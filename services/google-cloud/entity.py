@@ -69,12 +69,13 @@ class KnowledgeGraph(object):
             self.prop_mappings[ns] = dict([(p['id'], p) for p in self._properties(ns)])
             self.formatter_urls[ns] = dict([(p['id'], p) for p in self._formatter_urls(ns)])
 
-    def entity(self, qid, language=None):
+    def entity(self, qid, language=None, context=None, **kwargs):
         language = language if language else self.language
         ns, qid = qid.split(':') if ':' in qid else (self.ns, qid)
+        refresh = kwargs.pop('refresh', 'false').lower() in ('', 'true')
 
-        cache_key = f'{ns}:{qid}-{language}'
-        entity = CACHE['entities'].get(cache_key)
+        cache_key = f'{ns}:{qid}-{language}-{context}'
+        entity = CACHE['entities'].get(cache_key) if not refresh else None
         if entity:
             entity['fromCache'] = True
             return entity
@@ -92,7 +93,7 @@ class KnowledgeGraph(object):
                 primary = f'{ns}:{qid}'
                 secondary = None
         
-        logger.info(f'entity: primary={primary} secondary={secondary} language={language}')
+        logger.info(f'entity: primary={primary} secondary={secondary} language={language} context={context}')
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             by_qid = {}
@@ -105,7 +106,7 @@ class KnowledgeGraph(object):
                     by_qid[futures[future]] = future.result()
         
         entity = self._merge(by_qid.get(primary), by_qid.get(secondary))
-        self._add_summary_text(entity)
+        self._add_summary_text(entity, context, **kwargs)
         
         entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity), language))
         
@@ -119,7 +120,8 @@ class KnowledgeGraph(object):
         returns a simplified representation of data with property IDs converted to labels enabling
         property merging with other graphs using a compatible data model'''
         ns, qid = qid.split(':') if ':' in qid else (self.ns, qid)
-        resp = requests.get(f'{GRAPHS[ns]["api_endpoint"]}?format=json&action=wbgetentities&ids={qid}').json()
+        entity_url = f'{GRAPHS[ns]["api_endpoint"]}?format=json&action=wbgetentities&ids={qid}'
+        resp = requests.get(entity_url).json()
         raw_entity = resp.get('entities', {}).get(qid)
         entity = OrderedDict()
         entity['label'] = raw_entity['labels'].get(language,{}).get('value','')
@@ -349,10 +351,11 @@ class KnowledgeGraph(object):
                         merged['claims'][k] = v
         return merged
 
-    def _add_summary_text(self, entity, project_code=None):
+    def _add_summary_text(self, entity, context=None, **kwargs):
         '''Finds and adds summary data for entity.  For Wikidata entities the summary data is obtained
         from the Wikipedia article linked to the entity in the graph, if any.  For entities in the JSTOR
         graph the summary data (if any) is referenced by the "described at URL" property'''
+        logger.info(f'_add_summary_text: entity={entity["id"]} context={context}')
         summary_urls = {}
         for _id in entity['id']:
             if _id.startswith('jstor:') and 'described at URL' in entity['claims']:
@@ -361,8 +364,8 @@ class KnowledgeGraph(object):
                     #  property code is proided as a method argument
                     logger.info(stmt['value'])
                     if not self._is_entity_id(stmt['value'].split('/')[-1], False):
-                        if project_code:
-                            if project_code in stmt.get('qualifiers',{}).get('project code',[]):
+                        if context:
+                            if context in stmt.get('qualifiers',{}).get('project code',[]):
                                 summary_urls['jstor'] = stmt['value']
                         else:
                             if 'project code' not in stmt.get('qualifiers', {}):

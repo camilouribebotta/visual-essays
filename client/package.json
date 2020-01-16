@@ -14,7 +14,8 @@
     "@nuxtjs/axios": "^5.3.6",
     "css-element-queries": "^1.2.2",
     "nuxt": "^2.0.0",
-    "resize-sensor": "^0.0.6"
+    "resize-sensor": "^0.0.6",
+    "yaml": "^1.7.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0"

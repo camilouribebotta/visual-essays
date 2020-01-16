@@ -9,6 +9,10 @@ export const api = axios.create({
   baseURL
 })
 
-export function get_entity(qid) {
-    return api.get(`/entity/${qid}`).then(resp => resp.data)
+export function get_entity(qid, context) {
+  let url = `/entity/${qid}`
+  if (context) {
+    url += `?context=${context}`
+  }
+    return api.get(url).then(resp => resp.data)
 }

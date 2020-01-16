@@ -17,6 +17,9 @@ export default {
   props: {
     qid: { type: String }
   },
+  data: () => ({
+    requested: new Set()
+  }),
   computed: {
     entity () { return this.$store.getters.items.find(entity => entity.qid === this.qid) || {} },
     entityInfo () { return this.entity['summary info'] },
@@ -24,22 +27,30 @@ export default {
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
     thumbnail () { return this.entityInfo && this.entityInfo.thumbnail ? this.entityInfo.thumbnail.source : null },
     imageSrc () { return this.thumbnail ?  this.thumbnail : this.entity.images ? this.entity.images[0] : null },
-    html () { return this.entityInfo ?  this.entityInfo.extract_html : null }
+    html () { return this.entityInfo ?  this.entityInfo.extract_html : null },
+    context() { return this.$store.getters.context }
+  },
+  mounted() {
+    this.getSummaryInfo()
+  },
+  methods: {
+    getSummaryInfo() {
+      if (this.entity && this.entity['summary info'] === undefined && !this.requested.has(this.entity.qid)) {
+        this.requested.add(this.entity.qid)
+        get_entity(this.entity.qid, this.context)
+          .then((updated) => {
+            if (!updated['summary info']) {
+              updated['summary info'] = NULL
+            }
+            updated.id = this.entity.qid
+            this.$store.dispatch('updateItem', updated)
+          })
+      }
+    }
   },
   watch: {
-    entity: {
-      handler: function (entity) {
-        console.log('entity', entity.qid)
-        if (entity && !entity['summary info']) {
-          get_entity(entity.qid)
-            .then((updated) => {
-              console.log(updated)
-              updated.id = entity.qid
-              this.$store.dispatch('updateItem', updated)
-            })
-        }
-      },
-      immediate: true
+    entity() {
+      this.getSummaryInfo()
     }
   }
 }

@@ -35,6 +35,37 @@ function resizeend() {
   }
 }
 
+// Parses query arguments in request url 
+function parseQueryString(queryString) {
+  queryString = queryString || window.location.search
+  const dictionary = {}
+  try {
+    if (queryString.indexOf('?') === 0) {
+      queryString = queryString.substr(1)
+    }
+    const parts = queryString.split('&')
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i]
+      const keyValuePair = p.split('=')
+      if (keyValuePair[0] !== '') {
+        const key = keyValuePair[0]
+        if (keyValuePair.length === 2) {
+          let value = keyValuePair[1]
+          // decode URI encoded string
+          value = decodeURIComponent(value)
+          value = value.replace(/\+/g, ' ')
+          dictionary[key] = value
+        } else {
+          dictionary[key] = ''
+        }
+      }
+    }
+  } catch (err) {
+    console.log(err)
+  }
+  return dictionary
+}
+
 function initApp() {
   console.log('essay-utils.init')
 
@@ -59,6 +90,12 @@ function initApp() {
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
   })
+
+  const context = parseQueryString().context || window.context
+  if (context) {
+    vm.$store.dispatch('setContext', window.context)
+  }
+  console.log(`context=${vm.$store.getters.context}`)
 
   if (window.data) {
     vm.$store.dispatch('setItems', window.data)

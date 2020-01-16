@@ -1,15 +1,17 @@
-const routerBase = {
-  'GH_PAGES': { router: { base: '/visual-essays/' } }
-}[process.env.DEPLOY_ENV] || { router: { base: '/' } }
+import fs from 'fs'
+import YAML from 'yaml'
 
-// const BUNDLE_VERSION = '0.1.15'
+const SETTINGS = YAML.parse(fs.readFileSync('./settings.yaml', 'utf8'))
+
 const BUNDLE_VERSION = require('../package.json').version
 
+const routerBase = {
+  'GH_PAGES': { router: { base: SETTINGS.gh_path } }
+}[process.env.DEPLOY_ENV] || { router: { base: '/' } }
+
 export default {
-  env: {
-    banner_image: 'https://kg.jstor.org/w/images/c/cc/Viking_Bay,_Broadstairs.jpg',
+  env: { ...SETTINGS,
     deployEnv: process.env.DEPLOY_ENV || 'PROD',
-    app_version: '0.1.0',
     bundle_version: BUNDLE_VERSION,
     ve_service_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'PROD'
       ? 'https://us-central1-visual-essay.cloudfunctions.net'
@@ -19,7 +21,7 @@ export default {
   ...routerBase,
   mode: 'spa',
   head: {
-    title: 'Visual Essays',
+    title: SETTINGS.site_title,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

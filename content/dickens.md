@@ -11,8 +11,10 @@
 
 by <big><span class="author">Ken Moffat</span> and <span class="author">Carolyn W. de la L. Oulton</span></big>
 
-[[File:Rochester_1828.jpg|center|frame|West View of the City of Rochester.]]
-<br clear=all>
+<p align="center">
+  <img src="https://kg.jstor.org/w/images/3/39/Rochester_1828.jpg" style="width:100%;max-width:1000px" ><br/>
+  <small>West View of the City of Rochester</small>
+</p>
 
 <span data-entity="Q7197170">Philip Pirrip</span>
 tells us in his very name that he is trapped in language. Hardly surprisingly the child cannot perform this tongue twister and reduces his name to an inarticulate stutter: Pip.  According to this logic his full name must be pronounceable as ‘Pip Pip’, which would become a slang term for ‘goodbye’ in the twentieth century. As Joe will later say to him, ‘life is made of ever so many partings’[^ref1]. 

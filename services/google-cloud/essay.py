@@ -32,6 +32,9 @@ DEFAULT_SITE = 'https://kg.jstor.org'
 CUSTOM_MARKUP = {'entity', 'map', 'map-layer', 'video'}
 
 def _is_empty(elem):
+    child_images = [c for c in elem.children if c.name == 'img']
+    if child_images:
+        return False
     elem_contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
     return len(elem_contents) == 0
 
@@ -156,6 +159,7 @@ def md_to_html5(html):
 class Essay(object):
 
     def __init__(self, html, **kwargs):
+        self.context = kwargs.pop('context', None)
         self._soup = BeautifulSoup(html, 'html5lib')
         self.site = kwargs.get('site', DEFAULT_SITE)
         self.markup = self._find_ve_markup()
@@ -166,10 +170,9 @@ class Essay(object):
         self._add_data()
 
     def _remove_empty_paragraphs(self):
-        for elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
-            contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
-            if not contents:
-                elem.extract()
+        for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
+            if _is_empty(para_elem):
+                para_elem.extract()
 
     def _enclosing_section(self, elem):
         parent_section = None
@@ -290,6 +293,8 @@ class Essay(object):
 
     def _add_data(self):
         data = self._soup.new_tag('script')
+        if self.context is not None:
+            data.append(f'\nwindow.context = "{self.context}"')
         data.attrs['type'] = 'application/ld+json'
         data.append('\nwindow.data = ' + json.dumps([self.markup[_id] for _id in sorted(self.markup)], indent=2) + '\n')
         self._soup.html.body.article.append(data)

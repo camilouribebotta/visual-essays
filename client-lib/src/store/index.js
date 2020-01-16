@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    context: undefined,
     content: [],
     items: [],
     activeElements: [],
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     width: 0
   },
   mutations: {
+    setContext (state, context) { state.context = context },
     setContent (state, elems) { state.content = elems },
     setItems (state, items) { state.items = items },
     setActiveElements (state, elems) { state.activeElements = elems },
@@ -29,6 +31,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setContext: ({ commit }, context) => commit('setContext', context),
     setContent: ({ commit }, elems) => commit('setContent', elems),
     setItems: ({ commit }, items) => commit('setItems', items),
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
@@ -37,6 +40,7 @@ export default new Vuex.Store({
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport)
   },
   getters: {
+    context: state => state.context,
     content: state => state.content,
     items: state => state.items,
     activeElements: state => state.activeElements,

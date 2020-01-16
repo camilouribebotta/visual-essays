@@ -48,7 +48,8 @@ def html5(request, **args):
         fmt = 'wikitext'
     else:
         if 'src' in args:
-            if 'raw.githubusercontent.com' in args['src']:
+            extension = args['src'].split('.')[-1].lower()
+            if extension == 'md':
                 fmt = 'markdown'
             elif DEFAULT_MW_SITE in args['src']:
                 fmt = 'wikitext'
@@ -86,6 +87,17 @@ def to_html5(*args, **kwargs):
         html = html5(request, **args)
         return (html, 200, cors_headers)
 
+def local_content(*args, **kwargs):
+    global request
+    logger.info('local_content')
+    if args and 'request' not in globals():
+        request = args[0]
+    content_path = os.path.join(CONTENT_DIR, request.view_args['fname'])
+    logger.info(f'path={content_path}')
+    with open(content_path, 'r') as fp:
+        md = fp.read()
+        return (md, 200, {'Content-type': 'text/markdown; charset=utf-8'})
+
 def essay(*args, **kwargs):
     global request
     if args and 'request' not in globals():
@@ -97,7 +109,7 @@ def essay(*args, **kwargs):
         _set_logging_level(args)
         nocss = args.pop('nocss', 'false').lower() in ('true', '') if 'nocss' in args else False
         html = html5(request, **args)
-        essay = Essay(html=html)
+        essay = Essay(html=html, **args)
 
         if not nocss:
             with open('main.css', 'r') as styles:
@@ -158,4 +170,5 @@ if __name__ == '__main__':
     app.add_url_rule('/entity/<qid>', 'entity', entity)
     app.add_url_rule('/essay', 'essay', essay)
     app.add_url_rule('/fingerprints', 'fingerprints', fingerprints)
+    app.add_url_rule('/<fname>', 'local_content', local_content)
     app.run(debug=True, host='0.0.0.0')

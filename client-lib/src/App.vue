@@ -30,6 +30,9 @@ export default {
   name: 'app',
   components,
   data: () => ({}),
+  computed: {
+    context() { return this.$store.getters.context }
+  },
   mounted() {
     this.$nextTick(() => this.init())
   },
@@ -48,7 +51,7 @@ export default {
       this.$store.dispatch('setSelectedEntityQID', qid)
       const entity = this.$store.getters.items.find(item => item.qid === qid)
       if (entity && !entity['summary info']) {
-        get_entity(qid)
+        get_entity(qid, this.context)
           .then((entity) => {
             entity.id = qid
             this.$store.dispatch('updateItem', entity)

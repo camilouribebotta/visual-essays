@@ -42,16 +42,12 @@
       scroll-threshold="200"
     >
       <template v-slot:img="{ props }">
-        <!-- <v-img
-          v-bind="props"
-          gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
-        /> -->
         <v-img v-bind="props"/>
       </template>
 
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
-      <v-toolbar-title>Visual Essays</v-toolbar-title>
+      <v-toolbar-title>{{title}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -107,7 +103,7 @@
         height: 600,
         bannerHeight: 600,
         essayTopMargin: 140,
-        title: 'Visual Essays',
+        title: process.env.site_title,
         app_version: process.env.app_version,
         bundle_version: process.env.bundle_version,
         banner_image: process.env.banner_image,
