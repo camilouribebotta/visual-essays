@@ -1,0 +1,34 @@
+# Plant of the Month: Agave
+<big>The international popularity of tequila threatens the quantity, health, and biodiversity of all species of agave.</big>
+
+<p align="center">
+  <img src="https://daily.jstor.org/wp-content/uploads/2020/01/plant_of_the_month_agave_1050x700.jpg" style="width:100%;max-width:1000px" ><br/>
+  <small>Aloë Americana: heeft gebloeid in des universiteits Kruyd-Hof tot Leiden, 1698, Rare Book Collection, Dumbarton Oaks, Trustees for Harvard University, Washington, DC</small>
+</p>
+
+The global tequila market will be [worth $6.36 billion by the end of 2025](https://www.marketwatch.com/press-release/tequila-market-2019-global-industry-size-growth-segments-revenue-manufacturers-and-2025-forecast-research-report-2019-05-10). Yet 2020 marks the height of a worldwide tequila shortage that has been ramping up for more than two years, the result of unsustainable agave farming and harvesting practices. The international popularity of the liquor threatens the quantity, health, and biodiversity not only of the agave used for tequila, but all agave species and even bats.
+
+The problem is that traditional agave farming could not keep pace with the ever-increasing global demand for tequila. As a consequence, genetically diverse, locally adapted, and [traditionally cultivated agave farms were replaced by large-scale, commercial blue agave plantations](https://www.jstor.org/stable/25568896?mag=plant-of-the-month-agave&seq=1#metadata_info_tab_contents), which often placed profit over crop diversity and sustainability. Biologist Ofelia Vargas-Ponce and coauthors conclude that “extensive cultivation of Blue Agave threatens overall agrobiodiversity in areas where it is cultivated, as well as the diversity of Agave landraces used in traditional spirits production in west-central Mexico.”
+
+> **Fermented agave sap, called pulque, was central to religious rituals and sacrifices Mexica (Aztec) cultures.**
+
+Produced primarily in the area surrounding the city of Tequila and in the Jalisco Highlands of central western Mexico, tequila is a spirit distilled from agave and thus a type of mescal. Not all mescals, however, are tequilas. Under Mexican law, tequila is the product of only the blue agave (Agave tequilana or Agave azul), grown predominantly in Jalisco.
+
+Centuries before the international success of tequila, agaves had played a significant role in the religion, culture, and economies of Mesoamerica. Fermented agave sap, called pulque, was central to religious rituals and sacrifices in Mexica (Aztec) cultures. Agave fibers were used to produce clothing, footwear, building materials, fires, and paper. And mescals satiated the thirst of revolutionaries in cantinas across Mexico during the Mexican War of Independence.
+
+Mescal was (and remains) a traditional Mesoamerican beverage and gets its name from underground pits in which the naturally fermented hearts and bases of agave plants were roasted. These pits were called “mexcalli” in the indigenous language, Nahuatl, and later “mezcal” and “mescal” in Spanish. In the sixteenth century, Europeans introduced the technique of distillation, transforming pit-roasted fermented agave hearts into vinos de mescal, the precursor to our modern-day mescals and tequila.
+
+When Europeans first encountered agave, they nicknamed it the “century plant.” That is because when transported from its warm, semi-arid natural environment to botanical gardens in Northern Europe, agaves took decades to bloom. In 1698, after 96 long years, the Leiden Botanical Garden’s exotic “Aloe Americana” (or Agave americana as it is classified today) bloomed for the first time.
+
+To commemorate the marvelous event, the garden commissioned an illustrated poster of the plant. [A surviving poster](https://hollis.harvard.edu/primo-explore/fulldisplay?context=L&vid=HVD2&search_scope=everything&tab=everything&lang=en_US&docid=01HVD_ALMA212299978550003941), recently acquired by the Dumbarton Oaks rare book collection in Washington, D.C., reveals the sixteenth- and seventeenth-century European fascination with the so-called “century plant” and provides a lens through which to explore the cultural history of agave. Carolus Clusius, a French naturalist and future director of the Leiden Botanical Garden, was the first to encounter a living agave specimen while traveling through Spain in 1564-1565. Clusius was at the center of an international network of naturalists and collectors who exchanged knowledge and specimens of exotic plants like agave. Leiden’s blooming agave was not simply a horticultural success, it symbolized the flowering of a new discipline—botany—that investigated, classified, and cultivated plants for scientific study beyond their medicinal uses.
+
+Back in Jalisco, distilling agave spirits became a culturally and economically important activity starting in the eighteenth century.  But it was only tequila that would morph into a lucrative international export. Fondness for tequila, which was first introduced to Americans at the Chicago World’s Fair in 1893, grew steadily over the twentieth century and has only continued to increase, outpacing all other distilled liquors in the past decade.
+
+Which brings us to the shortage. While slightly faster-growing than an Agave americana in Leiden, the blue agave needs on average eight years to mature. To meet demand, many tequila producers began harvesting their blue agaves early. But this exacerbated the problem: younger plants that have not bloomed yield less tequila and cannot reproduce. So, tequila producers increasingly resorted to planting clonal shoots—leading to the vast majority of plants being genetically identical and thus vulnerable to epidemics.
+
+To make matters worse, by not allowing blue agave to flower and seed, tequila producers removed a major food source for bats. For thousands of years, bats and agave plants coevolved. The lesser-nosed bat (Genus Leptonycteris)—tequila bat for short—scatters agave seeds and pollen, allowing the plant to propagate naturally, in the process diversifying the genetic material of the plants. You cannot have tequila without agave, and you cannot have agave without bats.
+
+Fortunately, the recent tequila shortage has spurred a reassessment of the practices of the tequila industry. New initiatives aiming to create more sustainable agave production, like the Tequila Interchange Project (TIP), remind us that “agave fibers weave generation to generation and their sugars bind the story of Mexico to its people.”
+
+The story of agave also reminds us of the interdependency of human, animal, and plant, and the importance of plants not only to natural ecosystems, but also human culture. Through individual plant case studies, like agave, the interdisciplinary Plant Humanities Initiative explores and highlights the unparalleled significance of plants to human culture one fascinating plant at a time.
+

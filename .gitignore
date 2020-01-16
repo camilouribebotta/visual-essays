@@ -1,0 +1,6 @@
+node_modules
+venv
+serverless.yml
+.serverless
+*-gcreds.json
+dist

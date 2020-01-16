@@ -1,0 +1,22 @@
+{
+  "name": "visual-essay-client",
+  "version": "1.0.0",
+  "description": "Visual Essay",
+  "author": "Ron Snyder",
+  "private": true,
+  "scripts": {
+    "dev": "DEPLOY_ENV=DEV nuxt",
+    "start": "nuxt start",
+    "build:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt generate",
+    "build": "DEPLOY_ENV=PROD nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "css-element-queries": "^1.2.2",
+    "nuxt": "^2.0.0",
+    "resize-sensor": "^0.0.6"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.0.0"
+  }
+}

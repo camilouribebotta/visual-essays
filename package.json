@@ -1,0 +1,10 @@
+{
+  "name": "visual-essays",
+  "version": "0.1.15",
+  "description": "Visual Essays",
+  "author": "Ron Snyder",
+  "private": false,
+  "scripts": {
+    "netlify-build": "cd client && npm i && npm run build; cd ../client-lib && npm i && npm run build;"
+  }
+}
