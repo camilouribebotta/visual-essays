@@ -2,7 +2,8 @@ const routerBase = {
   'GH_PAGES': { router: { base: '/visual-essays/' } }
 }[process.env.DEPLOY_ENV] || { router: { base: '/' } }
 
-const BUNDLE_VERSION = '0.1.15'
+// const BUNDLE_VERSION = '0.1.15'
+const BUNDLE_VERSION = require('../package.json').version
 
 export default {
   env: {
