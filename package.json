@@ -1,10 +1,14 @@
 {
   "name": "visual-essays",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Visual Essays",
   "author": "Ron Snyder",
   "private": false,
   "scripts": {
     "netlify-build": "cd client && npm i && npm run build; cd ../client-lib && npm i && npm run build;"
+  },
+  "dependencies": {
+    "serverless": "^1.47.0",
+    "serverless-google-cloudfunctions": "^2.3.3"
   }
 }

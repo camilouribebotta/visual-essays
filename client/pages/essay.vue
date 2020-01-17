@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
-      <div id="main" v-html="essay"/>
+      <div ref="main" id="main" v-html="essay"/>
     </v-flex>
   </v-layout>
 </template>
@@ -29,9 +29,8 @@ export default {
         url += `&context=${process.env.context}`
       }
       api.get(url)
-        .then(resp => resp.data)
-        .then((html) => {
-          this.essay = html
+        .then((resp) => {
+          this.essay = resp.data
           this.$nextTick(() => {
             const element = document.getElementById('essay')
             const _this = this
