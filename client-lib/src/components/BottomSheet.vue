@@ -3,9 +3,9 @@
     <transition name="bottom-sheet-transition">
       <div class="v-dialog v-dialog--active v-dialog--scrollable v-bottom-sheet" v-if="isOpen">
         <v-card style="padding:0; margin:0;">
-          <v-card-actions>
+          <!-- <v-card-actions>
             <v-btn @click="close" text>Close</v-btn>
-          </v-card-actions>
+          </v-card-actions> -->
           <v-card-text style="padding:0; margin:0;" class="text-center">
             <div style="height: 100%;">
               <viewer/>
@@ -72,7 +72,7 @@
       makeHeadingsClickable() {
         for (let i = 1; i < 9; i++) {
           document.body.querySelectorAll(`h${i}`).forEach((heading) => {
-            heading.addEventListener('click', (e) => this.open(e.target.parentElement.id))
+            heading.addEventListener('click', (e) => this.toggle(e.target.parentElement.id))
           })
         }
       },
@@ -80,7 +80,7 @@
         for (let i = 1; i < 9; i++) {
           document.body.querySelectorAll(`h${i}`).forEach((heading) => {
             const section = heading.parentElement
-            section.addEventListener('click', (e) => this.open(e.target.parentElement.id))
+            section.addEventListener('click', (e) => this.toggle(e.target.parentElement.id))
           })
         }
       },
@@ -88,16 +88,20 @@
         this.content.forEach((elem) => {
           if (elem.paragraphs) {
             elem.paragraphs.forEach((para) => {
-              document.getElementById(para.id).addEventListener('click', (e) => this.open(e.target.id))
+              document.getElementById(para.id).addEventListener('click', (e) => this.toggle(e.target.id))
             })
           }
         })
       },
-      open(elemId) {
+      toggle(elemId) {
         if (elemId) {
-          this.spacer.style.height = `${this.viewport.height/2}px`
-          this.positionElementInViewport(elemId)
-          this.isOpen = true
+          if (this.isOpen) {
+            this.close()
+          } else {
+            this.spacer.style.height = `${this.viewport.height/2}px`
+            this.positionElementInViewport(elemId)
+            this.isOpen = true
+          }
         }
       },
       close() {

@@ -67,8 +67,8 @@ export default {
         // center the map
         this.$refs.mapWrapperInner.style.paddingTop = 0
         this.$refs.mapWrapperInner.style.paddingBottom = 0
-        this.$refs.mapWrapperInner.style.paddingLeft = `${(this.viewport.width - mapWidth)/2}px`
-        this.$refs.mapWrapperInner.style.paddingRight = `${(this.viewport.width - mapWidth)/2}px`
+        this.$refs.mapWrapperInner.style.paddingLeft = `${(this.viewport.width - mapWidth)/2+12}px`
+        //this.$refs.mapWrapperInner.style.paddingRight = `${(this.viewport.width - mapWidth)/2}px`
         // console.log(`positionMapContainer: mapHeight=${this.$refs.map.style.height} mapWidth=${this.$refs.map.style.width}`)
       }
     },
@@ -283,6 +283,7 @@ export default {
   
     .lmap {
         z-index: 1;
+        width: 100%;
     }
 
   .leaflet-interactive {

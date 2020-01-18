@@ -1,7 +1,7 @@
 <template>
   <v-card id="viewer">
-  
-    <v-tabs vertical>
+    <v-btn text class="close-button">Close</v-btn>
+    <v-tabs>
       <v-tab v-if="maps.length > 0" href="#tab-item-0">Map</v-tab>
       <v-tab 
         v-for="(itemsByCat, i) in itemsByCategory"
@@ -92,14 +92,23 @@
 
 <style>
 
+  .v-tabs-bar__content {
+    min-width: 150px;
+  }
+
   #viewer {
     height: 100%;
+  }
+
+  .close-button {
+    position: absolute;
+    left: 0;
+    top: 6px;
   }
 
   .entity-infobox {
     width: 600px;
     height: 100%;
-    margin-left: 60px;
     min-height: 165px;
   }
 
