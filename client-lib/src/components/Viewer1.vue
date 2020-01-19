@@ -1,16 +1,14 @@
 <template>
   <v-card id="viewer">
-    <v-btn text class="close-button">Close</v-btn>
     <v-tabs>
       <v-tab v-if="maps.length > 0" href="#tab-item-0">Map</v-tab>
       <v-tab 
         v-for="(itemsByCat, i) in itemsByCategory"
-        :key="`tab-${i+1}`"
-        :href="`#tab-item-${i+1}`"
+        :key="`tab-${activeElement.id}-${i+1}`"
+        :href="`#tab-item-${activeElement.id}-${i+1}`"
       >
         {{itemsByCat.category}}
       </v-tab>
-
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
@@ -23,27 +21,22 @@
         transition="fade-transition"
         reverse-transition="fade-transition"
         v-for="(itemsByCat, i) in itemsByCategory"
-        :key="`tab-item-${i+1}`"
-        :value="`tab-item-${i+1}`"
+        :key="`tab-item-${activeElement.id}-${i+1}`"
+        :value="`tab-item-${activeElement.id}-${i+1}`"
       >
-        <v-tabs vertical>
-          <v-tab 
-            v-for="(item, j) in itemsByCat.items"
-            :key="`tab-${i}-${j+1}`"
-            :href="`#tab-item-${i}-${j+1}`"
-          >
-            {{item.label}}
-          </v-tab>
-          <v-tab-item
+        <v-window
+          class="elevation-1"
+          showArrows
+        > 
+          <v-window-item
             transition="fade-transition"
             reverse-transition="fade-transition"
-            v-for="(item, j) in itemsByCat.items"
-            :key="`tab-item-${i}-${j+1}`"
-            :value="`tab-item-${i}-${j+1}`"
+            v-for="item in itemsByCat.items" 
+            :key="`${activeElement}-${item.id}`"
           >
             <entity-infobox class="entity-infobox" :qid="item.qid"/>
-          </v-tab-item>
-        </v-tabs>
+          </v-window-item>
+        </v-window>
       </v-tab-item>
     </v-tabs>
   </v-card>      
@@ -65,8 +58,12 @@
       lmap: Map,
       EntityInfobox
     },
-    data: () => ({}),
+    data: () => ({
+      window: 0,
+      windows: {},
+    }),
     computed: {
+      activeElement() { return this.$store.getters.activeElement },
       entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
       maps() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map') },
@@ -108,6 +105,7 @@
 
   .entity-infobox {
     width: 600px;
+    margin: auto;
     height: 100%;
     min-height: 165px;
   }
