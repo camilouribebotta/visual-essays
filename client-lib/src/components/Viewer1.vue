@@ -45,7 +45,6 @@
             :key="`tab-${itemsByCat.tab}-${window}`"
             :value="`window-${tab+1}-${window}`"
           >
-            <div>{{`tab-${activeElement.id}-${itemsByCat.tab}`}} {{`tab-${activeElement.id}-${itemsByCat.tab}-${window}`}}</div>
             <entity-infobox class="entity-infobox" :qid="item.qid"/>
           </v-window-item>
         </v-window>
@@ -78,6 +77,9 @@
       activeWindow: undefined,
       itemsMap: {}
     }),
+    mounted() {
+      this.itemsByCategory
+    },
     computed: {
       activeElement() { return this.$store.getters.activeElement },
       entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },

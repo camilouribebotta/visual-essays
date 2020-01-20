@@ -252,11 +252,11 @@
   }
 
   p.active-elem {
-    border-left: 4px solid blue;
+    border-left: 4px solid #8FBC8F;
   }
 
   p.active-elem .inferred {
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid #8FBC8F;
     cursor: pointer;
   }
 
