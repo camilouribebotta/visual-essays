@@ -107,11 +107,12 @@
       close() {
         this.spacer.style.height = '0px'
         const currentElem = document.getElementById(this.activeElement.id)
-        currentElem.style.background = ''
-        Array.prototype.slice.call(currentElem.getElementsByClassName('inferred')).forEach((entity) => {
-          entity.style.borderBottom = ''
+        currentElem.classList.remove('active-elem')
+        /*
+        currentElem.querySelectorAll('.entity.inferred').forEach((entity) => {
           entity.removeEventListener('click', this.clickHandler)
         })
+        */
         this.isOpen = false
       },
       positionElementInViewport(elemId) {
@@ -189,8 +190,9 @@
         }
       }, 100),
       clickHandler(e) {
-        console.log(e)
-      },
+        // console.log(e)
+        // console.log(this.$refs)
+      }
     },
     watch: {
       content: {
@@ -213,34 +215,28 @@
         immediate: false
       },
       activeElements(current, prior) {
-        console.log('activeElements:', current)
+        // console.log('activeElements:', current)
       },
       activeElement(current, prior) {
-        console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null}`)
+        // console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null}`)
         if (this.isOpen) {
           if (prior) {
             const priorElem = document.getElementById(prior.id)
+            priorElem.classList.remove('active-elem')
+            /*
             priorElem.querySelectorAll('.entity.inferred').forEach((entity) => {
               entity.removeEventListener('click', this.clickHandler)
             })
-            priorElem.style.background = ''
-            // priorElem.style.fontWeight = '400'
-            Array.prototype.slice.call(priorElem.getElementsByClassName('inferred')).forEach((entity) => {
-              entity.style.borderBottom = ''
-            })
+            */
           }
           if (current) {
             const currentElem = document.getElementById(current.id)
+            currentElem.classList.add('active-elem')
+            /*
             currentElem.querySelectorAll('.entity.inferred').forEach((entity) => {
               entity.addEventListener('click', this.clickHandler)
-              entity.style.cursor = 'pointer'
             })
-            currentElem.style.background = '#eee'
-            // currentElem.style.fontWeight = '600'
-            Array.prototype.slice.call(currentElem.getElementsByClassName('inferred')).forEach((entity) => {
-              entity.style.borderBottom = '2px solid red'
-            })
-
+            */
           }
         }
       }
@@ -249,6 +245,20 @@
 </script>
 
 <style>
+
+  section p {
+    padding-left: 12px;
+    border-left: 4px solid transparent;
+  }
+
+  p.active-elem {
+    border-left: 4px solid blue;
+  }
+
+  p.active-elem .inferred {
+    border-bottom: 2px solid red;
+    cursor: pointer;
+  }
 
   .v-bottom-sheet.v-dialog {
     height: 50%;

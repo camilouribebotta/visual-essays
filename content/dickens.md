@@ -6,9 +6,6 @@
 
 ## Great Expections - a curated walk
 
-<span data-entity="Q5686"></span>
-<span data-entity="Q726"></span>
-
 by <big><span class="author">Ken Moffat</span> and <span class="author">Carolyn W. de la L. Oulton</span></big>
 
 <p align="center">
@@ -75,10 +72,10 @@ On a visit to the town after his succession to fortune Pip will be taunted by th
 
 Later events will force Pip to reassess his own past and what it means to be a ‘gentleman’. Thackeray famously said that it took three generations ‘to make a gentleman’; Magwitch believes that through his hard work and self-denial he has ‘made a gentleman’; Pip’s unlikely counterpart Estella is the most obviously constructed character in the novel and herself has to be ‘educated for a lady’. A mature Pip will provide the only possible answer to this conundrum when he describes Joe as ‘this gentle Christian man’.
 
+<span data-entity="Q5156367" data-note="Compeyson"></span>
 Pip himself seems about to come full circle in returning to the marshes with Magwitch as they row down the river from London. Towards the end of the novel he is from this point when he and his friends stop with Magwitch at the Ship Inn
 <!-- [link article 16, Ship and Lobster] -->
-at the end of their abortive attempt to smuggle him out of the country. While Pip has never before seen this stretch of river he recognises at once that ‘It was like my own marsh country, flat and monotonous, and with a dim horizon; while the winding river turned and turned, and the great floating buoys upon it turned and turned, and everything else seemed stranded and still.’[^ref3]  But his final return is thwarted when Magwitch is hunted down by
-<span data-entity="Q5156367">Compeyson</span>
+at the end of their abortive attempt to smuggle him out of the country. While Pip has never before seen this stretch of river he recognises at once that ‘It was like my own marsh country, flat and monotonous, and with a dim horizon; while the winding river turned and turned, and the great floating buoys upon it turned and turned, and everything else seemed stranded and still.’[^ref3]  But his final return is thwarted when Magwitch is hunted down by Compeyson
 and dies of his injuries, possibly compounded by a river infection
 <!-- [Link Heidi’s article on sewage and tidal rivers, when it comes in] -->.
 Pip finally realises what Joe was trying to tell him years before - there is no way back save in the imagination.

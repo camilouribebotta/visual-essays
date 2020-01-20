@@ -252,7 +252,7 @@ export default {
     },
     mapsInActiveElements: {
       handler: function (value, prior) {
-        console.log('mapsInActiveElements', this.mapsInActiveElements.length)
+        // console.log('mapsInActiveElements', this.mapsInActiveElements.length)
         if (this.$refs.map) {
           if (this.mapsInActiveElements.length === 0) {
               this.$refs.mapWrapper.style.display = 'none'
