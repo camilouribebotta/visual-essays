@@ -1,3 +1,5 @@
+<meta charset="UTF-8">
+
 <!-- Entities mentioned in this essay -->
 <var title="Charles Dickens" id="Q5686"></var>
 <var title="Chatham" id="Q729006"></var>
