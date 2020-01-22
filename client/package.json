@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "DEPLOY_ENV=DEV nuxt",
     "start": "nuxt start",
-    "build:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt generate",
+    "build:gh-pages": "DEPLOY_ENV=GH_PAGES nuxt generate; rm -rf ../docs/_nuxt; rsync -va dist/ ../docs",
     "build": "DEPLOY_ENV=PROD nuxt generate"
   },
   "dependencies": {

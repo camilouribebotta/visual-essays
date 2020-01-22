@@ -46,7 +46,7 @@ export default {
     '@nuxtjs/axios',
   ],
   generate: {
-    dir: process.env.DEPLOY_ENV === 'GH_PAGES' ? '../docs' : '../dist',
+    dir: process.env.DEPLOY_ENV === 'GH_PAGES' ? 'dist' : '../dist',
     fallback: true,
   }
 }
