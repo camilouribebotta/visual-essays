@@ -65,6 +65,7 @@ export default {
           if (para.id) {
             para.title = `${para.id} (${para.offsetTop})`
             paragraphs.push({
+              type: 'paragraph',
               id: para.id,
               top: para.offsetTop,
               bottom: para.offsetTop + para.offsetHeight,

@@ -18,7 +18,7 @@ from entity import KnowledgeGraph
 from essay import Essay, mw_to_html5, md_to_html5, add_vue_app
 from fingerprints import get_fingerprints
 
-VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.1.23.min.js'
+VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.1.24.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -71,7 +71,7 @@ def html5(request, **args):
             with open(path, 'r') as fp:
                 md = fp.read()
         else:
-            md = requests.get(source).text
+            md = requests.get(source).content.decode('utf-8')
         raw_html = markdown2.markdown(md, extras=['footnotes'])
         return md_to_html5(raw_html)
 

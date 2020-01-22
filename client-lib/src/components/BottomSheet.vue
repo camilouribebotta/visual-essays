@@ -33,7 +33,7 @@
       scrollingElement: null,
       offsets: {
         scrollTo: 10,
-        activeElem: 340
+        activeElem: 140
       },
       isOpen: false,
       mouseOver: null
@@ -80,20 +80,40 @@
         for (let i = 1; i < 9; i++) {
           document.body.querySelectorAll(`h${i}`).forEach((heading) => {
             const section = heading.parentElement
-            section.addEventListener('click', (e) => this.toggle(e.target.parentElement.id))
+            section.addEventListener('click', (e) => {
+              this.toggle(e.target.parentElement.id)
+            })
           })
         }
       },
+      /*
       makeParagraphsClickable() {
+        console.log(`makeParagraphsClickable: elems=${this.content.length}`)
         this.content.forEach((elem) => {
+          console.log(`elem=${elem.id}`)
           if (elem.paragraphs) {
             elem.paragraphs.forEach((para) => {
-              document.getElementById(para.id).addEventListener('click', (e) => this.toggle(e.target.id))
+              console.log(`para=${para.id}`)
+              document.getElementById(para.id).addEventListener('click', (e) => {
+                console.log('paragraph clicked')
+                e.stopPropagation()
+                e.preventDefault()
+                this.toggle(e.target.id)
+              })
             })
           }
         })
       },
+      */
+      makeParagraphsClickable() {
+        this.content.forEach((elem) => {
+          if (elem.type === 'paragraph') {
+            document.getElementById(elem.id).addEventListener('click', (e) => this.toggle(e.target.id))
+          }
+        })
+      },
       toggle(elemId) {
+        // console.log(`BottomSheet.toggle: isOpen=${this.isOpen} elemId=${elemId}`)
         if (elemId) {
           if (this.isOpen) {
             this.close()
@@ -101,13 +121,14 @@
             this.spacer.style.height = `${this.viewport.height/2}px`
             this.positionElementInViewport(elemId)
             this.isOpen = true
+            const currentElem = document.getElementById(elemId)
+            currentElem.classList.add('active-elem')
           }
         }
       },
       close() {
         this.spacer.style.height = '0px'
-        const currentElem = document.getElementById(this.activeElement.id)
-        currentElem.classList.remove('active-elem')
+        document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         /*
         currentElem.querySelectorAll('.entity.inferred').forEach((entity) => {
           entity.removeEventListener('click', this.clickHandler)
@@ -126,7 +147,9 @@
               ? elem.top - topPadding + this.offsets.scrollTo
               : elem.top - 10
             // console.log(`positionElementInViewport: element=${elem.id} viewPaneHeight=${viewPaneHeight} elemHeight=${elemHeight} elemTop=${elem.top} topPadding=${topPadding} scrollTo=${scrollTo}`)
-            this.scrollingElement.scrollTo(0, scrollTo)
+            if (this.scrollingElement) {
+              this.scrollingElement.scrollTo(0, scrollTo)
+            }
             break
           }
         }
