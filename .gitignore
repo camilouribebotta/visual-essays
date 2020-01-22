@@ -4,3 +4,4 @@ serverless.yml
 .serverless
 *-gcreds.json
 dist
+arbor_vitae.md
