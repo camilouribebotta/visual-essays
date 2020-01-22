@@ -9,7 +9,7 @@ export default new Vuex.Store({
     content: [],
     items: [],
     activeElements: [],
-    selectedEntityQID: null,
+    selectedItemID: null,
     height: 0,
     width: 0
   },
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     setContent (state, elems) { state.content = elems },
     setItems (state, items) { state.items = items },
     setActiveElements (state, elems) { state.activeElements = elems },
-    setSelectedEntityQID (state, qid) { state.selectedEntityQID = qid },
+    setSelectedItemID (state, id) { state.selectedItemID = id },
     updateItem (state, item) {
       state.items = [ 
         ...state.items.filter(c => c.id !== item.id),
@@ -35,7 +35,7 @@ export default new Vuex.Store({
     setContent: ({ commit }, elems) => commit('setContent', elems),
     setItems: ({ commit }, items) => commit('setItems', items),
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
-    setSelectedEntityQID: ({ commit }, qid) => commit('setSelectedEntityQID', qid),
+    setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport)
   },
@@ -52,7 +52,7 @@ export default new Vuex.Store({
       })
       return Object.values(items)
     },
-    selectedEntityQID: state => state.selectedEntityQID,
+    selectedItemID: state => state.selectedItemID,
     height: state => state.height,
     width: state => state.width
   },

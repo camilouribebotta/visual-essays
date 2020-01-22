@@ -100,6 +100,7 @@ function initApp() {
   if (window.data) {
     vm.$store.dispatch('setItems', window.data)
   }
+  console.log('items', vm.$store.getters.items)
 
   setViewport()
   window.addEventListener('resize', () => {

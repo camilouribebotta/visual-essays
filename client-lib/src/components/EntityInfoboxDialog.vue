@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="isOpen" @click:outside="setSelectedEntityQID(null)" width="500">
+    <v-dialog v-model="isOpen" @click:outside="setSelectedItemID(null)" width="500">
       <v-card class="entity-infobox-dialog" v-if="entity">
         <v-card-title class="headline grey lighten-2" primary-title v-html="title"/>
         <v-card-text>
@@ -11,7 +11,7 @@
         <v-divider/>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" text @click="setSelectedEntityQID(null)">Dismiss</v-btn>
+          <v-btn color="primary" text @click="setSelectedItemID(null)">Dismiss</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -26,8 +26,8 @@ export default {
     isOpen: false
   }),
   computed: {
-    selectedEntityQID () { return this.$store.getters.selectedEntityQID },
-    entity () { return this.$store.getters.items.find(entity => entity.qid === this.selectedEntityQID) || {} },
+    selectedItemId () { return this.$store.getters.selectedItemId },
+    entity () { return this.$store.getters.items.find(entity => entity.qid === this.selectedItemId) || {} },
     entityInfo () { return this.entity['summary info'] },
     title () { return this.entityInfo ? this.entityInfo.displaytitle : this.entity.label },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
@@ -36,14 +36,14 @@ export default {
     html () { return this.entityInfo ?  this.entityInfo.extract_html : null }
   },
   methods: {
-    setSelectedEntityQID(arg) {
+    setSelectedItemID(arg) {
       const qid = arg && arg.target ? arg.target.attributes['data-entity'].value : arg
-      const selectedEntity = qid === this.selectedEntityQID ? null : qid
-      this.$store.dispatch('setSelectedEntityQID', selectedEntity)
+      const selectedEntity = qid === this.selectedItemID ? null : qid
+      this.$store.dispatch('setSelectedItemID', selectedEntity)
     }
   },
   watch: {
-    selectedEntityQID(qid) {
+    selectedItemId(qid) {
       this.isOpen = qid !== null
     }
   }

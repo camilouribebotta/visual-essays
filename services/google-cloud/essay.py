@@ -29,7 +29,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'entity', 'map', 'map-layer', 'video'}
+CUSTOM_MARKUP = {'entity', 'map', 'geojson', 'map-layer', 'video'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -161,14 +161,16 @@ class Essay(object):
     def __init__(self, html, **kwargs):
         self.context = kwargs.pop('context', None)
         self._soup = BeautifulSoup(html, 'html5lib')
+        for comment in self._soup(text=lambda text: isinstance(text, Comment)):
+            comment.extract()
         self.site = kwargs.get('site', DEFAULT_SITE)
         self.markup = self._find_ve_markup()
         self._update_entities_from_knowledgegraph()
-        self._find_and_tag_entities()
+        self._find_and_tag_items()
         self. _update_image_links()
         self._remove_empty_paragraphs()
         self._add_data()
-
+        
     def _remove_empty_paragraphs(self):
         for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
             if _is_empty(para_elem):
@@ -181,6 +183,7 @@ class Essay(object):
                 parent_section = elem
                 break
             elem = elem.parent
+        #logger.info(f'_enclosing_section: elem={elem} parent_section={parent_section}')
         return parent_section
 
     def _enclosing_sections(self, elem, id):
@@ -227,35 +230,71 @@ class Essay(object):
                             for coords_str in v:
                                 coords.append([float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]])
                             v = coords
+                        if k in ('aliases',) and k in self.markup[kg_props['id']]:
+                            # merge values
+                            v = sorted(set(self.markup[kg_props['id']][k] + v))
                         self.markup[kg_props['id']][k] = v
                     # logger.info(json.dumps(self.markup[kg_props['id']], indent=2))
 
     def _find_ve_markup(self):
         ve_markup = {}
+        geojson_id_seq = 0
 
-        # custom markup is defined in a span element with an empty 'data-*' attribute
-        #   the markup type is the data attribute key with the 'data-' prefix removed
-        for span in self._soup.find_all('span'):
-            attrs = dict([k.replace('data-',''),v] for k,v in span.attrs.items() if k not in ['class'])
+        # custom markup is defined in a var or span elements.  Custom properties are defined with element data-* attribute
+        for vem_elem in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag)]:
+            attrs = dict([k.replace('data-',''),v] for k,v in vem_elem.attrs.items() if k not in ['class'])
             matches = CUSTOM_MARKUP.intersection(set(attrs.keys()))
-            if not len(matches) == 1:
+            if len(matches) == 1:
+                _type = matches.pop()
+            elif 'id' in attrs and is_qid(attrs['id']):
+                if ':' not in attrs['id']:
+                    attrs['id'] = f'wd:{attrs["id"]}'
+                attrs['qid'] = attrs['id']
+                _type = 'entity'
+            else:
                 continue
-            
-            _type = matches.pop()
 
             if _type == 'entity':
                 attrs['qid'] = attrs.pop('entity', attrs.pop('qid', None))
                 if ':' not in attrs['qid']:
-                    # ensure entity QIDs are namespaced.  Use wikidata ('wd:') as default
+                    # ensure entity QIDs are namespaced. Use wikidata ('wd:') as default
                     attrs['qid'] = f'wd:{attrs["qid"]}'
-                span.attrs['data-entity'] = attrs['qid']
+                vem_elem.attrs['data-entity'] = attrs['qid']
                 if 'scope' not in attrs:
                     attrs['scope'] = 'global'
+                if 'aliases' in attrs:
+                    attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
             elif  _type == 'map':
+                #logger.info(vem_elem)
                 if 'center' in attrs:
-                    attrs['center'] = [float(c.strip()) for c in attrs['center'].replace(',', ' ').split()]
+                    if is_qid(attrs['center']):
+                        attrs['center'] = self._qid_coords(attrs['center'])
+                    else:
+                        attrs['center'] = [float(c.strip()) for c in attrs['center'].replace(',', ' ').split()]
                 if 'zoom' in attrs:
-                    attrs['zoom'] = int(attrs['zoom'])
+                    attrs['zoom'] = round(float(attrs['zoom']), 1)
+                #logger.info(attrs)
+            elif  _type == 'geojson':
+                #if 'title' in attrs:
+                #    attrs['label'] = attrs['title']
+                if 'aliases' in attrs:
+                    attrs['aliases'] = attrs['aliases'].split('|')
+                geojson = self._get_geojson(attrs.pop('url'))
+                attrs['geojson'] = geojson
+                geojson_props = geojson['features'][0].get('properties', {}) if 'features' in geojson and len(geojson['features']) > 0 else geojson.get('properties', {})
+                for attr, val in geojson_props.items():
+                    if attr == 'aliases':
+                        geojson_aliases = val.split('|') if isinstance(val, str) else val
+                        attrs['aliases'] = sorted(set(geojson_aliases + attrs.get('aliases', [])))
+                    else:
+                        attrs[attr] = val
+                if 'id' not in attrs:
+                    geojson_id_seq += 1
+                    attrs['id'] = f'geojson-{geojson_id_seq}'
+                vem_elem['id'] = attrs['id']
+                for attr in [f'data-{attr_suffix}' for attr_suffix in ('active', 'geojson', 'url')]:
+                    if attr in vem_elem.attrs:
+                        del vem_elem.attrs[attr]
             elif  _type == 'map-layer':
                 if 'url' in attrs:
                     attrs['geojson'] = self._get_geojson(attrs.pop('url'))
@@ -267,21 +306,24 @@ class Essay(object):
             else:
                 attrs['type'] = _type
                 attrs['tagged_in'] = []
-            ve_markup[attrs['id']] = attrs
 
             # add id of enclosing element to entities 'tagged_in' attribute
-            if span.parent.name == 'p': # enclosing element is a paragraph
-                if 'id' in span.parent.attrs:
-                    enclosing_element_id = span.parent.attrs['id']
+            if vem_elem.parent.name == 'p': # enclosing element is a paragraph
+                if 'id' in vem_elem.parent.attrs and not _is_empty(vem_elem.parent):
+                    enclosing_element_id = vem_elem.parent.attrs['id']
                 else:
-                    enclosing_element_id = self._enclosing_section_id(span, self._soup.html.body.article.attrs['id'])
+                    enclosing_element_id = self._enclosing_section_id(vem_elem, self._soup.html.body.article.attrs['id'])
                 if enclosing_element_id not in attrs['tagged_in']:
                     attrs['tagged_in'].append(enclosing_element_id)
-                if _type == 'entity' and span.text:
-                    span.attrs['class'] = ['entity', 'tagged']
+                if _type in ('entity', 'geojson') and vem_elem.text:
+                    vem_elem.attrs['class'] = [_type, 'tagged']
+                    if _type == 'geojson':
+                        attrs['scope' ] = 'element'
                 else:
-                    span.decompose()
+                    vem_elem.decompose()
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')
+
+            ve_markup[attrs['id']] = attrs
 
         return ve_markup
 
@@ -307,7 +349,7 @@ class Essay(object):
             elem = elem.parent
         return section_ids
 
-    def _find_and_tag_entities(self):
+    def _find_and_tag_items(self):
         def tm_regex(s):
             return r'(^|\W)(%s)($|\W|[,:;])' % re.escape(s.lower())
 
@@ -320,11 +362,12 @@ class Essay(object):
             return True
 
         to_match = {}
-        for entity in [item for item in self.markup.values() if item['type'] == 'entity']:
-            to_match[tm_regex(entity['label'])] = {'str': entity['label'], 'entity': entity}
-            if entity.get('aliases'):
-                for alias in entity['aliases']:
-                    to_match[tm_regex(alias)] = {'str': alias, 'entity': entity}
+        for item in [item for item in self.markup.values() if item['type'] in ('entity', 'geojson')]:
+            if 'label' in item:
+                to_match[tm_regex(item['label'])] = {'str': item['label'], 'item': item}
+            if item.get('aliases'):
+                for alias in item['aliases']:
+                    to_match[tm_regex(alias)] = {'str': alias, 'item': item}
 
         for e in [e for e in filter(tag_visible, self._soup.findAll(text=True)) if e.strip() != '']:
             context = self._ids_for_elem(e)
@@ -332,13 +375,13 @@ class Essay(object):
             snorm = e.string.lower()
             matches = []
             for tm in sorted(to_match.keys(), key=len, reverse=True):
-                entity = to_match[tm]['entity']
+                item = to_match[tm]['item']
                 try:
                     for m in re.finditer(tm, snorm):
                         matched = m[2]
                         start = m.start(2)
                         end = start + len(matched)
-                        logger.debug(f'{entity["label"]} "{tm}" "{e[start:end]}" {start}')
+                        logger.debug(f'{item.get("label")} "{tm}" "{e[start:end]}" {start}')
                         overlaps = False
                         for match in matches:
                             mstart = match['idx']
@@ -348,7 +391,7 @@ class Essay(object):
                                 overlaps = True
                                 break
                         if not overlaps:
-                            _m = {'idx': start, 'matched': e.string[start:end], 'entity': to_match[tm]['entity']}
+                            _m = {'idx': start, 'matched': e.string[start:end], 'item': to_match[tm]['item']}
                             matches.append(_m)
 
                 except:
@@ -366,7 +409,7 @@ class Essay(object):
                 replaced = []
                 for rec in matches:
                     m = rec['idx']
-                    entity = rec['entity']
+                    item = rec['item']
                     if not cursor or m > cursor:
                         seg = s[cursor:m]
                         if replaced:
@@ -376,26 +419,28 @@ class Essay(object):
                         replaced.append(seg)
                         cursor = m
 
-                    logger.debug(f'{rec["matched"]} tagged_in={entity["tagged_in"]} scope={entity["scope"]} context={context} in_scope={len(set(entity["tagged_in"]).intersection(context_set)) > 0}')
+                    logger.debug(f'{rec["matched"]} tagged_in={item["tagged_in"]} scope={item.get("scope")} context={context} in_scope={len(set(item["tagged_in"]).intersection(context_set)) > 0}')
 
-                    if entity['scope'] == 'global' or set(entity['tagged_in']).intersection(context_set):
+                    if item.get('scope') == 'global' or (item.get('scope') not in ('element',) and set(item['tagged_in']).intersection(context_set)):
                         # make tag for matched item
                         seg = self._soup.new_tag('span')
                         seg.string = rec['matched']
-                        seg.attrs['title'] = entity['label']
+                        seg.attrs['id'] = item['id']
+                        seg.attrs['title'] = item.get('title', item.get('label'))
                         seg.attrs['class'] = ['entity', 'inferred']
-                        seg.attrs['data-entity'] = entity['qid']
-                        if 'found_in' not in entity:
-                            entity['found_in'] = []
-                        if context[0] not in entity['found_in']:
-                            entity['found_in'].append(context[0])
+                        if 'qid' in item:
+                            seg.attrs['data-entity'] = item['qid']
+                        if 'found_in' not in item:
+                            item['found_in'] = []
+                        if context[0] not in item['found_in']:
+                            item['found_in'].append(context[0])
                     else:
                         seg = s[cursor:cursor+len(rec['matched'])]
 
                     if replaced:
                         p.insert(idx+len(replaced), seg)
                     else:
-                        e.parent.attrs['title'] = entity['label']
+                        e.parent.attrs['title'] = item.get('title', item.get('label'))
                     replaced.append(rec['matched'])
                     cursor += len(rec['matched'])
 
@@ -404,6 +449,20 @@ class Essay(object):
                     p.insert(idx+len(replaced), seg)
                     replaced.append(seg)
     
+    def _qid_coords(self, qid):
+        resp = requests.post(
+            'https://query.wikidata.org/sparql',
+            headers={
+                'Accept': 'application/sparql-results+json',
+                'Content-type': 'application/x-www-form-urlencoded'},
+            data='query=%s' % quote(f'SELECT ?coords WHERE {{ wd:{qid.split(":")[-1]} wdt:P625 ?coords . }}')
+        )
+        if resp.status_code == 200:
+            bindings = resp.json()['results']['bindings']
+            if len(bindings) > 0:
+                coords_str = bindings[0]['coords']['value']
+                return [float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]]
+
     def _get_entity_data(self, qids):
         sparql = open(os.path.join(SPARQL_DIR, 'entities.rq'), 'r').read()
         sparql = sparql.replace('VALUES (?item) {}', f'VALUES (?item) {{ ({") (".join(qids)}) }}')
@@ -446,6 +505,11 @@ class Essay(object):
 
     def __str__(self):
         return self.html
+
+def is_qid(s, ns_required=True):
+    if not s or not isinstance(s, str): return False
+    eid = s.split(':')
+    return len(eid[-1]) > 1 and eid[-1][0] == 'Q' and eid[-1][1:].isdecimal()
 
 def add_vue_app(html, js_lib):
     soup = html if isinstance(html, BeautifulSoup) else BeautifulSoup(html, 'html5lib')
@@ -511,7 +575,7 @@ if __name__ == '__main__':
         else:
             assert False, "unhandled option"
 
-    client = EssayUtils(**kwargs)
+    client = Essay(**kwargs)
 
     if args:
         title = args[0]

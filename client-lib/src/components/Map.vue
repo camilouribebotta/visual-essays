@@ -22,9 +22,11 @@ export default {
       tile: {},
       geoJSON: {}
     },
-    controls: {}
+    controls: {},
+    featuresById: {}
   }),
   computed: {
+    selectedItemID () { return this.$store.getters.selectedItemID },
     activeElements() { return this.$store.getters.activeElements },
     activeElement() { return this.$store.getters.activeElements.length > 0 ? this.$store.getters.activeElements[0] : null },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
@@ -33,7 +35,7 @@ export default {
     locations() { return this.entities.filter(entity => entity.coords) },
     layerDefinitions() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map-layer') },
     mapwarperLayerDefs() { return this.layerDefinitions.filter(layer => layer['mapwarper-id']) },
-    geojsonLayerDefs() { return this.layerDefinitions.filter(layer => layer.geojson) },
+    geojsonLayerDefs() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
   },
   mounted() {
@@ -44,7 +46,7 @@ export default {
       if (this.mapsInActiveElements.length > 0) {
         this.positionMapContainer()
         const mapDef = this.mapsInActiveElements[this.mapsInActiveElements.length - 1]
-        this.map = this.$L.map('map')
+        this.map = this.$L.map('map', {zoomSnap: 0.1})
         this.map.setView(mapDef.center, mapDef.zoom || 10)
         this.mapLayers.baseLayer = this.$L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png')
         this.map.addLayer(
@@ -80,7 +82,7 @@ export default {
         } else {
           currentMwLayers[mwDef.id] = {
             id: mwDef['mapwarper-id'],
-            name: mwDef.name,
+            name: mwDef.title,
             active: (mwDef.active || 'false') === 'true',
             layer: this.$L.tileLayer(`https://mapwarper.net/maps/tile/${mwDef['mapwarper-id']}/{z}/{x}/{y}.png`)
           }
@@ -94,21 +96,24 @@ export default {
       this.mapLayers.mapWarper = currentMwLayers
     },
     async setGeoJSONLayers() {
+      console.log('setGeoJSONLayers')
       const currentLayers = {}
       this.geojsonLayerDefs.forEach((def) => {
+        console.log('geojson', def)
         if (this.mapLayers.geoJSON[def.id]) {
           currentLayers[def.id] = this.mapLayers.geoJSON[def.id]
         } else {
           currentLayers[def.id] = {
             id: def.id,
-            name: def.name,
+            name: def.title,
             active: (def.active || 'false') === 'true',
             layer: this.$L.geoJSON(
                   def.geojson,
                   { onEachFeature: this.onEachFeature }
-                ).bindPopup(def.name)
+                ).bindPopup(def.title)
           }
         }
+        this.featuresById[def.id] = currentLayers[def.id].layer
       })
       for (const layerId in this.mapLayers.geoJSON) {
         if (!currentLayers[layerId]) {
@@ -170,7 +175,9 @@ export default {
       const markers = []
       this.locations.forEach((location) => {
         const popup = location.label
-        markers.push(this.$L.marker(location.coords[0]).bindPopup(popup))   
+        const marker = this.$L.marker(location.coords[0]).bindPopup(popup)
+        markers.push(marker)
+        this.featuresById[location.id] = marker
       })
       return markers
     },
@@ -241,6 +248,15 @@ export default {
         */
   },
   watch: {
+    selectedItemID: {
+      handler: function (value, prior) {
+        console.log(`Map.watch.selectedItemID=${this.selectedItemID}`, this.featuresById[this.selectedItemID])
+        if (this.featuresById[this.selectedItemID]) {
+          this.featuresById[this.selectedItemID].openPopup()
+        }
+      },
+      immediate: true
+    },
     viewport: {
       handler: function (value, prior) {
         this.positionMapContainer()
@@ -259,7 +275,8 @@ export default {
           } else {
             if (this.map) {
               const curMap = this.mapsInActiveElements[this.mapsInActiveElements.length-1]
-              this.map.setView(curMap.center, curMap.zoom || 10)
+              // this.map.setView(curMap.center, curMap.zoom || 10)
+              this.map.flyTo(curMap.center, curMap.zoom || 10)
             } else {
               this.createBaseMap()
             }

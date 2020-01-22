@@ -81,13 +81,26 @@
       this.itemsByCategory
     },
     computed: {
+      selectedItemID () { return this.$store.getters.selectedItemID },
       activeElement() { return this.$store.getters.activeElement },
       entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
+      geojson() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
       maps() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map') },
       itemsByCategory() {
         const byCat = {}
-        this.entities.forEach((entity) => {
+        this.geojson
+        //.filter(geojson => geojson.label)
+        .forEach((geojson) => {
+          const category = 'Places'
+          if (!byCat[category]) {
+            byCat[category] = []
+          }
+          byCat[category].push(geojson)
+        })
+        this.entities
+        //.filter(entity => entity.label)
+        .forEach((entity) => {
           const category = catLabels[entity.category] || entity.category || 'unspecified'
           if (!byCat[category]) {
             byCat[category] = []
@@ -103,33 +116,54 @@
           let _window = 0
           activeWindow[`tab${tab}`] = `window-${tab}-0`
           byCat[key].forEach((item) => {
-            this.itemsMap[item.qid] = { tab, window: _window++}
+            this.itemsMap[item.id] = { tab, window: _window++}
           })
           results.push(
             {category: key, tab, items: byCat[key]}
           )
         })
+        this.activeTab = this.maps.length > 0 ? 'tab-0' : 'tab-1'
         this.activeWindow = activeWindow
+        // console.log(this.itemsMap)
+        // console.log(`itemsByCategory: maps=${this.maps.length} activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
         return results
       }
     },
     methods: {
+      isLocation(id) {
+        return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0
+      },
       clickHandler(e) {
-        const selectedItem = this.itemsMap[e.toElement.attributes['data-entity'].value]
-        this.activeTab = `tab-${selectedItem.tab}`
+        event.preventDefault()
+        event.stopPropagation()
+
+        const selectedItemID = e.toElement.id || e.toElement.attributes['data-entity'].value
+        const selectedItem = this.itemsMap[selectedItemID]
+        console.log('clickHandler', selectedItemID, this.isLocation(selectedItemID))
+        this.activeTab = this.maps.length > 0 && this.isLocation(selectedItemID)
+          ? 'tab-0'
+          : `tab-${selectedItem.tab}`
         this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`
+        console.log(`clickHandler: activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
+        this.$store.dispatch('setSelectedItemID', selectedItemID)
       }
     },
     watch: {
+      selectedItemID: {
+        handler: function (value, prior) {
+          console.log(`Viewer.watch.selectedItemId=${this.selectedItemID}`)
+        },
+        immediate: false
+      },
       activeElement(current, prior) {
         this.itemsByCategory
         if (prior) {
-          document.getElementById(prior.id).querySelectorAll('.entity.inferred').forEach((entity) => {
+          document.getElementById(prior.id).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
             entity.removeEventListener('click', this.clickHandler)
           })
         }
         if (current) {
-            document.getElementById(current.id).querySelectorAll('.entity.inferred').forEach((entity) => {
+            document.getElementById(current.id).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
               entity.addEventListener('click', this.clickHandler)
             })
           }

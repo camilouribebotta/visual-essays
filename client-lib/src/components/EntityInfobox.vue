@@ -23,7 +23,7 @@ export default {
   computed: {
     entity () { return this.$store.getters.items.find(entity => entity.qid === this.qid) || {} },
     entityInfo () { return this.entity['summary info'] },
-    title () { return this.entityInfo ? this.entityInfo.displaytitle : this.entity.label },
+    title () { return this.entityInfo && this.entityInfo.displaytitle || this.entity.label || this.entity.title },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
     thumbnail () { return this.entityInfo && this.entityInfo.thumbnail ? this.entityInfo.thumbnail.source : null },
     imageSrc () { return this.thumbnail ?  this.thumbnail : this.entity.images ? this.entity.images[0] : null },
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     getSummaryInfo() {
-      if (this.entity && this.entity['summary info'] === undefined && !this.requested.has(this.entity.qid)) {
+      if (this.entity.qid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.qid)) {
         this.requested.add(this.entity.qid)
         get_entity(this.entity.qid, this.context)
           .then((updated) => {

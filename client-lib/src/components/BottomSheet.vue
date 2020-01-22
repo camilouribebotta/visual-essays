@@ -255,7 +255,7 @@
     border-left: 4px solid #8FBC8F;
   }
 
-  p.active-elem .inferred {
+  p.active-elem .inferred, p.active-elem .tagged {
     border-bottom: 2px solid #8FBC8F;
     cursor: pointer;
   }

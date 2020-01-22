@@ -48,7 +48,7 @@ export default {
     onEntityClick(e) {
       e.stopPropagation()
       const qid = e.target.attributes['data-entity'].value
-      this.$store.dispatch('setSelectedEntityQID', qid)
+      this.$store.dispatch('setSelectedItemID', qid)
       const entity = this.$store.getters.items.find(item => item.qid === qid)
       if (entity && !entity['summary info']) {
         get_entity(qid, this.context)
