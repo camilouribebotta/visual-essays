@@ -6,7 +6,7 @@
 <var title="Estella" id="Q5400904"></var>
 <var title="Folkestone" id="Q375314"></var>
 <var title="Gravesend" id="Q676689"></var>
-<var title="Magwitch" id="Q4666596" data-aliases="Magwitch"></var>
+<var title="Abel Magwitch" id="Q4666596" data-aliases="Magwitch"></var>
 <var title="Philip Pirrip" id="Q7197170"></var>
 <var title="Rochester" id="Q507517"></var>
 <var title="Rod Hull" id="Q7356235"></var>
@@ -23,7 +23,7 @@
      title="Kent 1820"
      data-type="mapwarper"
      data-mapwarper-id="38872" 
-     data-active="false"></var>
+     data-active="true"></var>
 <var data-map-layer
      title="Kent 1808"
      data-type="mapwarper"
@@ -64,6 +64,7 @@ conveys a huge expanse. When he first meets the convict Magwitch in the churchya
 <var data-map data-center="Q5132831" data-zoom="12"></var>
 <var data-geojson
      title="Marshes"
+     data-aliases="marshes"
      data-url="https://raw.githubusercontent.com/kent-map/geojson/master/marshes.json"
      data-active="true"></var>
 

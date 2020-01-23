@@ -30,13 +30,14 @@
       show: { type: Boolean, default: false }
     },
     data: () => ({
-      scrollingElement: null,
+      scrollingElement: undefined,
       offsets: {
         scrollTo: 10,
         activeElem: 0
       },
       isOpen: false,
-      mouseOver: null
+      mouseOver: null,
+      selectedElem: undefined
     }),
     computed: {
       content() { return this.$store.getters.content },
@@ -68,6 +69,7 @@
           .forEach(para => {
             if (!nearest || pos >= para.top) { nearest = para }
           })
+        // console.log(`nearest pos=${pos} elem=${nearest.id}`)
         return nearest
       },
       addSpacer() {
@@ -86,14 +88,16 @@
         })
       },
       toggle(pos) {
-        const selected = this.nearestPara(pos)
-        console.log(`BottomSheet.toggle: pos=${pos} isOpen=${this.isOpen} elemId=${selected.id}`)
+        this.selectedElem = this.nearestPara(pos)
+        console.log(`BottomSheet.toggle: pos=${pos} isOpen=${this.isOpen} elemId=${this.selectedElem.id}`)
         if (this.isOpen) {
           this.close()
         } else {
           this.spacer.style.height = `${this.viewport.height/2}px`
-          this.positionElementInViewport(selected.id)
           this.isOpen = true
+          this.positionElementInViewport(this.selectedElem.id)
+          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
+          document.getElementById(this.selectedElem.id).classList.add('active-elem')
         }
       },
       close() {
@@ -102,6 +106,7 @@
         this.isOpen = false
       },
       positionElementInViewport(elemId) {
+        // console.log(`positionElementInViewport: elem=${elemId} scrollingElement=${this.scrollingElement !== undefined}`)
         for (let i = 0; i < this.content.length; i++) {
           const elem = this.content[i]
           if (elemId === elem.id) {
@@ -109,12 +114,12 @@
             const viewPaneHeight = this.viewport.height/2
             const topPadding = viewPaneHeight - elemHeight
             if (this.scrollingElement) {
-              this.scrollingElement.scrollTo(0,
-                viewPaneHeight > elemHeight
-                  ? elem.top - topPadding + this.offsets.scrollTo
+              const scrollTo = elem.top - topPadding + 10 > 0
+                  ? elem.top - topPadding + 10
                   : elem.top - 10
-              )
-              this.setActiveElements(scrollTo + this.viewport.height/2 - 80)
+            // console.log(`elem=${elem.id} elemTop=${elem.top} elemHeight=${elemHeight} viewPaneHeight=${viewPaneHeight} topPadding=${topPadding} scrollTo=${scrollTo}`)
+              this.scrollingElement.scrollTo(0, scrollTo)
+              this.setActiveElements(scrollTo)
             }
             break
           }
@@ -166,13 +171,17 @@
       handleScroll: throttle(function (event) {
         if (!this.ignoreScrollEvents) {
           this.scrollingElement = event.target.scrollingElement ? event.target.scrollingElement : event.target
+          // console.log('handleScroll', this.scrollingElement.scrollTop)
           event.preventDefault()
           event.stopPropagation()
-          const pos = this.isOpen
-            ? (this.scrollingElement.scrollTop + this.viewport.height/2) - 60
+          const viewPaneSize = this.isOpen ? this.viewport.height/2 : this.viewport.height
+          let pos = this.isOpen
+            ? (this.scrollingElement.scrollTop + this.viewport.height/2) - 10
             : this.scrollingElement.scrollTop
-          // console.log(`handleScroll: ${this.scrollingElement.scrollTop} ${this.nearestPara(pos).id}`)
-          this.setActiveElements(pos)
+          if (!this.selectedElem) {
+            this.setActiveElements(pos)
+          }
+          this.selectedElem = undefined
         }
       }, 300),
       handleMouseMove: throttle(function (event) {
@@ -202,11 +211,11 @@
         immediate: false
       },
       activeElements(current, prior) {
-        console.log('activeElements:', current.map(e => e.id).join(', '))
+        // console.log('activeElements:', current.map(e => e.id).join(', '))
       },
       activeElement(current, prior) {
-        // console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null}`)
-        if (this.isOpen) {
+        // console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null} isOpen=${this.isOpen} selected=${this.selectedElem !== undefined}`)
+        if (this.isOpen && !this.selectedElem) {
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
           if (current) {
             document.getElementById(current.id).classList.add('active-elem')
