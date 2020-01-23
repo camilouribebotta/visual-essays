@@ -78,6 +78,7 @@
       itemsMap: {}
     }),
     mounted() {
+      console.log('Viewer.mounted')
       this.itemsByCategory
     },
     computed: {
@@ -132,6 +133,7 @@
         return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0
       },
       clickHandler(e) {
+        console.log('Viewer.click')
         event.preventDefault()
         event.stopPropagation()
 
@@ -143,21 +145,43 @@
         this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`
         // console.log(`clickHandler: activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
         this.$store.dispatch('setSelectedItemID', selectedItemID)
+      },
+      addClickHandlers(elemId) {
+        console.log(`addClickHandlers: ${elemId}`)
+        document.getElementById(elemId).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
+          console.log(entity.id)
+          entity.addEventListener('click', this.clickHandler)
+        })
+      },
+      removeClickHandlers(elemId) {
+        document.getElementById(elemId).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
+          entity.removeEventListener('click', this.clickHandler)
+        })
       }
     },
-    watch: {
-      activeElement(current, prior) {
-        this.itemsByCategory
-        if (prior) {
-          document.getElementById(prior.id).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
-            entity.removeEventListener('click', this.clickHandler)
-          })
-        }
-        if (current) {
-            document.getElementById(current.id).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
-              entity.addEventListener('click', this.clickHandler)
-            })
+      content: {
+          handler: function (content) {
+          if (content) {
+            window.scrollTo(0, 0)
+            this.setActiveElements(content[0].top)
+            this.makeParagraphsClickable()
           }
+        },
+        immediate: false
+      },
+    watch: {
+      activeElement: {
+        handler: function (current, prior) {
+          console.log(`Viewer.activeElement: current=${current ? current.id : current} prior=${prior ? prior.id : prior}`)
+          this.itemsByCategory
+          if (prior) {
+            this.removeClickHandlers(prior.id)
+          }
+          if (current) {
+            this.addClickHandlers(current.id)
+          }
+        },
+        immediate: true
       }
     }
   }

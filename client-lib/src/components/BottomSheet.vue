@@ -119,7 +119,7 @@
                   : elem.top - 10
             // console.log(`elem=${elem.id} elemTop=${elem.top} elemHeight=${elemHeight} viewPaneHeight=${viewPaneHeight} topPadding=${topPadding} scrollTo=${scrollTo}`)
               this.scrollingElement.scrollTo(0, scrollTo)
-              this.setActiveElements(scrollTo)
+              this.setActiveElements(scrollTo + viewPaneHeight)
             }
             break
           }
@@ -161,9 +161,9 @@
             }
           }
         })
-        // console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
         if (!this.setsEqual(currentActiveElemIds, updatedActiveElemIds)) {
           if (updated.length > 0) {
+            console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
             this.$store.dispatch('setActiveElements', updated)        
           }
         }
