@@ -33,7 +33,7 @@
       scrollingElement: null,
       offsets: {
         scrollTo: 10,
-        activeElem: 140
+        activeElem: 0
       },
       isOpen: false,
       mouseOver: null
@@ -61,6 +61,15 @@
       this.addSpacer()
     },
     methods: {
+      nearestPara(pos) {
+        let nearest = undefined
+        this.content
+          .filter(elem => elem.type === 'paragraph')
+          .forEach(para => {
+            if (!nearest || pos >= para.top) { nearest = para }
+          })
+        return nearest
+      },
       addSpacer() {
         // Adds a spacer element that expands and contracts to match the size of the BottomSheet so
         // that content at the end of the article is still reachable by scrolling
@@ -69,71 +78,27 @@
         this.spacer.id = 'essay-spacer'
         document.getElementById('essay').appendChild(this.spacer)
       },
-      makeHeadingsClickable() {
-        for (let i = 1; i < 9; i++) {
-          document.body.querySelectorAll(`h${i}`).forEach((heading) => {
-            heading.addEventListener('click', (e) => this.toggle(e.target.parentElement.id))
-          })
-        }
-      },
-      makeSectionsClickable() {
-        for (let i = 1; i < 9; i++) {
-          document.body.querySelectorAll(`h${i}`).forEach((heading) => {
-            const section = heading.parentElement
-            section.addEventListener('click', (e) => {
-              this.toggle(e.target.parentElement.id)
-            })
-          })
-        }
-      },
-      /*
-      makeParagraphsClickable() {
-        console.log(`makeParagraphsClickable: elems=${this.content.length}`)
-        this.content.forEach((elem) => {
-          console.log(`elem=${elem.id}`)
-          if (elem.paragraphs) {
-            elem.paragraphs.forEach((para) => {
-              console.log(`para=${para.id}`)
-              document.getElementById(para.id).addEventListener('click', (e) => {
-                console.log('paragraph clicked')
-                e.stopPropagation()
-                e.preventDefault()
-                this.toggle(e.target.id)
-              })
-            })
-          }
-        })
-      },
-      */
       makeParagraphsClickable() {
         this.content.forEach((elem) => {
           if (elem.type === 'paragraph') {
-            document.getElementById(elem.id).addEventListener('click', (e) => this.toggle(e.target.id))
+            document.getElementById(elem.id).addEventListener('click', (e) => this.toggle(e.layerY))
           }
         })
       },
-      toggle(elemId) {
-        // console.log(`BottomSheet.toggle: isOpen=${this.isOpen} elemId=${elemId}`)
-        if (elemId) {
-          if (this.isOpen) {
-            this.close()
-          } else {
-            this.spacer.style.height = `${this.viewport.height/2}px`
-            this.positionElementInViewport(elemId)
-            this.isOpen = true
-            const currentElem = document.getElementById(elemId)
-            currentElem.classList.add('active-elem')
-          }
+      toggle(pos) {
+        const selected = this.nearestPara(pos)
+        console.log(`BottomSheet.toggle: pos=${pos} isOpen=${this.isOpen} elemId=${selected.id}`)
+        if (this.isOpen) {
+          this.close()
+        } else {
+          this.spacer.style.height = `${this.viewport.height/2}px`
+          this.positionElementInViewport(selected.id)
+          this.isOpen = true
         }
       },
       close() {
         this.spacer.style.height = '0px'
         document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-        /*
-        currentElem.querySelectorAll('.entity.inferred').forEach((entity) => {
-          entity.removeEventListener('click', this.clickHandler)
-        })
-        */
         this.isOpen = false
       },
       positionElementInViewport(elemId) {
@@ -143,12 +108,13 @@
             const elemHeight = elem.bottom - elem.top
             const viewPaneHeight = this.viewport.height/2
             const topPadding = viewPaneHeight - elemHeight
-            const scrollTo = viewPaneHeight > elemHeight
-              ? elem.top - topPadding + this.offsets.scrollTo
-              : elem.top - 10
-            // console.log(`positionElementInViewport: element=${elem.id} viewPaneHeight=${viewPaneHeight} elemHeight=${elemHeight} elemTop=${elem.top} topPadding=${topPadding} scrollTo=${scrollTo}`)
             if (this.scrollingElement) {
-              this.scrollingElement.scrollTo(0, scrollTo)
+              this.scrollingElement.scrollTo(0,
+                viewPaneHeight > elemHeight
+                  ? elem.top - topPadding + this.offsets.scrollTo
+                  : elem.top - 10
+              )
+              this.setActiveElements(scrollTo + this.viewport.height/2 - 80)
             }
             break
           }
@@ -160,50 +126,54 @@
           return true
       },
       setActiveElements(pos) {
-        pos += this.offsets.activeElem
-        const currentActiveElemIds = new Set()
-        this.$store.getters.activeElements.forEach(e => currentActiveElemIds.add(e.id))
+        const currentActiveElemIds = new Set(this.$store.getters.activeElements.map(e => e.id))
         const updatedActiveElemIds = new Set()
         const updated = []
+
         this.$store.getters.content.forEach((elem) => {
-          if (pos >= elem.top && pos <= elem.bottom) {
-            if (elem.paragraphs) {
-              elem.paragraphs.forEach((para) => {
-                if (pos >= para.top && pos <= para.bottom) {
-                  if (!updatedActiveElemIds.has(para.id)) {
-                    updated.push(para)
-                    updatedActiveElemIds.add(para.id)
+          if (elem.type !== 'paragraph') {
+            if (pos >= elem.top && pos <= elem.bottom) {
+              if (elem.paragraphs) {
+                let ap = elem.paragraphs[0]
+                for (let i = 0; i < elem.paragraphs.length; i++) {
+                  const para = elem.paragraphs[i]
+                  if (pos >= para.top) {
+                    ap = para
+                  }
+                  if (pos < para.bottom) {
+                    break
                   }
                 }
-              })
-            //} else {
-            //  if (!updatedActiveElemIds.has(elem.id)) {
-            //    updated.push(elem)
-            //    updatedActiveElemIds.add(elem.id)
-            //  }
-            }
-            if (!updatedActiveElemIds.has(elem.id)) {
-              updated.push(elem)
-              updatedActiveElemIds.add(elem.id)
+                if (!updatedActiveElemIds.has(ap.id)) {
+                  updated.push(ap)
+                  updatedActiveElemIds.add(ap.id)
+                }
+              }
+              if (!updatedActiveElemIds.has(elem.id)) {
+                updated.push(elem)
+                updatedActiveElemIds.add(elem.id)
+              }
             }
           }
         })
-        // console.log(currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
+        // console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
         if (!this.setsEqual(currentActiveElemIds, updatedActiveElemIds)) {
-          // updated.sort().reverse()
           if (updated.length > 0) {
             this.$store.dispatch('setActiveElements', updated)        
           }
         }
       },
       handleScroll: throttle(function (event) {
-        this.scrollingElement = event.target.scrollingElement ? event.target.scrollingElement : event.target
-        event.preventDefault()
-        event.stopPropagation()
-        const pos = this.isOpen && this.scrollingElement.scrollTop > 0
-          ? (this.scrollingElement.scrollTop + this.viewport.height/2) - 60
-          : this.scrollingElement.scrollTop + 20
-        this.setActiveElements(this.scrollingElement.scrollTop)     
+        if (!this.ignoreScrollEvents) {
+          this.scrollingElement = event.target.scrollingElement ? event.target.scrollingElement : event.target
+          event.preventDefault()
+          event.stopPropagation()
+          const pos = this.isOpen
+            ? (this.scrollingElement.scrollTop + this.viewport.height/2) - 60
+            : this.scrollingElement.scrollTop
+          // console.log(`handleScroll: ${this.scrollingElement.scrollTop} ${this.nearestPara(pos).id}`)
+          this.setActiveElements(pos)
+        }
       }, 300),
       handleMouseMove: throttle(function (event) {
         const where = this.isOpen ? event.clientY <= this.viewport.height/2 ? 'document' : 'viewer' : 'essay'
@@ -211,11 +181,7 @@
           this.mouseOver = where
           // console.log(`mouseOver=${this.mouseOver}`)
         }
-      }, 100),
-      clickHandler(e) {
-        // console.log(e)
-        // console.log(this.$refs)
-      }
+      }, 100)
     },
     watch: {
       content: {
@@ -223,9 +189,7 @@
           if (content) {
             window.scrollTo(0, 0)
             this.setActiveElements(content[0].top)
-            this.makeHeadingsClickable()
             this.makeParagraphsClickable()
-            //this.makeSectionsClickable()
           }
         },
         immediate: false
@@ -238,28 +202,14 @@
         immediate: false
       },
       activeElements(current, prior) {
-        // console.log('activeElements:', current)
+        console.log('activeElements:', current.map(e => e.id).join(', '))
       },
       activeElement(current, prior) {
         // console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null}`)
         if (this.isOpen) {
-          if (prior) {
-            const priorElem = document.getElementById(prior.id)
-            priorElem.classList.remove('active-elem')
-            /*
-            priorElem.querySelectorAll('.entity.inferred').forEach((entity) => {
-              entity.removeEventListener('click', this.clickHandler)
-            })
-            */
-          }
+          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
           if (current) {
-            const currentElem = document.getElementById(current.id)
-            currentElem.classList.add('active-elem')
-            /*
-            currentElem.querySelectorAll('.entity.inferred').forEach((entity) => {
-              entity.addEventListener('click', this.clickHandler)
-            })
-            */
+            document.getElementById(current.id).classList.add('active-elem')
           }
         }
       }

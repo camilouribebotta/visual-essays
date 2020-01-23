@@ -96,10 +96,8 @@ export default {
       this.mapLayers.mapWarper = currentMwLayers
     },
     async setGeoJSONLayers() {
-      console.log('setGeoJSONLayers')
       const currentLayers = {}
       this.geojsonLayerDefs.forEach((def) => {
-        console.log('geojson', def)
         if (this.mapLayers.geoJSON[def.id]) {
           currentLayers[def.id] = this.mapLayers.geoJSON[def.id]
         } else {
@@ -250,7 +248,7 @@ export default {
   watch: {
     selectedItemID: {
       handler: function (value, prior) {
-        console.log(`Map.watch.selectedItemID=${this.selectedItemID}`, this.featuresById[this.selectedItemID])
+        //console.log(`Map.watch.selectedItemID=${this.selectedItemID}`, this.featuresById[this.selectedItemID])
         if (this.featuresById[this.selectedItemID]) {
           this.featuresById[this.selectedItemID].openPopup()
         }

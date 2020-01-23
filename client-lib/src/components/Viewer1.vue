@@ -124,8 +124,6 @@
         })
         this.activeTab = this.maps.length > 0 ? 'tab-0' : 'tab-1'
         this.activeWindow = activeWindow
-        // console.log(this.itemsMap)
-        // console.log(`itemsByCategory: maps=${this.maps.length} activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
         return results
       }
     },
@@ -139,22 +137,15 @@
 
         const selectedItemID = e.toElement.id || e.toElement.attributes['data-entity'].value
         const selectedItem = this.itemsMap[selectedItemID]
-        console.log('clickHandler', selectedItemID, this.isLocation(selectedItemID))
         this.activeTab = this.maps.length > 0 && this.isLocation(selectedItemID)
           ? 'tab-0'
           : `tab-${selectedItem.tab}`
         this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`
-        console.log(`clickHandler: activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
+        // console.log(`clickHandler: activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
         this.$store.dispatch('setSelectedItemID', selectedItemID)
       }
     },
     watch: {
-      selectedItemID: {
-        handler: function (value, prior) {
-          console.log(`Viewer.watch.selectedItemId=${this.selectedItemID}`)
-        },
-        immediate: false
-      },
       activeElement(current, prior) {
         this.itemsByCategory
         if (prior) {
