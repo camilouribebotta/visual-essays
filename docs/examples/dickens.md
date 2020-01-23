@@ -25,6 +25,11 @@
      title="Kent 1820"
      data-type="mapwarper"
      data-mapwarper-id="38872" 
+     data-active="false"></var>
+<var data-map-layer
+     title="Kent Topo Survey 1860"
+     data-type="mapwarper"
+     data-mapwarper-id="44832" 
      data-active="true"></var>
 <var data-map-layer
      title="Kent 1808"
