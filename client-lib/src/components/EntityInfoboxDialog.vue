@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     setSelectedItemID(arg) {
-      const qid = arg && arg.target ? arg.target.attributes['data-entity'].value : arg
+      const qid = arg && arg.target ? arg.target.attributes['data-itemid'].value : arg
       const selectedEntity = qid === this.selectedItemID ? null : qid
       this.$store.dispatch('setSelectedItemID', selectedEntity)
     }

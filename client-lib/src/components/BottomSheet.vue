@@ -102,6 +102,9 @@
       },
       close() {
         this.spacer.style.height = '0px'
+        document.querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
+          entity.removeEventListener('click', this.clickHandler)
+        })
         document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         this.isOpen = false
       },
@@ -163,7 +166,7 @@
         })
         if (!this.setsEqual(currentActiveElemIds, updatedActiveElemIds)) {
           if (updated.length > 0) {
-            console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
+            // console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
             this.$store.dispatch('setActiveElements', updated)        
           }
         }

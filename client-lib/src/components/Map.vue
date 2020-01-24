@@ -272,9 +272,11 @@ export default {
               this.$refs.mapWrapper.style.display = 'none'
           } else {
             if (this.map) {
-              const curMap = this.mapsInActiveElements[this.mapsInActiveElements.length-1]
-              // this.map.setView(curMap.center, curMap.zoom || 10)
-              this.map.flyTo(curMap.center, curMap.zoom || 10)
+              if (this.mapsInActiveElements.length > 0) {
+                const curMap = this.mapsInActiveElements[this.mapsInActiveElements.length-1]
+                // this.map.setView(curMap.center, curMap.zoom || 10)
+                this.map.flyTo(curMap.center, curMap.zoom || 10)
+              }
             } else {
               this.createBaseMap()
             }

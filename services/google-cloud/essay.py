@@ -238,7 +238,6 @@ class Essay(object):
 
     def _find_ve_markup(self):
         ve_markup = {}
-        geojson_id_seq = 0
 
         # custom markup is defined in a var or span elements.  Custom properties are defined with element data-* attribute
         for vem_elem in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag)]:
@@ -247,25 +246,23 @@ class Essay(object):
             if len(matches) == 1:
                 _type = matches.pop()
             elif 'id' in attrs and is_qid(attrs['id']):
-                if ':' not in attrs['id']:
-                    attrs['id'] = f'wd:{attrs["id"]}'
-                attrs['qid'] = attrs['id']
                 _type = 'entity'
+                qid = attrs.pop('id')
+                ns, qid = qid.split(':') if ':' in qid else ('wd', qid)
+                attrs['id'] = f'{ns}:{qid}'
+                attrs['qid'] = f'{ns}:{qid}'
             else:
                 continue
 
+            if 'id' not in attrs:
+                attrs['id'] = f'{_type}-{sum([1 for item in ve_markup.values() if item["type"] == _type])+1}'
+
             if _type == 'entity':
-                attrs['qid'] = attrs.pop('entity', attrs.pop('qid', None))
-                if ':' not in attrs['qid']:
-                    # ensure entity QIDs are namespaced. Use wikidata ('wd:') as default
-                    attrs['qid'] = f'wd:{attrs["qid"]}'
-                vem_elem.attrs['data-entity'] = attrs['qid']
                 if 'scope' not in attrs:
                     attrs['scope'] = 'global'
                 if 'aliases' in attrs:
                     attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
             elif  _type == 'map':
-                #logger.info(vem_elem)
                 if 'center' in attrs:
                     if is_qid(attrs['center']):
                         attrs['center'] = self._qid_coords(attrs['center'])
@@ -273,10 +270,7 @@ class Essay(object):
                         attrs['center'] = [float(c.strip()) for c in attrs['center'].replace(',', ' ').split()]
                 if 'zoom' in attrs:
                     attrs['zoom'] = round(float(attrs['zoom']), 1)
-                #logger.info(attrs)
             elif  _type == 'geojson':
-                #if 'title' in attrs:
-                #    attrs['label'] = attrs['title']
                 if 'aliases' in attrs:
                     attrs['aliases'] = attrs['aliases'].split('|')
                 geojson = self._get_geojson(attrs.pop('url'))
@@ -288,19 +282,12 @@ class Essay(object):
                         attrs['aliases'] = sorted(set(geojson_aliases + attrs.get('aliases', [])))
                     else:
                         attrs[attr] = val
-                if 'id' not in attrs:
-                    geojson_id_seq += 1
-                    attrs['id'] = f'geojson-{geojson_id_seq}'
-                vem_elem['id'] = attrs['id']
                 for attr in [f'data-{attr_suffix}' for attr_suffix in ('active', 'geojson', 'url')]:
                     if attr in vem_elem.attrs:
                         del vem_elem.attrs[attr]
             elif  _type == 'map-layer':
                 if 'url' in attrs:
                     attrs['geojson'] = self._get_geojson(attrs.pop('url'))
-
-            if 'id' not in attrs:
-                attrs['id'] = attrs['qid'] if _type == 'entity' else f'{_type}-{sum([1 for item in ve_markup.values() if item["type"] == _type])+1}'
             if attrs['id'] in ve_markup:
                 attrs = ve_markup[attrs['id']]
             else:
@@ -316,6 +303,7 @@ class Essay(object):
                 if enclosing_element_id not in attrs['tagged_in']:
                     attrs['tagged_in'].append(enclosing_element_id)
                 if _type in ('entity', 'geojson') and vem_elem.text:
+                    vem_elem.attrs['data-itemid'] = attrs['id']
                     vem_elem.attrs['class'] = [_type, 'tagged']
                     if _type == 'geojson':
                         attrs['scope' ] = 'element'
@@ -425,11 +413,9 @@ class Essay(object):
                         # make tag for matched item
                         seg = self._soup.new_tag('span')
                         seg.string = rec['matched']
-                        seg.attrs['id'] = item['id']
                         seg.attrs['title'] = item.get('title', item.get('label'))
                         seg.attrs['class'] = ['entity', 'inferred']
-                        if 'qid' in item:
-                            seg.attrs['data-entity'] = item['qid']
+                        seg.attrs['data-itemid'] = item['id']
                         if 'found_in' not in item:
                             item['found_in'] = []
                         if context[0] not in item['found_in']:

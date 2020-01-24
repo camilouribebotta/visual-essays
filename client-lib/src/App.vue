@@ -45,6 +45,7 @@ export default {
         entity.addEventListener('click', this.onEntityClick)
       })
     },
+    /*
     onEntityClick(e) {
       e.stopPropagation()
       const qid = e.target.attributes['data-entity'].value
@@ -58,6 +59,7 @@ export default {
           })
       }
     },
+    */
     getParagraphs(elem) {
       const paragraphs = []
       if (elem) {

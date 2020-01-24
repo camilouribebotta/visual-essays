@@ -78,7 +78,6 @@
       itemsMap: {}
     }),
     mounted() {
-      console.log('Viewer.mounted')
       this.itemsByCategory
     },
     computed: {
@@ -133,11 +132,9 @@
         return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0
       },
       clickHandler(e) {
-        console.log('Viewer.click')
         event.preventDefault()
         event.stopPropagation()
-
-        const selectedItemID = e.toElement.id || e.toElement.attributes['data-entity'].value
+        const selectedItemID = e.toElement.attributes['data-itemid'].value
         const selectedItem = this.itemsMap[selectedItemID]
         this.activeTab = this.maps.length > 0 && this.isLocation(selectedItemID)
           ? 'tab-0'
@@ -147,14 +144,14 @@
         this.$store.dispatch('setSelectedItemID', selectedItemID)
       },
       addClickHandlers(elemId) {
-        console.log(`addClickHandlers: ${elemId}`)
-        document.getElementById(elemId).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
-          console.log(entity.id)
+        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+          // console.log(`add clickHandler: ${entity.attributes['data-itemid'].value}`)
           entity.addEventListener('click', this.clickHandler)
         })
       },
       removeClickHandlers(elemId) {
-        document.getElementById(elemId).querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
+        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+          // console.log(`remove clickHandler: ${entity.attributes['data-itemid'].value}`)
           entity.removeEventListener('click', this.clickHandler)
         })
       }
