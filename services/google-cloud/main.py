@@ -22,7 +22,7 @@ VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.1.28.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-CONTENT_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'content')
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'docs', 'examples')
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
