@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import Viewer from './Viewer1'
+  import Viewer from './Viewer'
   import { throttle } from 'lodash'
 
   export default {

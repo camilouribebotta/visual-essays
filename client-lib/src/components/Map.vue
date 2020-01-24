@@ -108,7 +108,7 @@ export default {
             layer: this.$L.geoJSON(
                   def.geojson,
                   { onEachFeature: this.onEachFeature }
-                ).bindPopup(def.title)
+                ).bindPopup(this.makePopup(def))
           }
         }
         this.featuresById[def.id] = currentLayers[def.id].layer
@@ -172,8 +172,7 @@ export default {
     getLocationMarkers() {
       const markers = []
       this.locations.forEach((location) => {
-        const popup = location.label
-        const marker = this.$L.marker(location.coords[0]).bindPopup(popup)
+        const marker = this.$L.marker(location.coords[0]).bindPopup(this.makePopup(location))
         markers.push(marker)
         this.featuresById[location.id] = marker
       })
@@ -229,7 +228,16 @@ export default {
         }
         this.setControls()
       }
-    }
+    },
+    makePopup(item) {
+      let pu = `<h1>${item.label || item.title}</h1>`
+      if (item.images) {
+        pu += `<img src="${item.images[0]}">`
+        pu = `<div style="width: 125px !important; height:135px !important;">${pu}</div>`
+      }
+      console.log(item)
+      return pu
+    },
         /*
         this.layers.forEach((layer) => {
             const markerFeatures = layer.features.filter(feature => feature.type === 'marker')
@@ -294,17 +302,46 @@ export default {
 
 <style>
 
-    .wrapper {
-        display: inherit;
-    }
+  .wrapper {
+    display: inherit;
+  }
   
-    .lmap {
-        z-index: 1;
-        width: 100%;
-    }
+  .lmap {
+    z-index: 1;
+    width: 100%;
+  }
 
   .leaflet-interactive {
     fill-opacity: 0;
   }
+
+  /*
+  .leaflet-popup-content-wrapper {
+    height: 150px;
+    width: 150px;
+  }
+  */
+  .leaflet-popup-content-wrapper h1 {
+    font-size: 14px;
+    text-align: center;
+  }
+  .leaflet-popup-content-wrapper img {
+    /* object-fit:
+       fill = stretched to fit box
+       contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
+       cover = fills entire box, maintains aspect ration, clipped to fit
+       none = content not resized
+       scale-down = same as none or contain, whichever is smaller
+    */
+    object-fit: contain; 
+    width: 125px;
+    height: 120px;
+    /* 
+    padding: 2px 10px 2px 0;
+    float: left;
+    */
+    vertical-align: top;
+  }    
+  
 
 </style>
