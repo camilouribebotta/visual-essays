@@ -1,6 +1,6 @@
 # Welcome to StackEdit!
 
-Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about Douglas Adams, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
+Hi! I'm your first Markdown file in **StackEdit**. If you want to learn more about Douglas Adams, click somewhere on this paragraph. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
 <var title="Douglas Adams" id="Q42"></var>
 
 # Files
@@ -142,5 +142,5 @@ B --> D{Rhombus}
 C --> D
 ```
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk2OTgzODY3OCwxNDI1MDI1NTZdfQ==
+eyJoaXN0b3J5IjpbLTEyNTM1ODgzNDAsMTQyNTAyNTU2XX0=
 -->
