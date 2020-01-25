@@ -7,13 +7,15 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: 'help',
     data: () => ({
       html: undefined
     }),
-    async mounted() {
-      this.html = this.$marked(await this.$axios.$get(`${process.env.app_md_endpoint}/${this.$options.name}.md`))
+    mounted() {
+      axios.get(`${process.env.app_md_endpoint}/${this.$options.name}.md`)
+        .then(resp => this.html = this.$marked(resp.data))
     }
   }
 </script>

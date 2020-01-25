@@ -10,25 +10,24 @@
 import axios from 'axios'
 import ResizeSensor from 'resize-sensor'
 
-const api = axios.create({
-  baseURL: process.env.ve_service_endpoint
-})
-
 export default {
   name: 'essay',
   data: () => ({
     essay: undefined
   }),
   mounted() {
-    this.getEssay(this.$route.query.src)
+    const src = this.$route.query.src.replace(/http:\/\/localhost:5000/, 'file://localhost')
+    console.log('essay', src, process.env.ve_service_endpoint)
+    this.getEssay(src)
   },
   methods: {
     getEssay(src) {
-      let url = `/essay?src=${encodeURIComponent(src)}&nocss`
+      let url = `${process.env.ve_service_endpoint}/essay?src=${encodeURIComponent(src)}&nocss`
       if (process.env.context) {
         url += `&context=${process.env.context}`
       }
-      api.get(url)
+      console.log(url)
+      axios.get(url)
         .then((resp) => {
           this.essay = resp.data
           this.$nextTick(() => {

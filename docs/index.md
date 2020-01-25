@@ -1,1 +1,3 @@
 ## Visual Essays home
+
+**<big>[Great Expectations: a curated walk](examples/dickens.md)</big>** - In this essay...
