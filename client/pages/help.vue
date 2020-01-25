@@ -1,33 +1,19 @@
 <template>
   <v-layout>
     <v-flex>
-      <div>url: {{ url }}</div>
-      <div>resp: {{ resp }}</div>
-      <div>md: {{ md }}</div>
-      <div ref="index" v-html="html"/>
+      <div v-html="html"/>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-
   export default {
     name: 'help',
     data: () => ({
-      url: undefined,
-      resp: undefined,
-      md: undefined,
       html: undefined
     }),
-    mounted() {
-      this.url = `${process.env.app_md_endpoint}/${this.$options.name}.md`
-
-      this.$axios.get(this.url)
-      .then((resp) => {
-        this.resp = JSON.stringify(resp)
-        this.md = resp.data
-        this.html = this.$marked(this.md)
-      })
+    async mounted() {
+      this.html = this.$marked(await this.$axios.$get(`${process.env.app_md_endpoint}/${this.$options.name}.md`))
     }
   }
 </script>
