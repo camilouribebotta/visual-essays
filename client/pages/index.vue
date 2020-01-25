@@ -1,6 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
+      <div>src: {{src}}</div>
       <div ref="index" v-html="html"/>
     </v-flex>
   </v-layout>
@@ -11,18 +12,17 @@
   import marked from 'marked'
   import { parseUrl } from '../utils'
 
-  const baseURL = 'https://jstor-labs.github.io/visual-essays/examples'
-  const api = axios.create({ baseURL })
-
   export default {
     name: 'index',
     data: () => ({
-      html: undefined
+      html: undefined,
+      src: undefined
     }),
     mounted() {
-      api.get('/README.md')
+      this.src = `${process.env.app_md_endpoint}/${this.$options.name}.md`
+      this.$axios.get(this.src)
       .then((resp) => {
-        this.html = marked(resp.data)
+        this.html = this.$marked(resp.data)
         this.$nextTick(() => {
           const host = window.location.host
           this.$refs.index.querySelectorAll('a').forEach((link) => {
@@ -30,7 +30,7 @@
             if (parsedUrl.host === host) {
               link.addEventListener('click', (e) => {
                 e.preventDefault()
-                this.$router.push({path: '/essay', query: { src: `${baseURL}${parsedUrl.pathname}` }})
+                this.$router.push({path: '/essay', query: { src: `${process.env.app_md_endpoint}${parsedUrl.pathname}` }})
               })
             }
           })
