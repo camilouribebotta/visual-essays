@@ -124,6 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const esssayElem = document.getElementById('essay')
       if (esssayElem && esssayElem.innerText.length > 0) {
         initApp()
+        href = window.location.href
+        console.log(href)
       }
     }
   }

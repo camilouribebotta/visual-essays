@@ -144,12 +144,14 @@
         this.$store.dispatch('setSelectedItemID', selectedItemID)
       },
       addClickHandlers(elemId) {
+        // console.log(`addClickHandlers ${elemId}`)
         document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
           // console.log(`add clickHandler: ${entity.attributes['data-itemid'].value}`)
           entity.addEventListener('click', this.clickHandler)
         })
       },
       removeClickHandlers(elemId) {
+        // console.log(`removeClickHandlers ${elemId}`)
         document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
           // console.log(`remove clickHandler: ${entity.attributes['data-itemid'].value}`)
           entity.removeEventListener('click', this.clickHandler)

@@ -22,7 +22,7 @@ VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.1.28.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-CONTENT_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'docs', 'examples')
+CONTENT_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'docs')
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
@@ -92,6 +92,7 @@ def local_content(*args, **kwargs):
     if args and 'request' not in globals():
         request = args[0]
     content_path = os.path.join(CONTENT_DIR, request.view_args['fname'])
+    logger.info(f'local_content: {content_path}')
     if os.path.exists(content_path):
         with open(content_path, 'r') as fp:
             md = fp.read()

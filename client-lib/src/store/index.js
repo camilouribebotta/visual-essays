@@ -11,7 +11,8 @@ export default new Vuex.Store({
     activeElements: [],
     selectedItemID: null,
     height: 0,
-    width: 0
+    width: 0,
+    topMargin: 0
   },
   mutations: {
     setContext (state, context) { state.context = context },
@@ -28,7 +29,8 @@ export default new Vuex.Store({
     setViewport(state, viewport) { 
       state.height = viewport.height
       state.width = viewport.width
-    }
+    },
+    setTopMargin (state, height) { state.topMargin = height }
   },
   actions: {
     setContext: ({ commit }, context) => commit('setContext', context),
@@ -37,7 +39,8 @@ export default new Vuex.Store({
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
-    setViewport: ({ commit }, viewport) => commit('setViewport', viewport)
+    setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
+    setTopMargin: ({ commit }, height) => commit('setTopMargin', height)
   },
   getters: {
     context: state => state.context,
@@ -54,7 +57,8 @@ export default new Vuex.Store({
     },
     selectedItemID: state => state.selectedItemID,
     height: state => state.height,
-    width: state => state.width
+    width: state => state.width,
+    topMargin: state => state.topMargin
   },
   modules: {
   }

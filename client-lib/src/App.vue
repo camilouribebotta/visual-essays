@@ -38,6 +38,9 @@ export default {
   },
   methods: {
     init() {
+      document.body.querySelectorAll('.v-toolbar__content').forEach((toolbar) => {
+        this.$store.dispatch('setTopMargin', toolbar.offsetHeight + 10)
+      })
       this.aggregateItemMappings()
       this.findContent()
       // attach click listeners to entities

@@ -17,12 +17,6 @@ export default {
   props: {
     qid: { type: String }
   },
-  created() {
-    console.log('EntityInfobox', this.qid)
-  },
-  mounted() {
-    console.log('EntityInfobox', this.qid)
-  },
   computed: {
     entity () { return this.$store.getters.items.find(entity => entity.qid === this.qid) || {} },
     entityInfo () { return this.entity['summary info'] },

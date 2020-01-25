@@ -31,10 +31,6 @@
     },
     data: () => ({
       scrollingElement: undefined,
-      offsets: {
-        scrollTo: 10,
-        activeElem: 0
-      },
       isOpen: false,
       mouseOver: null,
       selectedElem: undefined
@@ -43,7 +39,8 @@
       content() { return this.$store.getters.content },
       activeElements() { return this.$store.getters.activeElements },
       activeElement() { return this.activeElements.length > 0 ? this.activeElements[0] : null },
-      viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
+      viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
+      topMargin() { return this.$store.getters.topMargin }
     },
     created() {
       this.isOpen = this.show
@@ -51,10 +48,7 @@
     mounted() {
       // add scroll listener to update visible sections list in store
       let contentContainer = document.getElementById('scrollableContent')
-      if (contentContainer) {
-        this.offsets.scrollTo = 290
-        this.offsets.activeElem = 220
-      } else {
+      if (!contentContainer) {
         contentContainer = window.document
       }
       contentContainer.addEventListener('scroll', this.handleScroll)
@@ -69,7 +63,7 @@
           .forEach(para => {
             if (!nearest || pos >= para.top) { nearest = para }
           })
-        // console.log(`nearest pos=${pos} elem=${nearest.id}`)
+        console.log(`nearest pos=${pos} elem=${nearest.id}`)
         return nearest
       },
       addSpacer() {
@@ -102,6 +96,7 @@
       },
       close() {
         this.spacer.style.height = '0px'
+        // console.log('removeClickHandlers')
         document.querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
           entity.removeEventListener('click', this.clickHandler)
         })
@@ -121,8 +116,8 @@
                   ? elem.top - topPadding + 10
                   : elem.top - 10
             // console.log(`elem=${elem.id} elemTop=${elem.top} elemHeight=${elemHeight} viewPaneHeight=${viewPaneHeight} topPadding=${topPadding} scrollTo=${scrollTo}`)
-              this.scrollingElement.scrollTo(0, scrollTo)
-              this.setActiveElements(scrollTo + viewPaneHeight)
+              this.scrollingElement.scrollTo(0, scrollTo + this.topMargin)
+              this.setActiveElements(scrollTo + viewPaneHeight + this.topMargin)
             }
             break
           }
@@ -134,6 +129,7 @@
           return true
       },
       setActiveElements(pos) {
+        pos -= this.topMargin
         const currentActiveElemIds = new Set(this.$store.getters.activeElements.map(e => e.id))
         const updatedActiveElemIds = new Set()
         const updated = []
@@ -166,7 +162,7 @@
         })
         if (!this.setsEqual(currentActiveElemIds, updatedActiveElemIds)) {
           if (updated.length > 0) {
-            // console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
+            console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
             this.$store.dispatch('setActiveElements', updated)        
           }
         }

@@ -436,41 +436,48 @@ class Essay(object):
                     replaced.append(seg)
     
     def _qid_coords(self, qid):
-        resp = requests.post(
-            'https://query.wikidata.org/sparql',
-            headers={
-                'Accept': 'application/sparql-results+json',
-                'Content-type': 'application/x-www-form-urlencoded'},
-            data='query=%s' % quote(f'SELECT ?coords WHERE {{ wd:{qid.split(":")[-1]} wdt:P625 ?coords . }}')
-        )
-        if resp.status_code == 200:
-            bindings = resp.json()['results']['bindings']
-            if len(bindings) > 0:
-                coords_str = bindings[0]['coords']['value']
-                return [float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]]
+        sparql = f'SELECT ?coords WHERE {{ wd:{qid.split(":")[-1]} wdt:P625 ?coords . }}'
+        for _ in range(3):
+            resp = requests.post(
+                'https://query.wikidata.org/sparql',
+                headers={
+                    'Accept': 'application/sparql-results+json',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'User-agent': 'JSTOR Labs python client'},
+                data='query=%s' % quote(sparql)
+            )
+            if resp.status_code == 200:
+                bindings = resp.json()['results']['bindings']
+                if len(bindings) > 0:
+                    coords_str = bindings[0]['coords']['value']
+                    return [float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]]
+            logger.info(f'_qid_coords: resp_code={resp.status_code} msg=${resp.text}')
+            logger.info(sparql)
 
     def _get_entity_data(self, qids):
         sparql = open(os.path.join(SPARQL_DIR, 'entities.rq'), 'r').read()
         sparql = sparql.replace('VALUES (?item) {}', f'VALUES (?item) {{ ({") (".join(qids)}) }}')
         context = json.loads(open(os.path.join(SPARQL_DIR, 'entities_context.json'), 'r').read())
-        resp = requests.post(
-            'https://query.wikidata.org/sparql',
-            headers={
-                'Accept': 'text/plain',
-                'Content-type': 'application/x-www-form-urlencoded'},
-            data='query=%s' % quote(sparql)
-        )
-        if resp.status_code == 200:
-            # Convert N-Triples to json-ld using json-ld context
-            graph = Graph()
-            graph.parse(data=resp.text, format='nt')
-            _jsonld = json.loads(str(graph.serialize(format='json-ld', context=context, indent=None), 'utf-8'))
-            if '@graph' not in _jsonld:
-                _context = _jsonld.pop('@context')
-                _jsonld = {'@context': _context, '@graph': [_jsonld]}
-            return _jsonld
-        else:
+        for _ in range(3):
+            resp = requests.post(
+                'https://query.wikidata.org/sparql',
+                headers={
+                    'Accept': 'text/plain',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'User-agent': 'JSTOR Labs python client'},
+                data='query=%s' % quote(sparql)
+            )
+            if resp.status_code == 200:
+                # Convert N-Triples to json-ld using json-ld context
+                graph = Graph()
+                graph.parse(data=resp.text, format='nt')
+                _jsonld = json.loads(str(graph.serialize(format='json-ld', context=context, indent=None), 'utf-8'))
+                if '@graph' not in _jsonld:
+                    _context = _jsonld.pop('@context')
+                    _jsonld = {'@context': _context, '@graph': [_jsonld]}
+                return _jsonld
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
+            logger.info(sparql)
 
     def _get_geojson(self, url):
         # logger.info(f'_get_geojson url={url}')

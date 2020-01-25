@@ -27,6 +27,7 @@
           const host = window.location.host
           this.$refs.index.querySelectorAll('a').forEach((link) => {
             const parsedUrl = parseUrl(link.href)
+            console.log(parsedUrl.host === host)
             if (parsedUrl.host === host) {
               link.addEventListener('click', (e) => {
                 e.preventDefault()

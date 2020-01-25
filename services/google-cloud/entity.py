@@ -213,7 +213,8 @@ class KnowledgeGraph(object):
                 GRAPHS[ns]['sparql_endpoint'],
                 headers={
                     'Accept': 'application/sparql-results+json',
-                    'Content-type': 'application/x-www-form-urlencoded'},
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'User-agent': 'JSTOR Labs python client'},
                 data='query=%s' % quote(sparql)
             ).json()['results']['bindings']
             props = [
@@ -250,7 +251,8 @@ class KnowledgeGraph(object):
                 GRAPHS[ns]['sparql_endpoint'],
                 headers={
                     'Accept': 'application/sparql-results+json',
-                    'Content-type': 'application/x-www-form-urlencoded'},
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'User-agent': 'JSTOR Labs python client'},
                 data='query=%s' % quote(sparql)
             ).json()['results']['bindings']
             formatter_urls = [
@@ -284,7 +286,8 @@ class KnowledgeGraph(object):
             GRAPHS['jstor']['sparql_endpoint'],
             headers={
                 'Accept': 'application/sparql-results+json;charset=UTF-8',
-                'Content-type': 'application/x-www-form-urlencoded'},
+                'Content-type': 'application/x-www-form-urlencoded',
+                'User-agent': 'JSTOR Labs python client'},
             data='query=%s' % quote(sparql)
         ).json()
         for b in resp['results']['bindings']:
@@ -315,7 +318,8 @@ class KnowledgeGraph(object):
             GRAPHS['jstor']['sparql_endpoint'],
             headers={
                 'Accept': 'application/sparql-results+json;charset=UTF-8',
-                'Content-type': 'application/x-www-form-urlencoded'},
+                'Content-type': 'application/x-www-form-urlencoded',
+                'User-agent': 'JSTOR Labs python client'},
             data='query=%s' % quote(sparql)
         ).json()
         for b in resp['results']['bindings']:
@@ -380,7 +384,8 @@ class KnowledgeGraph(object):
                     GRAPHS['wd']['sparql_endpoint'],
                     headers={
                         'Accept': 'application/sparql-results+json;charset=UTF-8',
-                        'Content-type': 'application/x-www-form-urlencoded'},
+                        'Content-type': 'application/x-www-form-urlencoded',
+                        'User-agent': 'JSTOR Labs python client'},
                     data='query=%s' % quote(sparql)
                 )
                 if resp.status_code == 200:
@@ -399,7 +404,10 @@ class KnowledgeGraph(object):
                 page = url.split('/')[-1]
                 if ns == 'wd':
                     # Summary data from Wikipedia comes back nicely formatted.  We just add it to the entity
-                    entity['summary info'] = requests.get(f'https://en.wikipedia.org/api/rest_v1/page/summary/{page}').json()
+                    entity['summary info'] = requests.get(
+                        f'https://en.wikipedia.org/api/rest_v1/page/summary/{page}',
+                        headers={'User-agent': 'JSTOR Labs python client'},
+                    ).json()
                 elif ns == 'jstor':
                     # We need to create formatted summary data from the wikitext in the referenced mediawiki page
                     #  Any data extracted is used to update the Wikidata/Wikipedia summary data, if found.  Currently

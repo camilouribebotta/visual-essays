@@ -6,7 +6,7 @@ const SETTINGS = YAML.parse(fs.readFileSync('./settings.yaml', 'utf8'))
 const BUNDLE_VERSION = require('../package.json').version
 
 const routerBase = {
-  'GH_PAGES': { router: { base: SETTINGS.gh_path } }
+  'GH_PAGES': { router: { base: ghPagesPath(SETTINGS.gh_path) } }
 }[process.env.DEPLOY_ENV] || { router: { base: '/' } }
 
 export default {
@@ -15,6 +15,9 @@ export default {
     bundle_version: BUNDLE_VERSION,
     ve_service_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'PROD'
       ? 'https://us-central1-visual-essay.cloudfunctions.net'
+      : 'http://localhost:5000',
+    app_md_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'PROD'
+      ? SETTINGS.gh_path
       : 'http://localhost:5000'
 
   },
@@ -38,6 +41,7 @@ export default {
   },
   plugins: [
     { src: '@/plugins/detect-environment.js', ssr: false },
+    { src: '@/plugins/marked.js', ssr: false }
   ],
   buildModules: [
     '@nuxtjs/vuetify'
@@ -49,4 +53,9 @@ export default {
     dir: process.env.DEPLOY_ENV === 'GH_PAGES' ? 'dist' : '../dist',
     fallback: true,
   }
+}
+
+function ghPagesPath(path) {
+  const elems = path.split('/')
+  return `/${elems[elems.length-1]}/`
 }

@@ -235,7 +235,6 @@ export default {
         pu += `<img src="${item.images[0]}">`
         pu = `<div style="width: 125px !important; height:135px !important;">${pu}</div>`
       }
-      console.log(item)
       return pu
     },
         /*
