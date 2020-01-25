@@ -12,7 +12,7 @@
 <script>
 
   export default {
-    name: 'about',
+    name: 'help',
     data: () => ({
       url: undefined,
       resp: undefined,

@@ -13,7 +13,7 @@
   import axios from 'axios'
 
   export default {
-    name: 'about',
+    name: 'contact',
     data: () => ({
       url: undefined,
       resp: undefined,
