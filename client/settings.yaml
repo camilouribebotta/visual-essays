@@ -2,5 +2,5 @@ site_title: Visual Essays
 gh_path: https://jstor-labs.github.io/visual-essays
 root_essay: https://kg.jstor.org/wiki/Visual_Essays
 banner_image: https://picsum.photos/1200/225
-app_version: 0.1.8
+app_version: 0.1.9
 context: null
