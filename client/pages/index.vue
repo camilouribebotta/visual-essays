@@ -1,7 +1,8 @@
 <template>
   <v-layout>
     <v-flex>
-      <div>src: {{src}}</div>
+      <div>url: {{ url }}</div>
+      <div>md: {{ md }}</div>
       <div ref="index" v-html="html"/>
     </v-flex>
   </v-layout>
@@ -15,14 +16,16 @@
   export default {
     name: 'index',
     data: () => ({
-      html: undefined,
-      src: undefined
+      url: undefined,
+      md: undefined,
+      html: undefined
     }),
     mounted() {
-      this.src = `${process.env.app_md_endpoint}/${this.$options.name}.md`
-      this.$axios.get(this.src)
+      this.url = `${process.env.app_md_endpoint}/${this.$options.name}.md`
+      this.$axios.get(this.url)
       .then((resp) => {
-        this.html = this.$marked(resp.data)
+        this.md = resp.data
+        this.html = this.$marked(this.md)
         this.$nextTick(() => {
           const host = window.location.host
           this.$refs.index.querySelectorAll('a').forEach((link) => {
