@@ -469,6 +469,8 @@ class Essay(object):
                 _context = _jsonld.pop('@context')
                 _jsonld = {'@context': _context, '@graph': [_jsonld]}
             return _jsonld
+        else:
+            logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
 
     def _get_geojson(self, url):
         # logger.info(f'_get_geojson url={url}')

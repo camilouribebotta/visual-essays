@@ -382,9 +382,14 @@ class KnowledgeGraph(object):
                         'Accept': 'application/sparql-results+json;charset=UTF-8',
                         'Content-type': 'application/x-www-form-urlencoded'},
                     data='query=%s' % quote(sparql)
-                ).json()
-                if resp['results']['bindings']:
-                    summary_urls['wd'] = resp['results']['bindings'][0]['mwPage']['value']
+                )
+                if resp.status_code == 200:
+                    resp = resp.json()
+                    if resp['results']['bindings']:
+                        summary_urls['wd'] = resp['results']['bindings'][0]['mwPage']['value']
+                else:
+                    logger.info(f'_add_summary_text: resp_code={resp.status_code} msg={resp.text}')
+
         if summary_urls:
             entity['summary info'] = {}
             for ns in ('wd', 'jstor'):
