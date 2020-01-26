@@ -13,12 +13,12 @@ export default {
   env: { ...SETTINGS,
     deployEnv: process.env.DEPLOY_ENV || 'PROD',
     bundle_version: BUNDLE_VERSION,
-    ve_service_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'PROD'
-      ? 'https://us-central1-visual-essay.cloudfunctions.net'
-      : 'http://localhost:5000',
-    app_md_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'PROD'
-      ? SETTINGS.gh_path
-      : 'http://localhost:5000'
+    ve_service_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
+      ? 'http://localhost:5000'
+      : 'https://us-central1-visual-essay.cloudfunctions.net',
+    app_md_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
+      ? 'http://localhost:5000'
+      : SETTINGS.gh_path,
 
   },
   ...routerBase,
