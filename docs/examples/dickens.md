@@ -14,11 +14,13 @@
 <var title="Rod Hull" id="Q7356235"></var>
 <var title="Satis House" id="Q26377461"></var>
 <var title="Ship Inn" id="Q26377259"></var>
+
 <!-- Kent with map centered at Boughton Malherbe (Q2161900) -->
 <var data-map
      title="Kent"
      data-center="Q2161900"
      data-zoom="9.3"></var>
+
 <!-- A couple of historical map layers -->
 <var data-map-layer
      title="Kent 1820"
@@ -35,6 +37,7 @@
      data-type="mapwarper"
      data-mapwarper-id="37387" 
      data-active="false"></var>
+
 <!-- A GeoJSON feature defining outline of Kent -->
 <var data-geojson
      title="Kent"
