@@ -19,10 +19,7 @@ export default new Vuex.Store({
     setContext (state, context) { state.context = context },
     setContent (state, elems) { state.content = elems },
     setItems (state, items) { state.items = items },
-    setActiveElement (state, elem) { 
-      state.activeElement = elem
-      console.log(state.activeElement.id)
-    },
+    setActiveElement (state, elem) { state.activeElement = elem },
     setActiveElements (state, elems) { state.activeElements = elems },
     setSelectedItemID (state, id) { state.selectedItemID = id },
     updateItem (state, item) {

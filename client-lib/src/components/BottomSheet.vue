@@ -56,7 +56,6 @@
       this.addSpacer()
     },
     beforeDestroy() {
-      console.log('beforeDestroy')
       this.close()
       let element = document.getElementById('bottom-sheet')
       element.parentNode.removeChild(element)
@@ -110,7 +109,6 @@
         })
         document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         this.isOpen = false
-        console.log('closed')
       },
       positionElementInViewport(elemId) {
         // console.log(`positionElementInViewport: elem=${elemId} scrollingElement=${this.scrollingElement !== undefined}`)
