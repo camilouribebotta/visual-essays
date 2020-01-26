@@ -34,7 +34,6 @@
      data-type="mapwarper"
      data-mapwarper-id="37387" 
      data-active="false"></var>
-
 <!-- A GeoJSON feature defining outline of Kent -->
 <var data-geojson
      title="Kent"
@@ -99,5 +98,5 @@ Pip himself seems about to come full circle in returning to the marshes with Mag
 [^ref2]:http://www.literaturepage.com/read/greatexpectations-273.html
 [^ref3]:http://www.literaturepage.com/read/greatexpectations-490.html
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTIwNDY5Mzg1LDE1OTk4NTAxODVdfQ==
+eyJoaXN0b3J5IjpbLTE5NTczNTQ1MDUsMTU5OTg1MDE4NV19
 -->
