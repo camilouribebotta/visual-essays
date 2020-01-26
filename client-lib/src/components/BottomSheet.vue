@@ -30,15 +30,16 @@
       show: { type: Boolean, default: false }
     },
     data: () => ({
+      contentContainer: undefined,
       scrollingElement: undefined,
       isOpen: false,
       mouseOver: null,
-      selectedElem: undefined
+      selectedElem: undefined,
+      ignoreScrollEvents: false
     }),
     computed: {
       content() { return this.$store.getters.content },
-      activeElements() { return this.$store.getters.activeElements },
-      activeElement() { return this.activeElements.length > 0 ? this.activeElements[0] : null },
+      activeElement() { return this.$store.getters.activeElement },
       viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
       topMargin() { return this.$store.getters.topMargin }
     },
@@ -47,13 +48,19 @@
     },
     mounted() {
       // add scroll listener to update visible sections list in store
-      let contentContainer = document.getElementById('scrollableContent')
-      if (!contentContainer) {
-        contentContainer = window.document
+      this.contentContainer = document.getElementById('scrollableContent')
+      if (!this.contentContainer) {
+        this.contentContainer = window.document
       }
-      contentContainer.addEventListener('scroll', this.handleScroll)
-      // window.addEventListener('mousemove', this.handleMouseMove)
+      this.contentContainer.addEventListener('scroll', this.handleScroll)
       this.addSpacer()
+    },
+    beforeDestroy() {
+      console.log('beforeDestroy')
+      this.close()
+      let element = document.getElementById('bottom-sheet')
+      element.parentNode.removeChild(element)
+      document.querySelectorAll('.layout').forEach(elem => elem.height = `1000px`)
     },
     methods: {
       nearestPara(pos) {
@@ -63,7 +70,7 @@
           .forEach(para => {
             if (!nearest || pos >= para.top) { nearest = para }
           })
-        console.log(`nearest pos=${pos} elem=${nearest.id}`)
+        // console.log(`nearest pos=${pos} elem=${nearest.id}`)
         return nearest
       },
       addSpacer() {
@@ -92,16 +99,18 @@
           this.positionElementInViewport(this.selectedElem.id)
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
           document.getElementById(this.selectedElem.id).classList.add('active-elem')
+          this.$store.dispatch('setActiveElement', this.selectedElem)
         }
       },
       close() {
         this.spacer.style.height = '0px'
-        // console.log('removeClickHandlers')
+        // removeClickHandlers
         document.querySelectorAll('p.active-elem .inferred, p.active-elem .tagged').forEach((entity) => {
           entity.removeEventListener('click', this.clickHandler)
         })
         document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         this.isOpen = false
+        console.log('closed')
       },
       positionElementInViewport(elemId) {
         // console.log(`positionElementInViewport: elem=${elemId} scrollingElement=${this.scrollingElement !== undefined}`)
@@ -112,114 +121,48 @@
             const viewPaneHeight = this.viewport.height/2
             const topPadding = viewPaneHeight - elemHeight
             if (this.scrollingElement) {
-              const scrollTo = elem.top - topPadding + 10 > 0
+              let scrollTo = elem.top - topPadding + 10 > 0
                   ? elem.top - topPadding + 10
                   : elem.top - 10
-            // console.log(`elem=${elem.id} elemTop=${elem.top} elemHeight=${elemHeight} viewPaneHeight=${viewPaneHeight} topPadding=${topPadding} scrollTo=${scrollTo}`)
-              this.scrollingElement.scrollTo(0, scrollTo + this.topMargin)
-              this.setActiveElements(scrollTo + viewPaneHeight + this.topMargin)
+              scrollTo += this.topMargin
+              // console.log(`elem=${elem.id} elemTop=${elem.top} elemHeight=${elemHeight} viewPaneHeight=${viewPaneHeight} topPadding=${topPadding} scrollTo=${scrollTo}`)
+              this.ignoreScrollEvents = true
+              this.scrollingElement.scrollTo(0, scrollTo)
+              setTimeout(() => { this.ignoreScrollEvents = false }, 1000)
             }
             break
           }
         }
       },
-      setsEqual(as, bs) {
-        if (as.size !== bs.size) return false
-          for (var a of as) if (!bs.has(a)) return false
-          return true
-      },
-      setActiveElements(pos) {
-        pos -= this.topMargin
-        const currentActiveElemIds = new Set(this.$store.getters.activeElements.map(e => e.id))
-        const updatedActiveElemIds = new Set()
-        const updated = []
-
-        this.$store.getters.content.forEach((elem) => {
-          if (elem.type !== 'paragraph') {
-            if (pos >= elem.top && pos <= elem.bottom) {
-              if (elem.paragraphs) {
-                let ap = elem.paragraphs[0]
-                for (let i = 0; i < elem.paragraphs.length; i++) {
-                  const para = elem.paragraphs[i]
-                  if (pos >= para.top) {
-                    ap = para
-                  }
-                  if (pos < para.bottom) {
-                    break
-                  }
-                }
-                if (!updatedActiveElemIds.has(ap.id)) {
-                  updated.push(ap)
-                  updatedActiveElemIds.add(ap.id)
-                }
-              }
-              if (!updatedActiveElemIds.has(elem.id)) {
-                updated.push(elem)
-                updatedActiveElemIds.add(elem.id)
-              }
-            }
-          }
-        })
-        if (!this.setsEqual(currentActiveElemIds, updatedActiveElemIds)) {
-          if (updated.length > 0) {
-            console.log('setActiveElements', currentActiveElemIds, updatedActiveElemIds, this.setsEqual(currentActiveElemIds, updatedActiveElemIds))
-            this.$store.dispatch('setActiveElements', updated)        
-          }
-        }
-      },
       handleScroll: throttle(function (event) {
+        event.preventDefault()
+        event.stopPropagation()
         if (!this.ignoreScrollEvents) {
           this.scrollingElement = event.target.scrollingElement ? event.target.scrollingElement : event.target
-          // console.log('handleScroll', this.scrollingElement.scrollTop)
-          event.preventDefault()
-          event.stopPropagation()
-          const viewPaneSize = this.isOpen ? this.viewport.height/2 : this.viewport.height
-          let pos = this.isOpen
-            ? (this.scrollingElement.scrollTop + this.viewport.height/2) - 10
-            : this.scrollingElement.scrollTop
-          if (!this.selectedElem) {
-            this.setActiveElements(pos)
+          if (this.isOpen) {
+            const pos = this.scrollingElement.scrollTop - this.topMargin
+            const client = this.scrollingElement.clientHeight
+            const textWindowHeight = client/2 - 40
+            const relPos = pos + pos/textWindowHeight * textWindowHeight
+            const refPos = pos > textWindowHeight ? textWindowHeight + pos : relPos
+            const activeElem = this.nearestPara(refPos)
+            document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
+            document.getElementById(activeElem.id).classList.add('active-elem')
+            this.$store.dispatch('setActiveElement', activeElem)
           }
-          this.selectedElem = undefined
+          // console.log(`scrollTop=${this.scrollingElement.scrollTop} scrollHeight=${this.scrollingElement.scrollHeight} clientTop=${this.scrollingElement.clientTop} clientHeight=${this.scrollingElement.clientHeight} topMargin=${this.topMargin}`)
         }
-      }, 300),
-      handleMouseMove: throttle(function (event) {
-        const where = this.isOpen ? event.clientY <= this.viewport.height/2 ? 'document' : 'viewer' : 'essay'
-        if (where !== this.mouseOver) {
-          this.mouseOver = where
-          // console.log(`mouseOver=${this.mouseOver}`)
-        }
-      }, 100)
+      }, 200)
     },
     watch: {
-      content: {
-          handler: function (content) {
-          if (content) {
-            window.scrollTo(0, 0)
-            this.setActiveElements(content[0].top)
-            this.makeParagraphsClickable()
-          }
-        },
-        immediate: false
-      },
-      viewport: {
-        handler: function (value, prior) {
-          // adjust spacer size based using new viewport height
-          this.spacer.style.height = this.isOpen ? `${this.viewport.height/2}px` : '0px'
-        },
-        immediate: false
-      },
-      activeElements(current, prior) {
-        // console.log('activeElements:', current.map(e => e.id).join(', '))
-      },
-      activeElement(current, prior) {
-        // console.log(`activeElement: current=${current ? current.id : null} prior=${prior ? prior.id : null} isOpen=${this.isOpen} selected=${this.selectedElem !== undefined}`)
-        if (this.isOpen && !this.selectedElem) {
-          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-          if (current) {
-            document.getElementById(current.id).classList.add('active-elem')
-          }
+      content(content) {
+        if (content) {
+          // window.scrollTo(0, 0)
+          this.makeParagraphsClickable()
         }
+      },
+      viewport(value, prior) {
+        this.spacer.style.height = this.isOpen ? `${this.viewport.height/2}px` : '0px'
       }
     }
   }

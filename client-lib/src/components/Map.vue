@@ -28,14 +28,15 @@ export default {
   computed: {
     selectedItemID () { return this.$store.getters.selectedItemID },
     activeElements() { return this.$store.getters.activeElements },
-    activeElement() { return this.$store.getters.activeElements.length > 0 ? this.$store.getters.activeElements[0] : null },
+    activeElement() { return this.$store.getters.activeElement },
+    // activeElement() { return this.$store.getters.activeElements.length > 0 ? this.$store.getters.activeElements[0] : null },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
-    mapsInActiveElements() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map') },
-    entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
+    mapsInActiveElements() { return this.itemsInActiveElements.filter(item => item.type === 'map') },
+    entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
     locations() { return this.entities.filter(entity => entity.coords) },
-    layerDefinitions() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map-layer') },
+    layerDefinitions() { return this.itemsInActiveElements.filter(item => item.type === 'map-layer') },
     mapwarperLayerDefs() { return this.layerDefinitions.filter(layer => layer['mapwarper-id']) },
-    geojsonLayerDefs() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
+    geojsonLayerDefs() { return this.itemsInActiveElements.filter(item => item.type === 'geojson') },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
   },
   mounted() {
@@ -268,7 +269,7 @@ export default {
       },
       immediate: true
     },
-    activeElements() {
+    activeElement() {
       this.updateLayers()
     },
     mapsInActiveElements: {

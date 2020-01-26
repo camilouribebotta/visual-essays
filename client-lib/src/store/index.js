@@ -9,6 +9,7 @@ export default new Vuex.Store({
     content: [],
     items: [],
     activeElements: [],
+    activeElement: undefined,
     selectedItemID: null,
     height: 0,
     width: 0,
@@ -18,6 +19,10 @@ export default new Vuex.Store({
     setContext (state, context) { state.context = context },
     setContent (state, elems) { state.content = elems },
     setItems (state, items) { state.items = items },
+    setActiveElement (state, elem) { 
+      state.activeElement = elem
+      console.log(state.activeElement.id)
+    },
     setActiveElements (state, elems) { state.activeElements = elems },
     setSelectedItemID (state, id) { state.selectedItemID = id },
     updateItem (state, item) {
@@ -37,6 +42,7 @@ export default new Vuex.Store({
     setContent: ({ commit }, elems) => commit('setContent', elems),
     setItems: ({ commit }, items) => commit('setItems', items),
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
+    setActiveElement: ({ commit }, elem) => commit('setActiveElement', elem),
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
@@ -47,13 +53,17 @@ export default new Vuex.Store({
     content: state => state.content,
     items: state => state.items,
     activeElements: state => state.activeElements,
-    activeElement: (state) => state.activeElements.length > 0 ? state.activeElements[0] : null,
+    // activeElement: (state) => state.activeElements.length > 0 ? state.activeElements[0] : null,
+    activeElement: (state) => state.activeElement,
     itemsInActiveElements(state) {
+      /*
       const items = {}
       state.activeElements.forEach((elem) => {
         (elem.items || []).forEach(item => items[item.id] = item)
       })
       return Object.values(items)
+      */
+      return state.activeElement.items
     },
     selectedItemID: state => state.selectedItemID,
     height: state => state.height,

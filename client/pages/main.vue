@@ -19,7 +19,7 @@
     data: () => ({
       html: undefined
     }),
-    mounted() {
+    mounted() {              
       api.get('/README.md')
       .then((resp) => {
         this.html = marked(resp.data)

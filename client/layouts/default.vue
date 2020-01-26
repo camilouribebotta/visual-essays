@@ -4,7 +4,8 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-    >
+      disable-resize-watcher
+      >
       <v-list dense>
 
         <v-list-item nuxt to="/">
@@ -18,7 +19,7 @@
 
         <v-list-item nuxt to="/about">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>mdi-information</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>About</v-list-item-title>
@@ -27,7 +28,7 @@
 
         <v-list-item nuxt to="/help">
           <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
+            <v-icon>mdi-help-circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Help</v-list-item-title>
@@ -40,15 +41,6 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Contact</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item nuxt to="/test">
-          <v-list-item-action>
-            <v-icon>mdi-contact-mail</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Test</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -65,7 +57,7 @@
       absolute
       dark
       shrink-on-scroll
-      :src="banner_image"
+      :src="banner"
       scroll-target="#scrollableContent"
       scroll-threshold="200"
     >
@@ -131,7 +123,7 @@
         height: 600,
         bannerHeight: 600,
         essayTopMargin: 140,
-        title: process.env.site_title,
+        // title: process.env.site_title,
         app_version: process.env.app_version,
         bundle_version: process.env.bundle_version,
         banner_image: process.env.banner_image,
@@ -155,7 +147,9 @@
     computed: {
       logMessages() { return this.$store.getters.logMessages },
       viewport() { return this.$store.getters.viewport },
-      spacerHeight() { return this.$store.getters.spacerHeight }
+      spacerHeight() { return this.$store.getters.spacerHeight },
+      title() { return this.$store.getters.title || process.env.site_title },
+      banner() { return this.$store.getters.banner || process.env.banner_image }
     },
     mounted() {
       this.bannerHeight = this.viewport.height * .25 

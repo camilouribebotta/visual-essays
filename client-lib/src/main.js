@@ -100,6 +100,7 @@ function initApp() {
   if (window.data) {
     vm.$store.dispatch('setItems', window.data)
   }
+
   console.log('items', vm.$store.getters.items)
 
   setViewport()
@@ -124,6 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const esssayElem = document.getElementById('essay')
       if (esssayElem && esssayElem.innerText.length > 0) {
         initApp()
+        vm.$store.getters.items.forEach((item) => {
+          if (item.type === 'essay' && item.title) {
+            esssayElem.title = item.title
+            console.log(esssayElem.title)
+          }
+        })
         href = window.location.href
         console.log(href)
       }

@@ -15,6 +15,10 @@
     data: () => ({
       html: undefined
     }),
+    created() {
+      this.$store.dispatch('setTitle', process.env.site_title)
+      this.$store.dispatch('setBanner', process.env.banner_image)
+    },
     mounted() {
       axios.get(`${process.env.app_md_endpoint}/${this.$options.name}.md`)
       .then((resp) => {

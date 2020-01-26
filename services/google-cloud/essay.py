@@ -29,7 +29,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'entity', 'map', 'geojson', 'map-layer', 'video'}
+CUSTOM_MARKUP = {'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']

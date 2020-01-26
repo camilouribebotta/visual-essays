@@ -1,4 +1,5 @@
 <!-- Entities mentioned in this essay -->
+<var data-essay title="Great Expectations - a curated walk" data-banner="https://kg.jstor.org/w/images/c/cc/Viking_Bay%2C_Broadstairs.jpg"></var>
 <var title="Charles Dickens" id="Q5686"></var>
 <var title="Chatham" id="Q729006"></var>
 <var title="Cooling" id="Q2649453"></var>

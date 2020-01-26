@@ -29,7 +29,9 @@ if (window.data && window.data.customComponents) {
 export default {
   name: 'app',
   components,
-  data: () => ({}),
+  data: () => ({
+    top: 300
+  }),
   computed: {
     context() { return this.$store.getters.context }
   },
@@ -48,21 +50,6 @@ export default {
         entity.addEventListener('click', this.onEntityClick)
       })
     },
-    /*
-    onEntityClick(e) {
-      e.stopPropagation()
-      const qid = e.target.attributes['data-entity'].value
-      this.$store.dispatch('setSelectedItemID', qid)
-      const entity = this.$store.getters.items.find(item => item.qid === qid)
-      if (entity && !entity['summary info']) {
-        get_entity(qid, this.context)
-          .then((entity) => {
-            entity.id = qid
-            this.$store.dispatch('updateItem', entity)
-          })
-      }
-    },
-    */
     getParagraphs(elem) {
       const paragraphs = []
       if (elem) {

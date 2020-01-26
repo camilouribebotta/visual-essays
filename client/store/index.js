@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
+  title: undefined,
+  banner: undefined,
   viewport: null,
   spacerHeight: 0,
   isMobile: false,
@@ -20,6 +22,8 @@ const state = {
 }
 
 const mutations = {
+  setTitle(state, title) { state.title = title },
+  setBanner(state, banner) { state.banner = banner },
   setViewport(state, viewport) { state.viewport = viewport },
   setSpacerHeight(state, height) { state.spacerHeight = height },
   setIsMobile(state, isMobile) { state.isMobile = isMobile },
@@ -63,6 +67,8 @@ const actions = {
     // console.log('nuxtServerInit')
   },
   setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
+  setTitle: ({ commit }, title) => commit('setTitle', title),
+  setBanner: ({ commit }, banner) => commit('setBanner', banner),
   setSpacerHeight: ({ commit }, height) => commit('setSpacerHeight', height),
   setIsMobile: ({ commit }, isMobile) => commit('setIsMobile', isMobile),
   setIsIos: ({ commit }, isIos) => commit('setIsIos', isIos),
@@ -75,6 +81,8 @@ const actions = {
 }
 
 const getters = {
+  title: state => state.title,
+  banner: state => state.banner,
   viewport: state => state.viewport,
   spacerHeight: state => state.spacerHeight,
   isMobile: state => state.isMobile,
