@@ -1,6 +1,6 @@
-## Visual Essays about
+## About Visual Essays
 
-The visual essays service creates an interactive web page merging text content with external data from knowledge graphs 
+The `visual essays` service creates an interactive web page merging text content with external data from knowledge graphs such as [Wikidata](https://www.wikidata.org).  The text
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM3Nzk4OTU1XX0=
+eyJoaXN0b3J5IjpbLTIwNzU5ODk3NTFdfQ==
 -->
