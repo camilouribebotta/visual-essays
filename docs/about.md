@@ -19,7 +19,3 @@ When an entity is declared in a text using a `var` tag the software will use inf
 
 Other attributes available for entity declarations include:
 * `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MTMxODUzMzIsMTUyMjk2Njc0NSwyND
-c4Njk2MjcsMTA1NTIzNTQ0OF19
--->
