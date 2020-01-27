@@ -72,6 +72,7 @@
 
 In seventeenth-century Leiden, the *Agave americana* certainly earned its nickname, taking almost a century to bloom. In its natural climate, however, an *Agave americana* can grow upwards of twenty feet and typically blooms every 10 to 25 years.[^ref2] *Agave* is a genus of monocots with some 200 species indigenous to Central America, the Southwestern US, and in some tropical areas of South America. Distinguished by their strong, fleshy leaves, agaves grow slowly and require little water to survive, making them a vital resource in semiarid climates. Although best known today as the plant from which tequila is made, agave plants played a central role in ancient Amerindian religion and culture for centuries, encouraged a botanical revolution in Europe, helped form Mexican identity in the nineteenth and twentieth centuries, and offer solutions to present-day environmental challenges.
 <var data-geojson
+     id=“hortus”
      title="Hortus"
      data-type="geojson"
      data-url="https://ithaka.github.io/labs-ph-essays/geojson/hortus.json#"
@@ -104,6 +105,7 @@ While the agave in Europe was an ornamental plant that displayed botanical knowl
      data-center="Q13160"
      data-zoom="6.0"></var>
 <var data-geojson
+   id=“jalisco”
    title="Jalisco"
    data-type="geojson"
    data-url="https://ithaka.github.io/labs-ph-essays/geojson/jalisco.json#"
@@ -118,6 +120,7 @@ Today, tequila is the national drink of Mexico. Since its creation, and perhaps 
      data-center="Q13160"
      data-zoom="6.0"></var>
 <var data-geojson
+     id=“jalisco”
      title="Jalisco"
      data-type="geojson"
      data-url="https://ithaka.github.io/labs-ph-essays/geojson/jalisco.json#"
@@ -150,5 +153,5 @@ Beyond producing one of North America’s favorite spirits, agave plants, just a
 [^ref14]:  Garcia‐Moya, E., Romero‐Manzanares, A. and Nobel, P. S. (2011), Highlights for *Agave* Productivity. GCB Bioenergy, 3: 4-14. doi:10.1111/j.1757-1707.2010.01078.x
 [^ref15]:  David, Sarah C., Frank G. Dohleman, and Stephen P. Long. (2010). The global potential for Agave as a biofuel feedstock. GCB Bioenergy 3, 68–78, doi:10.1111/j.17571707.2010.01077.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDg1ODYxODJdfQ==
+eyJoaXN0b3J5IjpbNTY2ODk3MDZdfQ==
 -->
