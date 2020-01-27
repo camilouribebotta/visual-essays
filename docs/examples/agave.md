@@ -38,12 +38,10 @@
     data-mapwarper-id="31241"
     data-active="true"></var>
 <var data-map-layer
-    id=“jalisco”
     title="Jalisco 1752"
     data-type="mapwarper"
     data-mapwarper-id="45230"
     data-active="true"></var>
-
 
 <!-- A GeoJSON feature defining outline of Jalisco -->
 <!-- Think about this in relation to generating origins of agave plant -->
@@ -57,7 +55,6 @@
     data-type="geojson"
     data-url="https://ithaka.github.io/labs-ph-essays/geojson/hortus.json#"
     data-active="true"></var> -->
-
 
 <p align="center">
   <img src="https://daily.jstor.org/wp-content/uploads/2020/01/plant_of_the_month_agave_1050x700.jpg" style="width:100%;max-width:800px" ><br/>
@@ -153,5 +150,5 @@ Beyond producing one of North America’s favorite spirits, agave plants, just a
 [^ref14]:  Garcia‐Moya, E., Romero‐Manzanares, A. and Nobel, P. S. (2011), Highlights for *Agave* Productivity. GCB Bioenergy, 3: 4-14. doi:10.1111/j.1757-1707.2010.01078.x
 [^ref15]:  David, Sarah C., Frank G. Dohleman, and Stephen P. Long. (2010). The global potential for Agave as a biofuel feedstock. GCB Bioenergy 3, 68–78, doi:10.1111/j.17571707.2010.01077.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTY2ODk3MDZdfQ==
+eyJoaXN0b3J5IjpbNTYxMzg5OTI4LDU2Njg5NzA2XX0=
 -->
