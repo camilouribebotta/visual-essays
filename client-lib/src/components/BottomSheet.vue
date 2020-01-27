@@ -161,6 +161,20 @@
       },
       viewport(value, prior) {
         this.spacer.style.height = this.isOpen ? `${this.viewport.height/2}px` : '0px'
+      },
+      activeElement() {
+        if (this.activeElement) {
+          const activeElemIds = []
+          let elem = document.getElementById(this.activeElement.id)
+          while (true) {
+            activeElemIds.push(elem.id)
+            if (!elem.parentNode || elem.id === 'essay') {
+              break
+            }
+            elem = elem.parentNode
+          }
+          console.log(`activeElements=${activeElemIds.join(',')}`)
+        }
       }
     }
   }
