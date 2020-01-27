@@ -38,6 +38,7 @@
     data-mapwarper-id="31241"
     data-active="true"></var>
 <var data-map-layer
+    id=“jalisco”
     title="Jalisco 1752"
     data-type="mapwarper"
     data-mapwarper-id="45230"
@@ -134,11 +135,11 @@ Beyond producing one of North America’s favorite spirits, agave plants, just a
 ### References
 
 [^ref1]:  van Uffelen, Gerda & Kessler, P.J.A. *425 years Hortus botanicus Leiden*, 2015, pg. 32-33.
-[^ref2]:  Gentry, Howard Scott. *Agaves of Continental North America*. Tucson, Ariz.: University of Arizona Press, 1982.
+[^ref2]:  Gentry, Howard Scott. *Agaves of Continental North America*. Tucson, Ariz.: University of Arizona Press, 1982.
 [^ref3]:  Gaytán, Marie Sarita. *¡̕Tequila!*: The Spirit of Mexico. Stanford, California: Stanford University Press, 2014, pg 5.
-[^ref4]:  Motolinía, Toribio. *History of the Indians of New Spain.* Publications of the Academy of American Franciscan History. Documentary Series; 1. Washington: Academy of American Franciscan History, 1951, Chapter XXXI.
+[^ref4]:  Motolinía, Toribio. *History of the Indians of New Spain.* Publications of the Academy of American Franciscan History. Documentary Series; 1. Washington: Academy of American Franciscan History, 1951, Chapter XXXI.
 [^ref5]:  James M. Córdova (2015) “Drinking the fifth cup: notes on the drunken Indian image in colonial Mexico,” Word & Image, 31:1, 1-18, DOI: 10.1080/02666286.2014.927210
-[^ref6]:  Henderson, Lucia. “Blood, Water, Vomit, and Wine,” Chicago Maya Society. Mesoamerican Voices: Journal of the Chicago Maya Society. Vol. 3, 2018, pgs. 64-67.
+[^ref6]:  Henderson, Lucia. “Blood, Water, Vomit, and Wine,” Chicago Maya Society. Mesoamerican Voices: Journal of the Chicago Maya Society. Vol. 3, 2018, pgs. 64-67.
 [^ref7]:  Escalante, A., López Soto, D. R., Velázquez Gutiérrez, J. E., Giles-Gómez, M., Bolívar, F., & López-Munguía, A. (2016). Pulque, a Traditional Mexican Alcoholic Fermented Beverage: Historical, Microbiological, and Technical Aspects. *Frontiers in microbiology*, 7, 1026. doi:10.3389/fmicb.2016.01026
 [^ref8]:  Clusius, *Rariorum aliquot stirpium per Hispanias observatarum historia*, Antverpiae: Ex officina Christophori Plantinus ...,1576. Accessed via BHL.
 [^ref9]:  Camerarius, *Hortus Medicus Et Philosophicus*, Feyerabend, 1588
@@ -148,3 +149,6 @@ Beyond producing one of North America’s favorite spirits, agave plants, just a
 [^ref13]:  Ibid., pgs. 14 – 15.
 [^ref14]:  Garcia‐Moya, E., Romero‐Manzanares, A. and Nobel, P. S. (2011), Highlights for *Agave* Productivity. GCB Bioenergy, 3: 4-14. doi:10.1111/j.1757-1707.2010.01078.x
 [^ref15]:  David, Sarah C., Frank G. Dohleman, and Stephen P. Long. (2010). The global potential for Agave as a biofuel feedstock. GCB Bioenergy 3, 68–78, doi:10.1111/j.17571707.2010.01077.
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbNDg1ODYxODJdfQ==
+-->
