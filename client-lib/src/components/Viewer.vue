@@ -122,7 +122,7 @@
           byCat[category].push(entity)
         })
         const results = []
-        let tab = 0
+        let tab = 1
         this.itemsMap = {}
         const activeWindow = {}
         Object.keys(byCat).sort().forEach((key) => {
@@ -136,7 +136,7 @@
             {category: key, tab, items: byCat[key]}
           )
         })
-        this.activeTab = this.maps.length > 0 ? 'tab-0' : 'tab-1'
+        this.activeTab = this.maps.length > 0 ? 'tab-0' : showImageViewer ? 'tab-1' : 'tab-2'
         this.activeWindow = activeWindow
         return results
       }
