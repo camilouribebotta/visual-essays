@@ -136,7 +136,7 @@
             {category: key, tab, items: byCat[key]}
           )
         })
-        this.activeTab = this.maps.length > 0 ? 'tab-0' : showImageViewer ? 'tab-1' : 'tab-2'
+        this.activeTab = this.maps.length > 0 ? 'tab-0' : this.showImageViewer ? 'tab-1' : 'tab-2'
         this.activeWindow = activeWindow
         return results
       }
