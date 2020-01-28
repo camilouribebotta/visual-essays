@@ -18,7 +18,7 @@ from entity import KnowledgeGraph
 from essay import Essay, mw_to_html5, md_to_html5, add_vue_app
 from fingerprints import get_fingerprints
 
-VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.2.0.min.js'
+VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.2.1.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -93,7 +93,7 @@ def local_content(*args, **kwargs):
         request = args[0]
     content_path = os.path.join(CONTENT_DIR, request.view_args['fname'])
     logger.info(f'local_content: {content_path}')
-    if os.path.exists(content_path):
+    if os.path.exists(content_path) and content_path.split('/')[-1] not in ('favicon.ico',):
         with open(content_path, 'r') as fp:
             md = fp.read()
             return (md, 200, {'Content-type': 'text/markdown; charset=utf-8'})

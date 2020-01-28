@@ -10,6 +10,9 @@
       <v-tab v-if="maps.length > 0" href="#tab-0">
         Map
       </v-tab>
+      <v-tab v-if="showImageViewer" href="#tab-1">
+        Image viewer
+      </v-tab>
       <v-tab 
         v-for="itemsByCat in itemsByCategory"
         :key="`tab-${itemsByCat.tab}`"
@@ -28,13 +31,21 @@
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
+        v-if="showImageViewer"         
+        value="tab-1"
+      >
+        <image-viewer/>
+      </v-tab-item>
+      <v-tab-item
+        transition="fade-transition"
+        reverse-transition="fade-transition"
         v-for="(itemsByCat, tab) in itemsByCategory"
-        :key="`tab-item-${tab+1}`"
-        :value="`tab-${tab+1}`"
+        :key="`tab-item-${tab+2}`"
+        :value="`tab-${tab+2}`"
       >
         <v-window
           ref="entities"
-          v-model="activeWindow[`tab${tab+1}`]"
+          v-model="activeWindow[`tab${tab+2}`]"
           class="entity-window"
           showArrows
         > 
@@ -43,7 +54,7 @@
             reverse-transition="fade-transition"
             v-for="(item, window) in itemsByCat.items" 
             :key="`tab-${itemsByCat.tab}-${window}`"
-            :value="`window-${tab+1}-${window}`"
+            :value="`window-${tab+2}-${window}`"
           >
             <entity-infobox class="entity-infobox" :qid="item.qid"/>
           </v-window-item>
@@ -56,6 +67,7 @@
 <script>
   import Vue from 'vue'
   import Map from './Map'
+  import ImageViewer from './ImageViewer'
   import EntityInfobox from './EntityInfobox'
 
   const catLabels = {
@@ -70,6 +82,7 @@
     name: 'Viewer',
     components: {
       lmap: Map,
+      ImageViewer,
       EntityInfobox
     },
     data: () => ({
@@ -87,6 +100,7 @@
       geojson() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
       maps() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map') },
+      showImageViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
       itemsByCategory() {
         const byCat = {}
         this.geojson

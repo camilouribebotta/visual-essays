@@ -29,7 +29,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
+CUSTOM_MARKUP = {'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -253,6 +253,9 @@ class Essay(object):
                 attrs['qid'] = f'{ns}:{qid}'
             else:
                 continue
+            for k in sorted(attrs.keys()):
+                if not attrs[k]:
+                    del attrs[k]
 
             if 'id' not in attrs:
                 attrs['id'] = f'{_type}-{sum([1 for item in ve_markup.values() if item["type"] == _type])+1}'
@@ -323,6 +326,7 @@ class Essay(object):
 
     def _add_data(self):
         data = self._soup.new_tag('script')
+        logger.info(json.dumps([self.markup[_id] for _id in sorted(self.markup)], indent=2) + '\n')
         if self.context is not None:
             data.append(f'\nwindow.context = "{self.context}"')
         data.attrs['type'] = 'application/ld+json'
@@ -520,6 +524,7 @@ def add_vue_app(html, js_lib):
 
     for url in [
             'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
             js_lib
         ]:
         lib = soup.new_tag('script')
