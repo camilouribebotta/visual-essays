@@ -21,8 +21,7 @@ export default {
     requested: new Set()
   }),
   computed: {
-    entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
-    entity () { return this.entities.find(entity => entity.qid === this.qid) || {} },
+    entity () { return this.$store.getters.items.find(entity => entity.qid === this.qid) || {} },
     entityInfo () { return this.entity['summary info'] },
     title () { return this.entityInfo && this.entityInfo.displaytitle || this.entity.label || this.entity.title },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
