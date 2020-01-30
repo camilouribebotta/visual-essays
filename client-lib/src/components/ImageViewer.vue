@@ -10,7 +10,7 @@
 </template>
 
 <script>
-
+var openseadragon = require('openseadragon');
 export default {
   name: 'ImageViewer',
   data: () => ({}),
@@ -20,14 +20,23 @@ export default {
   },
   mounted() {
     this.images.forEach((image) => {
-      OpenSeadragon({
-        id: image.id,
-        tileSources: {
-          type: 'image',
-          url: image.url
-        },
-        buildPyramid: true,
-        showNavigationControl: false
+      let dziURL = this.axios.get('https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url).then((resp) => {
+        let viewer = OpenSeadragon({
+          id: image.id,
+          tileSources: {
+            Image: resp.data.data
+          },
+          buildPyramid: false,
+          showNavigationControl: false
+        })
+        if (image.region !== undefined && image.region[2] != 0 && image.region[0] !== undefined) {
+            console.log("Editing initial region")
+            let region = image.region
+            viewer.addHandler("open", function(){
+                let rect = viewer.viewport.imageToViewportRectangle(region[0], region[1], region[2]-region[0], region[3]-region[1]);
+                viewer.viewport.fitBounds(rect, true);
+            });
+        }
       })
     })
   }
@@ -50,11 +59,4 @@ export default {
     text-transform: uppercase;
     list-style: none;
   }
-
-  div.image {
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    text-align: center;
-  }
-
 </style>

@@ -10,6 +10,10 @@ import Vue from 'vue'
 import entityInfobox from './components/EntityInfoboxDialog'
 import bottomSheet from './components/BottomSheet'
 import { get_entity } from './api'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+ 
+Vue.use(VueAxios, axios)
 
 // Initialize with default components
 const components = {
