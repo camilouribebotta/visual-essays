@@ -29,16 +29,11 @@ export default {
           buildPyramid: false,
           showNavigationControl: false
         })
-        console.log(image.region)
         if (image.region !== undefined && image.region[2] != 0 && image.region[0] !== undefined) {
             console.log("Editing initial region")
-            let region = image.region.split(",")
-            for (let i = 0; i < region.length; i++) {
-              region[i] = parseInt(region[i])
-            }
+            let region = image.region
             viewer.addHandler("open", function(){
                 let rect = viewer.viewport.imageToViewportRectangle(region[0], region[1], region[2]-region[0], region[3]-region[1]);
-                console.log(rect)
                 viewer.viewport.fitBounds(rect, true);
             });
         }
