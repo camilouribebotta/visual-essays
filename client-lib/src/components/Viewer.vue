@@ -7,10 +7,10 @@
       center-active
       show-arrows
     >
-      <v-tab v-if="maps.length > 0" href="#tab-0">
+      <v-tab v-if="includeMapViewer" href="#tab-0">
         Map
       </v-tab>
-      <v-tab v-if="showImageViewer" href="#tab-1">
+      <v-tab v-if="includeImageViewer" href="#tab-1">
         Image viewer
       </v-tab>
       <v-tab 
@@ -23,7 +23,7 @@
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
-        v-if="maps.length > 0"         
+        v-if="includeMapViewer"         
         value="tab-0"
       >
         <lmap/>
@@ -31,7 +31,7 @@
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
-        v-if="showImageViewer"         
+        v-if="includeImageViewer"         
         value="tab-1"
       >
         <image-viewer/>
@@ -96,12 +96,18 @@
     computed: {
       selectedItemID () { return this.$store.getters.selectedItemID },
       activeElement() { return this.$store.getters.activeElement },
+      configs() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'config') },
       entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
       geojson() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
-      maps() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map') },
-      showImageViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
+      includeMapViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map').length > 0 },
+      includeImageViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
       itemsByCategory() {
+        let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : 'tab-2'
+        this.configs.filter(c => c.tab).forEach(c => activeTab = c.tab)
+        console.log('itemsByCategory', activeTab)
+        this.activeTab = activeTab
+
         const byCat = {}
         this.geojson
         //.filter(geojson => geojson.label)
@@ -136,7 +142,6 @@
             {category: key, tab, items: byCat[key]}
           )
         })
-        this.activeTab = this.maps.length > 0 ? 'tab-0' : this.showImageViewer ? 'tab-1' : 'tab-2'
         this.activeWindow = activeWindow
         return results
       }
@@ -150,7 +155,7 @@
         event.stopPropagation()
         const selectedItemID = e.toElement.attributes['data-itemid'].value
         const selectedItem = this.itemsMap[selectedItemID]
-        this.activeTab = this.maps.length > 0 && this.isLocation(selectedItemID)
+        this.activeTab = includeMapViewer && this.isLocation(selectedItemID)
           ? 'tab-0'
           : `tab-${selectedItem.tab}`
         this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`

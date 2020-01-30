@@ -40,6 +40,7 @@ export default {
     if (window.location.hash) {
       this.scrollTo(window.location.hash.slice(1))
     }
+    this.addFootnotesHover()
   },
   methods: {
     init() {
@@ -120,6 +121,16 @@ export default {
         console.dir(elem)
         window.scrollTo(0, elem.offsetTop)
       }
+    },
+    addFootnotesHover() {
+      document.querySelectorAll('.footnote-ref').forEach((fn) => {
+        fn.addEventListener('mouseover', (e) => {
+          const fnId = e.toElement.hash.slice(1)
+          const fnHTML = document.getElementById(fnId).innerHTML
+          console.log(`footnote: id=${fnId} html="${fnHTML}"`)
+        })
+      })
+
     }
   }
 }

@@ -143,7 +143,7 @@
             const textWindowHeight = client/2 - 40
             const relPos = pos + pos/textWindowHeight * textWindowHeight
             const refPos = pos > textWindowHeight ? textWindowHeight + pos : relPos
-            const activeElem = this.nearestPara(refPos)
+            const activeElem = this.nearestPara(refPos - 50)
             document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
             document.getElementById(activeElem.id).classList.add('active-elem')
             this.$store.dispatch('setActiveElement', activeElem)
