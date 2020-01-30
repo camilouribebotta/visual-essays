@@ -41,6 +41,9 @@ export default {
   },
   mounted() {
     this.$nextTick(() => this.init())
+    if (window.location.hash) {
+      this.scrollTo(window.location.hash.slice(1))
+    }
   },
   methods: {
     init() {
@@ -113,6 +116,14 @@ export default {
         }
       })
       return items
+    },
+    scrollTo(elemid) {
+      console.log(`scrollTo=${elemid}`)
+      const elem = document.getElementById(elemid)
+      if (elem) {
+        console.dir(elem)
+        window.scrollTo(0, elem.offsetTop)
+      }
     }
   }
 }

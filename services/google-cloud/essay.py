@@ -291,6 +291,10 @@ class Essay(object):
             elif  _type == 'map-layer':
                 if 'url' in attrs:
                     attrs['geojson'] = self._get_geojson(attrs.pop('url'))
+            elif  _type == 'image':
+                if 'region' in attrs:
+                    attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
+            
             if attrs['id'] in ve_markup:
                 attrs = ve_markup[attrs['id']]
             else:
