@@ -42,7 +42,7 @@
 <var data-geojson
      title="Kent"
      data-type="geojson" 
-     data-url="https://raw.githubusercontent.com/kent-map/geojson/master/Q23298.json"
+     data-url="https://ithaka.github.io/labs-ph-essays/geojson/maya-region.json"
      data-active="true"></var>
 
 ## Great Expections - a curated walk

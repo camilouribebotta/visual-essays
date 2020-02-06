@@ -401,7 +401,7 @@ class KnowledgeGraph(object):
                 if ns not in summary_urls:
                     continue
                 url = summary_urls[ns]
-                page = url.split('/')[-1]
+                page = url.replace('/w/', '/wiki/').split('/wiki/')[-1]
                 if ns == 'wd':
                     # Summary data from Wikipedia comes back nicely formatted.  We just add it to the entity
                     entity['summary info'] = requests.get(
