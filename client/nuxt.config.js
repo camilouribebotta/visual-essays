@@ -10,7 +10,7 @@ const routerBase = {
 export default {
   env: { ...SETTINGS,
     deployEnv: process.env.DEPLOY_ENV || 'PROD',
-    ve_service_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
+    ve_service_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'DEV'
       ? 'http://localhost:5000'
       : 'https://us-central1-visual-essay.cloudfunctions.net',
     app_md_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
