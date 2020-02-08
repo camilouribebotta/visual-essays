@@ -33,7 +33,7 @@ export default {
     script: [
         { src: process.env.DEPLOY_ENV === 'DEV'
           ? 'http://localhost:8080/lib/visual-essays.js'
-          : `https://visual-essays.online/lib/visual-essay-${BUNDLE_VERSION}.min.js` }
+          : `https://jstor-labs.github.io/visual-essays/lib/visual-essays-${BUNDLE_VERSION}.min.js` }
       ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

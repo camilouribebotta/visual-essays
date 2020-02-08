@@ -5,7 +5,7 @@
   "author": "Ron Snyder",
   "private": false,
   "scripts": {
-    "netlify-build": "cd client && npm i && npm run build; cd ../client-lib && npm i && npm run build;"
+    "netlify-build": "cd client && npm i && npm run build; cd ../client-lib && npm i && npm run netlify-build;"
   },
   "dependencies": {
     "serverless": "^1.47.0",

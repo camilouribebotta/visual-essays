@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --mode development --hot --port 8080 --output-public-path lib --contentBase ../docs",
-    "build": "webpack --mode production --progress"
+    "build": "webpack --mode production --progress; rsync -va ../dist/lib/ ../docs/lib",
+    "netlify-build": "webpack --mode production --progress"
   },
   "dependencies": {
     "axios": "^0.19.2",
