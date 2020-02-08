@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ScrollMagic from 'ScrollMagic'
+import ScrollMagic from 'scrollmagic'
 
 export default {
   name: 'essay',
