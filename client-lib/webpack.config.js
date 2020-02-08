@@ -10,12 +10,12 @@ const BUNDLE_VERSION = require('../package.json').version
 module.exports = (env, argv) => {
   config = {
     entry: {
-    'visual-essay' : './src/main.js'
+    'visual-essays' : './src/main.js'
     },
     output: {
       path: path.resolve(__dirname, '../dist/lib'),
       publicPath: '/lib/',
-      filename: argv.mode === 'production' ? `[name]-${BUNDLE_VERSION}.min.js` : "[name].js"
+      filename: argv.mode === 'production' ? `[name]-${BUNDLE_VERSION}.min.js` : `[name].js`
     },
     resolve: {
       extensions: ['.js', '.vue', '.json'],

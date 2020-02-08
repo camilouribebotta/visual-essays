@@ -3,7 +3,7 @@
   "version": "0.1.7",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --mode development --hot --port 8081 --output-public-path js --output-filename index.js",
+    "dev": "webpack-dev-server --mode development --hot --port 8080 --output-public-path lib --contentBase ../docs",
     "build": "webpack --mode production --progress"
   },
   "dependencies": {

@@ -29,7 +29,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'config', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
+CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -294,6 +294,8 @@ class Essay(object):
             elif  _type == 'image':
                 if 'region' in attrs:
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
+            elif _type == 'component':
+                attrs['src'] = f'url:{attrs["src"]}'
             elif _type == 'config':
                 logger.info(attrs)
             

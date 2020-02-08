@@ -18,7 +18,7 @@ from entity import KnowledgeGraph
 from essay import Essay, mw_to_html5, md_to_html5, add_vue_app
 from fingerprints import get_fingerprints
 
-VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.2.5.min.js'
+VE_JS_LIB = 'https://visual-essays.online/lib/visual-essay-0.3.0.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     from flask import Flask, request
     app = flask.Flask(__name__)
     app.config['JSON_SORT_KEYS'] = False
-    VE_JS_LIB = 'http://localhost:8081/js/index.js'
+    VE_JS_LIB = 'http://localhost:8080/lib/visual-essays.js'
     CORS(app)
     app.add_url_rule('/html5', 'html5', to_html5)
     app.add_url_rule('/entity/<qid>', 'entity', entity)

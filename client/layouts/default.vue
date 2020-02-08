@@ -4,11 +4,10 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      disable-resize-watcher
       >
       <v-list dense>
 
-        <v-list-item nuxt to="/">
+        <v-list-item @click="drawer = false" nuxt to="/">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -17,7 +16,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item nuxt to="/about">
+        <v-list-item @click="drawer = false" nuxt to="/about">
           <v-list-item-action>
             <v-icon>mdi-information</v-icon>
           </v-list-item-action>
@@ -26,7 +25,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item nuxt to="/help">
+        <v-list-item @click="drawer = false" nuxt to="/help">
           <v-list-item-action>
             <v-icon>mdi-help-circle</v-icon>
           </v-list-item-action>
@@ -35,7 +34,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item nuxt to="/contact">
+        <v-list-item @click="drawer = false" nuxt to="/contact">
           <v-list-item-action>
             <v-icon>mdi-contact-mail</v-icon>
           </v-list-item-action>

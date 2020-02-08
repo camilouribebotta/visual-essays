@@ -32,7 +32,7 @@ export default {
     ],
     script: [
         { src: process.env.DEPLOY_ENV === 'DEV'
-          ? 'http://localhost:8081/js/index.js'
+          ? 'http://localhost:8080/lib/visual-essays.js'
           : `https://visual-essays.online/lib/visual-essay-${BUNDLE_VERSION}.min.js` }
       ],
     link: [

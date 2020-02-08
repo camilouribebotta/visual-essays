@@ -4,11 +4,10 @@ import httpVueLoader from 'http-vue-loader'
 import App from './App.vue'
 import store from './store'
 import 'leaflet'
-// import '../assets/styles/main.css'
-
-// import 'leaflet/dist/leaflet.css'
+import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
+import { parseQueryString } from './utils'
 
 let vm
 
@@ -35,43 +34,17 @@ function resizeend() {
   }
 }
 
-// Parses query arguments in request url 
-function parseQueryString(queryString) {
-  queryString = queryString || window.location.search
-  const dictionary = {}
-  try {
-    if (queryString.indexOf('?') === 0) {
-      queryString = queryString.substr(1)
-    }
-    const parts = queryString.split('&')
-    for (let i = 0; i < parts.length; i++) {
-      const p = parts[i]
-      const keyValuePair = p.split('=')
-      if (keyValuePair[0] !== '') {
-        const key = keyValuePair[0]
-        if (keyValuePair.length === 2) {
-          let value = keyValuePair[1]
-          // decode URI encoded string
-          value = decodeURIComponent(value)
-          value = value.replace(/\+/g, ' ')
-          dictionary[key] = value
-        } else {
-          dictionary[key] = ''
-        }
-      }
-    }
-  } catch (err) {
-    console.log(err)
-  }
-  return dictionary
-}
-
 function initApp() {
-  console.log('essay-utils.init')
+  console.log('visual-essays.init')
 
-  const vueAppElem = document.createElement('div')
-  vueAppElem.id = 'app1'
-  document.body.appendChild(vueAppElem)
+  document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
+    eval(scr.text)
+  })
+
+  window.customComponents = {}
+  window.data.filter(item => item.type === 'component').forEach(item => window.customComponents[item.name] = item)
+  console.log('customComponents', window.customComponents)
+
   Vue.config.productionTip = false
   Vue.config.devtools = true
 
@@ -79,29 +52,33 @@ function initApp() {
   Vue.use(httpVueLoader)
   Vue.prototype.$L = L
 
- vm = new Vue({
+  vm = new Vue({
     template: '<App/>',
     store,
     render: h => h(App),
     vuetify: new Vuetify()
   })
-  vm.$mount('#app1')
 
-  document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
-    eval(scr.text)
-  })
+  vm.$store.dispatch('setItems', window.data.filter(item => item.type !== 'component'))
+  console.log('items', vm.$store.getters.items)
+  vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
-  const context = parseQueryString().context || window.context
+  const qargs = parseQueryString()
+  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '')
+
+  const context = qargs.context || window.context
   if (context) {
-    vm.$store.dispatch('setContext', window.context)
+    vm.$store.dispatch('setContext', context)
   }
   console.log(`context=${vm.$store.getters.context}`)
 
-  if (window.data) {
-    vm.$store.dispatch('setItems', window.data)
+  const layout = parseQueryString().layout || window.layout
+  if (layout) {
+    vm.$store.dispatch('setLayout', layout)
   }
-
-  console.log('items', vm.$store.getters.items)
+  console.log(`layout=${vm.$store.getters.layout}`)
+  
+  vm.$mount('#essay')
 
   setViewport()
   window.addEventListener('resize', () => {
@@ -112,6 +89,8 @@ function initApp() {
     }
   })
 }
+
+// document.addEventListener('DOMContentLoaded', () => { initApp() }, false)
 
 document.addEventListener('DOMContentLoaded', () => {
   let href = window.location.href

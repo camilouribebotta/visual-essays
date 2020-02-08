@@ -140,7 +140,7 @@ class KnowledgeGraph(object):
         converted to text using the property labels.'''
         _claims = {}
         for prop, stmts in claims.items():
-            prop_label = self.prop_mappings[ns][prop]['label']
+            prop_label = self.prop_mappings[ns].get(prop, {}).get('label', prop)
             _claims[prop_label] = []
             for stmt in stmts:
                 stmt_value = self._stmt_value(stmt['mainsnak'], ns)

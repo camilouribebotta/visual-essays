@@ -30,7 +30,7 @@ export default {
           showNavigationControl: false
         })
         if (image.region !== undefined && image.region[2] != 0 && image.region[0] !== undefined) {
-            console.log("Editing initial region")
+            // console.log("Editing initial region")
             let region = image.region
             viewer.addHandler("open", function(){
                 let rect = viewer.viewport.imageToViewportRectangle(region[0], region[1], region[2]-region[0], region[3]-region[1]);

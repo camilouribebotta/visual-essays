@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title></title><style>/* Normalize */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+    display: block;
+}
+html {
+    -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+}
+body {
+    margin: 20px 60px;
+}
+::-moz-selection {
+    background-color: hsla(0,0%,0%,.5);
+    color: #fff;
+    text-shadow: none;
+}
+::selection {
+    background-color: hsla(0,0%,0%,.5);
+    color: #fff;
+    text-shadow: none;
+}
+a:focus {
+    outline: thin dotted;
+}
+a:active,
+a:hover {
+    outline: 0;
+}
+strong {
+    font-weight: bold;
+}
+mark {
+    background: #ff6;
+    color: #444;
+}
+code,
+pre {
+    font-family: monospace, serif;
+    font-size: 1em;
+}
+pre {
+    white-space: pre;
+}
+img {
+    border: 0;
+    max-width: 100%;
+    vertical-align: top;
+}
+figure {
+    margin: 0;
+}
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 100%;
+    margin: 0;
+}
+button,
+input {
+    line-height: normal;
+}
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+textarea {
+    overflow: auto;
+    vertical-align: top;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Default Typography */
+
+html {
+    color: #444;
+    font-family: sans-serif;
+    font-size: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    margin: 0;
+}
+h1 {
+    font-size: 3em;
+    line-height: 1;
+    margin-bottom: .5em;
+}
+h2 {
+    font-size: 2.25em;
+    line-height: 1.333333333;
+    margin-bottom: 0.666666666em;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1;
+    margin-bottom: 1em;
+}
+h4 {
+    font-size: 1.3125em;
+    line-height: 1.142857142;
+    margin-bottom: 1.142857142em;
+}
+h5 {
+    font-size: 1.125em;
+    line-height: 1.333333333;
+    margin-bottom: 1.333333333em;
+}
+h6 {
+    font-size: 1em;
+    line-height: 1.5;
+    margin-bottom: 1.5em;
+}
+p,
+blockquote {
+    font-size: 1em;
+    margin: 0 0 1.5em;
+    line-height: 1.5;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+}
+p a:link,
+p a:visited {
+    border-bottom: 2px solid #6af;
+    color: #444;
+    padding-bottom: 1px;
+    text-decoration: none;
+    -webkit-transition: .25s;
+       -moz-transition: .25s;
+        -ms-transition: .25s;
+         -o-transition: .25s;
+            transition: .25s;
+}
+p a:hover,
+p a:focus {
+    color: #6af;
+}
+p a:active {
+    position: relative;
+    top: 1px;
+    -webkit-transition: none;
+       -moz-transition: none;
+        -ms-transition: none;
+         -o-transition: none;
+            transition: none;
+}
+dl,
+ol,
+ul {
+    font-size: 1em;
+    margin: 0 0 1.5em;
+    padding: 0;
+}
+dd,
+dt,
+li {
+    line-height: 1.5;
+    margin: 0;
+}
+
+.entity.tagged {
+    /* background-color:#eeffcc; */
+    border-bottom: 2px solid #c4ff4d;
+    /*
+    text-decoration: underline;
+    text-decoration-color: #c4ff4d;
+    */
+}
+.entity.tagged:hover {
+    background-color:#eeffcc;
+    cursor: pointer;
+}
+
+.thumbimage {
+    border: 1px solid #ccc;
+}
+
+.thumbcaption {
+    margin-top: 6px;
+    margin-bottom: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.footnotes p {
+    margin: 6px 0;
+}</style><link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/><link href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css" rel="stylesheet"/></head><body><article data-app="true" id="essay"><section id="section-1"><h2><span class="entity inferred" data-itemid="wd:Q871991" title="cherry blossom">Cherry Blossom</span></h2><section id="section-2"><h3>Introduction</h3><p id="section-2-1">Cherry blossoms have formed an integral part of the identity of <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington</span>, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the Tidal Basin, cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale. 
+Although cherry blossoms became beloved fixtures of the city of <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington</span>, attitudes toward cherry trees have at times varied: <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington</span>’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington, D.C.</span>, that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington, D.C.</span> </p></section><section id="section-3"><h3>Cherry Trees in Japan</h3><p id="section-3-1">The <span class="entity inferred" data-itemid="wd:Q871991" title="cherry blossom">cherry blossom</span> has been a repository of symbolism in Japanese culture for centuries: it has variously symbolized processes of life, death, reproductive power, love, rebirth, and the beauty of impermanence. By the end of the Edo period (1603-1868) cherry blossoms came to be a dominant symbol of Japanese identity, although their association with Japanese identity dates to at least the ninth century. During the early years of Japan’s rapid industrialization, cherry trees fell prey to an iconoclastic drive to erase reminders of the old feudal society. As Japan continued to negotiate its national identity, cherries were taken up again, now as symbols of a modern Japan that would be recognizable on an international scale. In the years leading up to World War II, the image of falling cherry blossoms, which had traditionally been associated with impermanence and death, was increasingly deployed to aestheticize self-sacrifice for the emperor. Cherry blossoms were planted in shrines glorifying fallen soldiers, and featured prominently in military imagery. </p><section id="section-4"><h4>Cherry viewing in Japan</h4><p id="section-4-1">Flower-viewing or <span class="entity inferred" data-itemid="wd:Q210150" title="hanami">hanami</span> is a centuries-old practice in Japan. Flower viewing started in imperial circles in the eighth century, when the Japanese elite eagerly adopted Chinese high culture. Chinese plum blossoms were initially the object of viewing parties. By the ninth century, <span class="entity inferred" data-itemid="wd:Q210150" title="hanami">hanami</span> was practically synonymous with viewing cherry blossoms, as Japanese elites sought to delineate a distinctly Japanese identity. In the 18th century, mass plantings were made in poor riverside districts of present-day <span class="entity inferred" data-itemid="wd:Q1490" title="Tokyo">Tokyo</span>, many of which were notorious for prostitution, gambling, and licentious theater. Plantings of cherry trees were meant to beautify riverside communities, which the government considered eyesores. These mass plantings helped make cherry-viewing a popular pastime across all classes. Both new cherry-picnic sites and sites historically famous for imperial outings became widely popular spots for drink, merry-making and the loosening of social conventions. </p></section></section><section id="section-5"><h3>Cherries in the West</h3><p id="section-5-1">Before the craze for Japanese cherries in the West at the start of the twentieth century, Europeans knew little of Japanese cherry blossoms, and Westerners who visited Japan often complained of how flowering Japanese cherry trees bore no fruit. As shipping techniques improved in the early 19th century, Japanese cherries began to trickle into European gardens in 1832, but remained unfashionable until the 1870s. When Japan opened its borders, greater contact with Japanese culture fueled interest in cherry blossoms among Westerners. By the 1890’s, Japan was marketing and exporting cherry trees to the West. However, cherries did not reach wide audiences in the West until Japan gave thousands of cherry trees to the United States in the early 20th century.  </p><section id="section-6"><h4>Cherries in <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">D.C.</span></h4><p id="section-6-1">In 1912, Japan gifted thousands of cherry trees to the United States  as a gesture of friendship. A previous shipment, made in 1909, was burned upon entry into the United States when it was discovered that the trees were infected. The trees from 1912 prospered, becoming a beloved part of the city and an enduring symbol of the United States’ relationship with Japan. Most of the trees in the Tidal Basin were of the Yoshido variety, or <span class="entity inferred" data-itemid="wd:Q190545" title="Prunus">Prunus</span> x yedoensis. There are ongoing efforts to preserve the few surviving cherries from 1912 as witnesses to <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington</span>’s history. 
+
+</p><section id="section-7"><h5>Cherry Rebellion 1938</h5><p id="section-7-1">On November 17, 1938, the day construction began on the Jefferson Memorial, dozens of Washingtonian women marched to the White House armed with a petition to prevent damage to cherries during the construction. Many considered the preservation of the Japanese cherry trees to be more in keeping with American values than building a large and expensive marble monument on the Tidal basin. Eleanor "Cissy" Patterson, the owner and editor of the <span class="entity inferred" data-itemid="wd:Q61" title="Washington, D. C.">Washington</span> Times-Herald, wrote articles vociferously criticizing the FDR administration, and led protests on the Tidal Basin. The protestors chained themselves to a tree, seized shovels from workers, refilled holes, and prepared themselves to obstruct bulldozers. Although officials assured the public the cherry trees would be transplanted, the protesters did not stand down until they spoke with Assistant Secretary of the Interior Michael Strauss, who brought lunch and copious amounts of coffee. In dire need of restrooms, the women finally unchained themselves from the cherry tree. President Roosevelt had the remaining trees removed at night to prevent conflict, and the construction of the Jefferson Memorial proceeded smoothly. </p><p id="section-7-2">https://www.nps.gov/nama/blogs/cherry-tree-rebellion.htm</p></section><section id="section-8"><h5>Vandalism 1942</h5><p id="section-8-1">A few days after Pearl Harbor, vandals cut down four cherry trees in the night, leaving “to hell with those Japanese” carved into the stumps of one of the felled trees. Letters flooded the White House calling for the removal of all Japanese cherry trees. Many people wrote letters to newspapers in defense of cherry blossoms, calling the vandals out for chauvinism. Japanese cherries were renamed Oriental cherries to prevent the destruction of any more trees. The annual cherry festival, held since 1935, was suspended for the remainder of the war, partly because of the austere wartime economy and partly because of cherry blossoms’ association with Japan. Despite the suspension of the cherry festival, the public continued to enjoy the cherry blossoms on the Tidal Basin during the War, as attested by the photographs taken by Esther Bubley in 1943 for the Farm Security Administration. </p></section></section><section id="section-9"><h4>Cherries at <span class="entity inferred" data-itemid="wd:Q1264942" title="Dumbarton Oaks">Dumbarton Oaks</span></h4><p id="section-9-1">Located in the Northeastern corner of <span class="entity inferred" data-itemid="wd:Q1264942" title="Dumbarton Oaks">Dumbarton Oaks</span>, Cherry Hill is planted with the Japanese cherry varieties <span class="entity inferred" data-itemid="wd:Q190545" title="Prunus">Prunus</span> sargentii, <span class="entity inferred" data-itemid="wd:Q190545" title="Prunus">Prunus</span> subhirtella, and <span class="entity inferred" data-itemid="wd:Q190545" title="Prunus">Prunus</span> x yedoensis, the most abundant cherry in the Tidal Basin. Fruit-bearing black cherries, <span class="entity inferred" data-itemid="wd:Q158987" title="Prunus serotina">Prunus serotina</span>, can also be found in the gardens. By isolating a large grouping of cherries on Cherry Hill, landscape architect Beatrix Farrand created a space devoted to the display of cherry blossoms that would not be a conspicuous part of the gardens when not in bloom. 
+</p></section></section><section id="section-10"><h3><span class="entity inferred" data-itemid="wd:Q8269" title="The Tale of Genji">Tale of Genji</span></h3><p id="section-10-1"><span class="entity inferred" data-itemid="wd:Q8269" title="The Tale of Genji">The Tale of Genji</span>, written in the early years of the 11th century by the noblewoman <span class="entity inferred" data-itemid="wd:Q81731" title="Murasaki Shikibu">Murasaki Shikibu</span>, depicts an imperial court brimming with elegance and intrigue, where cherry-viewing parties set the stage for love and courtship. Although <span class="entity inferred" data-itemid="wd:Q8269" title="The Tale of Genji">The Tale of Genji</span> marked a turning-point in the development of the aesthetics of pathos and the keen awareness of ephemerality (monono aware), cherry blossoms are largely symbols of youth and love in the novel. This screen depicts a scene from chapter thirty four, New Herbs I, in which the courtier Kashiwagi falls in love while playing kickball under blossoming cherry trees as he catches sight of Genji’s new wife behind a bamboo blind that a cat has pushed open. </p><p id="section-10-2">“The women had been too delighted with the game, young gentlemen heedless of how they scattered the blossoms, to worry about blinds and concealment.”</p></section></section><script type="application/ld+json">
+window.data = [
+  {
+    "center": [
+      51.4,
+      0.53
+    ],
+    "zoom": 2.0,
+    "id": "map-1",
+    "type": "map",
+    "tagged_in": [
+      "essay"
+    ]
+  },
+  {
+    "center": [
+      35.9,
+      137.4
+    ],
+    "zoom": 6.0,
+    "id": "map-2",
+    "type": "map",
+    "tagged_in": [
+      "section-3"
+    ]
+  },
+  {
+    "center": [
+      48.8,
+      -38.2
+    ],
+    "zoom": 3.0,
+    "id": "map-3",
+    "type": "map",
+    "tagged_in": [
+      "section-5"
+    ]
+  },
+  {
+    "center": [
+      38.88,
+      -77.03
+    ],
+    "zoom": 12.0,
+    "id": "map-4",
+    "type": "map",
+    "tagged_in": [
+      "section-6-1"
+    ]
+  },
+  {
+    "center": [
+      38.900868,
+      -77.009021
+    ],
+    "zoom": 11.0,
+    "id": "map-5",
+    "type": "map",
+    "tagged_in": [
+      "section-9-1"
+    ]
+  },
+  {
+    "active": "false",
+    "mapwarper-id": "37798",
+    "type": "map-layer",
+    "title": "Cherry festival map",
+    "id": "map-layer-1",
+    "tagged_in": [
+      "section-6-1"
+    ]
+  },
+  {
+    "title": "Dumbarton Oaks",
+    "id": "wd:Q1264942",
+    "qid": "wd:Q1264942",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [
+      "essay"
+    ],
+    "aliases": [
+      "Dumbarton Oaks Research Library and Collection"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        38.9139,
+        -77.0635
+      ]
+    ],
+    "description": "research institution concerning Byzantine and Pre-Columbian studies",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Dumbarton%20Oaks%20-%20house%20photo%20with%20snow.jpg"
+    ],
+    "label": "Dumbarton Oaks",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Dumbarton_Oaks",
+    "found_in": [
+      "section-9",
+      "section-9-1"
+    ]
+  },
+  {
+    "title": "Tokyo",
+    "id": "wd:Q1490",
+    "qid": "wd:Q1490",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "T\u00f4ky\u00f4",
+      "T\u00f4ky\u00f4-to",
+      "Tokyo Metropolis",
+      "Tokyo Metropolitan prefecture",
+      "Tokyo Prefecture",
+      "Tokyo-to",
+      "T\u014dky\u014d-to",
+      "Tokio",
+      "T\u014dky\u014d"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        35.689722222,
+        139.692222222
+      ]
+    ],
+    "description": "capital of Japan and one of 47 prefectures of Japan",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Tokyo%20Montage%202015.jpg"
+    ],
+    "label": "Tokyo",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Tokyo",
+    "found_in": [
+      "section-4-1"
+    ]
+  },
+  {
+    "title": "Prunus serotina",
+    "id": "wd:Q158987",
+    "qid": "wd:Q158987",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "category": "plant",
+    "description": "species of plant",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Amerikaanse%20vogelkers%20Prunus%20serotina%20closeup.jpg"
+    ],
+    "label": "Prunus serotina",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Prunus_serotina",
+    "found_in": [
+      "section-9-1"
+    ]
+  },
+  {
+    "title": "Stockholm",
+    "id": "wd:Q1754",
+    "qid": "wd:Q1754",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "Estocolmo",
+      "Tukholma"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        59.329444444,
+        18.068611111
+      ]
+    ],
+    "description": "capital of Sweden",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Stockholm%20gamlastan%20etc.jpg"
+    ],
+    "label": "Stockholm",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Stockholm"
+  },
+  {
+    "title": "Prunus",
+    "id": "wd:Q190545",
+    "qid": "wd:Q190545",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "the Cherries"
+    ],
+    "category": "plant",
+    "description": "genus of plants",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Prunus-domestica.JPG",
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Fr%C3%BChling%20bl%C3%BChender%20Kirschenbaum.jpg"
+    ],
+    "label": "Prunus",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Prunus",
+    "found_in": [
+      "section-6-1",
+      "section-9-1"
+    ]
+  },
+  {
+    "title": "hanami",
+    "id": "wd:Q210150",
+    "qid": "wd:Q210150",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "category": "entity",
+    "description": "the Japanese traditional custom of enjoying the transient beauty of flowers",
+    "label": "Hanami",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Hanami",
+    "found_in": [
+      "section-4-1"
+    ]
+  },
+  {
+    "title": "West Yorkshire",
+    "id": "wd:Q23083",
+    "qid": "wd:Q23083",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "category": "location",
+    "coords": [
+      [
+        53.75,
+        -1.666666666
+      ]
+    ],
+    "description": "metropolitan and ceremonial county in England",
+    "label": "West Yorkshire",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/West_Yorkshire"
+  },
+  {
+    "title": ">Eleanor Patterson",
+    "id": "wd:Q5122270",
+    "qid": "wd:Q5122270",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [
+      "essay"
+    ],
+    "category": "person",
+    "description": "American newspaper publisher, socialite",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Eleanor%20Cissy%20Patterson%20cph.3b29571.jpg"
+    ],
+    "label": "Cissy Patterson",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Cissy_Patterson"
+  },
+  {
+    "title": "Bonn",
+    "id": "wd:Q586",
+    "qid": "wd:Q586",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [
+      "essay"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        50.733888888,
+        7.099722222
+      ]
+    ],
+    "description": "city in Germany, former capital",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Altes%20Rathaus%20Bonn.jpg"
+    ],
+    "label": "Bonn",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Bonn"
+  },
+  {
+    "title": "Washington, D. C.",
+    "id": "wd:Q61",
+    "qid": "wd:Q61",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "Washington",
+      "Washington DC",
+      "Washington D.C.",
+      "Washington, District of Columbia",
+      "DC",
+      "D.C.",
+      "Washington, DC",
+      "District of Columbia"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        38.895,
+        -77.036666666
+      ]
+    ],
+    "description": "capital city of the United States",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Aerial%20of%20the%20U.S.%20Capitol%20under%20restoration%2004879v.jpg"
+    ],
+    "label": "Washington, D.C.",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Washington,_D.C.",
+    "found_in": [
+      "section-2-1",
+      "section-6",
+      "section-6-1",
+      "section-7-1"
+    ]
+  },
+  {
+    "title": "Murasaki Shikibu",
+    "id": "wd:Q81731",
+    "qid": "wd:Q81731",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "Lady Murasaki"
+    ],
+    "category": "person",
+    "description": "Japanese novelist and poet",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Portrait%20of%20Murasaki%20Shikibu.jpg"
+    ],
+    "label": "Murasaki Shikibu",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Murasaki_Shikibu",
+    "found_in": [
+      "section-10-1"
+    ]
+  },
+  {
+    "title": "The Tale of Genji",
+    "id": "wd:Q8269",
+    "qid": "wd:Q8269",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "Genji Monogatari",
+      "Tale of Genji",
+      "The Tale of Genzi",
+      "El relato de Genji",
+      "Princess Aoi",
+      "\u6e90\u6c0f\u7269\u8a9e",
+      "Genjimonogatari",
+      "Genzi Monogatari"
+    ],
+    "category": "written_work",
+    "description": "classic work of Japanese literature",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/Genji%20emaki%2001003%20002.jpg"
+    ],
+    "label": "The Tale of Genji",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/The_Tale_of_Genji",
+    "found_in": [
+      "section-10",
+      "section-10-1"
+    ]
+  },
+  {
+    "title": "cherry blossom",
+    "id": "wd:Q871991",
+    "qid": "wd:Q871991",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [
+      "essay"
+    ],
+    "aliases": [
+      "??",
+      "Sakura"
+    ],
+    "description": "blossom of the cherry tree",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/SakuraHealed.png"
+    ],
+    "label": "cherry blossom",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Cherry_blossom",
+    "found_in": [
+      "section-1",
+      "section-3-1"
+    ]
+  },
+  {
+    "title": "Traverse City",
+    "id": "wd:Q984544",
+    "qid": "wd:Q984544",
+    "scope": "global",
+    "type": "entity",
+    "tagged_in": [],
+    "aliases": [
+      "Traverse City, Michigan"
+    ],
+    "category": "location",
+    "coords": [
+      [
+        44.768055555,
+        -85.622222222
+      ]
+    ],
+    "description": "city in Michigan",
+    "images": [
+      "http://commons.wikimedia.org/wiki/Special:FilePath/TraverseCity-MI-waterfront.jpg"
+    ],
+    "label": "Traverse City",
+    "wikipedia_page": "https://en.wikipedia.org/wiki/Traverse_City,_Michigan"
+  }
+]
+</script></article><script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js">
+</script><script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js"></script>
+<script src="lib/visual-essays.js"></script></body></html>

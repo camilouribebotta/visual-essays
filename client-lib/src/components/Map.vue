@@ -1,7 +1,7 @@
 <template>
-    <div ref="mapWrapper" class="row wrapper">
-        <div ref="mapWrapperInner" class="col-md-9">
-            <div ref="map" id="map" class="lmap" style="margin:0"></div>
+    <div ref="mapWrapper" class="row wrapper" style="width:100%; margin:0;">
+        <div ref="mapWrapperInner">
+            <div ref="map" id="map" class="lmap" style="margin:0;"></div>
         </div>
     </div>
 </template>
@@ -67,12 +67,12 @@ export default {
         this.$refs.map.style.height = `${mapHeight - 52}px`
         const mapWidth = this.viewport.width < this.maxWidth ? this.viewport.width : this.maxWidth
         this.$refs.map.style.width = `${mapWidth}px`
+        const wrapperWidth = this.$refs.mapWrapper.clientWidth
+        // console.log(`wrapperWidth=${wrapperWidth} calculatedContainerHeight=${calculatedContainerHeight} mapHeight=${mapHeight} mapWidth=${mapWidth}`)
         // center the map
         this.$refs.mapWrapperInner.style.paddingTop = 0
         this.$refs.mapWrapperInner.style.paddingBottom = 0
-        this.$refs.mapWrapperInner.style.paddingLeft = `${(this.viewport.width - mapWidth)/2+12}px`
-        //this.$refs.mapWrapperInner.style.paddingRight = `${(this.viewport.width - mapWidth)/2}px`
-        // console.log(`positionMapContainer: mapHeight=${this.$refs.map.style.height} mapWidth=${this.$refs.map.style.width}`)
+        this.$refs.mapWrapperInner.style.paddingLeft = `${(wrapperWidth - mapWidth)/2}px`
       }
     },
     setMapwarperLayers() {
@@ -269,8 +269,11 @@ export default {
       },
       immediate: true
     },
-    activeElement() {
-      this.updateLayers()
+    activeElement: {
+      handler: function () {
+        this.updateLayers()
+      },
+      immediate: false
     },
     mapsInActiveElements: {
       handler: function (value, prior) {
@@ -281,7 +284,7 @@ export default {
           } else {
             if (this.map) {
               if (this.mapsInActiveElements.length > 0) {
-                const curMap = this.mapsInActiveElements[this.mapsInActiveElements.length-1]
+                const curMap = this.mapsInActiveElements[0]
                 // this.map.setView(curMap.center, curMap.zoom || 10)
                 this.map.flyTo(curMap.center, curMap.zoom || 10)
               }

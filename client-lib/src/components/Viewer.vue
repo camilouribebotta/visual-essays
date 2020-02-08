@@ -1,5 +1,5 @@
 <template>
-  <v-card id="viewer">
+  <v-card id="viewer" v-if="visualizerIsOpen">
     <v-tabs
      v-if="activeWindow"
       ref="tabs"
@@ -91,21 +91,25 @@
       itemsMap: {}
     }),
     mounted() {
-      this.itemsByCategory
+      if (this.activeElement) {
+        this.itemsByCategory
+      }
     },
     computed: {
       selectedItemID () { return this.$store.getters.selectedItemID },
       activeElement() { return this.$store.getters.activeElement },
-      configs() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'config') },
-      entities() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'entity') },
-      geojson() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'geojson') },
+      activeElements() { return this.$store.getters.activeElements },
+      itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
+      configs() { return this.itemsInActiveElements.filter(item => item.type === 'config') },
+      entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
+      geojson() { return this.itemsInActiveElements.filter(item => item.type === 'geojson') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
-      includeMapViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'map').length > 0 },
-      includeImageViewer() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
+      includeMapViewer() { return this.itemsInActiveElements.filter(item => item.type === 'map').length > 0 },
+      includeImageViewer() { return this.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
+      visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
       itemsByCategory() {
         let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : 'tab-2'
         this.configs.filter(c => c.tab).forEach(c => activeTab = c.tab)
-        console.log('itemsByCategory', activeTab)
         this.activeTab = activeTab
 
         const byCat = {}
@@ -155,7 +159,7 @@
         event.stopPropagation()
         const selectedItemID = e.toElement.attributes['data-itemid'].value
         const selectedItem = this.itemsMap[selectedItemID]
-        this.activeTab = includeMapViewer && this.isLocation(selectedItemID)
+        this.activeTab = this.includeMapViewer && this.isLocation(selectedItemID)
           ? 'tab-0'
           : `tab-${selectedItem.tab}`
         this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`
@@ -178,16 +182,16 @@
     watch: {
       activeElement: {
         handler: function (current, prior) {
-          console.log(`Viewer.activeElement: current=${current ? current.id : current} prior=${prior ? prior.id : prior}`)
+          // console.log(`Viewer.activeElement: current=${current} prior=${prior}`)
           this.itemsByCategory
           if (prior) {
-            this.removeClickHandlers(prior.id)
+            this.removeClickHandlers(prior)
           }
           if (current) {
-            this.addClickHandlers(current.id)
+            this.addClickHandlers(current)
           }
         },
-        immediate: true
+        immediate: false
       }
     }
   }
