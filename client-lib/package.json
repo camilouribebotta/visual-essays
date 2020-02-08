@@ -12,6 +12,7 @@
     "leaflet": "^1.6.0",
     "leaflet.control.opacity": "^1.3.0",
     "openseadragon": "^2.4.1",
+    "scrollmagic": "^2.0.7",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-openseadragon": "^0.1.2",
