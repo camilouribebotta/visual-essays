@@ -3,8 +3,6 @@ import YAML from 'yaml'
 
 const SETTINGS = YAML.parse(fs.readFileSync('./settings.yaml', 'utf8'))
 
-const BUNDLE_VERSION = require('../package.json').version
-
 const routerBase = {
   'GH_PAGES': { router: { base: ghPagesPath(SETTINGS.gh_path) } }
 }[process.env.DEPLOY_ENV] || { router: { base: '/' } }
@@ -12,7 +10,6 @@ const routerBase = {
 export default {
   env: { ...SETTINGS,
     deployEnv: process.env.DEPLOY_ENV || 'PROD',
-    bundle_version: BUNDLE_VERSION,
     ve_service_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
       ? 'http://localhost:5000'
       : 'https://us-central1-visual-essay.cloudfunctions.net',
@@ -33,7 +30,7 @@ export default {
     script: [
         { src: process.env.DEPLOY_ENV === 'DEV'
           ? 'http://localhost:8080/lib/visual-essays.js'
-          : `https://jstor-labs.github.io/visual-essays/lib/visual-essays-${BUNDLE_VERSION}.min.js` }
+          : `https://jstor-labs.github.io/visual-essays/lib/visual-essays-${SETTINGS.visual_essays_version}.min.js` }
       ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
