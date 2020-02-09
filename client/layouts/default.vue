@@ -124,7 +124,7 @@
         essayTopMargin: 140,
         // title: process.env.site_title,
         app_version: process.env.app_version,
-        bundle_version: process.env.bundle_version,
+        bundle_version: process.env.visual_essays_version,
         banner_image: process.env.banner_image,
 
         snackbar: false,

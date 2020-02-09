@@ -18,7 +18,7 @@ from entity import KnowledgeGraph
 from essay import Essay, mw_to_html5, md_to_html5, add_vue_app
 from fingerprints import get_fingerprints
 
-VE_JS_LIB = 'https://jstor.labs.github.io/visual-essays/lib/visual-essays-0.3.0.min.js'
+VE_JS_LIB = 'https://jstor.labs.github.io/visual-essays/lib/visual-essays-0.3.1.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))

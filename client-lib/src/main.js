@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         })
         href = window.location.href
-        console.log(href)
+        // console.log(href)
       }
     }
   }

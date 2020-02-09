@@ -1,7 +1,12 @@
 site_title: Visual Essays
-gh_path: https://jstor-labs.github.io/visual-essays
-root_essay: https://kg.jstor.org/wiki/Visual_Essays
 banner_image: https://picsum.photos/1200/225
-app_version: 0.2.1
-visual_essays_version: 0.3.0
+root_essay: https://kg.jstor.org/wiki/Visual_Essays
+index: https://jstor-labs.github.io/visual-essays/index.md
+about: https://jstor-labs.github.io/visual-essays/about.md
+help: https://jstor-labs.github.io/visual-essays/help.md
+contact: https://jstor-labs.github.io/visual-essays/contact.md
+gh_path: https://jstor-labs.github.io/visual-essays
+wiki_base: https://kg.jstor.org
+app_version: 0.2.2
+visual_essays_version: 0.3.1
 context: null

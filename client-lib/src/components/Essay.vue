@@ -138,6 +138,7 @@ export default {
     },
     toggleVisualizer(e) {
       // Toggles display of visualizer pane
+      console.log('toggleVisualizer')
       this.$store.dispatch('setVisualizerIsOpen', !this.visualizerIsOpen)
       if (this.visualizerIsOpen) {
         let offset = 100
@@ -182,7 +183,7 @@ export default {
   },
   watch: {
     activeElement(active, prior) {
-      console.log(`activeElement=${active} store=${this.activeElement}`)
+      console.log(`activeElement=${active}`)
       if (this.visualizerIsOpen) {
         if (prior) {
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))

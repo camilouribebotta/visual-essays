@@ -30,6 +30,9 @@ export default {
     viewportHeight() { return this.$store.getters.height },
     viewportWidth() { return this.$store.getters.width }
   },
+  mounted() {
+    this.updateVisualizerPosition()
+  },
   methods: {
     updateVisualizerPosition() {
       this.essay = { height: this.visualizerIsOpen }
@@ -43,7 +46,7 @@ export default {
   watch: {
     viewportHeight() { this.updateVisualizerPosition() },
     viewportWidth() { this.updateVisualizerPosition() }
-  }
+   }
 }
 </script>
 

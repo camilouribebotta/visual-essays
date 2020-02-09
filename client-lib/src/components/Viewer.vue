@@ -184,10 +184,10 @@
         handler: function (current, prior) {
           // console.log(`Viewer.activeElement: current=${current} prior=${prior}`)
           this.itemsByCategory
-          if (prior) {
-            this.removeClickHandlers(prior)
-          }
           if (current) {
+            if (prior) {
+            this.removeClickHandlers(prior)
+            }            
             this.addClickHandlers(current)
           }
         },
