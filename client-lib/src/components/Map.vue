@@ -49,7 +49,7 @@ export default {
         const mapDef = this.mapsInActiveElements[this.mapsInActiveElements.length - 1]
         this.map = this.$L.map('map', {zoomSnap: 0.1})
         this.map.setView(mapDef.center, mapDef.zoom || 10)
-        this.mapLayers.baseLayer = this.$L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png')
+        this.mapLayers.baseLayer = this.$L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
         this.map.addLayer(
           this.mapLayers.baseLayer,
           {
