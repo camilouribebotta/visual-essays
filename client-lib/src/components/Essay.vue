@@ -113,7 +113,7 @@ export default {
           content.push(section)
         })
       }
-      console.log(content)
+      console.log('content', content)
       this.$store.dispatch('setContent', content)
     },
     aggregateItemMappings() {
@@ -138,22 +138,27 @@ export default {
     },
     toggleVisualizer(e) {
       // Toggles display of visualizer pane
-      console.log('toggleVisualizer')
-      this.$store.dispatch('setVisualizerIsOpen', !this.visualizerIsOpen)
-      if (this.visualizerIsOpen) {
-        let offset = 100
-        let scrollable = document.getElementById('scrollableContent')
-        if (scrollable) {
-          offset = -80
+      e.preventDefault()
+      // e.stopPropagation()
+      const elemId = e.toElement.id
+      if (this.paragraphs[elemId]) {
+        console.log('toggleVisualizer')
+        this.$store.dispatch('setVisualizerIsOpen', !this.visualizerIsOpen)
+        if (this.visualizerIsOpen) {
+          let offset = 100
+          let scrollable = document.getElementById('scrollableContent')
+          if (scrollable) {
+            offset = -80
+          } else {
+            scrollable = window
+          }
+          const scrollTo = this.paragraphs[elemId].top - offset
+          // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
+          this.spacer.style.height = `${this.viewportHeight/2}px`
+          scrollable.scrollTo(0, scrollTo )
         } else {
-          scrollable = window
+          this.spacer.style.height = 0
         }
-        const scrollTo = this.paragraphs[e.toElement.id].top - offset
-        // console.log(`scrollTo: elem=${e.toElement.id} top=${scrollTo}`)
-        this.spacer.style.height = `${this.viewportHeight/2}px`
-        scrollable.scrollTo(0, scrollTo )
-      } else {
-        this.spacer.style.height = 0
       }
     },
     addSpacer() {

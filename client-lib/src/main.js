@@ -36,14 +36,21 @@ function resizeend() {
 
 function initApp() {
   console.log('visual-essays.init')
+  window.data = undefined
+  window.context = undefined
+  console.log('window.data', window.data)
 
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
+    // scr.parentElement.removeChild(scr)
   })
+  console.log('window.data', window.data)
 
   window.customComponents = {}
-  window.data.filter(item => item.type === 'component').forEach(item => window.customComponents[item.name] = item)
-  console.log('customComponents', window.customComponents)
+  if (window.data) {
+    window.data.filter(item => item.type === 'component').forEach(item => window.customComponents[item.name] = item)
+    console.log('customComponents', window.customComponents)
+  }
 
   Vue.config.productionTip = false
   Vue.config.devtools = true
@@ -58,9 +65,16 @@ function initApp() {
     render: h => h(App),
     vuetify: new Vuetify()
   })
+  vm.$store.dispatch('setEssayHTML', undefined)
+  vm.$store.dispatch('setContent', [])
+  vm.$store.dispatch('setItems', [])
+  vm.$store.dispatch('setContext', undefined)
+  vm.$store.dispatch('setLayout', 'horizontal')
 
-  vm.$store.dispatch('setItems', window.data.filter(item => item.type !== 'component'))
-  console.log('items', vm.$store.getters.items)
+  if (window.data) {
+    vm.$store.dispatch('setItems', window.data.filter(item => item.type !== 'component'))
+    console.log('items', vm.$store.getters.items)
+  }
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
   const qargs = parseQueryString()
@@ -98,16 +112,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (vm) {
       if (href !== window.location.href) {
         href = window.location.href
+        console.log('remove vm')
         vm = vm.$destroy()
+        const essayElem = document.getElementById('essay')
+        if (essayElem) {
+          essayElem.parentNode.removeChild(essayElem)
+        }
       }
     } else {
-      const esssayElem = document.getElementById('essay')
-      if (esssayElem && esssayElem.innerText.length > 0) {
+      const essayElem = document.getElementById('essay')
+      if (essayElem && essayElem.innerText.length > 0) {
         initApp()
         vm.$store.getters.items.forEach((item) => {
           if (item.type === 'essay' && item.title) {
-            esssayElem.title = item.title
-            console.log(esssayElem.title)
+            essayElem.title = item.title
+            console.log(essayElem.title)
           }
         })
         href = window.location.href
