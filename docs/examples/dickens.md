@@ -55,6 +55,7 @@ by <big><span class="author">Ken Moffat</span> and <span class="author">Carolyn 
 </p>
 
 Philip Pirrip tells us in his very name that he is trapped in language. Hardly surprisingly the child cannot perform this tongue twister and reduces his name to an inarticulate stutter: Pip.  According to this logic his full name must be pronounceable as ‘Pip Pip’, which would become a slang term for ‘goodbye’ in the twentieth century. As Joe will later say to him, ‘life is made of ever so many partings’[^ref1]. 
+<var data-video id="wizsPOYyE9o" title="Great Expectations by Charles Dickens Dickens's Kent"></var>
 
 But the novel insists that Pip does have choices. He keeps his encounter with Magwitch a secret. He accepts the offer of a mysterious benefactor to transform him into a gentleman, largely in hopes of winning Estella. He puts up at the Blue Boar on his return from London rather than staying with Joe at the forge. The starkness of these choices is symbolised by the accusatory finger post at the end of the village. Pointing both towards town and in the opposite direction towards the marshes and the church, this signpost offers two mutually exclusive paths for Pip to take whenever he leaves the village. This road does not exist on maps of the time, or at least there is no road that obviously leads in both directions in the direct way that Pip suggests. The moral imperatives, which he will increasingly ignore, are symbolically mapped by the guilty character himself.
 <var title="London" id="Q84" scope="local"></var>

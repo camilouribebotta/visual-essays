@@ -13,6 +13,9 @@
       <v-tab v-if="includeImageViewer" href="#tab-1">
         Image viewer
       </v-tab>
+      <v-tab v-if="includeVideoPlayer" href="#tab-2">
+        Video
+      </v-tab>
       <v-tab 
         v-for="itemsByCat in itemsByCategory"
         :key="`tab-${itemsByCat.tab}`"
@@ -39,13 +42,21 @@
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
+        v-if="includeVideoPlayer"         
+        value="tab-2"
+      >
+        <video-player :videoId="videos[0].id"/>
+      </v-tab-item>
+      <v-tab-item
+        transition="fade-transition"
+        reverse-transition="fade-transition"
         v-for="(itemsByCat, tab) in itemsByCategory"
-        :key="`tab-item-${tab+2}`"
-        :value="`tab-${tab+2}`"
+        :key="`tab-item-${tab+3}`"
+        :value="`tab-${tab+3}`"
       >
         <v-window
           ref="entities"
-          v-model="activeWindow[`tab${tab+2}`]"
+          v-model="activeWindow[`tab${tab+3}`]"
           class="entity-window"
           showArrows
         > 
@@ -54,7 +65,7 @@
             reverse-transition="fade-transition"
             v-for="(item, window) in itemsByCat.items" 
             :key="`tab-${itemsByCat.tab}-${window}`"
-            :value="`window-${tab+2}-${window}`"
+            :value="`window-${tab+3}-${window}`"
           >
             <entity-infobox class="entity-infobox" :qid="item.qid"/>
           </v-window-item>
@@ -68,6 +79,7 @@
   import Vue from 'vue'
   import Map from './Map'
   import ImageViewer from './ImageViewer'
+  import VideoPlayer from './VideoPlayer'
   import EntityInfobox from './EntityInfobox'
 
   const catLabels = {
@@ -83,6 +95,7 @@
     components: {
       lmap: Map,
       ImageViewer,
+      VideoPlayer,
       EntityInfobox
     },
     data: () => ({
@@ -103,9 +116,11 @@
       configs() { return this.itemsInActiveElements.filter(item => item.type === 'config') },
       entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
       geojson() { return this.itemsInActiveElements.filter(item => item.type === 'geojson') },
+      videos() { return this.itemsInActiveElements.filter(item => item.type === 'video') },
       title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
       includeMapViewer() { return this.itemsInActiveElements.filter(item => item.type === 'map').length > 0 },
       includeImageViewer() { return this.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
+      includeVideoPlayer() { return this.videos.length > 0 },
       visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
       itemsByCategory() {
         let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : 'tab-2'
@@ -132,7 +147,7 @@
           byCat[category].push(entity)
         })
         const results = []
-        let tab = 1
+        let tab = 2
         this.itemsMap = {}
         const activeWindow = {}
         Object.keys(byCat).sort().forEach((key) => {

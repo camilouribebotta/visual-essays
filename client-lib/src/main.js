@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import httpVueLoader from 'http-vue-loader'
+import VueYoutube from 'vue-youtube'
 import App from './App.vue'
 import store from './store'
 import 'leaflet'
@@ -57,6 +58,7 @@ function initApp() {
 
   Vue.use(Vuetify)
   Vue.use(httpVueLoader)
+  Vue.use(VueYoutube)
   Vue.prototype.$L = L
 
   vm = new Vue({
