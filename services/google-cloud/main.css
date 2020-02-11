@@ -206,17 +206,36 @@ li {
     cursor: pointer;
 }
 
+.footnotes p {
+    margin: 6px 0;
+}
+
+.tleft {
+    float: left;
+    clear: left;
+    margin: 6px 18px 6px 12px;
+}
+
+.tright {
+    float: right;
+    clear: right;
+    margin: 6px 12px 6px 18px;
+}
+
+.thumbinner {
+    padding: 6px;
+    border: 0.5pt solid #aaa;
+    -webkit-box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.5); 
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.3);
+}
+
 .thumbimage {
-    border: 1px solid #ccc;
+    border: 0.5pt solid #444;
 }
 
 .thumbcaption {
     margin-top: 6px;
-    margin-bottom: 18px;
+    margin-bottom: 6px;
     font-weight: bold;
     text-align: center;
-}
-
-.footnotes p {
-    margin: 6px 0;
 }

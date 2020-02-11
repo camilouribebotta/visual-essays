@@ -116,9 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
         href = window.location.href
         console.log('remove vm')
         vm = vm.$destroy()
-        const essayElem = document.getElementById('essay')
+        const essayElem = document.getElementById('visual-essay')
         if (essayElem) {
-          essayElem.parentNode.removeChild(essayElem)
+          console.log('removing visual-essay')
+          //essayElem.parentNode.removeChild(essayElem)
         }
       }
     } else {

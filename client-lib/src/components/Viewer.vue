@@ -189,9 +189,12 @@
       },
       removeClickHandlers(elemId) {
         // console.log(`removeClickHandlers ${elemId}`)
-        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          entity.removeEventListener('click', this.clickHandler)
-        })
+        const elem = document.getElementById(elemId)
+        if (elem) {
+          document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+            entity.removeEventListener('click', this.clickHandler)
+          })
+        }
       }
     },
     watch: {
@@ -201,7 +204,7 @@
           this.itemsByCategory
           if (current) {
             if (prior) {
-            this.removeClickHandlers(prior)
+              this.removeClickHandlers(prior)
             }            
             this.addClickHandlers(current)
           }

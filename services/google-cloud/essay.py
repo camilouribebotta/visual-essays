@@ -170,7 +170,7 @@ class Essay(object):
         self. _update_image_links()
         self._remove_empty_paragraphs()
         self._add_data()
-        
+
     def _remove_empty_paragraphs(self):
         for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
             if _is_empty(para_elem):
@@ -201,17 +201,21 @@ class Essay(object):
 
     def _update_image_links(self):
         for thumb in self._soup.html.body.article.find_all('div', {'class': 'thumb'}):
+            thumb.div.a.img.attrs["src"] = f'{self.site}{thumb.div.a.img.attrs["src"]}'
+            '''
+            logger.info(thumb)
             caption = thumb.div.div.text
             img_wrapper = self._soup.new_tag('div')
             img = self._soup.new_tag('img')
             img.attrs['src'] = f'{self.site}{thumb.div.a.img.attrs["src"]}'
-            img.attrs['style'] = 'width: 100%; height: auto; border: 1px solid #ddd; box-shadow: 3px 3px 3px #eee;'
+            img.attrs['style'] = 'width: 300px; height: auto; border: 1px solid #ddd; box-shadow: 3px 3px 3px #eee;'
             caption_elem = self._soup.new_tag('p')
             caption_elem.attrs['style'] = 'text-align: center; margin-bottom: 18px; font-weight: 500;'
             caption_elem.string = caption
             img_wrapper.append(img)       
             img_wrapper.append(caption_elem)       
             thumb.replace_with(img_wrapper)
+            '''
         #for img in self._soup.html.body.article.find_all('img'):
         #    img.attrs['src'] = f'{self.site}{img.attrs["src"]}'
 
