@@ -3,10 +3,12 @@
 </template>
 
 <script>
-  export default {
+  module.exports = {
     name: 'CustomEntityViewer',
     props: {
       items: { type: Array, default: () => ([]) }
     }
   }
 </script>
+
+<style></style>
