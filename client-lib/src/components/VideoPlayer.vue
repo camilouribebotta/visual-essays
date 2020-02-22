@@ -18,7 +18,7 @@
 export default {
   name: 'VideoPlayer',
   props: {
-    videoId: { type: String, default: null }
+    items: { type: Array, default: () => ([]) }
   },
   data: () => ({
     playerVars: {
@@ -28,6 +28,7 @@ export default {
     playerWidth: 564
   }),
   computed: {
+    videoId() { return this.items[0].id },
     player() { return this.$refs.youtube ? this.$refs.youtube.player : null }
   },
   beforeDestroy() {

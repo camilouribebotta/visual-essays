@@ -14,7 +14,9 @@ CONTENT_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'content'
 import json
 import getopt
 import sys
+import hashlib
 from urllib.parse import quote
+from time import time as now
 
 from bs4 import BeautifulSoup
 from bs4.element import Comment, Tag
@@ -159,6 +161,7 @@ def md_to_html5(html):
 class Essay(object):
 
     def __init__(self, html, **kwargs):
+        self.cache = kwargs.get('cache', {})
         self.context = kwargs.pop('context', None)
         self._soup = BeautifulSoup(html, 'html5lib')
         for comment in self._soup(text=lambda text: isinstance(text, Comment)):
@@ -221,24 +224,32 @@ class Essay(object):
 
     def _update_entities_from_knowledgegraph(self):
         qids = [item['qid'] for item in self.markup.values() if 'qid' in item]
-        if qids:
-            for kg_props in self._get_entity_data(qids)['@graph']:
-                if kg_props['id'] in self.markup:
-                    for k, v in kg_props.items():
-                        if k in ('aliases',) and not isinstance(v, list):
-                            v = [v]
-                        elif k == 'qid' and ':' not in kg_props[k]:
-                            v = f'wd:{kg_props[k]}'
-                        elif k == 'coords':
-                            coords = []
-                            for coords_str in v:
-                                coords.append([float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]])
-                            v = coords
-                        if k in ('aliases',) and k in self.markup[kg_props['id']]:
-                            # merge values
-                            v = sorted(set(self.markup[kg_props['id']][k] + v))
-                        self.markup[kg_props['id']][k] = v
-                    # logger.info(json.dumps(self.markup[kg_props['id']], indent=2))
+        cache_key = hashlib.sha256(str(sorted(qids)).encode('utf-8')).hexdigest()
+        kg_entities = self.cache.get(cache_key)
+        if kg_entities is None:
+            kg_entities = self._get_entity_data(qids)['@graph']
+            self.cache[cache_key] = kg_entities
+        for kg_props in kg_entities:
+            if kg_props['id'] in self.markup:
+                me = self.markup[kg_props['id']]
+                for k, v in kg_props.items():
+                    if k in ('aliases',) and not isinstance(v, list):
+                        v = [v]
+                    elif k == 'qid' and ':' not in kg_props[k]:
+                        v = f'wd:{kg_props[k]}'
+                    elif k == 'coords':
+                        coords = []
+                        for coords_str in v:
+                            coords.append([float(c.strip()) for c in coords_str.replace('Point(','').replace(')','').split()[::-1]])
+                        v = coords
+                    elif k == 'category':
+                        if 'category' in me:
+                            v = me['category']
+                    if k in ('aliases',) and k in self.markup[kg_props['id']]:
+                        # merge values
+                        v = sorted(set(self.markup[kg_props['id']][k] + v))
+                    me[k] = v
+                # logger.info(json.dumps(self.markup[kg_props['id']], indent=2))
 
     def _find_ve_markup(self):
         ve_markup = {}
@@ -298,8 +309,6 @@ class Essay(object):
             elif  _type == 'image':
                 if 'region' in attrs:
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
-            elif _type == 'component':
-                attrs['src'] = f'url:{attrs["src"]}'
             elif _type == 'config':
                 logger.info(attrs)
             
@@ -527,7 +536,8 @@ def add_vue_app(html, js_lib):
 
     for url in [
         'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css'
+        'https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css',
+        'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
         ]:
         style = soup.new_tag('link')
         style.attrs['rel'] = 'stylesheet'

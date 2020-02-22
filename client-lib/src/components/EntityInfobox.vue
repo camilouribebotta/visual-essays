@@ -40,7 +40,7 @@ export default {
         get_entity(this.entity.qid, this.context)
           .then((updated) => {
             if (!updated['summary info']) {
-              updated['summary info'] = NULL
+              updated['summary info'] = null
             }
             updated.id = this.entity.qid
             this.$store.dispatch('updateItem', updated)

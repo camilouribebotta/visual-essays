@@ -8,31 +8,41 @@
 </template>
 
 <script>
-import Viewer from './Viewer'
 
 export default {
   name: 'visualizer',
-  components: {
-    Viewer
+  methods: {
+    clickHandler(e) {
+      this.$store.dispatch('setSelectedItemID', e.toElement.attributes['data-itemid'].value)
+    },
+    addClickHandlers(elemId) {
+      document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+        entity.addEventListener('click', this.clickHandler)
+      })
+    },
+    removeClickHandlers(elemId) {
+      const elem = document.getElementById(elemId)
+      if (elem) {
+        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+          entity.removeEventListener('click', this.clickHandler)
+        })
+      }
+    }
   },
-  computed: {
-    height() { return this.$store.getters.height}
-  },
+  watch: {
+    visualizerIsOpen(isOpen) {
+      if (!isOpen) {
+        this.$store.dispatch('setSelectedItemID')
+      }
+    },
+    activeElement(current, prior) {
+      if (current) {
+        if (prior) {
+          this.removeClickHandlers(prior)
+        }            
+        this.addClickHandlers(current)
+      }
+    }
+  }
 }
 </script>
-
-<style>
-
-  #viewer {
-    height: 100%;
-    margin-top: 3px;
-  }
-
-  .v-tabs-bar {
-    background-color: #eee !important;
-    height: 35px !important;
-    margin-bottom: 3px;
-    border-top: 1px solid #ccc !important;
-  }
-
-</style>

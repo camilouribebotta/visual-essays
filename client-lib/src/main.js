@@ -1,14 +1,39 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VueScrollmagic from 'vue-scrollmagic'
 import httpVueLoader from 'http-vue-loader'
 import VueYoutube from 'vue-youtube'
 import App from './App.vue'
 import store from './store'
 import 'leaflet'
-import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
+// import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
-import { parseQueryString } from './utils'
+import '../assets/styles/main.css'
+import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
+
+// Default viewer components
+import Visualizer from './components/Visualizer'
+import Viewer from './components/Viewer1'
+import Map from './components/Map1'
+import ImageViewer from './components/ImageViewer'
+import VideoPlayer from './components/VideoPlayer'
+import EntityViewer from './components/EntityViewer'
+import EntityInfobox from './components/EntityInfobox'
+
+const myMixin = {
+  computed: {
+    activeElement() { return store.getters.activeElement },
+    activeElements() { return store.getters.activeElements },
+    allItems() { return store.getters.items },
+    groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems)) },
+    selectedItemID () { return store.getters.selectedItemID },
+    visualizerIsOpen() { return store.getters.visualizerIsOpen }
+  },
+  mounted() {
+    console.log('mixin.mounted', this.$options.name, store.getters.activeElements.join(','))
+  }
+}
 
 let vm
 
@@ -35,31 +60,49 @@ function resizeend() {
   }
 }
 
+const components = {
+  visualizer: Visualizer,
+  viewer: Viewer,
+  gmap: Map,
+  entity: EntityViewer,
+  gvideo: VideoPlayer,
+  gimage: ImageViewer,
+  entityInfobox: EntityInfobox
+}
+
 function initApp() {
   console.log('visual-essays.init')
-  window.data = undefined
-  window.context = undefined
-  console.log('window.data', window.data)
 
+  window.data = []
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
-    // scr.parentElement.removeChild(scr)
   })
   console.log('window.data', window.data)
 
-  window.customComponents = {}
-  if (window.data) {
-    window.data.filter(item => item.type === 'component').forEach(item => window.customComponents[item.name] = item)
-    console.log('customComponents', window.customComponents)
-  }
+  window.data.filter(item => item.type === 'component').forEach(customComponent => {
+    console.log('customComponent', customComponent)
+    components[customComponent.name] = httpVueLoader(customComponent.src)
+  })
 
   Vue.config.productionTip = false
   Vue.config.devtools = true
 
   Vue.use(Vuetify)
-  Vue.use(httpVueLoader)
+  Vue.use(VueScrollmagic, {
+    vertical: true,
+    globalSceneOptions: {},
+    loglevel: 2,
+    refreshInterval: 100
+  })
+  // Vue.use(httpVueLoader)
   Vue.use(VueYoutube)
   Vue.prototype.$L = L
+
+  Object.entries(components).forEach(component => {
+    component[1].mixins = [myMixin]
+    console.log(component[1])
+    Vue.component(component[0], component[1])
+  })
 
   vm = new Vue({
     template: '<App/>',
@@ -70,30 +113,19 @@ function initApp() {
   vm.$store.dispatch('setEssayHTML', undefined)
   vm.$store.dispatch('setContent', [])
   vm.$store.dispatch('setItems', [])
-  vm.$store.dispatch('setContext', undefined)
-  vm.$store.dispatch('setLayout', 'horizontal')
 
-  if (window.data) {
-    vm.$store.dispatch('setItems', window.data.filter(item => item.type !== 'component'))
-    console.log('items', vm.$store.getters.items)
-  }
+  vm.$store.dispatch('setItems', prepItems(window.data.filter(item => item.type !== 'component')))
+  vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
+
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
   const qargs = parseQueryString()
-  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '')
+  const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'horizontal')
+  vm.$store.dispatch('setContext', qargs.context || config.context)
+  vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
+  console.log(`layout=${vm.$store.getters.layout} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
-  const context = qargs.context || window.context
-  if (context) {
-    vm.$store.dispatch('setContext', context)
-  }
-  console.log(`context=${vm.$store.getters.context}`)
-
-  const layout = parseQueryString().layout || window.layout
-  if (layout) {
-    vm.$store.dispatch('setLayout', layout)
-  }
-  console.log(`layout=${vm.$store.getters.layout}`)
-  
   vm.$mount('#essay')
 
   setViewport()

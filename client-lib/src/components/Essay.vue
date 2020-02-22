@@ -1,16 +1,17 @@
 <template>
-  <div id="essay" v-html="html"/>    
+  <div ref="essay" id="essay" v-html="html"/>    
 </template>
 
 <script>
-import ScrollMagic from 'scrollmagic'
+import { addActivator } from './Activator'
+import { elemIdPath, itemsInElements, groupItems } from '../utils'
 
 export default {
   name: 'essay',
   data: () => ({
-    controller: new ScrollMagic.Controller(),
     paragraphs: {},
-    spacer: undefined
+    spacer: undefined,
+    activators: undefined
   }),
   computed: {
     html() { return this.$store.getters.essayHTML },
@@ -18,45 +19,80 @@ export default {
     visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
     activeElement() { return this.$store.getters.activeElement },
     layout() { return this.$store.getters.layout },
-    viewportHeight() { return this.$store.getters.height }
+    viewportHeight() { return this.$store.getters.height },
+    viewportWidth() { return this.$store.getters.width },
+    allItems() { return this.$store.getters.items }
   },
   mounted() {
+    groupItems(this.allItems)
     this.addSpacer()
     this.$nextTick(() => this.init())
     if (window.location.hash) {
       this.scrollTo(window.location.hash.slice(1))
     }
-    this.addFootnotesHover()
-
-    // Setup ScrollMagic (https://scrollmagic.io/)
-    let prior
-    Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
-      para.title = para.id
-      this.paragraphs[para.id] = { prior, top: para.offsetTop }
-      prior = para.id
-      if (this.layout === 'horizontal') {
-        para.addEventListener('click', (e) => { this.toggleVisualizer(e) })
-      }
-      const scene = new ScrollMagic.Scene({
-        triggerElement: `#${para.id}`,
-        triggerHook: 0.25
-      })
-      .on('enter', (e) => { this.setActiveElements(para.id) })
-      .on('leave', (e) => {
-        if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
-          this.setActiveElements(this.paragraphs[para.id].prior)
-        }
-      })
-      if (this.debug) {
-        scene.addIndicators()
-      }
-      scene.addTo(this.controller)
-    })
   },
   methods: {
+    offset(el) {
+      var rect = el.getBoundingClientRect(),
+      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    },
+    addActivators() {
+      // console.log('addActivators')
+      const essay = this.$refs.essay
+      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+        const paraData = this.paragraphs[para.id]
+        // console.log(`${para.id} items=${paraData.items.map(item => item.id).join(',')}`)
+        if (paraData.items.length > 0) {
+          addActivator(essay, para.id, paraData.top, paraData.items.map(item => item.id).join(','), this.clickHandler)
+        }
+      })
+    },
+    clickHandler(e) {
+      const selectedParaId = e.target.parentElement.attributes['data-id'].value
+      this.toggleVisualizer(selectedParaId)
+    },
     init() {
-      this.aggregateItemMappings()
       this.findContent()
+      this.addFootnotesHover()
+    
+      console.dir(this.$refs.essay)
+      // const offsets = this.offset(this.$refs.essay)
+      // console.log(offsets)
+
+      // Setup ScrollMagic (https://scrollmagic.io/)
+      let prior
+      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+        para.title = elemIdPath(para.id).join(',')
+        this.paragraphs[para.id] = {
+          prior, 
+          top: para.offsetTop,
+          items: itemsInElements(elemIdPath(para.id), this.allItems)
+        }
+        prior = para.id
+        //if (this.layout === 'horizontal') {
+        //  para.addEventListener('click', (e) => { this.toggleVisualizer(e.toElement.id) })
+        //}
+        const scene = this.$scrollmagic.scene({
+          triggerElement: `#${para.id}`,
+          triggerHook: 0.25
+        })
+        .on('enter', (e) => {
+          this.setActiveElements(para.id)
+        })
+        .on('leave', (e) => {
+          if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
+            this.setActiveElements(this.paragraphs[para.id].prior)
+          }
+        })
+        if (this.debug) {
+          scene.addIndicators()
+        }
+        this.$scrollmagic.addScene(scene)
+
+      })
+      this.addActivators()
     },
     eqSet(as, bs) {
       if (as.size !== bs.size) return false;
@@ -64,17 +100,7 @@ export default {
       return true;
     },
     setActiveElements(elemId) {
-      const activeElements = []
-      let elem = document.getElementById(elemId)
-      while(elem) {
-        activeElements.push(elem.id)
-        if (elem.id === 'essay') {
-          break
-        }
-        elem = elem.parentElement
-      }
-      // console.log(activeElements, this.activeElements, this.eqSet(new Set(activeElements), new Set(this.activeElements)))
-      this.$store.dispatch('setActiveElements', activeElements)
+      this.$store.dispatch('setActiveElements', elemIdPath(elemId))
     },
     getParagraphs(elem) {
       const paragraphs = []
@@ -116,49 +142,35 @@ export default {
       console.log('content', content)
       this.$store.dispatch('setContent', content)
     },
-    aggregateItemMappings() {
-      this.$store.getters.items.forEach((item) => {
-        item.part_of = new Set()
-        if (item.tagged_in) {
-          item.tagged_in.forEach((elemId) => { item.part_of.add(elemId) }) 
-        }        
-        if (item.found_in) {
-          item.found_in.forEach((elemId) => { item.part_of.add(elemId) }) 
-        }
-      })
-    },
     itemsPartOf(elemId) {
       const items = []
       this.$store.getters.items.forEach((item) => {
-        if (item.part_of.has(elemId) || (item.type !== 'entity' && item.part_of.has('essay'))) {
+        if (item.found_in.has(elemId) || item.tagged_in.has(elemId) ||
+            (item.type !== 'entity' && item.tagged_in.has('essay'))) {
           items.push(item)
         }
       })
       return items
     },
-    toggleVisualizer(e) {
+    toggleVisualizer(elemId) {
       // Toggles display of visualizer pane
-      e.preventDefault()
+      // e.preventDefault()
       // e.stopPropagation()
-      const elemId = e.toElement.id
       if (this.paragraphs[elemId]) {
         console.log('toggleVisualizer')
-        this.$store.dispatch('setVisualizerIsOpen', !this.visualizerIsOpen)
-        if (this.visualizerIsOpen) {
-          let offset = 100
-          let scrollable = document.getElementById('scrollableContent')
-          if (scrollable) {
-            offset = -80
-          } else {
-            scrollable = window
-          }
-          const scrollTo = this.paragraphs[elemId].top - offset
-          // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
-          this.spacer.style.height = `${this.viewportHeight/2}px`
-          scrollable.scrollTo(0, scrollTo )
+        this.$store.dispatch('setVisualizerIsOpen', true)
+        document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
+        let offset = 100
+        let scrollable = document.getElementById('scrollableContent')
+        if (scrollable) {
+          offset = -80
         } else {
-          this.spacer.style.height = 0
+          scrollable = window
         }
+        const scrollTo = this.paragraphs[elemId].top - offset
+        // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
+        this.spacer.style.height = `${this.viewportHeight*0.7}px`
+        scrollable.scrollTo(0, scrollTo )
       }
     },
     addSpacer() {
@@ -188,7 +200,8 @@ export default {
   },
   watch: {
     activeElement(active, prior) {
-      console.log(`activeElement=${active}`)
+      // console.log(`activeElement=${active}`)
+      console.log(active, groupItems(itemsInElements(elemIdPath(active), this.allItems)))
       if (this.visualizerIsOpen) {
         if (prior) {
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
@@ -203,7 +216,7 @@ export default {
         this.spacer.style.height = 0
         document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
       } else if (this.activeElement) {
-        this.spacer.style.height = `${this.viewportHeight/2}px`
+        this.spacer.style.height = `${this.viewportHeight*0.7}px`
         document.getElementById(this.activeElement).classList.add('active-elem')
       }
     },
@@ -211,6 +224,15 @@ export default {
       if (this.layout === 'vertical') {
         this.spacer.style.height = `${this.viewportHeight/2}px`
       }
+    },
+    viewportWidth() {    
+      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+        this.paragraphs[para.id].top = para.offsetTop
+      })
+      document.querySelectorAll('.activator').forEach((activator) => {
+        const paraId = activator.attributes['data-id'].value
+        activator.style.top = `${this.paragraphs[paraId].top}px`
+      })
     }
   }
 }
@@ -239,6 +261,16 @@ export default {
   p.active-elem .inferred, p.active-elem .tagged {
     border-bottom: 2px solid #8FBC8F;
     cursor: pointer;
+  }
+
+  span.activator i {
+    color: #eee;
+    opacity: 0.4;
+  }
+
+  span.activator i:hover {
+    color: blue;
+    opacity: 1;
   }
 
 </style>

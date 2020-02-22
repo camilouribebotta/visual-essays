@@ -21,6 +21,7 @@ export default {
 </script>
 
 <style>
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -31,5 +32,13 @@ export default {
   .v-application--wrap {
     min-height: 0 !important;
     background-color: #fff;
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    padding: 0;
+    margin: 0;
+    max-width: none;
   }
 </style>

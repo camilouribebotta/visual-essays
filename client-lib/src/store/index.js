@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { itemsInElements } from '../utils'
 
 Vue.use(Vuex)
 
@@ -29,18 +30,7 @@ export default new Vuex.Store({
     setItems (state, items) { state.items = items },
     setActiveElements (state, elems) {
       state.activeElements = elems
-      const items = []
-      const itemIds = new Set()
-      state.activeElements.forEach(activeElem => {
-        state.items
-        .filter(item => item.part_of && item.part_of.has(activeElem))
-        .filter(item => !itemIds.has(item.id))
-        .forEach((item) => {
-          itemIds.add(item.id)
-          items.push(item)
-        })
-      })
-      state.itemsInActiveElements = Object.values(items)
+      state.itemsInActiveElements = itemsInElements(state.activeElements, state.items)
     },
     setSelectedItemID (state, id) { state.selectedItemID = id },
     updateItem (state, item) {

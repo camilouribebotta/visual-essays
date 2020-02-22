@@ -7,6 +7,7 @@ logger.setLevel(logging.WARNING)
 
 import os, json
 from urllib.parse import quote
+from time import time as now
 
 import flask
 
@@ -18,7 +19,10 @@ from entity import KnowledgeGraph
 from essay import Essay, mw_to_html5, md_to_html5, add_vue_app
 from fingerprints import get_fingerprints
 
-VE_JS_LIB = 'https://jstor.labs.github.io/visual-essays/lib/visual-essays-0.3.5.min.js'
+from gc_cache import Cache
+cache = Cache()
+
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.3.6.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -67,7 +71,7 @@ def html5(request, **args):
     elif fmt == 'markdown':
         source = args.pop('src')
         if source.startswith('file://localhost'):
-            path = os.path.join(CONTENT_DIR, source[17:])
+            path = os.path.join(CONTENT_DIR, source[17:].split('?')[0])
             with open(path, 'r') as fp:
                 md = fp.read()
         else:
@@ -101,7 +105,7 @@ def local_content(*args, **kwargs):
         return ('Not found', 404)
 
 def essay(*args, **kwargs):
-    global request
+    global request, cache
     if args and 'request' not in globals():
         request = args[0]
     if request.method == 'OPTIONS':
@@ -110,8 +114,14 @@ def essay(*args, **kwargs):
         args = dict([(k, request.args.get(k)) for k in request.args])
         _set_logging_level(args)
         nocss = args.pop('nocss', 'false').lower() in ('true', '') if 'nocss' in args else False
+        
+        st = now()
         html = html5(request, **args)
-        essay = Essay(html=html, **args)
+        logger.info(f'{round(now()-st, 3)}: html5')
+        
+        st = now()
+        essay = Essay(html=html, cache=cache, **args)
+        logger.info(f'{round(now()-st, 3)}: essay')
 
         if not nocss:
             with open('main.css', 'r') as styles:
@@ -134,7 +144,7 @@ def entity(*args, **kwargs):
         path = request.path[7:] if request.path.startswith('/entity') else request.path
         qid = path[1:-1] if path.endswith('/') else path[1:]
         logger.info(f'entity: path={path} args={args}')
-        entity = KnowledgeGraph(**args).entity(qid, **args)
+        entity = KnowledgeGraph(cache=cache, **args).entity(qid, **args)
         # accept = request.headers.get('Accept', 'application/json').split(',')
         # content_type = ([ct for ct in accept if ct in ('text/html', 'application/json', 'text/csv', 'text/tsv')] + ['application/json'])[0]
         # as_json = args.pop('format', None) == 'json' or content_type == 'application/json'
@@ -164,6 +174,8 @@ if __name__ == '__main__':
     logger.setLevel(logging.INFO)
     from flask_cors import CORS
     from flask import Flask, request
+    #from sqlitedict_cache import Cache
+    #cache = Cache()
     app = flask.Flask(__name__)
     app.config['JSON_SORT_KEYS'] = False
     VE_JS_LIB = 'http://localhost:8080/lib/visual-essays.js'

@@ -1,7 +1,7 @@
 <template>
     <div ref="mapWrapper" class="row wrapper" style="width:100%; margin:0;">
         <div ref="mapWrapperInner">
-            <div ref="map" id="map" class="lmap" style="margin:0;"></div>
+            <div ref="map" id="map" class="lmap" style="margin:0;border:1px solid red;"></div>
         </div>
     </div>
 </template>
@@ -254,6 +254,7 @@ export default {
         */
   },
   watch: {
+
     selectedItemID: {
       handler: function (value, prior) {
         //console.log(`Map.watch.selectedItemID=${this.selectedItemID}`, this.featuresById[this.selectedItemID])

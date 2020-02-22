@@ -1,12 +1,13 @@
 <template>
   <v-card id="viewer" v-if="visualizerIsOpen">
     <v-tabs
-     v-if="activeWindow"
+      v-if="activeWindow"
       ref="tabs"
       v-model="activeTab"
       center-active
       show-arrows
     >
+      <!-- TODO make tab generation more generic using dynamic components -->
       <v-tab v-if="includeMapViewer" href="#tab-0">
         Map
       </v-tab>
@@ -23,6 +24,7 @@
       >
         {{itemsByCat.category}}
       </v-tab>
+
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
@@ -47,6 +49,7 @@
       >
         <video-player :videoId="videos[0].id"/>
       </v-tab-item>
+
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
@@ -54,6 +57,8 @@
         :key="`tab-item-${tab+3}`"
         :value="`tab-${tab+3}`"
       >
+
+        <!-- TODO: turn this into an EntityViewer component -->
         <v-window
           ref="entities"
           v-model="activeWindow[`tab${tab+3}`]"
@@ -70,8 +75,18 @@
             <entity-infobox class="entity-infobox" :qid="item.qid"/>
           </v-window-item>
         </v-window>
+        <!-- -->
+
       </v-tab-item>
+
     </v-tabs>
+    <v-icon
+      size="30"
+      style="color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;"
+      @click="close"
+    >
+      mdi-close
+    </v-icon>
   </v-card>      
 </template>
 
@@ -123,7 +138,7 @@
       includeVideoPlayer() { return this.videos.length > 0 },
       visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
       itemsByCategory() {
-        let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : 'tab-2'
+        let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : this.includeVideoPlayer? 'tab-2' : 'tab-3'
         this.configs.filter(c => c.tab).forEach(c => activeTab = c.tab)
         this.activeTab = activeTab
 
@@ -166,6 +181,10 @@
       }
     },
     methods: {
+      close() {
+        this.$store.dispatch('setVisualizerIsOpen', false)
+        document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'block')
+      },
       isLocation(id) {
         return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0
       },
@@ -227,7 +246,9 @@
     margin-bottom: 3px;
     border-top: 1px solid #ccc !important;
   }
-
+  .v-tabs-bar__content {
+    margin-left: 24px;
+  }
   #viewer {
     height: 100%;
   }

@@ -23,16 +23,6 @@ from bs4 import BeautifulSoup
 
 from fingerprints import get_fingerprints
 
-from expiringdict import ExpiringDict
-# cache = ExpiringDict(max_len=100, max_age_seconds=10)
-expiration = 60 * 60 * 24 # one day
-CACHE = {
-    'contexts': ExpiringDict(max_len=10, max_age_seconds=expiration),
-    'entities': ExpiringDict(max_len=1000, max_age_seconds=expiration),
-    # 'eids': ExpiringDict(max_len=10000, max_age_seconds=expiration),
-    # 'labels': ExpiringDict(max_len=10000, max_age_seconds=expiration)
-}
-
 GRAPHS = {
     'jstor': {
         'prefix': '<http://kg.jstor.org/entity/>',
@@ -60,6 +50,7 @@ default_entity_type = 'entity'
 class KnowledgeGraph(object):
 
     def __init__(self, **kwargs):
+        self.cache = kwargs.get('cache', {})
         self.ns = kwargs.get('ns', default_ns)
         self.language = kwargs.get('language', default_language)
         self.entity_type = kwargs.get('entity_type', default_entity_type)
@@ -75,7 +66,7 @@ class KnowledgeGraph(object):
         refresh = kwargs.pop('refresh', 'false').lower() in ('', 'true')
 
         cache_key = f'{ns}:{qid}-{language}-{context}'
-        entity = CACHE['entities'].get(cache_key) if not refresh else None
+        entity = self.cache.get(cache_key) if not refresh else None
         if entity:
             entity['fromCache'] = True
             return entity
@@ -110,7 +101,7 @@ class KnowledgeGraph(object):
         
         entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity), language))
         
-        CACHE['entities'][cache_key] = entity
+        self.cache[cache_key] = entity
         entity['fromCache'] = False
 
         return entity

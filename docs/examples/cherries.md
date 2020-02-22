@@ -1,49 +1,68 @@
 <!--
-<var data-component data-name="entity" data-src="https://ithaka.github.io/labs-wikibase/components/CustomEntityInfobox.vue"></var>
+<var data-component 
+     data-name="entity"
+     data-src="https://jstor-labs.github.io/visual-essays/components/EntityViewer.vue"></var>
 -->
+
+<var data-essay
+     title="Cherry Blossom"
+     data-banner=""
+     data-layout="horizontal"
+     data-debug="false"></var>
+
+<!-- <var data-component 
+     data-name="entity"
+     data-src="https://ithaka.github.io/labs-wikibase/components/CustomEntityInfobox.vue"></var> -->
+
 <var title="Bonn" id="Q586"></var>
-<var title="cherry blossom" id="Q871991"></var>
+<var title="cherry blossom" id="Q871991" data-category="plant"></var>
 <var title="Dumbarton Oaks" id="Q1264942"></var>
 <var title=">Eleanor Patterson" id="Q5122270"</var>
-<var title="hanami" id="Q210150"></var>
+<var title="hanami" id="Q210150" data-category="activity"></var>
 <var title="Murasaki Shikibu" id="Q81731"></var>
-<var  title="Prunus" id="Q190545"></var>
+<var title="Prunus" id="Q190545"></var>
 <var title="Prunus serotina" id="Q158987"></var>
 <var title="Stockholm" id="Q1754"></var>
 <var title="The Tale of Genji" id="Q8269"></var>
-<var title="Tokyo" id="Q1490"></var>
-<var title="Traverse City" id="Q984544"></var>
 <var title="Washington, D. C." id="Q61"></var>
 <var title="West Yorkshire" id="Q23083"></var>
 
-<var data-map data-center="51.4,0.53" data-zoom="2"></var>
 
 ## Cherry Blossom
 
 ### Introduction
 
-Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the Tidal Basin, cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale. 
+Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the Tidal Basin, 
+cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale.
+
+<var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2"></var>
+<var title="West Yorkshire" id="Q23083"></var>
+
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C. 
 
 ### Cherry Trees in Japan
-<var data-map data-center="35.9,137.4" data-zoom="6"></var>
+<var data-map id="japan-map" data-center="35.9,137.4" data-zoom="6"></var>
+<var title="Tokyo" id="Q1490"></var>
 
 The cherry blossom has been a repository of symbolism in Japanese culture for centuries: it has variously symbolized processes of life, death, reproductive power, love, rebirth, and the beauty of impermanence. By the end of the Edo period (1603-1868) cherry blossoms came to be a dominant symbol of Japanese identity, although their association with Japanese identity dates to at least the ninth century. During the early years of Japan’s rapid industrialization, cherry trees fell prey to an iconoclastic drive to erase reminders of the old feudal society. As Japan continued to negotiate its national identity, cherries were taken up again, now as symbols of a modern Japan that would be recognizable on an international scale. In the years leading up to World War II, the image of falling cherry blossoms, which had traditionally been associated with impermanence and death, was increasingly deployed to aestheticize self-sacrifice for the emperor. Cherry blossoms were planted in shrines glorifying fallen soldiers, and featured prominently in military imagery. 
 
 #### Cherry viewing in Japan
+<var data-video id="jk0ic0D0MRo" title="Hanami"></var>
 
 Flower-viewing or hanami is a centuries-old practice in Japan. Flower viewing started in imperial circles in the eighth century, when the Japanese elite eagerly adopted Chinese high culture. Chinese plum blossoms were initially the object of viewing parties. By the ninth century, hanami was practically synonymous with viewing cherry blossoms, as Japanese elites sought to delineate a distinctly Japanese identity. In the 18th century, mass plantings were made in poor riverside districts of present-day Tokyo, many of which were notorious for prostitution, gambling, and licentious theater. Plantings of cherry trees were meant to beautify riverside communities, which the government considered eyesores. These mass plantings helped make cherry-viewing a popular pastime across all classes. Both new cherry-picnic sites and sites historically famous for imperial outings became widely popular spots for drink, merry-making and the loosening of social conventions. 
 
 ### Cherries in the West
-<var data-map data-center="48.8,-38.2" data-zoom="3"></var>
 
 Before the craze for Japanese cherries in the West at the start of the twentieth century, Europeans knew little of Japanese cherry blossoms, and Westerners who visited Japan often complained of how flowering Japanese cherry trees bore no fruit. As shipping techniques improved in the early 19th century, Japanese cherries began to trickle into European gardens in 1832, but remained unfashionable until the 1870s. When Japan opened its borders, greater contact with Japanese culture fueled interest in cherry blossoms among Westerners. By the 1890’s, Japan was marketing and exporting cherry trees to the West. However, cherries did not reach wide audiences in the West until Japan gave thousands of cherry trees to the United States in the early 20th century.  
+
+<var data-map data-center="48.8,-38.2" data-zoom="3"></var>
+<var title="Traverse City" id="Q984544"></var>
 
 #### Cherries in D.C.
 
 In 1912, Japan gifted thousands of cherry trees to the United States  as a gesture of friendship. A previous shipment, made in 1909, was burned upon entry into the United States when it was discovered that the trees were infected. The trees from 1912 prospered, becoming a beloved part of the city and an enduring symbol of the United States’ relationship with Japan. Most of the trees in the Tidal Basin were of the Yoshido variety, or Prunus x yedoensis. There are ongoing efforts to preserve the few surviving cherries from 1912 as witnesses to Washington’s history. 
-<var data-map data-center="38.88,-77.03" data-zoom="12"></var>
-<var data-map-layer data-type="mapwarper" title="Cherry festival map" data-mapwarper-id="37798" data-active="false"></var>
+<var data-map data-center="38.88,-77.03" data-zoom="13"></var>
+<var data-map-layer data-type="mapwarper" title="Cherry festival map" data-mapwarper-id="37798" data-active="true"></var>
 
 ##### Cherry Rebellion 1938
  
@@ -59,6 +78,7 @@ A few days after Pearl Harbor, vandals cut down four cherry trees in the night, 
 
 Located in the Northeastern corner of Dumbarton Oaks, Cherry Hill is planted with the Japanese cherry varieties Prunus sargentii, Prunus subhirtella, and Prunus x yedoensis, the most abundant cherry in the Tidal Basin. Fruit-bearing black cherries, Prunus serotina, can also be found in the gardens. By isolating a large grouping of cherries on Cherry Hill, landscape architect Beatrix Farrand created a space devoted to the display of cherry blossoms that would not be a conspicuous part of the gardens when not in bloom. 
 <var data-map data-center="38.900868,-77.009021" data-zoom="11"></var>
+<var data-video id="EvUK6ANy5II" title="Dumbarton Oaks Gardens: Cherry Hill"></var>
 
 ### Tale of Genji
 

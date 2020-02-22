@@ -3663,6 +3663,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
   integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
 
+gsap@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/gsap/-/gsap-2.1.3.tgz#c63ee3a50f0b7dc3b46ed0845bb0f09049feb944"
+  integrity sha512-8RFASCqi2FOCBuv7X4o7M6bLdy+1hbR0azg+MG7zz+EVsI+OmJblYsTk0GEepQd2Jg/ItMPiVTibF7r3EVxjZQ==
+
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"
@@ -7772,6 +7777,15 @@ vue-openseadragon@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/vue-openseadragon/-/vue-openseadragon-0.1.2.tgz#2c1101af6f21894ae8203ef9bdc0e7a004ac970a"
   integrity sha512-yDJiqFcgkzOJHLOk/gT/u63AOMBfuy7zn2n2iH824vNfBJYE2KUy8qzBwrnrs5U/zcn+KJET1oxmW5xwVA2zNw==
+
+vue-scrollmagic@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-scrollmagic/-/vue-scrollmagic-1.2.0.tgz#d29b0f0d01233d270f60d494d21d192da64c1787"
+  integrity sha512-4n+c35mHzEJeNdPShhXFVE9CY0e0318deAQtIF09Dglj4NKcYJXThTKic3gMMLCtyPwEj3derHlGg2Nsquzaaw==
+  dependencies:
+    gsap "^2.1.3"
+    scrollmagic "^2.0.7"
+    vue "^2.6.10"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
