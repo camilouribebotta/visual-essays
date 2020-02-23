@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     essayHTML: undefined,
     layout: 'horizontal',
-    visualizerIsOpen: false,
+    // visualizerIsOpen: false,
     debug: false,
     context: undefined,
     content: [],
@@ -23,7 +23,7 @@ export default new Vuex.Store({
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setLayout (state, layout) { state.layout = layout },
-    setVisualizerIsOpen (state, isOpen) { state.visualizerIsOpen = isOpen },
+    // setVisualizerIsOpen (state, isOpen) { state.visualizerIsOpen = isOpen },
     setContext (state, context) { state.context = context },
     setDebug (state, debug) { state.debug = debug },
     setContent (state, elems) { state.content = elems },
@@ -48,7 +48,7 @@ export default new Vuex.Store({
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
-    setVisualizerIsOpen: ({ commit }, isOpen) => commit('setVisualizerIsOpen', isOpen),
+    // setVisualizerIsOpen: ({ commit }, isOpen) => commit('setVisualizerIsOpen', isOpen),
     setContext: ({ commit }, context) => commit('setContext', context),
     setDebug: ({ commit }, debug) => commit('setDebug', debug),
     setContent: ({ commit }, content) => commit('setContent', content),
@@ -62,7 +62,7 @@ export default new Vuex.Store({
   getters: {
     layout: state => state.layout,
     essayHTML: state => state.essayHTML,
-    visualizerIsOpen: state => state.visualizerIsOpen,
+    // visualizerIsOpen: state => state.visualizerIsOpen,
     context: state => state.context,
     debug: state => state.debug,
     content: state => state.content,

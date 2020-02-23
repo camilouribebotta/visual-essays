@@ -3,63 +3,30 @@
 </template>
 
 <script>
-import { addActivator } from './Activator'
 import { elemIdPath, itemsInElements, groupItems } from '../utils'
 
 export default {
   name: 'essay',
   data: () => ({
-    paragraphs: {},
-    spacer: undefined,
-    activators: undefined
+    paragraphs: {}
   }),
   computed: {
     html() { return this.$store.getters.essayHTML },
     debug() { return this.$store.getters.debug },
-    visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
-    activeElement() { return this.$store.getters.activeElement },
-    layout() { return this.$store.getters.layout },
-    viewportHeight() { return this.$store.getters.height },
     viewportWidth() { return this.$store.getters.width },
     allItems() { return this.$store.getters.items }
   },
   mounted() {
     groupItems(this.allItems)
-    this.addSpacer()
     this.$nextTick(() => this.init())
     if (window.location.hash) {
       this.scrollTo(window.location.hash.slice(1))
     }
   },
   methods: {
-    offset(el) {
-      var rect = el.getBoundingClientRect(),
-      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-    },
-    addActivators() {
-      // console.log('addActivators')
-      const essay = this.$refs.essay
-      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
-        const paraData = this.paragraphs[para.id]
-        // console.log(`${para.id} items=${paraData.items.map(item => item.id).join(',')}`)
-        if (paraData.items.length > 0) {
-          addActivator(essay, para.id, paraData.top, paraData.items.map(item => item.id).join(','), this.clickHandler)
-        }
-      })
-    },
-    clickHandler(e) {
-      const selectedParaId = e.target.parentElement.attributes['data-id'].value
-      this.toggleVisualizer(selectedParaId)
-    },
     init() {
       this.findContent()
       this.addFootnotesHover()
-    
-      console.dir(this.$refs.essay)
-      // const offsets = this.offset(this.$refs.essay)
-      // console.log(offsets)
 
       // Setup ScrollMagic (https://scrollmagic.io/)
       let prior
@@ -71,9 +38,6 @@ export default {
           items: itemsInElements(elemIdPath(para.id), this.allItems)
         }
         prior = para.id
-        //if (this.layout === 'horizontal') {
-        //  para.addEventListener('click', (e) => { this.toggleVisualizer(e.toElement.id) })
-        //}
         const scene = this.$scrollmagic.scene({
           triggerElement: `#${para.id}`,
           triggerHook: 0.25
@@ -92,12 +56,6 @@ export default {
         this.$scrollmagic.addScene(scene)
 
       })
-      this.addActivators()
-    },
-    eqSet(as, bs) {
-      if (as.size !== bs.size) return false;
-      for (var a of as) if (!bs.has(a)) return false;
-      return true;
     },
     setActiveElements(elemId) {
       this.$store.dispatch('setActiveElements', elemIdPath(elemId))
@@ -152,37 +110,7 @@ export default {
       })
       return items
     },
-    toggleVisualizer(elemId) {
-      // Toggles display of visualizer pane
-      // e.preventDefault()
-      // e.stopPropagation()
-      if (this.paragraphs[elemId]) {
-        console.log('toggleVisualizer')
-        this.$store.dispatch('setVisualizerIsOpen', true)
-        document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
-        let offset = 100
-        let scrollable = document.getElementById('scrollableContent')
-        if (scrollable) {
-          offset = -80
-        } else {
-          scrollable = window
-        }
-        const scrollTo = this.paragraphs[elemId].top - offset
-        // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
-        this.spacer.style.height = `${this.viewportHeight*0.7}px`
-        scrollable.scrollTo(0, scrollTo )
-      }
-    },
-    addSpacer() {
-      // Adds a spacer element that expands and contracts to match the size of the visualizer so
-      // that content at the end of the article is still reachable by scrolling
-      this.spacer = document.createElement('div')
-      this.spacer.id = 'essay-spacer'
-      this.spacer.style.height = 0
-      document.getElementById('essay').appendChild(this.spacer)
-    },
     scrollTo(elemid) {
-      // console.log(`scrollTo=${elemid}`)
       const elem = document.getElementById(elemid)
       if (elem) {
         window.scrollTo(0, elem.offsetTop)
@@ -199,39 +127,9 @@ export default {
     }
   },
   watch: {
-    activeElement(active, prior) {
-      // console.log(`activeElement=${active}`)
-      console.log(active, groupItems(itemsInElements(elemIdPath(active), this.allItems)))
-      if (this.visualizerIsOpen) {
-        if (prior) {
-          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-        }
-        if (active) {
-          document.getElementById(active).classList.add('active-elem')
-        }
-      }
-    },
-    visualizerIsOpen(isOpen) {
-      if (!isOpen) {
-        this.spacer.style.height = 0
-        document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-      } else if (this.activeElement) {
-        this.spacer.style.height = `${this.viewportHeight*0.7}px`
-        document.getElementById(this.activeElement).classList.add('active-elem')
-      }
-    },
-    viewportHeight() {
-      if (this.layout === 'vertical') {
-        this.spacer.style.height = `${this.viewportHeight/2}px`
-      }
-    },
     viewportWidth() {    
       Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
         this.paragraphs[para.id].top = para.offsetTop
-      })
-      document.querySelectorAll('.activator').forEach((activator) => {
-        const paraId = activator.attributes['data-id'].value
-        activator.style.top = `${this.paragraphs[paraId].top}px`
       })
     }
   }
@@ -250,7 +148,7 @@ export default {
   }
 
   section p {
-    padding-left: 12px;
+    padding-left: 20px;
     border-left: 4px solid transparent;
   }
 
@@ -261,16 +159,6 @@ export default {
   p.active-elem .inferred, p.active-elem .tagged {
     border-bottom: 2px solid #8FBC8F;
     cursor: pointer;
-  }
-
-  span.activator i {
-    color: #eee;
-    opacity: 0.4;
-  }
-
-  span.activator i:hover {
-    color: blue;
-    opacity: 1;
   }
 
 </style>

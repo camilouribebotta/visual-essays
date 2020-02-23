@@ -28,7 +28,7 @@ const myMixin = {
     allItems() { return store.getters.items },
     groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems)) },
     selectedItemID () { return store.getters.selectedItemID },
-    visualizerIsOpen() { return store.getters.visualizerIsOpen }
+    // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   },
   mounted() {
     console.log('mixin.mounted', this.$options.name, store.getters.activeElements.join(','))
@@ -94,7 +94,6 @@ function initApp() {
     loglevel: 2,
     refreshInterval: 100
   })
-  // Vue.use(httpVueLoader)
   Vue.use(VueYoutube)
   Vue.prototype.$L = L
 

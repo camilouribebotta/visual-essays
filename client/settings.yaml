@@ -7,6 +7,6 @@ about: about.md
 help: help.md
 contact: contact.md
 gh_path: https://jstor-labs.github.io/visual-essays
-app_version: 0.2.7
-visual_essays_version: 0.3.7
+app_version: 0.2.8
+visual_essays_version: 0.3.8
 context: null

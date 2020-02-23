@@ -30,11 +30,6 @@ export default {
     }
   },
   watch: {
-    visualizerIsOpen(isOpen) {
-      if (!isOpen) {
-        this.$store.dispatch('setSelectedItemID')
-      }
-    },
     activeElement(current, prior) {
       if (current) {
         if (prior) {

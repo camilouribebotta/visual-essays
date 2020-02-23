@@ -19,9 +19,6 @@ html {
     -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
 }
-body {
-    margin: 0;
-}
 ::-moz-selection {
     background-color: hsla(0,0%,0%,.5);
     color: #fff;

@@ -113,3 +113,9 @@ export function groupItems(items) {
     })
   return groups
 }
+
+export function eqSet(as, bs) {
+  if (as.size !== bs.size) return false;
+  for (var a of as) if (!bs.has(a)) return false;
+  return true;
+}

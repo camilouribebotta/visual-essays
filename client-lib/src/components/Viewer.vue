@@ -183,7 +183,7 @@
     methods: {
       close() {
         this.$store.dispatch('setVisualizerIsOpen', false)
-        document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'block')
+        // document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'block')
       },
       isLocation(id) {
         return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0

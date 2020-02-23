@@ -2,10 +2,10 @@
   <v-container ref="container" style="padding:0;">
     <v-row no-gutters>
       <v-col>
-        <essay :style="`height:${essay.height}px;`"/>
+        <essay/>
         <visualizer 
           id="visualizer"
-          :style="`top:${visualizer.top}px; width:${visualizer.width}px;display:${visualizerIsOpen ? 'block': 'none'}`"
+          :style="`top:${visualizer.top}px; width:${visualizer.width}px;display:none`"
         />
       </v-col>
     </v-row>
@@ -18,15 +18,13 @@ import Visualizer from '../components/Visualizer'
 export default {
   name: 'horizontal-layout',
   components: {
-    Essay,
-    Visualizer
+    Visualizer,
+    Essay
   },
   data: () => ({
-    essay: {},
     visualizer: {}
   }),
   computed: {
-    visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
     viewportHeight() { return this.$store.getters.height },
     viewportWidth() { return this.$store.getters.width }
   },
@@ -35,7 +33,6 @@ export default {
   },
   methods: {
     updateVisualizerPosition() {
-      this.essay = { height: this.visualizerIsOpen }
       this.visualizer = {
         top: this.viewportHeight/2,
         height: this.viewportHeight/2,
