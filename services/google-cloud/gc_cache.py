@@ -52,12 +52,10 @@ class Cache(object):
         item = self.local.get(key)
         if item:
             logger.debug(f'get: key={key} local=True')
-            item['_cache'] = 'gc'
         else:
             blob = self.bucket.blob(key)
             try:
                 item = json.loads(blob.download_as_string())
-                item['_cache'] = 'gc'
             except:
                 pass
             logger.debug(f'get: key={key} local=False gc={item is not None}')

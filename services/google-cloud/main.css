@@ -1,4 +1,6 @@
-/* Normalize */
+#app, .v-application {
+    font-family: Roboto, sans-serif;
+}
 
 article,
 aside,

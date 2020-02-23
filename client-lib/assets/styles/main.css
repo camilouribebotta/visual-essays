@@ -1,4 +1,6 @@
-/* Normalize */
+#app, .v-application {
+    font-family: Roboto, sans-serif;
+}
 
 article,
 aside,
@@ -18,7 +20,7 @@ html {
         -ms-text-size-adjust: 100%;
 }
 body {
-    margin: 20px 60px;
+    margin: 0;
 }
 ::-moz-selection {
     background-color: hsla(0,0%,0%,.5);

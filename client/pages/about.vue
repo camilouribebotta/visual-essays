@@ -1,21 +1,19 @@
 <template>
   <v-layout>
     <v-flex>
-      <div v-html="html"/>
+      <div :ref="$options.name" v-html="html"/>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-  import axios from 'axios'
+  import Mixin from './mixin'
+
   export default {
     name: 'about',
-    data: () => ({
-      html: undefined
-    }),
+    mixins: [ Mixin ],
     mounted() {
-      axios.get(`${process.env.app_md_endpoint}/${this.$options.name}.md`)
-        .then(resp => this.html = this.$marked(resp.data))
+      this.getStaticPage(this.$store.getters.pages[this.$options.name])
     }
   }
 </script>

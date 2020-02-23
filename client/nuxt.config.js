@@ -12,11 +12,7 @@ export default {
     deployEnv: process.env.DEPLOY_ENV || 'PROD',
     ve_service_endpoint: (process.env.DEPLOY_ENV || 'PROD') === 'DEV'
       ? 'http://localhost:5000'
-      : 'https://us-central1-visual-essay.cloudfunctions.net',
-    app_md_endpoint: (process.env.DEPLOY_ENV || 'DEV') === 'DEV'
-      ? 'http://localhost:5000'
-      : SETTINGS.gh_path,
-
+      : 'https://us-central1-visual-essay.cloudfunctions.net'
   },
   ...routerBase,
   mode: 'spa',
@@ -38,7 +34,8 @@ export default {
   },
   plugins: [
     { src: '@/plugins/detect-environment.js', ssr: false },
-    { src: '@/plugins/marked.js', ssr: false }
+    { src: '@/plugins/marked.js', ssr: false },
+    { src: '@/plugins/pages.js', ssr: false }
   ],
   buildModules: [
     '@nuxtjs/vuetify'
