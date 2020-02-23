@@ -10,7 +10,7 @@
   import Mixin from './mixin'
 
   export default {
-    name: 'about',
+    name: 'contact',
     mixins: [ Mixin ],
     mounted() {
       this.getStaticPage(this.$store.getters.pages[this.$options.name])

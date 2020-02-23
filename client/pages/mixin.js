@@ -74,7 +74,9 @@ export default {
                     })
                   }
                 } else {
-                  let essayTitle = parsedUrl.pathname.slice(1)
+                  let essayTitle = parsedUrl.pathname.indexOf('/visual-essays/') === 0
+                    ? parsedUrl.pathname.slice(15)
+                    : parsedUrl.pathname.slice(1)
                   essayTitle = essayTitle.slice(essayTitle.length-3) == '.md' ? essayTitle.slice(0, essayTitle.length-3) : essayTitle
                   link.removeAttribute('href')
                   link.addEventListener('click', (e) => {
