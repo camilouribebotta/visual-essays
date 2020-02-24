@@ -22,16 +22,23 @@
   export default {
     name: 'EntityViewer',
     props: {
-      items: { type: Array, default: () => ([]) }
+      items: { type: Array, default: () => ([]) },
+      selected: { type: String }
     },
     data: () => ({
       activeWindow: undefined
     }),
+    mounted() {
+      console.log(`${this.$options.name} mounted`)
+    },
     watch: {
-      selectedItemID(selectedItemID) {
-        if (this.items.find(item => item.id === selectedItemID)) {
-          this.activeWindow = selectedItemID
-        }
+      selected: {
+        handler: function () {
+          if (this.items.find(item => item.id === this.selected)) {
+            this.activeWindow = this.selected
+          }        
+        },
+        immediate: true
       }
     }
   }

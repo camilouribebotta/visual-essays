@@ -2,6 +2,10 @@
     font-family: Roboto, sans-serif;
 }
 
+section p {
+    padding-left: 10px;
+}
+
 article,
 aside,
 details,

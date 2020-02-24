@@ -457,7 +457,7 @@ class Essay(object):
                         seg = s[cursor:cursor+len(rec['matched'])]
 
                     if replaced:
-                        p.insert(idx+len(replaced), seg)
+                        p.insert(idx+len(replaced), seg if p.name == 'p' else rec['matched'])
                     else:
                         e.parent.attrs['title'] = item.get('title', item.get('label'))
                     replaced.append(rec['matched'])

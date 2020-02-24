@@ -13,13 +13,13 @@ import '../assets/styles/main.css'
 import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
 
 // Default viewer components
-import Visualizer from './components/Visualizer'
-import Viewer from './components/Viewer1'
-import Map from './components/Map1'
+import Viewer from './components/Viewer'
+import MapViewer from './components/MapViewer'
 import ImageViewer from './components/ImageViewer'
 import VideoPlayer from './components/VideoPlayer'
 import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
+import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 const myMixin = {
   computed: {
@@ -29,9 +29,6 @@ const myMixin = {
     groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems)) },
     selectedItemID () { return store.getters.selectedItemID },
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
-  },
-  mounted() {
-    console.log('mixin.mounted', this.$options.name, store.getters.activeElements.join(','))
   }
 }
 
@@ -61,13 +58,13 @@ function resizeend() {
 }
 
 const components = {
-  visualizer: Visualizer,
   viewer: Viewer,
-  gmap: Map,
+  gmap: MapViewer,
   entity: EntityViewer,
   gvideo: VideoPlayer,
   gimage: ImageViewer,
-  entityInfobox: EntityInfobox
+  entityInfobox: EntityInfobox,
+  entityInfoboxDialog: EntityInfoboxDialog
 }
 
 function initApp() {

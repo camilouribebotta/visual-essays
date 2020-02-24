@@ -17,7 +17,7 @@
 <var title="Bonn" id="Q586"></var>
 <var title="cherry blossom" id="Q871991" data-category="plant"></var>
 <var title="Dumbarton Oaks" id="Q1264942"></var>
-<var title=">Eleanor Patterson" id="Q5122270"</var>
+<var title="Eleanor Patterson" id="Q5122270"</var>
 <var title="hanami" id="Q210150" data-category="activity"></var>
 <var title="Murasaki Shikibu" id="Q81731"></var>
 <var title="Prunus" id="Q190545"></var>
@@ -32,7 +32,7 @@
 
 ### Introduction
 
-Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the Tidal Basin, 
+Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the <var id="Q956781">Tidal Basin</var>, 
 cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale.
 
 <var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2"></var>

@@ -3,10 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <essay/>
-        <visualizer 
-          id="visualizer"
-          :style="`top:${visualizer.top}px; width:${visualizer.width}px;display:none`"
-        />
+        <viewer/>
       </v-col>
     </v-row>
   </v-container>
@@ -14,11 +11,9 @@
 
 <script>
 import Essay from '../components/Essay'
-import Visualizer from '../components/Visualizer'
 export default {
   name: 'horizontal-layout',
   components: {
-    Visualizer,
     Essay
   },
   data: () => ({

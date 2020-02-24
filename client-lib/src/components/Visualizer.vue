@@ -11,33 +11,5 @@
 
 export default {
   name: 'visualizer',
-  methods: {
-    clickHandler(e) {
-      this.$store.dispatch('setSelectedItemID', e.toElement.attributes['data-itemid'].value)
-    },
-    addClickHandlers(elemId) {
-      document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-        entity.addEventListener('click', this.clickHandler)
-      })
-    },
-    removeClickHandlers(elemId) {
-      const elem = document.getElementById(elemId)
-      if (elem) {
-        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          entity.removeEventListener('click', this.clickHandler)
-        })
-      }
-    }
-  },
-  watch: {
-    activeElement(current, prior) {
-      if (current) {
-        if (prior) {
-          this.removeClickHandlers(prior)
-        }            
-        this.addClickHandlers(current)
-      }
-    }
-  }
 }
 </script>

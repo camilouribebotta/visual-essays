@@ -1,19 +1,19 @@
 <template>
   <div>
-    <v-dialog v-model="isOpen" @click:outside="setSelectedItemID(null)" width="500">
-      <v-card class="entity-infobox-dialog" v-if="entity">
-        <v-card-title class="headline grey lighten-2" primary-title v-html="title"/>
-        <v-card-text>
-          <img v-if="imageSrc" :src="imageSrc">
-          <div class="subtitle">{{ description }}</div>
-          <div v-html="html"/>
-        </v-card-text>
-        <v-divider/>
+    <v-dialog v-if="selectedItemID" v-model="isOpen" @click:outside="clearSelectedItemID" width="500">
+      <v-card class="infobox">
+          <entity-infobox :qid="selectedItemID"/>
         <v-card-actions>
-          <v-spacer/>
-          <v-btn color="primary" text @click="setSelectedItemID(null)">Dismiss</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="clearSelectedItemID"
+          >
+            Close
+          </v-btn>
         </v-card-actions>
-      </v-card>
+      </v-card>      
     </v-dialog>
   </div>
 </template>
@@ -27,34 +27,26 @@ export default {
   }),
   computed: {
     selectedItemId () { return this.$store.getters.selectedItemId },
-    entity () { return this.$store.getters.items.find(entity => entity.qid === this.selectedItemId) || {} },
-    entityInfo () { return this.entity['summary info'] },
-    title () { return this.entityInfo ? this.entityInfo.displaytitle : this.entity.label },
-    description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
-    thumbnail () { return this.entityInfo && this.entityInfo.thumbnail ? this.entityInfo.thumbnail.source : null },
-    imageSrc () { return this.thumbnail ?  this.thumbnail : this.entity.images ? this.entity.images[0] : null },
-    html () { return this.entityInfo ?  this.entityInfo.extract_html : null }
   },
   methods: {
-    setSelectedItemID(arg) {
-      const qid = arg && arg.target ? arg.target.attributes['data-itemid'].value : arg
-      const selectedEntity = qid === this.selectedItemID ? null : qid
-      this.$store.dispatch('setSelectedItemID', selectedEntity)
+    clearSelectedItemID() {
+      this.$store.dispatch('setSelectedItemID')
     }
   },
   watch: {
-    selectedItemId(qid) {
+    selectedItemID(qid) {
       this.isOpen = qid !== null
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
-  .entity-infobox-dialog .v-card__text {
-    min-height: 165px;
-    padding-bottom: 0 !important;
+  div.v-card__text div p {
+    width: 95%;
+    padding: 0;
+    margin: 0;
   }
 
   img {

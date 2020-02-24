@@ -8,9 +8,10 @@
 
 <script>
 export default {
-  name: 'Map',
+  name: 'MapViewer',
   props: {
     items: { type: Array, default: () => ([]) },
+    selected: { type: String },
     maxWidth: { type: Number, default: 800 },
     maxHeight: { type: Number, default: 800 }
   },
@@ -27,7 +28,6 @@ export default {
   }),
   computed: {
     mapDef() { return this.items[0] },
-    selectedItemID () { return this.$store.getters.selectedItemID },
     activeElements() { return this.$store.getters.activeElements },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
     entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
@@ -35,10 +35,9 @@ export default {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
   },
   mounted() {
-    console.log('Map1.mounted', this.items)
+    console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
-
   methods: {
     createBaseMap() {
       this.positionMapContainer()
@@ -99,7 +98,7 @@ export default {
         }
         this.mapLayers[layerType] = currentLayers
       })
-      console.log(this.mapLayers)
+      // console.log(this.mapLayers)
     },
     setControls() {
       const baseLayers = {
@@ -149,7 +148,6 @@ export default {
     getLocationMarkers() {
       const markers = []
       this.locations.forEach((location) => {
-        console.log(location)
         const marker = this.$L.marker(location.coords[0]).bindPopup(this.makePopup(location))
         markers.push(marker)
         this.featuresById[location.id] = marker
@@ -178,7 +176,6 @@ export default {
       }
     },
     sync() {
-      console.log('sync')
       if (this.map) {
         Object.entries(this.mapDef.layers).forEach(mapLayer => {
           const layerType = mapLayer[0]
@@ -213,11 +210,10 @@ export default {
     }
   },
   watch: {
-    selectedItemID: {
+    selected: {
       handler: function (value, prior) {
-        console.log(`Map.watch.selectedItemID=${this.selectedItemID}`, this.featuresById[this.selectedItemID])
-        if (this.featuresById[this.selectedItemID]) {
-          this.featuresById[this.selectedItemID].openPopup()
+        if (this.featuresById[this.selected]) {
+          this.featuresById[this.selected].openPopup()
         }
       },
       immediate: true
@@ -229,7 +225,6 @@ export default {
     },
     activeElements: {
       handler: function () {
-        console.log(`Map.watch.activeElements=${this.activeElements.join(',')}`)
         this.updateLayers()
       },
       immediate: false

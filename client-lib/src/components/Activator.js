@@ -1,35 +1,5 @@
 import Vue from 'vue'
 
-const FunctionalActivator = Vue.component('activator', {
-  functional: true,
-  render: function (createElement) {
-    return createElement(
-      'span',
-      {
-        attrs: {
-            'data-id': this.item.id
-        },
-        domProps: {
-            innerHTML: 'X'
-        },
-        style: {
-          position: 'absolute',
-          left: this.item.left === null ? null : `${this.item.left}px`,
-          right:  this.item.right === null ? null : `${this.item.right}px`,
-          top: `${this.item.top}px`,
-          cursor: 'pointer',
-          paddingRight: '2px',
-          paddingLeft: '3px'
-        },
-        on: {
-          click: this.clickHandler
-        }
-      }
-    )
-  }
-})
-const FunctionalActivatorComponent = Vue.extend(FunctionalActivator)
-
 const Activator1 = Vue.component('activator', {
   template:
     `<span
@@ -53,7 +23,7 @@ export function addActivator(root, id, top, title, clickHandler) {
         style: {
           position: 'absolute',
           top: `${top}px`,
-          left: '0px',
+          left: '-20px',
           cursor: 'pointer'
         }
       },

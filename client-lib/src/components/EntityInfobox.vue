@@ -4,7 +4,7 @@
     <v-card-text>
       <img v-if="imageSrc" :src="imageSrc">
       <div class="subtitle">{{ description }}</div>
-      <div style="text-align: left;" v-html="html"/>
+      <div style="text-align;left;" v-html="html"/>
     </v-card-text>
   </v-card>
 </template>
@@ -15,13 +15,13 @@ import { get_entity } from '../api'
 export default {
   name: 'entity-infobox',
   props: {
-    qid: { type: String }
+    qid: { type: String, default: undefined }
   },
   data: () => ({
     requested: new Set()
   }),
   computed: {
-    entity () { return this.$store.getters.items.find(entity => entity.qid === this.qid) || {} },
+    entity () { return this.$store.getters.items.find(entity => entity.qid && entity.qid === this.qid) || {} },
     entityInfo () { return this.entity['summary info'] },
     title () { return this.entityInfo && this.entityInfo.displaytitle || this.entity.label || this.entity.title },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
@@ -31,6 +31,7 @@ export default {
     context() { return this.$store.getters.context }
   },
   mounted() {
+    console.log('EntityInfobox.mounted', this.qid)
     this.getSummaryInfo()
   },
   methods: {
@@ -49,6 +50,12 @@ export default {
     }
   },
   watch: {
+    qid: {
+      handler: function (value, prior) {
+        console.log('EntityInfobox.watch.qid', value)
+      },
+      immediate: true
+    },
     entity() {
       this.getSummaryInfo()
     }

@@ -1,234 +1,239 @@
 <template>
-  <v-card id="viewer" v-if="visualizerIsOpen">
-    <v-tabs
-      v-if="activeWindow"
+  <v-card ref="viewer" id="viewer" :style="style">
+    <v-tabs  v-if="visualizerIsOpen"
       ref="tabs"
       v-model="activeTab"
       center-active
       show-arrows
     >
-      <!-- TODO make tab generation more generic using dynamic components -->
-      <v-tab v-if="includeMapViewer" href="#tab-0">
-        Map
-      </v-tab>
-      <v-tab v-if="includeImageViewer" href="#tab-1">
-        Image viewer
-      </v-tab>
-      <v-tab v-if="includeVideoPlayer" href="#tab-2">
-        Video
-      </v-tab>
+
       <v-tab 
-        v-for="itemsByCat in itemsByCategory"
-        :key="`tab-${itemsByCat.tab}`"
-        :href="`#tab-${itemsByCat.tab}`"
-      >
-        {{itemsByCat.category}}
+        v-for="tab in tabs" :key="`tab-${tab}`"
+        :href="`#${tab}`">
+        {{groups[tab].label || tab}}
       </v-tab>
 
       <v-tab-item
         transition="fade-transition"
         reverse-transition="fade-transition"
-        v-if="includeMapViewer"         
-        value="tab-0"
-      >
-        <lmap/>
-      </v-tab-item>
-      <v-tab-item
-        transition="fade-transition"
-        reverse-transition="fade-transition"
-        v-if="includeImageViewer"         
-        value="tab-1"
-      >
-        <image-viewer/>
-      </v-tab-item>
-      <v-tab-item
-        transition="fade-transition"
-        reverse-transition="fade-transition"
-        v-if="includeVideoPlayer"         
-        value="tab-2"
-      >
-        <video-player :videoId="videos[0].id"/>
-      </v-tab-item>
-
-      <v-tab-item
-        transition="fade-transition"
-        reverse-transition="fade-transition"
-        v-for="(itemsByCat, tab) in itemsByCategory"
-        :key="`tab-item-${tab+3}`"
-        :value="`tab-${tab+3}`"
-      >
-
-        <!-- TODO: turn this into an EntityViewer component -->
-        <v-window
-          ref="entities"
-          v-model="activeWindow[`tab${tab+3}`]"
-          class="entity-window"
-          showArrows
-        > 
-          <v-window-item
-            transition="fade-transition"
-            reverse-transition="fade-transition"
-            v-for="(item, window) in itemsByCat.items" 
-            :key="`tab-${itemsByCat.tab}-${window}`"
-            :value="`window-${tab+3}-${window}`"
-          >
-            <entity-infobox class="entity-infobox" :qid="item.qid"/>
-          </v-window-item>
-        </v-window>
-        <!-- -->
-
+        v-for="tab in tabs" :key="`tab-item-${tab}`"
+        :value="tab"
+      >    
+        <component 
+          v-bind:is="groups[tab].component" 
+          :items="groups[tab].items" 
+          :selected="selected"
+          :max-width="viewerWidth"
+        />
       </v-tab-item>
 
     </v-tabs>
+
     <v-icon
       size="30"
       style="color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;"
-      @click="close"
+      @click="closeViewer"
     >
       mdi-close
     </v-icon>
-  </v-card>      
+  </v-card>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import Map from './Map'
-  import ImageViewer from './ImageViewer'
-  import VideoPlayer from './VideoPlayer'
-  import EntityInfobox from './EntityInfobox'
-
-  const catLabels = {
-    location: 'Places',
-    person: 'People',
-    'fictional_character': 'Fictional Characters',
-    plant: 'Plants',
-    entity: 'Entities'
-  }
+  import { addActivator } from './Activator'
+  import { elemIdPath, itemsInElements } from '../utils'
+  const tabOrder = ['map', 'image', 'video', 'location', 'place', 'person', 'plant', 'building', 'written_work', 'fictional_character', 'entity']
 
   export default {
     name: 'Viewer',
-    components: {
-      lmap: Map,
-      ImageViewer,
-      VideoPlayer,
-      EntityInfobox
-    },
     data: () => ({
-      activeTab: 'tab-0',
-      activeWindow: undefined,
-      itemsMap: {}
+      paragraphs: {},
+      spacer: undefined,
+      tabs: [],
+      activeTab: undefined,
+      visualizerIsOpen: false,
+      hoverElemId: undefined,
+      selected: undefined,
+      viewerWidth: 0
     }),
-    mounted() {
-      if (this.activeElement) {
-        this.itemsByCategory
-      }
-    },
     computed: {
-      selectedItemID () { return this.$store.getters.selectedItemID },
-      activeElement() { return this.$store.getters.activeElement },
-      activeElements() { return this.$store.getters.activeElements },
-      itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
-      configs() { return this.itemsInActiveElements.filter(item => item.type === 'config') },
-      entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
-      geojson() { return this.itemsInActiveElements.filter(item => item.type === 'geojson') },
-      videos() { return this.itemsInActiveElements.filter(item => item.type === 'video') },
-      title() { return this.$store.getters.activeElement ? this.$store.getters.activeElement.title ? this.$store.getters.activeElement.title : this.$store.getters.activeElement.id : null },
-      includeMapViewer() { return this.itemsInActiveElements.filter(item => item.type === 'map').length > 0 },
-      includeImageViewer() { return this.itemsInActiveElements.filter(item => item.type === 'image-viewer').length > 0 },
-      includeVideoPlayer() { return this.videos.length > 0 },
-      visualizerIsOpen() { return this.$store.getters.visualizerIsOpen },
-      itemsByCategory() {
-        let activeTab = this.includeMapViewer ? 'tab-0' : this.includeImageViewer ? 'tab-1' : this.includeVideoPlayer? 'tab-2' : 'tab-3'
-        this.configs.filter(c => c.tab).forEach(c => activeTab = c.tab)
-        this.activeTab = activeTab
-
-        const byCat = {}
-        this.geojson
-        //.filter(geojson => geojson.label)
-        .forEach((geojson) => {
-          const category = 'Places'
-          if (!byCat[category]) {
-            byCat[category] = []
-          }
-          byCat[category].push(geojson)
-        })
-        this.entities
-        //.filter(entity => entity.label)
-        .forEach((entity) => {
-          const category = catLabels[entity.category] || entity.category || 'unspecified'
-          if (!byCat[category]) {
-            byCat[category] = []
-          }
-          byCat[category].push(entity)
-        })
-        const results = []
-        let tab = 2
-        this.itemsMap = {}
-        const activeWindow = {}
-        Object.keys(byCat).sort().forEach((key) => {
-          tab += 1
-          let _window = 0
-          activeWindow[`tab${tab}`] = `window-${tab}-0`
-          byCat[key].forEach((item) => {
-            this.itemsMap[item.id] = { tab, window: _window++}
-          })
-          results.push(
-            {category: key, tab, items: byCat[key]}
-          )
-        })
-        this.activeWindow = activeWindow
-        return results
-      }
-    },
-    methods: {
-      close() {
-        this.$store.dispatch('setVisualizerIsOpen', false)
-        // document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'block')
-      },
-      isLocation(id) {
-        return this.entities.filter(e => e.id === id && e.category === 'location').length > 0 || this.geojson.filter(e => e.id == id).length > 0
-      },
-      clickHandler(e) {
-        event.preventDefault()
-        event.stopPropagation()
-        const selectedItemID = e.toElement.attributes['data-itemid'].value
-        const selectedItem = this.itemsMap[selectedItemID]
-        this.activeTab = this.includeMapViewer && this.isLocation(selectedItemID)
-          ? 'tab-0'
-          : `tab-${selectedItem.tab}`
-        this.activeWindow[`tab${selectedItem.tab}`] = `window-${selectedItem.tab}-${selectedItem.window}`
-        // console.log(`clickHandler: activeTab=${this.activeTab} activeWindow=`, this.activeWindow)
-        this.$store.dispatch('setSelectedItemID', selectedItemID)
-      },
-      addClickHandlers(elemId) {
-        // console.log(`addClickHandlers ${elemId}`)
-        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          entity.addEventListener('click', this.clickHandler)
-        })
-      },
-      removeClickHandlers(elemId) {
-        // console.log(`removeClickHandlers ${elemId}`)
-        const elem = document.getElementById(elemId)
-        if (elem) {
-          document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-            entity.removeEventListener('click', this.clickHandler)
-          })
+      viewportHeight() { return this.$store.getters.height },
+      viewportWidth() { return this.$store.getters.width },
+      style() {
+        return {
+          display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
+          position: 'fixed',
+          top: `${this.viewportHeight/2}px`,
+          height: `${this.viewportHeight/2}px`,
+          width: `${this.viewerWidth}px`
         }
       }
     },
-    watch: {
-      activeElement: {
-        handler: function (current, prior) {
-          // console.log(`Viewer.activeElement: current=${current} prior=${prior}`)
-          this.itemsByCategory
-          if (current) {
-            if (prior) {
-              this.removeClickHandlers(prior)
-            }            
-            this.addClickHandlers(current)
+    mounted() {
+      this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
+      // this.waitForEssay()
+      this.$nextTick(() => this.init())
+    },
+    methods: {
+      waitForEssay() {
+        console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
+        if (document.getElementById('essay')) {
+          this.init()
+        } else {
+          setTimeout(() => { this.waitForEssay() }, 1000)
+        }
+      },
+      init() {
+        Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+          para.title = elemIdPath(para.id).join(',')
+          this.paragraphs[para.id] = {
+            top: para.offsetTop,
+            items: itemsInElements(elemIdPath(para.id), this.allItems)
           }
-        },
-        immediate: false
+          // Display/enable activator when cursor hovers over paragraph element
+          para.addEventListener('mouseenter', (e) => {
+            const elemId = e.toElement.id
+            if (this.hoverElemId && this.hoverElemId !== elemId) {
+              const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
+              if (prior) { prior.style.display = 'none' }
+            }
+            this.hoverElemId = undefined
+            if (!this.visualizerIsOpen) {
+              this.hoverElemId = elemId
+              document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
+            }
+          })
+          /*
+          para.addEventListener('mouseleave', (e) => {
+            const elemId = e.toElement.id
+            if (this.hoverElemId) {
+              const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
+              if (prior) { prior.style.display = 'none' }
+            }
+            this.hoverElemId = undefined
+          })
+          */
+        })
+        this.addSpacer()
+        this.addActivators()
+      },
+      addSpacer() {
+        // Adds a spacer element that expands and contracts to match the size of the visualizer so
+        // that content at the end of the article is still reachable by scrolling
+        this.spacer = document.createElement('div')
+        this.spacer.id = 'essay-spacer'
+        this.spacer.style.height = 0
+        document.getElementById('essay').appendChild(this.spacer)
+      },
+      addActivators() {
+        const essay = document.getElementById('essay')
+        Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+          const paraData = this.paragraphs[para.id]
+          if (paraData.items.length > 0) {
+            addActivator(essay, para.id, paraData.top, paraData.items.map(item => item.id).join(','), this.activatorClickHandler)
+          }
+        })
+      },
+      openViewer(elemId) {
+        if (this.paragraphs[elemId]) {
+          this.visualizerIsOpen = true
+          document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
+          let offset = 100
+          let scrollable = document.getElementById('scrollableContent')
+          if (scrollable) {
+            offset = -80
+          } else {
+            scrollable = window
+          }
+          const scrollTo = this.paragraphs[elemId].top - offset
+          // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
+          this.spacer.style.height = `${this.viewportHeight*0.7}px`
+          scrollable.scrollTo(0, scrollTo )
+        }
+      },
+      closeViewer() {
+        this.visualizerIsOpen = false
+      },
+      activatorClickHandler(e) {
+        const selectedParaId = e.target.parentElement.attributes['data-id'].value
+        this.openViewer(selectedParaId)
+      },
+      addItemClickHandlers(elemId) {
+        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+          entity.addEventListener('click', this.itemClickHandler)
+        })
+      },
+      removeItemClickHandlers(elemId) {
+      const elem = document.getElementById(elemId)
+        if (elem) {
+          document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+            entity.removeEventListener('click', this.itemClickHandler)
+          })
+        }
+      },
+      itemClickHandler(e) {
+        const selectedItemId = e.toElement.attributes['data-itemid'].value 
+        let found = false
+        for (let groupId in this.groups) {
+          const item = this.groups[groupId].items.find(item => item.id === selectedItemId)
+          if (item) {
+            this.activeTab = item.category === 'location' && this.groups.map
+              ? 'map'
+              : groupId
+            break
+          }
+        }
+        this.selected = selectedItemId
+        console.log(`itemClickHandler: selected=${this.selected} tab=${this.activeTab}`)
+      }
+    },
+    watch: {
+      groups() {
+        const availableGroups = []
+        tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
+        this.tabs = availableGroups
+        if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
+          this.activeTab = availableGroups.length > 0 ? availableGroups[0] : undefined
+        }
+      },
+      viewportHeight() {
+        if (this.spacer) {
+          this.spacer.style.height = `${this.viewportHeight/2}px`
+        }
+      },      
+      viewportWidth() {   
+        document.querySelectorAll('.activator').forEach((activator) => {
+          const paraId = activator.attributes['data-id'].value
+          activator.style.top = `${this.paragraphs[paraId].top}px`
+        })
+      },
+      activeElement(active, prior) {
+        if (prior) {
+          this.removeItemClickHandlers(prior)
+          // document.querySelector(`[data-id="${prior}"]`).style.display = 'none'
+          if (this.visualizerIsOpen) {
+            document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
+          }
+        }
+        if (active) {
+          this.addItemClickHandlers(active)
+          // document.querySelector(`[data-id="${active}"]`).style.display = 'inline-block'
+          if (this.visualizerIsOpen) {
+            document.getElementById(active).classList.add('active-elem')
+          }
+        }
+      },
+      visualizerIsOpen(isOpen) {
+        if (this.$refs.viewer) {
+          this.$refs.viewer.$el.style.display = isOpen ? 'block' : 'none'
+        }
+        if (!isOpen) {
+          this.spacer.style.height = 0
+          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
+        } else if (this.activeElement) {
+          this.spacer.style.height = `${this.viewportHeight*0.7}px`
+          document.getElementById(this.activeElement).classList.add('active-elem')
+        }
       }
     }
   }
@@ -236,21 +241,15 @@
 
 <style>
 
-  .entity-window {
-    padding-top: 12px;
-  }
-
   .v-tabs-bar {
     background-color: #eee !important;
     height: 35px !important;
     margin-bottom: 3px;
     border-top: 1px solid #ccc !important;
   }
+
   .v-tabs-bar__content {
     margin-left: 24px;
-  }
-  #viewer {
-    height: 100%;
   }
 
   .close-button {
@@ -259,11 +258,27 @@
     top: 6px;
   }
 
-  .entity-infobox {
-    width: 600px;
-    margin: auto;
-    height: 100%;
-    min-height: 165px;
+  p.active-elem {
+    border-left: 4px solid #8FBC8F;
+  }
+
+  p.active-elem .inferred, p.active-elem .tagged {
+    border-bottom: 2px solid #8FBC8F;
+    cursor: pointer;
+  }
+
+  span.activator {
+    display: none;
+  }
+
+  span.activator i {
+    color: green !important;
+    opacity: 0.5;
+  }
+
+  span.activator i:hover {
+    color: green;
+    opacity: 1;
   }
 
 </style>

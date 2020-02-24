@@ -144,7 +144,6 @@ export default {
         }
       },
       addMetadata() {
-        console.log('addMetadata', window.data)
         if (window.data) {
           window.data.forEach((item) => {
             if (item.type === 'essay') {

@@ -1,5 +1,5 @@
 <template>
-  <div ref="essay" id="essay" v-html="html"/>    
+  <div ref="essay" id="essay" v-html="html"/>
 </template>
 
 <script>
@@ -26,6 +26,7 @@ export default {
   methods: {
     init() {
       this.findContent()
+      this.linkTaggedItems()
       this.addFootnotesHover()
 
       // Setup ScrollMagic (https://scrollmagic.io/)
@@ -124,6 +125,14 @@ export default {
           // console.log(`footnote: id=${fnId} html="${fnHTML}"`)
         })
       })
+    },
+    linkTaggedItems() {
+      document.querySelectorAll('.tagged').forEach((item) => {
+        item.addEventListener('click', (e) => {
+          const elemId = e.target.attributes['data-itemid'].value
+          this.$store.dispatch('setSelectedItemID', elemId)
+        })
+      })
     }
   },
   watch: {
@@ -140,25 +149,6 @@ export default {
 
   #essay {
     height: 100%;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    margin-top: 24px;
-    margin-bottom: 12px;
-  }
-
-  section p {
-    padding-left: 20px;
-    border-left: 4px solid transparent;
-  }
-
-  p.active-elem {
-    border-left: 4px solid #8FBC8F;
-  }
-
-  p.active-elem .inferred, p.active-elem .tagged {
-    border-bottom: 2px solid #8FBC8F;
-    cursor: pointer;
   }
 
 </style>

@@ -1,6 +1,7 @@
 <template>
   <v-app id="visual-essay">
     <component v-bind:is="layout"></component>
+    <entity-infobox-dialog/>
   </v-app>
 </template>
 
