@@ -2,6 +2,7 @@ import fs from 'fs'
 import YAML from 'yaml'
 
 const SETTINGS = YAML.parse(fs.readFileSync('./settings.yaml', 'utf8'))
+// const SETTINGS = YAML.parse(fs.readFileSync('./kent-settings.yaml', 'utf8'))
 
 const routerBase = {
   'GH_PAGES': { router: { base: ghPagesPath(SETTINGS.gh_path) } }

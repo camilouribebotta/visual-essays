@@ -18,24 +18,17 @@ export default {
     },
     methods: {
       getStaticPage(pageUrl) {
-        pageUrl = pageUrl.indexOf('http') === 0 ? pageUrl : `${this.baseUrl}/${pageUrl}`
+        console.log(`markup=${this.markup}`)
+        pageUrl = pageUrl.indexOf('http') === 0 ? pageUrl : `${this.baseUrl}/${this.markup === 'wikitext' ? 'wiki/': ''}${pageUrl}`
         const loc = parseUrl(pageUrl)
-        let pageType
-        if (loc.pathname.slice(loc.pathname.length - 3) === '.md') {
-          pageType = 'markdown'
-        } else {
-          if (loc.pathname.indexOf('/wiki/') === 0 || loc.pathname.indexOf('/w/')) {
-            pageType = 'mediawiki'
-          }
-        }
-        console.log(`Page ${this.$options.name}: type=${pageType} url=${pageUrl}`)
-        if (pageType === 'markdown') {
+        console.log(`Page ${this.$options.name}: markup=${this.markup} url=${pageUrl}`)
+        if (this.markup === 'markdown') {
           return this.getMarkdown(pageUrl)
           .then((html) => {
             this.$store.dispatch('setHtml', html)
             this.$nextTick(() => { this.updateLinks() })
           })
-      } else if (pageType === 'mediawiki') {
+        } else if (this.markup === 'wikitext') {
           return this.getWikitext(loc.hostname, pageUrl.split('/').slice(4).join('/'))
             .then((html) => {
               this.$store.dispatch('setHtml', html)

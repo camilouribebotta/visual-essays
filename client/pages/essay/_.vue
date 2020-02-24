@@ -18,7 +18,7 @@ export default {
   mounted() {
     console.log('essay', this.$route)
     window.scrollTo(0, 0)
-    this.getEssay(`${this.baseUrl}/${this.$route.params.pathMatch}${this.markup === 'markdown' ? '.md' : ''}`)
+    this.getEssay(`${this.baseUrl}/${this.markup === 'wikitext' ? 'wiki/' : ''}${this.$route.params.pathMatch}${this.markup === 'markdown' ? '.md' : ''}`)
   }
 }
 </script>

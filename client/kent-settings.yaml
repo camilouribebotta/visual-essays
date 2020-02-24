@@ -1,0 +1,12 @@
+site_title: Kent Maps
+banner_image: https://picsum.photos/1200/225
+base_url: 'https://kg.jstor.org'
+markup: 'wikitext'
+index: Kent:Essays
+about: Kent:About
+help: https://jstor-labs.github.io/visual-essays/help.md
+contact: Kent:Contact
+gh_path: https://kent-map.github.io
+app_version: 0.2.8
+visual_essays_version: 0.3.10
+context: kent-maps
