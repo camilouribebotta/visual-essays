@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
   div.v-card__text div p {
     width: 95%;
