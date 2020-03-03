@@ -38,3 +38,6 @@ Mapwarper is an open source tool and online service that generates map tiles fro
 
 ### GeoJSON feature layers
 
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTc2NjQ1MTYwXX0=
+-->
