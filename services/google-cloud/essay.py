@@ -233,6 +233,7 @@ class Essay(object):
         if qids:
             cache_key = hashlib.sha256(str(sorted(qids)).encode('utf-8')).hexdigest()
             kg_entities = self.cache.get(cache_key)
+            from_cache = kg_entities is not None
             if kg_entities is None:
                 logger.info('here')
                 kg_entities = self._get_entity_data(qids)['@graph']
@@ -240,6 +241,7 @@ class Essay(object):
             for kg_props in kg_entities:
                 if kg_props['id'] in self.markup:
                     me = self.markup[kg_props['id']]
+                    me['fromCache'] = from_cache
                     for k, v in kg_props.items():
                         if k in ('aliases',) and not isinstance(v, list):
                             v = [v]

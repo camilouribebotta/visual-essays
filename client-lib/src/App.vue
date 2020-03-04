@@ -37,9 +37,11 @@ export default {
     margin: 0;
   }
 
+  /*
   .container {
     padding: 0;
     margin: 0;
     max-width: none;
   }
+  */
 </style>

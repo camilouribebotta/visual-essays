@@ -134,11 +134,10 @@ function initApp() {
   })
 }
 
-// document.addEventListener('DOMContentLoaded', () => { initApp() }, false)
-
-document.addEventListener('DOMContentLoaded', () => {
+//document.addEventListener('DOMContentLoaded', () => {
   let href = window.location.href
   const waitForContent = () => {
+    // console.log('waitForContent')
     if (vm) {
       if (href !== window.location.href) {
         href = window.location.href
@@ -165,5 +164,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-  setInterval(() => waitForContent(), 250)
-}, false)
+  setInterval(() => waitForContent(), 1000)
+//}, false)

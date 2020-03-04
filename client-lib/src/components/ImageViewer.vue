@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 var openseadragon = require('openseadragon');
 export default {
   name: 'ImageViewer',
@@ -20,7 +21,9 @@ export default {
   },
   mounted() {
     this.images.forEach((image) => {
-      let dziURL = this.axios.get('https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url).then((resp) => {
+      const url = 'https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url
+      console.log(url)
+      let dziURL = axios.get('https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url).then((resp) => {
         let viewer = OpenSeadragon({
           id: image.id,
           tileSources: {

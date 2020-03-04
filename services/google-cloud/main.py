@@ -22,7 +22,7 @@ from fingerprints import get_fingerprints
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.3.11.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.3.12.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -45,37 +45,36 @@ def html5(request, **args):
     path = request.path[1:-1] if request.path.endswith('/') else request.path[1:]
     path = '/'.join(path.split('/')[1:])
     logger.info(f'{path} {args}')
-    if path:
-        args['title'] = path
+
+    mwTitle = None
+    gdId = None
+    src = None
 
     if 'title' in args:
-        fmt = 'wikitext'
+        mwTitle = args.pop('title')
+    elif 'src' in args:
+        if DEFAULT_MW_SITE in args['src']:
+            mwTitle = '/'.join(args.pop('src').split('/')[4:])
+        else:
+            src = args.pop('src')
+    elif 'gdid' in args:
+        src = 'https://drive.google.com/uc?export=download&id=%s' % args.pop('gdid')
     else:
-        if 'src' in args:
-            extension = args['src'].split('.')[-1].lower()
-            if extension == 'md':
-                fmt = 'markdown'
-            elif DEFAULT_MW_SITE in args['src']:
-                fmt = 'wikitext'
-                args['title'] = '/'.join(args['src'].split('/')[4:])
-            elif args['src'].startswith('file://localhost'):
-                fmt = 'markdown'
+        mwTitle = path
 
-    if fmt == 'wikitext':
+    if mwTitle:
         site = args.pop('site', DEFAULT_MW_SITE)
-        title = args.pop('title')
-        url = f'{site}/w/api.php?action=parse&format=json&page={quote(title)}'
+        url = f'{site}/w/api.php?action=parse&format=json&page={quote(mwTitle)}'
         resp = requests.get(url, headers={'Accept': 'application/json'}).json()
-        raw_html = f'<!doctype html><html lang="en">\n<head>\n<meta charset="utf-8">\n<title>{title}</title>\n</head>\n<body>\n' + resp.pop('parse')['text']['*'] + '\n</body>\n</html>'
+        raw_html = f'<!doctype html><html lang="en">\n<head>\n<meta charset="utf-8">\n<title>{mwTitle}</title>\n</head>\n<body>\n' + resp.pop('parse')['text']['*'] + '\n</body>\n</html>'
         return mw_to_html5(raw_html)
-    elif fmt == 'markdown':
-        source = args.pop('src')
-        if source.startswith('file://localhost'):
-            path = os.path.join(CONTENT_DIR, source[17:].split('?')[0])
+    else: # fmt is markdown and src contains URL to file
+        if src.startswith('file://localhost'):
+            path = os.path.join(CONTENT_DIR, src[17:].split('?')[0])
             with open(path, 'r') as fp:
                 md = fp.read()
         else:
-            md = requests.get(source).content.decode('utf-8')
+            md = requests.get(src).content.decode('utf-8')
         raw_html = markdown2.markdown(md, extras=['footnotes'])
         return md_to_html5(raw_html)
 
