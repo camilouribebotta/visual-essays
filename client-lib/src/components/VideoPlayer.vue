@@ -3,6 +3,8 @@
     <youtube
       v-if="playerWidth"
       ref="youtube"
+      :fit-parent="true"
+      :resize="true"
       :video-id="videoId"
       :width="playerWidth - 12"
       :player-vars="playerVars"
@@ -22,7 +24,12 @@ export default {
   },
   data: () => ({
     playerVars: {
-      ytpPauseOverlay: 0
+      ytppauseoverlay: 0,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      autohide: 1,
+      playsinline: 1
     },
     isPlaying: false,
     playerWidth: 564

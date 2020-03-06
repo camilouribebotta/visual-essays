@@ -11,7 +11,7 @@
 
 <script>
 import axios from 'axios'
-var openseadragon = require('openseadragon');
+import OpenSeadragon from 'openseadragon'
 export default {
   name: 'ImageViewer',
   data: () => ({}),

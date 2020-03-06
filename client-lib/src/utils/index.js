@@ -65,18 +65,20 @@ export function itemsInElements(elemIds, items) {
         selected.push(item)
         selectedItemIds.add(item.id)
       }
-      if (['map', 'map-layer', 'geojson', 'location'].includes(item.type) && 
+      if (['map', 'map-layer', 'geojson', 'location', 'image', 'video'].includes(item.type) && 
            item.tagged_in.has(eid) && 
            !selectedItemIds.has(item.id)) {
         selected.push(item)
         selectedItemIds.add(item.id)
       }
+      /*
       if ((item.type === 'video') && 
            item.tagged_in.has(eid) && 
            !selectedItemIds.has(item.id)) {
         selected.push(item)
         selectedItemIds.add(item.id)
       } 
+      */
     })
   }
   return selected
