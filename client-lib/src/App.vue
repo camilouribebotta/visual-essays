@@ -1,5 +1,5 @@
 <template>
-  <v-app id="visual-essay">
+  <v-app id="visual-essay" :class="path">
     <component v-bind:is="layout"></component>
     <entity-infobox-dialog/>
   </v-app>
@@ -11,6 +11,9 @@ import VerticalLayout from './layouts/VerticalLayout'
 
 export default {
   name: 'app',
+  props: {
+    path: { type: String }
+  },
   components: {
     'horizontal': HorizontalLayout,
     'vertical': VerticalLayout

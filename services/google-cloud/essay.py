@@ -100,7 +100,7 @@ def mw_to_html5(html):
 
     return str(html5)
 
-def md_to_html5(html):
+def md_to_html5(html, path):
     '''Transforms markdown generated HTML to semantic HTML'''
     # logger.info(html)
     _input = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
@@ -110,6 +110,7 @@ def md_to_html5(html):
 
     article = html5.new_tag('article', id='essay')
     article.attrs['data-app'] = 'true'
+    article.attrs['class'] = [path]
     html5.html.body.append(article)
 
     snum = 0 # section number
