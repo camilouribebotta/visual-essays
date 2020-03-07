@@ -69,6 +69,7 @@ const components = {
 
 function initApp() {
   console.log('visual-essays.init')
+  console.log('window.data', window.data)
 
   window.data = []
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
@@ -77,7 +78,7 @@ function initApp() {
   console.log('window.data', window.data)
 
   window.data.filter(item => item.type === 'component').forEach(customComponent => {
-    console.log('customComponent', customComponent)
+    // console.log('customComponent', customComponent)
     components[customComponent.name] = httpVueLoader(customComponent.src)
   })
 
@@ -96,7 +97,7 @@ function initApp() {
 
   Object.entries(components).forEach(component => {
     component[1].mixins = [myMixin]
-    console.log(component[1])
+    // console.log(component[1])
     Vue.component(component[0], component[1])
   })
 
@@ -151,6 +152,7 @@ function initApp() {
       }
     } else {
       const essayElem = document.getElementById('essay')
+      console.log('essay', essayElem)
       if (essayElem && essayElem.innerText.length > 0) {
         initApp()
         vm.$store.getters.items.forEach((item) => {
@@ -164,5 +166,5 @@ function initApp() {
       }
     }
   }
-  setInterval(() => waitForContent(), 1000)
+  setInterval(() => waitForContent(), 250)
 //}, false)

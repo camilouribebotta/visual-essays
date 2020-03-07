@@ -24,6 +24,8 @@ from bs4.element import Comment, Tag
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
+from slugify import slugify
+
 from rdflib import ConjunctiveGraph as Graph
 from pyld import jsonld
 
@@ -177,6 +179,7 @@ class Essay(object):
         self._find_and_tag_items()
         self. _update_image_links()
         self._remove_empty_paragraphs()
+        self._add_heading_ids()
         self._add_data()
         logger.info(f'{round(now()-st,3)}: phase 3')
 
@@ -184,6 +187,13 @@ class Essay(object):
         for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
             if _is_empty(para_elem):
                 para_elem.extract()
+
+    def _add_heading_ids(self):
+        for lvl in range(1, 9):
+            for heading in self._soup.findAll(lambda tag: tag.name in ('h%s' % lvl,)):
+                if 'id' not in heading.attrs:
+                    heading.attrs['id'] = slugify(heading.text)
+                logger.info(heading)
 
     def _enclosing_section(self, elem):
         parent_section = None
@@ -334,13 +344,13 @@ class Essay(object):
                     enclosing_element_id = vem_elem.parent.attrs['id']
                 else:
                     enclosing_element_id = self._enclosing_section_id(vem_elem, self._soup.html.body.article.attrs['id'])
-                if enclosing_element_id not in attrs['tagged_in']:
+                if enclosing_element_id not in attrs['tagged_in'] and attrs.get('scope') != 'element':
                     attrs['tagged_in'].append(enclosing_element_id)
                 if _type in ('entity', 'geojson') and vem_elem.text:
                     vem_elem.attrs['data-itemid'] = attrs['id']
                     vem_elem.attrs['class'] = [_type, 'tagged']
                     if _type == 'geojson':
-                        attrs['scope' ] = 'element'
+                        attrs['scope'] = 'element'
                 else:
                     vem_elem.decompose()
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')

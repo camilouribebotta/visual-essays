@@ -22,7 +22,7 @@ from fingerprints import get_fingerprints
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.3.12.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.3.14.min.js'
 
 DEFAULT_MW_SITE = 'https://kg.jstor.org'
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -75,7 +75,7 @@ def html5(request, **args):
                 md = fp.read()
         else:
             md = requests.get(src).content.decode('utf-8')
-        raw_html = markdown2.markdown(md, extras=['footnotes'])
+        raw_html = markdown2.markdown(md, extras=['footnotes', 'fenced-code-blocks'])
         return md_to_html5(raw_html)
 
 def to_html5(*args, **kwargs):
