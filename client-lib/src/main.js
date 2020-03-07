@@ -137,18 +137,17 @@ function initApp() {
 
 //document.addEventListener('DOMContentLoaded', () => {
   let href = window.location.href
+  let path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
   const waitForContent = () => {
     // console.log('waitForContent')
     if (vm) {
       if (href !== window.location.href) {
         href = window.location.href
+        path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
         console.log('remove vm')
         vm = vm.$destroy()
       }
     } else {
-      const elems = href.split('/')
-      const path = elems[elems.length-1] === '' ? 'index.md' : `${elems[elems.length-1]}.md`
-      console.log(path)
       const essayElem = document.getElementById('essay')
       console.log('essay', path, essayElem)
       if (essayElem && essayElem.className === path && essayElem.innerText.length > 0) {
@@ -160,6 +159,7 @@ function initApp() {
           }
         })
         href = window.location.href
+        path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
         // console.log(href)
       }
     }
