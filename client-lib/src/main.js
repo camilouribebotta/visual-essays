@@ -144,16 +144,14 @@ function initApp() {
         href = window.location.href
         console.log('remove vm')
         vm = vm.$destroy()
-        const essayElem = document.getElementById('visual-essay')
-        if (essayElem) {
-          console.log('removing visual-essay')
-          //essayElem.parentNode.removeChild(essayElem)
-        }
       }
     } else {
+      const elems = href.split('/')
+      const path = elems[elems.length-1] === '' ? 'index.md' : `${elems[elems.length-1]}.md`
+      console.log(path)
       const essayElem = document.getElementById('essay')
-      console.log('essay', essayElem)
-      if (essayElem && essayElem.innerText.length > 0) {
+      console.log('essay', path, essayElem)
+      if (essayElem && essayElem.className === path && essayElem.innerText.length > 0) {
         initApp()
         vm.$store.getters.items.forEach((item) => {
           if (item.type === 'essay' && item.title) {
