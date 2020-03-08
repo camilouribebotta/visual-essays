@@ -136,21 +136,20 @@ function initApp() {
 }
 
 //document.addEventListener('DOMContentLoaded', () => {
+  let name
   let href = window.location.href
-  let path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
   const waitForContent = () => {
     // console.log('waitForContent')
     if (vm) {
       if (href !== window.location.href) {
         href = window.location.href
-        path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
         console.log('remove vm')
         vm = vm.$destroy()
       }
     } else {
       const essayElem = document.getElementById('essay')
-      console.log('essay', path, essayElem)
-      if (essayElem && essayElem.className === path && essayElem.innerText.length > 0) {
+      // console.log('essay', name, essayElem, essayElem.innerText.length)
+      if (essayElem && essayElem.dataset.name !== name && essayElem.innerText.length > 0) {
         initApp()
         vm.$store.getters.items.forEach((item) => {
           if (item.type === 'essay' && item.title) {
@@ -159,8 +158,7 @@ function initApp() {
           }
         })
         href = window.location.href
-        path = window.location.pathname === '/' ? 'index' : window.location.pathname.slice(1)
-        // console.log(href)
+        name = essayElem.dataset.name
       }
     }
   }
