@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <essay/>
-        <viewer/>
+        <horizontal-viewer/>
       </v-col>
     </v-row>
   </v-container>

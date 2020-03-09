@@ -1,6 +1,6 @@
 <template>
   <v-card ref="viewer" id="viewer" :style="style">
-    <v-tabs  v-if="visualizerIsOpen"
+    <v-tabs v-if="visualizerIsOpen"
       ref="tabs"
       v-model="activeTab"
       center-active
@@ -24,6 +24,7 @@
           :items="groups[tab].items" 
           :selected="selected"
           :max-width="viewerWidth"
+          :max-height="viewportHeight/2"
         />
       </v-tab-item>
 

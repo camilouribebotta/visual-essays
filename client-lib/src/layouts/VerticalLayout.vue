@@ -2,15 +2,10 @@
   <v-container style="padding:0;">
     <v-row>
       <v-col>
-        <essay/>
+        <vertical-viewer/>
       </v-col>
       <v-col>
-        <!-- <visualizer/> -->
-        <!--
-        <div class="text-center" style="position:fixed; top:0;">
-          Visualizer
-        </div>
-        -->
+        <essay/>
       </v-col>
     </v-row>
   </v-container>
@@ -18,12 +13,10 @@
 
 <script>
 import Essay from '../components/Essay'
-import Visualizer from '../components/Visualizer'
 export default {
   name: 'vertical-layout',
   components: {
-    Essay,
-    Visualizer
+    Essay
   }
 }
 </script>

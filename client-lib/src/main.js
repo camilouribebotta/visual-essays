@@ -13,7 +13,8 @@ import '../assets/styles/main.css'
 import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
 
 // Default viewer components
-import Viewer from './components/Viewer'
+import HorizontalViewer from './components/HorizontalViewer'
+import VerticalViewer from './components/VerticalViewer'
 import MapViewer from './components/MapViewer'
 import ImageViewer from './components/ImageViewer'
 import VideoPlayer from './components/VideoPlayer'
@@ -58,7 +59,8 @@ function resizeend() {
 }
 
 const components = {
-  viewer: Viewer,
+  horizontalViewer: HorizontalViewer,
+  verticalViewer: VerticalViewer,
   gmap: MapViewer,
   entity: EntityViewer,
   gvideo: VideoPlayer,

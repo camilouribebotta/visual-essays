@@ -56,10 +56,12 @@ export default {
     positionMapContainer() {
       if (this.$refs.map) {
         const calculatedContainerHeight = this.viewport.height/2
-        const mapHeight = calculatedContainerHeight < this.maxHeight ? calculatedContainerHeight : this.maxHeight
+        // const mapHeight = calculatedContainerHeight < this.maxHeight ? calculatedContainerHeight : this.maxHeight
+        const mapHeight = this.maxHeight
         const mapWidth = this.viewport.width < this.maxWidth ? this.viewport.width : this.maxWidth
         const wrapperWidth = this.$refs.mapWrapper.clientWidth
-        this.$refs.map.style.height = `${mapHeight - 52}px`
+        // this.$refs.map.style.height = `${mapHeight - 52}px`
+        this.$refs.map.style.height = `${mapHeight - 38}px`
         this.$refs.map.style.width = `${mapWidth}px`
         console.log(`wrapperWidth=${wrapperWidth} calculatedContainerHeight=${calculatedContainerHeight} mapHeight=${mapHeight} mapWidth=${mapWidth}`)
         // center the map

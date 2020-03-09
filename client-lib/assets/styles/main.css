@@ -159,9 +159,11 @@ blockquote {
 }
 p a:link,
 p a:visited {
+    /*
     border-bottom: 2px solid #6af;
     color: #444;
     padding-bottom: 1px;
+    */
     text-decoration: none;
     -webkit-transition: .25s;
        -moz-transition: .25s;
