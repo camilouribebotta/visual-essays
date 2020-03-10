@@ -134,13 +134,6 @@ export default {
         })
       })
     }
-  },
-  watch: {
-    viewportWidth() {    
-      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
-        this.paragraphs[para.id].top = para.offsetTop
-      })
-    }
   }
 }
 </script>

@@ -1,12 +1,12 @@
 <template>
   <v-card ref="viewer" id="viewer" :style="style">
+
     <v-tabs v-if="visualizerIsOpen"
       ref="tabs"
       v-model="activeTab"
       center-active
       show-arrows
     >
-
       <v-tab 
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
@@ -30,20 +30,12 @@
 
     </v-tabs>
 
-    <v-icon
-      size="30"
-      style="color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;"
-      @click="closeViewer"
-    >
-      mdi-close
-    </v-icon>
   </v-card>
 </template>
 
 <script>
-  import { addActivator } from './Activator'
   import { elemIdPath, itemsInElements } from '../utils'
-  const tabOrder = ['map', 'image', 'video', 'location', 'place', 'person', 'plant', 'building', 'written_work', 'fictional_character', 'entity']
+  const tabOrder = ['map', 'image', 'video']
 
   export default {
     name: 'Viewer',
@@ -64,7 +56,7 @@
         return {
           display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
           position: 'fixed',
-          top: '0px',
+          top: '20px',
           height: `${this.viewportHeight}px`,
           width: `${this.viewerWidth}px`
         }
@@ -72,7 +64,6 @@
     },
     mounted() {
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
-      // this.waitForEssay()
       this.$nextTick(() => this.init())
     },
     methods: {
@@ -91,7 +82,6 @@
             top: para.offsetTop,
             items: itemsInElements(elemIdPath(para.id), this.allItems)
           }
-          // Display/enable activator when cursor hovers over paragraph element
           para.addEventListener('mouseenter', (e) => {
             const elemId = e.toElement.id
             if (this.hoverElemId && this.hoverElemId !== elemId) {
@@ -104,19 +94,8 @@
               document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
             }
           })
-          /*
-          para.addEventListener('mouseleave', (e) => {
-            const elemId = e.toElement.id
-            if (this.hoverElemId) {
-              const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
-              if (prior) { prior.style.display = 'none' }
-            }
-            this.hoverElemId = undefined
-          })
-          */
         })
         this.addSpacer()
-        this.addActivators()
       },
       addSpacer() {
         // Adds a spacer element that expands and contracts to match the size of the visualizer so
@@ -125,39 +104,6 @@
         this.spacer.id = 'essay-spacer'
         this.spacer.style.height = 0
         document.getElementById('essay').appendChild(this.spacer)
-      },
-      addActivators() {
-        const essay = document.getElementById('essay')
-        Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
-          const paraData = this.paragraphs[para.id]
-          if (paraData.items.length > 0) {
-            addActivator(essay, para.id, paraData.top, paraData.items.map(item => item.id).join(','), this.activatorClickHandler)
-          }
-        })
-      },
-      openViewer(elemId) {
-        if (this.paragraphs[elemId]) {
-          this.visualizerIsOpen = true
-          document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
-          let offset = 100
-          let scrollable = document.getElementById('scrollableContent')
-          if (scrollable) {
-            offset = -80
-          } else {
-            scrollable = window
-          }
-          const scrollTo = this.paragraphs[elemId].top - offset
-          // console.log(`scrollTo: elem=${elemId} top=${scrollTo}`)
-          this.spacer.style.height = `${this.viewportHeight*0.7}px`
-          scrollable.scrollTo(0, scrollTo )
-        }
-      },
-      closeViewer() {
-        this.visualizerIsOpen = false
-      },
-      activatorClickHandler(e) {
-        const selectedParaId = e.target.parentElement.attributes['data-id'].value
-        this.openViewer(selectedParaId)
       },
       addItemClickHandlers(elemId) {
         document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
@@ -202,12 +148,6 @@
           this.spacer.style.height = `${this.viewportHeight/2}px`
         }
       },      
-      viewportWidth() {   
-        document.querySelectorAll('.activator').forEach((activator) => {
-          const paraId = activator.attributes['data-id'].value
-          activator.style.top = `${this.paragraphs[paraId].top}px`
-        })
-      },
       activeElement(active, prior) {
         if (prior) {
           this.removeItemClickHandlers(prior)
@@ -242,44 +182,48 @@
 
 <style>
 
+  body {
+    margin: 20px;
+  }
+
   .v-tabs-bar {
-    background-color: #eee !important;
-    height: 35px !important;
-    margin-bottom: 3px;
-    border-top: 1px solid #ccc !important;
-  }
-
-  .v-tabs-bar__content {
-    margin-left: 24px;
-  }
-
-  .close-button {
     position: absolute;
-    left: 0;
-    top: 6px;
+    top: 10px;
+    right: 80px;
+    z-index: 2;
+    background-color :white !important;
+    height: 30px !important;
+  }
+
+  .v-tab {
+    color: black !important;
+    padding: 0 6px !important;
+  }
+
+  .v-tab--active {
+    color: white !important;
+    padding: 0 6px !important;
+    background-color :#0052CC !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    padding-left: 32px;
+  }
+
+  p {
+    padding-left: 20px;
+    border-left: 12px solid white;
+    font-size: 1em;
+    line-height: 1.8;
   }
 
   p.active-elem {
-    border-left: 4px solid #8FBC8F;
+    border-left: 12px solid #0052CC;
   }
 
   p.active-elem .inferred, p.active-elem .tagged {
     border-bottom: 2px solid #8FBC8F;
     cursor: pointer;
-  }
-
-  span.activator {
-    display: none;
-  }
-
-  span.activator i {
-    color: green !important;
-    opacity: 0.5;
-  }
-
-  span.activator i:hover {
-    color: green;
-    opacity: 1;
   }
 
 </style>

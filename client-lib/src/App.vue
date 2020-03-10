@@ -9,6 +9,8 @@
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
 
+const breakpoint = 1000;
+
 export default {
   name: 'app',
   props: {
@@ -18,8 +20,22 @@ export default {
     'horizontal': HorizontalLayout,
     'vertical': VerticalLayout
   },
+  data: () => ({
+    layout: undefined
+  }),
   computed: {
-    layout() { return this.$store.getters.layout }
+    viewportWidth() { return this.$store.getters.width }
+  },
+  watch: {
+    viewportWidth: {
+      handler: function (width) {
+        if (width > 0) {
+          this.layout = this.$store.getters.layout || width >= breakpoint ? 'vertical' : 'horizontal'
+          console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
+        }     
+      },
+      immediate: true
+    }
   }
 }
 </script>
@@ -40,11 +56,10 @@ export default {
     margin: 0;
   }
 
-  /*
   .container {
     padding: 0;
     margin: 0;
     max-width: none;
   }
-  */
+
 </style>

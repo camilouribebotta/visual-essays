@@ -7,8 +7,7 @@
 <var data-essay
      title="Cherry Blossom"
      data-banner=""
-     data-layout="horizontal"
-     data-debug="false"></var>
+     data-debug="true"></var>
 
 <!-- <var data-component 
      data-name="entity"

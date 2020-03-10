@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     essayHTML: undefined,
-    layout: 'horizontal',
+    layout: undefined,
     // visualizerIsOpen: false,
     debug: false,
     context: undefined,

@@ -120,7 +120,7 @@ function initApp() {
 
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'horizontal')
+  vm.$store.dispatch('setLayout', qargs.layout || config.layout)
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
   console.log(`layout=${vm.$store.getters.layout} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)

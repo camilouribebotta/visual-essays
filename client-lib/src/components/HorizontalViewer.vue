@@ -240,7 +240,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 
   .v-tabs-bar {
     background-color: #eee !important;
