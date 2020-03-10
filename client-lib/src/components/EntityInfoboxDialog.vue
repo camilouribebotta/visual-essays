@@ -5,15 +5,15 @@
           <entity-infobox :qid="selectedItemID"/>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
+          <!--<v-btn
             color="primary"
             text
             @click="clearSelectedItemID"
           >
             Close
-          </v-btn>
+          </v-btn>-->
         </v-card-actions>
-      </v-card>      
+      </v-card>
     </v-dialog>
   </div>
 </template>
@@ -65,11 +65,10 @@ export default {
     vertical-align: top;
   }
 
-  .subtitle {
-    line-height: 1em;
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-size: 1.1em;
+  .source-link {
+    position: absolute;
+    float: left;
+    padding-left: 8px;
   }
 
 </style>

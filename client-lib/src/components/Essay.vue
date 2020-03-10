@@ -144,18 +144,18 @@ export default {
     height: 100%;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  #essay h1, h2, h3, h4, h5, h6 {
     padding-left: 32px;
   }
 
-  p {
+  #essay p {
     padding-left: 20px;
     border-left: 12px solid white;
     font-size: 1em;
     line-height: 1.8;
   }
 
-  p.active-elem {
+  #essay p.active-elem {
     border-left: 12px solid #1D5BC2;
   }
 

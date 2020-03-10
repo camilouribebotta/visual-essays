@@ -47,11 +47,11 @@
 <style>
 
   .entity-window {
-    padding-top: 12px;
+    padding: 16px;
   }
 
   .entity-infobox {
-    width: 600px;
+    padding: 16px;
     margin: auto;
     height: 100%;
     min-height: 165px;
