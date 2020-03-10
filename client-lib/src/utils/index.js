@@ -118,7 +118,7 @@ export function groupItems(items) {
         if (lastMap) {
           if (item['mapwarper-id']) {
             lastMap.layers.mapwarper.push(item)
-          } else if (item['url']) {
+          } else if (item['geojson']) {
             lastMap.layers.geojson.push(item)
           }
         }

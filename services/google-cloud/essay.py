@@ -175,6 +175,7 @@ class Essay(object):
         logger.info(f'{round(now()-st,3)}: phase 1')
         st = now()
         self._update_entities_from_knowledgegraph()
+        self.add_entity_classes()
         logger.info(f'{round(now()-st,3)}: phase 2')
         st = now()        
         self._find_and_tag_items()
@@ -271,6 +272,10 @@ class Essay(object):
                             v = sorted(set(self.markup[kg_props['id']][k] + v))
                         me[k] = v
                     # logger.info(json.dumps(self.markup[kg_props['id']], indent=2))
+
+    def add_entity_classes(self):
+        for entity in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag, {'class': 'entity'})]:
+            entity.attrs['class'].append(self.markup[entity.attrs['data-itemid']]['category'])
 
     def _find_ve_markup(self):
         ve_markup = {}
@@ -460,7 +465,7 @@ class Essay(object):
                         seg = self._soup.new_tag('span')
                         seg.string = rec['matched']
                         seg.attrs['title'] = item.get('title', item.get('label'))
-                        seg.attrs['class'] = ['entity', 'inferred']
+                        seg.attrs['class'] = ['entity', 'inferred', item['category']]
                         seg.attrs['data-itemid'] = item['id']
                         if 'found_in' not in item:
                             item['found_in'] = []

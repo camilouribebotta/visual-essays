@@ -138,10 +138,66 @@ export default {
 }
 </script>
 
-<style>
+<style >
 
   #essay {
     height: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    padding-left: 32px;
+  }
+
+  p {
+    padding-left: 20px;
+    border-left: 12px solid white;
+    font-size: 1em;
+    line-height: 1.8;
+  }
+
+  p.active-elem {
+    border-left: 12px solid #1D5BC2;
+  }
+
+  .tagged.location,
+  .tagged.building,
+  .tagged.place,
+  p.active-elem .inferred.location,
+  p.active-elem .inferred.building,
+  p.active-elem .inferred.place {
+    background: #EBECBB;
+    border-bottom: 2px solid #A9AC00;
+    cursor: pointer;
+  }
+
+  .tagged.person,
+  .tagged.fictional_character,
+  p.active-elem .inferred.person,
+  p.active-elem .inferred.fictional_character {
+    background: #FFDEF6;
+    border-bottom: 2px solid #FF88DF;
+    cursor: pointer;
+  }
+
+  /* primary sources */
+  .tagged .written_work {
+    background: #E2EDFF;
+    border-bottom: 2px solid #1D5BC2;
+    cursor: pointer;
+  }
+
+  .tagged .plant,
+  p.active-elem .inferred.plant {
+    background: #DFFFDF;
+    border-bottom: 2px solid #187117;
+    cursor: pointer;
+  }
+
+  .tagged .event,
+  p.active-elem .inferred.event {
+    background: #FFDFDF;
+    border-bottom: 2px solid #AF7171;
+    cursor: pointer;
   }
 
 </style>

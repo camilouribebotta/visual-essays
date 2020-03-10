@@ -107,7 +107,11 @@
       },
       addItemClickHandlers(elemId) {
         document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          entity.addEventListener('click', this.itemClickHandler)
+          // entity.addEventListener('click', this.itemClickHandler)
+          entity.addEventListener('click', (e) => {
+            const elemId = e.target.attributes['data-itemid'].value
+            this.$store.dispatch('setSelectedItemID', elemId)
+          })
         })
       },
       removeItemClickHandlers(elemId) {
@@ -147,7 +151,10 @@
         if (this.spacer) {
           this.spacer.style.height = `${this.viewportHeight/2}px`
         }
-      },      
+      },
+      viewportWidth() {
+        this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
+      }, 
       activeElement(active, prior) {
         if (prior) {
           this.removeItemClickHandlers(prior)
@@ -203,27 +210,7 @@
   .v-tab--active {
     color: white !important;
     padding: 0 6px !important;
-    background-color :#0052CC !important;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    padding-left: 32px;
-  }
-
-  p {
-    padding-left: 20px;
-    border-left: 12px solid white;
-    font-size: 1em;
-    line-height: 1.8;
-  }
-
-  p.active-elem {
-    border-left: 12px solid #0052CC;
-  }
-
-  p.active-elem .inferred, p.active-elem .tagged {
-    border-bottom: 2px solid #8FBC8F;
-    cursor: pointer;
+    background-color :#1D5BC2 !important;
   }
 
 </style>

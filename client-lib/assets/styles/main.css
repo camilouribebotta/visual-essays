@@ -194,19 +194,6 @@ li {
     margin: 0;
 }
 
-.entity.tagged {
-    /* background-color:#eeffcc; */
-    border-bottom: 2px solid #c4ff4d;
-    /*
-    text-decoration: underline;
-    text-decoration-color: #c4ff4d;
-    */
-}
-.entity.tagged:hover {
-    background-color:#eeffcc;
-    cursor: pointer;
-}
-
 .thumbimage {
     border: 1px solid #ccc;
 }

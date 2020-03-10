@@ -222,6 +222,7 @@ export default {
     },
     viewport: {
       handler: function (value, prior) {
+        this.positionMapContainer()
       },
       immediate: true
     },
