@@ -314,10 +314,12 @@ class Essay(object):
                         attrs['center'] = [float(c.strip()) for c in attrs['center'].replace(',', ' ').split()]
                 if 'zoom' in attrs:
                     attrs['zoom'] = round(float(attrs['zoom']), 1)
-            elif  _type == 'geojson':
+            elif  _type == 'map-layer':
+                logger.info(attrs)
                 if 'aliases' in attrs:
                     attrs['aliases'] = attrs['aliases'].split('|')
-                geojson = self._get_geojson(attrs.pop('url'))
+                '''
+                geojson = self._get_geojson(attrs.get('url'))
                 attrs['geojson'] = geojson
                 geojson_props = geojson['features'][0].get('properties', {}) if 'features' in geojson and len(geojson['features']) > 0 else geojson.get('properties', {})
                 for attr, val in geojson_props.items():
@@ -326,12 +328,13 @@ class Essay(object):
                         attrs['aliases'] = sorted(set(geojson_aliases + attrs.get('aliases', [])))
                     else:
                         attrs[attr] = val
+                '''
                 for attr in [f'data-{attr_suffix}' for attr_suffix in ('active', 'geojson', 'url')]:
                     if attr in vem_elem.attrs:
                         del vem_elem.attrs[attr]
-            elif  _type == 'map-layer':
-                if 'url' in attrs:
-                    attrs['geojson'] = self._get_geojson(attrs.pop('url'))
+            #elif  _type == 'map-layer':
+            #    if 'url' in attrs:
+            #        attrs['geojson'] = self._get_geojson(attrs.get('url'))
             elif  _type == 'image':
                 if 'region' in attrs:
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
@@ -465,7 +468,9 @@ class Essay(object):
                         seg = self._soup.new_tag('span')
                         seg.string = rec['matched']
                         seg.attrs['title'] = item.get('title', item.get('label'))
-                        seg.attrs['class'] = ['entity', 'inferred', item['category']]
+                        seg.attrs['class'] = ['entity', 'inferred']
+                        if 'category' in item:
+                            seg.attrs['class'].append(item['category'])
                         seg.attrs['data-itemid'] = item['id']
                         if 'found_in' not in item:
                             item['found_in'] = []
@@ -534,7 +539,7 @@ class Essay(object):
             logger.info(sparql)
 
     def _get_geojson(self, url):
-        # logger.info(f'_get_geojson url={url}')
+        logger.info(f'_get_geojson url={url}')
         cache_key = hashlib.sha256(url.encode('utf-8')).hexdigest()
         geojson = self.cache.get(cache_key)
         if not geojson:

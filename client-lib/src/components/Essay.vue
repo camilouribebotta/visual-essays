@@ -153,6 +153,7 @@ export default {
     border-left: 12px solid white;
     font-size: 1em;
     line-height: 1.8;
+    z-index: 1;
   }
 
   p.active-elem {
@@ -168,6 +169,7 @@ export default {
     background: #EBECBB;
     border-bottom: 2px solid #A9AC00;
     cursor: pointer;
+    z-index: 10;
   }
 
   .tagged.person,
@@ -177,6 +179,7 @@ export default {
     background: #FFDEF6;
     border-bottom: 2px solid #FF88DF;
     cursor: pointer;
+    z-index: 10;
   }
 
   /* primary sources */
@@ -184,6 +187,7 @@ export default {
     background: #E2EDFF;
     border-bottom: 2px solid #1D5BC2;
     cursor: pointer;
+    z-index: 10;
   }
 
   .tagged .plant,
@@ -191,6 +195,7 @@ export default {
     background: #DFFFDF;
     border-bottom: 2px solid #187117;
     cursor: pointer;
+    z-index: 10;
   }
 
   .tagged .event,
@@ -198,6 +203,7 @@ export default {
     background: #FFDFDF;
     border-bottom: 2px solid #AF7171;
     cursor: pointer;
+    z-index: 10;
   }
 
 </style>

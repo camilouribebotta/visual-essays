@@ -15,7 +15,7 @@ import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } 
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
-import MapViewer from './components/MapViewer'
+import MapViewer from './components/MapViewer1'
 import ImageViewer from './components/ImageViewer'
 import VideoPlayer from './components/VideoPlayer'
 import EntityViewer from './components/EntityViewer'

@@ -82,6 +82,22 @@
             top: para.offsetTop,
             items: itemsInElements(elemIdPath(para.id), this.allItems)
           }
+          para.addEventListener('click', (e) => {
+            const paraId = e.target.tagName === 'P'
+              ? e.target.id
+              : e.target.parentElement.id
+            if (this.paragraphs[paraId]) {
+              let offset = 100
+              let scrollable = document.getElementById('scrollableContent')
+              if (scrollable) {
+                offset = -80
+              } else {
+                scrollable = window
+              }
+              const scrollTo = this.paragraphs[paraId].top - offset
+              scrollable.scrollTo(0, scrollTo )
+            }
+          })
           para.addEventListener('mouseenter', (e) => {
             const elemId = e.toElement.id
             if (this.hoverElemId && this.hoverElemId !== elemId) {
@@ -102,40 +118,25 @@
         // that content at the end of the article is still reachable by scrolling
         this.spacer = document.createElement('div')
         this.spacer.id = 'essay-spacer'
-        this.spacer.style.height = 0
+        this.spacer.style.height = `${this.viewportHeight/2}px`
         document.getElementById('essay').appendChild(this.spacer)
       },
       addItemClickHandlers(elemId) {
-        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          // entity.addEventListener('click', this.itemClickHandler)
-          entity.addEventListener('click', (e) => {
-            const elemId = e.target.attributes['data-itemid'].value
-            this.$store.dispatch('setSelectedItemID', elemId)
-          })
+        document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
+          entity.addEventListener('click', this.itemClickHandler)
         })
       },
       removeItemClickHandlers(elemId) {
-      const elem = document.getElementById(elemId)
+        const elem = document.getElementById(elemId)
         if (elem) {
-          document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
+          document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
             entity.removeEventListener('click', this.itemClickHandler)
           })
         }
       },
       itemClickHandler(e) {
-        const selectedItemId = e.toElement.attributes['data-itemid'].value 
-        let found = false
-        for (let groupId in this.groups) {
-          const item = this.groups[groupId].items.find(item => item.id === selectedItemId)
-          if (item) {
-            this.activeTab = item.category === 'location' && this.groups.map
-              ? 'map'
-              : groupId
-            break
-          }
-        }
-        this.selected = selectedItemId
-        console.log(`itemClickHandler: selected=${this.selected} tab=${this.activeTab}`)
+        const elemId = e.target.attributes['data-itemid'].value
+        this.$store.dispatch('setSelectedItemID', elemId)
       }
     },
     watch: {
@@ -164,11 +165,11 @@
           }
         }
         if (active) {
-          this.addItemClickHandlers(active)
           // document.querySelector(`[data-id="${active}"]`).style.display = 'inline-block'
           if (this.visualizerIsOpen) {
             document.getElementById(active).classList.add('active-elem')
           }
+          this.addItemClickHandlers(active)
         }
       },
       visualizerIsOpen(isOpen) {
@@ -176,10 +177,8 @@
           this.$refs.viewer.$el.style.display = isOpen ? 'block' : 'none'
         }
         if (!isOpen) {
-          this.spacer.style.height = 0
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         } else if (this.activeElement) {
-          this.spacer.style.height = `${this.viewportHeight*0.7}px`
           document.getElementById(this.activeElement).classList.add('active-elem')
         }
       }
