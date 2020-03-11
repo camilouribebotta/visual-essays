@@ -142,7 +142,7 @@ export default {
 
   #essay {
     padding-top: 32px;
-    padding-right: 16px;
+    padding-right: 24px;
     height: 100%;
   }
 
