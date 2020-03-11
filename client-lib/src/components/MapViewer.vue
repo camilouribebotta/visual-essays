@@ -206,7 +206,7 @@ export default {
       let pu = `<h1>${item.label || item.title}</h1>`
       if (item.images) {
         pu += `<img src="${item.images[0]}">`
-        pu = `<div style="width: 125px !important; height:135px !important;">${pu}</div>`
+        pu = `<div class="leaflet-popup-content-div">${pu}</div>`
       }
       return pu
     }
@@ -284,9 +284,21 @@ export default {
     width: 150px;
   }
   */
-  .leaflet-popup-content-wrapper h1 {
-    font-size: 14px;
-    text-align: center;
+  .leaflet-popup-content {
+      margin: 8px;
+
+  }
+
+  .leaflet-popup-content-div {
+      width: 300px !important;
+      height:135px !important;
+  }
+
+  .leaflet-popup-content-div h1 {
+      font-size: 16px;
+      margin-left: 0 !important;
+      margin-bottom: 8px;
+      text-align: left;
   }
   .leaflet-popup-content-wrapper img {
     /* object-fit:
@@ -296,7 +308,7 @@ export default {
        none = content not resized
        scale-down = same as none or contain, whichever is smaller
     */
-    object-fit: contain; 
+    object-fit: cover;
     width: 125px;
     height: 120px;
     /* 

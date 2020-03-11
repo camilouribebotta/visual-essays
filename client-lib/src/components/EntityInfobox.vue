@@ -1,12 +1,13 @@
 <template>
-  <v-card class="entity-infobox">
-    <v-card-title primary-title v-html="title"/>
-    <v-card-text>
-      <img v-if="imageSrc" :src="imageSrc">
-      <div class="subtitle">{{ description }}</div>
-      <div style="text-align;left;" v-html="html"/>
-    </v-card-text>
-  </v-card>
+  <div class="entity-infobox">
+    <div class="entity-image-holder" v-if="imageSrc" :style="{backgroundImage: 'url(' + imageSrc + ')'}">
+    </div>
+
+    <h3 class="entity-title" primary-title v-html="title"/>
+    <div class="subtitle">{{ description }}</div>
+    <div class="entity-description" v-html="html"/>
+    <a :href="entity.wikipedia_page" target="_blank">Source</a>
+  </div>
 </template>
 
 <script>
@@ -32,6 +33,7 @@ export default {
   },
   mounted() {
     console.log('EntityInfobox.mounted', this.qid)
+    console.log(this.entity.wikipedia_page);
     this.getSummaryInfo()
   },
   methods: {
@@ -65,33 +67,36 @@ export default {
 
 <style scoped>
 
+  .entity-infobox {
+    align-items: left;
+  }
+
   .entity-infobox .v-card__text {
     height: 100%;
     min-height: 165px;
     padding-bottom: 0 !important;
   }
 
-  img {
-    /* object-fit:
-       fill = stretched to fit box
-       contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
-       cover = fills entire box, maintains aspect ration, clipped to fit
-       none = content not resized
-       scale-down = same as none or contain, whichever is smaller
-    */
-    object-fit: cover; 
-    width: 150px;
-    height: 150px;
-    padding: 2px 10px 2px 0;
-    float: left;
-    vertical-align: top;
+  .entity-title {
+    padding: 0;
+    margin-bottom: 8px;
+  }
+
+  .entity-image-holder {
+    width: 100%;
+    height: 250px;
+    background-color: #7F828B;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 16px;
   }
 
   .subtitle {
     line-height: 1em;
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-size: 1.2em;
+    margin-bottom: 16px;
+    font-size: 16px;
   }
+
+
 
 </style>
