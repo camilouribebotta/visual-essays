@@ -36,6 +36,11 @@ cherry blossoms became accessible to the American public, entering Western consc
 
 <var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2"></var>
 <var title="West Yorkshire" id="Q23083"></var>
+<var data-map-layer
+     title="North Atlantic Ocean"
+     data-type="geojson" 
+     data-url="https://jstor-labs.github.io/plant-humanities/geojson/north_atlantic_ocean.json"
+     data-active="true"></var>
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward [cherry trees](https://en.wikipedia.org/wiki/Cherry) have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C. 
 

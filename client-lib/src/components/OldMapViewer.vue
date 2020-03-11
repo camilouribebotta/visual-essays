@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'MapViewer',
   props: {
@@ -19,17 +17,14 @@ export default {
   },
   data: () => ({
     map: null,
-    geojson: {},
     mapLayers: {
       baseLayer: null,
       mapwarper: {},
-      markerGroups: {},
+      markerGroups: [],
       geojson: {}
     },
-    addedLayers: new Set(),
     controls: {},
-    featuresById: {},
-    markersByLatLng: {}
+    featuresById: {}
   }),
   computed: {
     mapDef() { return this.items[0] },
@@ -75,84 +70,37 @@ export default {
         this.$refs.mapWrapperInner.style.paddingLeft = `${(wrapperWidth - mapWidth)/2}px`
       }
     },
-    loadGeojson(def) {
-      console.log('loadGeojson', def.id, def.active)
-      axios.get(def.url)
-        .then(resp => {
-          let geojson = L.geoJson(resp.data, {
-            // Pop Up
-            onEachFeature: function(feature, layer) {
-              layer.bindPopup(`<p>${feature.properties.name}</p>`)
-            },
-            // Style
-            pointToLayer: function(feature, latlng) {
-              return L.circleMarker(latlng, {
-                radius: 8,
-                fillColor: "#fabada",
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-              })
+    setLayers() {
+      Object.entries(this.mapDef.layers).forEach(mapLayer => {
+        const layerType = mapLayer[0]
+        const layerValues = mapLayer[1]
+        const currentLayers = {}
+        layerValues.forEach(def => {
+          if (this.mapLayers[layerType][def.id]) {
+            currentLayers[def.id] = this.mapLayers[layerType][def.id]
+          } else {
+            const layer = layerType === 'mapwarper'
+                ? this.$L.tileLayer(`https://mapwarper.net/maps/tile/${def['mapwarper-id']}/{z}/{x}/{y}.png`)
+                : this.$L.geoJSON(def.geojson, { onEachFeature: this.onEachFeature } )
+            if (layerType !== 'mapwarper') {
+              layer.bindPopup(this.makePopup(def))
             }
-          })
-          this.geojson[def.id] = geojson
-          this.mapLayers.geojson[def.id] = {
-            id: def.id,
-            name: def.title,
-            active: (def.active || 'false') === 'true',
-            layer: geojson
-          }
-          this.addedLayers.add(def.id)
-          geojson.addTo(this.map)
-        })
-    },
-    syncGeojsonLayers() {
-      Object.keys(this.mapLayers.geojson).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.geojson.find(def => def.id === cur)) {
-          console.log('remove geojson', cur)
-          this.addedLayers.delete(cur)
-          this.map.removeLayer(this.mapLayers.geojson[cur].layer)
-        }
-      })
-      this.mapDef.layers.geojson.forEach(def => {
-        if (!this.addedLayers.has(def.id)) {
-          if (this.mapLayers.geojson[def.id]) {
-            console.log('add geojson', def.id)
-            this.addedLayers.add(def.id)
-            this.mapLayers.geojson[def.id].layer.addTo(this.map)
-          } else {
-            this.loadGeojson(def)
-          }
-        }
-      })
-    },
-    syncMapwarperLayers() {
-      Object.keys(this.mapLayers.mapwarper).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.mapwarper.find(def => def.id === cur)) {
-          console.log('remove mapwarper', cur)
-          this.addedLayers.delete(cur)
-          this.map.removeLayer(this.mapLayers.mapwarper[cur].layer)
-        }
-      })
-      this.mapDef.layers.mapwarper.forEach(def => {
-        if (!this.addedLayers.has(def.id)) {
-          if (this.mapLayers.mapwarper[def.id]) {
-            console.log('add mapwarper', def.id)
-            this.addedLayers.add(def.id)
-            this.mapLayers.mapwarper[def.id].layer.addTo(this.map)
-          } else {
-            const layer = this.$L.tileLayer(`https://mapwarper.net/maps/tile/${def['mapwarper-id']}/{z}/{x}/{y}.png`)
-            this.mapLayers.mapwarper[def.id] = {
+            currentLayers[def.id] = {
               id: def.id,
               name: def.title,
               active: (def.active || 'false') === 'true',
               layer
             }
-            layer.addTo(this.map)
           }
+        })
+        for (const layerId in this.mapLayers[layerType]) {
+          if (!currentLayers[layerId]) {
+            this.mapLayers[layerType][layerId].layer.removeFrom(this.map)
+          }                
         }
+        this.mapLayers[layerType] = currentLayers
       })
+      // console.log(this.mapLayers)
     },
     setControls() {
       const baseLayers = {
@@ -165,11 +113,9 @@ export default {
         const layerValues = mapLayer[1]
         layerValues.forEach(layerDef => {
           const layer = this.mapLayers[layerType][layerDef.id]
-          if (layer) {
-            allLayers[layer.name] = layer.layer
-            if (layerType === 'mapwarper') {
-              fadeableLayers[layer.name] = layer.layer
-            }
+          allLayers[layer.name] = layer.layer
+          if (layerType === 'mapwarper') {
+            fadeableLayers[layer.name] = layer.layer
           }
         })
       })
@@ -204,41 +150,55 @@ export default {
     getLocationMarkers() {
       const markers = []
       this.locations.forEach((location) => {
-        const marker = this.$L.marker(location.coords[0])
-        // .bindPopup(this.makePopup(location))
-        marker.addEventListener('click', (e) => {
-          const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
-          this.$store.dispatch('setSelectedItemID', elemId)
-        })   
+        const marker = this.$L.marker(location.coords[0]).bindPopup(this.makePopup(location))
         markers.push(marker)
-        const mll = marker.getLatLng()
         this.featuresById[location.id] = marker
-        this.markersByLatLng[`${mll.lat},${mll.lng}`] = location.id
       })
       return markers
     },
-    syncMarkerGroups() {
+    setMarkerGroups() {
+      const currentMarkerGroups = {
+        locations: {
+          name: 'Locations',
+          active: true,
+          layer: this.$L.layerGroup([...this.getLocationMarkers()])
+        }
+      }
       for (const groupName in this.mapLayers.markerGroups) {
         const markerGroup = this.mapLayers.markerGroups[groupName]
         this.map.removeLayer(markerGroup.layer)
       }
-      const currentMarkerGroups = {}
-      
-      const layer = this.$L.layerGroup([...this.getLocationMarkers()])
-      currentMarkerGroups['locations'] = {
-        name: 'Locations',
-        active: true,
-        layer
-      }
-      layer.addTo(this.map)
-
       this.mapLayers.markerGroups = currentMarkerGroups
     },
     updateLayers() {
       if (this.map) {
-        this.syncGeojsonLayers()
-        this.syncMapwarperLayers()
-        this.syncMarkerGroups()
+        this.setLayers()
+        this.setMarkerGroups()
+        this.sync()
+      }
+    },
+    sync() {
+      if (this.map) {
+        Object.entries(this.mapDef.layers).forEach(mapLayer => {
+          const layerType = mapLayer[0]
+          const layerValues = mapLayer[1]
+          layerValues.forEach(layerDef => {
+            const layer = this.mapLayers[layerType][layerDef.id]
+            if (layer.active) {
+              this.map.addLayer(layer.layer)
+            } else {
+              this.map.removeLayer(layer.layer)
+            }
+          })
+        })
+        for (const groupName in this.mapLayers.markerGroups) {
+          const markerGroup = this.mapLayers.markerGroups[groupName]
+          if (markerGroup.active) {
+            this.map.addLayer(markerGroup.layer)
+          } else {
+            this.map.removeLayer(markerGroup.layer)
+          }
+        }
         this.setControls()
       }
     },
@@ -246,7 +206,7 @@ export default {
       let pu = `<h1>${item.label || item.title}</h1>`
       if (item.images) {
         pu += `<img src="${item.images[0]}">`
-        pu = `<div style="width: 125px !important; height:135px !important;">${pu}</div>`
+        pu = `<div class="leaflet-popup-content-div">${pu}</div>`
       }
       return pu
     }
@@ -324,9 +284,21 @@ export default {
     width: 150px;
   }
   */
-  .leaflet-popup-content-wrapper h1 {
-    font-size: 14px;
-    text-align: center;
+  .leaflet-popup-content {
+      margin: 8px;
+
+  }
+
+  .leaflet-popup-content-div {
+      width: 300px !important;
+      height:135px !important;
+  }
+
+  .leaflet-popup-content-div h1 {
+      font-size: 16px;
+      margin-left: 0 !important;
+      margin-bottom: 8px;
+      text-align: left;
   }
   .leaflet-popup-content-wrapper img {
     /* object-fit:
@@ -336,7 +308,7 @@ export default {
        none = content not resized
        scale-down = same as none or contain, whichever is smaller
     */
-    object-fit: contain; 
+    object-fit: cover;
     width: 125px;
     height: 120px;
     /* 
