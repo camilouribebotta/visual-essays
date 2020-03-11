@@ -185,6 +185,10 @@
 
 <style>
 
+  path {
+    stroke-width: 2px;
+  }
+
   #viewer {
     position: fixed;
     height: 100vh;
