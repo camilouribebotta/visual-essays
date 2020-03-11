@@ -2,6 +2,13 @@
     font-family: Roboto, sans-serif;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+}
 article,
 aside,
 details,

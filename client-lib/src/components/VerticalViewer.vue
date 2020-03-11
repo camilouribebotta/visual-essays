@@ -1,5 +1,5 @@
 <template>
-  <v-card ref="viewer" id="viewer" :style="style">
+  <v-card ref="viewer" id="viewer" :style="style" >
 
     <v-tabs v-if="visualizerIsOpen"
       ref="tabs"
@@ -55,9 +55,6 @@
       style() {
         return {
           display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
-          position: 'fixed',
-          top: '20px',
-          height: `${this.viewportHeight}px`,
           width: `${this.viewerWidth}px`
         }
       }
@@ -95,7 +92,7 @@
                 scrollable = window
               }
               const scrollTo = this.paragraphs[paraId].top - offset
-              scrollable.scrollTo(0, scrollTo )
+              scrollable.scrollTo(0, scrollTo, )
             }
           })
           para.addEventListener('mouseenter', (e) => {
@@ -188,8 +185,10 @@
 
 <style>
 
-  body {
-    margin: 20px;
+  #viewer {
+    position: fixed;
+    height: 100vh;
+    background-color: #3A7734;
   }
 
   .v-tabs-bar {

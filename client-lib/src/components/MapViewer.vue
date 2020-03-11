@@ -314,7 +314,7 @@ export default {
   }
 
   .leaflet-container {
-    background: white !important;
+    background: #aad3df;
   }
 
   /*

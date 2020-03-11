@@ -141,6 +141,8 @@ export default {
 <style >
 
   #essay {
+    padding-top: 32px;
+    padding-right: 16px;
     height: 100%;
   }
 
