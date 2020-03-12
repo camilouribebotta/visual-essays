@@ -185,10 +185,14 @@
 
 <style>
 
+  path {
+    stroke-width: 2px;
+  }
+
   #viewer {
     position: fixed;
     height: 100vh;
-    background-color: #3A7734;
+    box-shadow: none;
   }
 
   .v-tabs-bar {

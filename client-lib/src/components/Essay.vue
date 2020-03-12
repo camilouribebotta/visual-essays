@@ -142,7 +142,7 @@ export default {
 
   #essay {
     padding-top: 32px;
-    padding-right: 16px;
+    padding-right: 32px;
     height: 100%;
   }
 
@@ -160,6 +160,10 @@ export default {
 
   #essay p.active-elem {
     border-left: 12px solid #1D5BC2;
+  }
+  
+  #essay p:hover {
+    cursor: pointer;
   }
 
   .tagged.location,
