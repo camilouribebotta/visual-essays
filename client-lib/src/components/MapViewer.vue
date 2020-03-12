@@ -196,7 +196,7 @@ export default {
               fadeableLayers,
               {
                 // label: 'Layers Opacity',
-                collapsed: true 
+                collapsed: true
               }
           ).addTo(this.map)
     },
@@ -300,50 +300,68 @@ export default {
 
 <style>
 
-  .wrapper {
-    display: inherit;
-  }
-  
-  .lmap {
-    z-index: 1;
-    width: 100%;
-  }
+    .wrapper {
+        display: inherit;
+    }
 
-  .leaflet-interactive {
-    /* fill-opacity: 1; */
-  }
+    .lmap {
+        z-index: 1;
+        width: 100%;
+    }
 
-  .leaflet-container {
-    background: #aad3df;
-  }
+    .leaflet-interactive {
+        /* fill-opacity: 1; */
+    }
 
-  /*
-  .leaflet-popup-content-wrapper {
-    height: 150px;
-    width: 150px;
-  }
-  */
-  .leaflet-popup-content-wrapper h1 {
-    font-size: 14px;
-    text-align: center;
-  }
-  .leaflet-popup-content-wrapper img {
-    /* object-fit:
-       fill = stretched to fit box
-       contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
-       cover = fills entire box, maintains aspect ration, clipped to fit
-       none = content not resized
-       scale-down = same as none or contain, whichever is smaller
+    .leaflet-container {
+        background: #aad3df;
+    }
+
+    /*
+    .leaflet-popup-content-wrapper {
+      height: 150px;
+      width: 150px;
+    }
     */
-    object-fit: contain; 
-    width: 125px;
-    height: 120px;
-    /* 
-    padding: 2px 10px 2px 0;
-    float: left;
-    */
-    vertical-align: top;
-  }    
+    .leaflet-popup-content-wrapper h1 {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .leaflet-popup-content-wrapper img {
+        /* object-fit:
+           fill = stretched to fit box
+           contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
+           cover = fills entire box, maintains asp dect ration, clipped to fit
+           none = content not resized
+           scale-down = same as none or contain, whichever is smaller
+        */
+        object-fit: contain;
+        width: 125px;
+        height: 120px;
+        /*
+        padding: 2px 10px 2px 0;
+        float: left;
+        */
+        vertical-align: top;
+    }
+
+    .leaflet-bar a, .leaflet-bar a:hover {
+        height: 30px;
+        width: 36px;
+    }
+    
+    .leaflet-right .leaflet-control {
+        float: left;
+    }
+
+    .leaflet-top.leaflet-right {
+        left: 10px;
+        top: 90px;
+        right: unset;
+    }
+
+
   
 
 </style>

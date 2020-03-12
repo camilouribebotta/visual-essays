@@ -2,14 +2,12 @@
   <v-container>
     <v-row no-gutters>
       <v-col
-        cols="6"
-        class="map-pane"
+              class="map-pane"
       >
         <vertical-viewer/>
       </v-col>
       <v-col
-         class="essay-pane"
-         cols="6"
+              class="essay-pane"
       >
         <essay/>
       </v-col>

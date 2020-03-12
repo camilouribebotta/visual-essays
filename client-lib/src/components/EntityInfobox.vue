@@ -6,7 +6,7 @@
     <h3 class="entity-title" primary-title v-html="title"/>
     <div class="subtitle">{{ description }}</div>
     <div class="entity-description" v-html="html"/>
-    <a :href="entity.wikipedia_page" target="_blank">Source</a>
+    <a :href="entity.wikipedia_page" target="_blank" >Source</a>
   </div>
 </template>
 
