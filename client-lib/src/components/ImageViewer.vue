@@ -1,12 +1,44 @@
 <template>
+  <v-card id="image-viewer" :style="`height:${viewport.height}px`">
+    <v-card-title></v-card-title>
+    <v-container fluid>
+      <v-row dense>
+        <v-col
+          v-for="image in images"
+          :key="image.id"
+          :cols="image.cols || 6"
+        >
+          <v-card>
+            <div :id="image.id" :style="`width:100%; height:${(image.cols || 6) * 50}px`"/>
+            <!-- 
+            <v-card-actions>
+              <v-spacer/>
+              <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+              <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
+              <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
+            </v-card-actions>
+            -->
+            <v-card-title v-text="image.title">
+            </v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
+  <!--
   <div ref="imageViewer" id="imageViewer">
     <ul class="listHorizontal">
       <li v-for="image in images" :key="image.id">
         <h3>{{ image.title }}</h3>
-        <div :id="image.id" class="image" :style="`width:${viewport.height*0.3}px; height:${viewport.height*0.40}px;`"></div>
+        <div 
+          :id="image.id" 
+          class="image" 
+          :style="style"
+        />
       </li>
     </ul>
   </div>
+  -->
 </template>
 
 <script>
@@ -17,7 +49,11 @@ export default {
   data: () => ({}),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
-    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
+    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
+    style() { return {
+      width: '100%',
+      height: '300px'
+    }}
   },
   mounted() {
     this.images.forEach((image) => {
@@ -30,7 +66,16 @@ export default {
             Image: resp.data.data
           },
           buildPyramid: false,
-          showNavigationControl: false
+          showNavigationControl: false,
+          maxZoomLevel: 5,
+          showNavigator: true,
+          homeFillsViewer: true,
+          //navigatorId: 'image-navigator',
+          //toolbar: 'image-toolbar',
+          //zoomInButton: 'image-toolbar-zoomin',
+          //zoomOutButton: 'image-toolbar-zoomout',
+          //homeButton: 'image-toolbar-reset',
+          //fullPageButton: 'image-toolbar-fullscreen'
         })
         if (image.region !== undefined && image.region[2] != 0 && image.region[0] !== undefined) {
             // console.log("Editing initial region")
@@ -48,6 +93,20 @@ export default {
 </script>
 
 <style scoped>
+  #image-viewer {
+    background-color: #ddd;
+    padding: 3px 10px 3px 3px;
+    overflow-y: scroll;
+  }
+
+  .v-card__title {
+    padding: 6px 12px;
+    font-size: 1.0rem;
+    line-height: 1.2rem;
+    height: 50px;
+    word-break: normal !important;
+  }
+
   h3 {
     font-size: 14pt;
     color: black;

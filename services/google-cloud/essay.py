@@ -247,7 +247,6 @@ class Essay(object):
             kg_entities = self.cache.get(cache_key)
             from_cache = kg_entities is not None
             if kg_entities is None:
-                logger.info('here')
                 kg_entities = self._get_entity_data(qids)['@graph']
                 self.cache[cache_key] = kg_entities
             for kg_props in kg_entities:
@@ -275,7 +274,8 @@ class Essay(object):
 
     def add_entity_classes(self):
         for entity in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag, {'class': 'entity'})]:
-            entity.attrs['class'].append(self.markup[entity.attrs['data-itemid']]['category'])
+            if 'category' in self.markup.get(entity.attrs.get('data-itemid'), {}):
+                entity.attrs['class'].append(self.markup[entity.attrs['data-itemid']]['category'])
 
     def _find_ve_markup(self):
         ve_markup = {}
@@ -480,7 +480,7 @@ class Essay(object):
                         seg = s[cursor:cursor+len(rec['matched'])]
 
                     if replaced:
-                        p.insert(idx+len(replaced), seg if p.name == 'p' else rec['matched'])
+                        p.insert(idx+len(replaced), seg if p.name in ('p', 'em', 'strong') else rec['matched'])
                     else:
                         e.parent.attrs['title'] = item.get('title', item.get('label'))
                     replaced.append(rec['matched'])
@@ -575,9 +575,14 @@ def add_vue_app(html, js_lib):
     soup = html if isinstance(html, BeautifulSoup) else BeautifulSoup(html, 'html5lib')
 
     for url in [
+        'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900',
+        'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css',
+        #'https://fonts.googleapis.com/css?family=Material+Icons',
+        #'https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.css',
+
         'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
         # 'https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css',
-        'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
+        # 'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
         ]:
         style = soup.new_tag('link')
         style.attrs['rel'] = 'stylesheet'
@@ -585,9 +590,13 @@ def add_vue_app(html, js_lib):
         soup.html.head.append(style)
 
     for url in [
-            # 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
-            # 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
-            js_lib
+        #'https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js',
+        #'https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js',
+        #'https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.js',
+
+        # 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
+        # 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
+        js_lib
         ]:
         lib = soup.new_tag('script')
         lib.attrs['src'] = url

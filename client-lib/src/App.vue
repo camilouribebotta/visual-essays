@@ -57,9 +57,9 @@ export default {
   }
 
   .container {
-    padding: 0;
-    margin: 0;
-    max-width: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
   }
 
 </style>

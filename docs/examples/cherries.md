@@ -1,13 +1,11 @@
-<!--
-<var data-component 
+<!-- <var data-component 
      data-name="entity"
-     data-src="https://jstor-labs.github.io/visual-essays/components/EntityViewer.vue"></var>
--->
+     data-src="https://jstor-labs.github.io/visual-essays/components/EntityViewer.vue"></var> -->
 
 <var data-essay
      title="Cherry Blossom"
      data-banner=""
-     data-debug="true"></var>
+     data-debug="false"></var>
 
 <!-- <var data-component 
      data-name="entity"

@@ -185,14 +185,14 @@ export default {
   }
 
   /* primary sources */
-  .tagged .written_work {
+  .tagged.written_work {
     background: #E2EDFF;
     border-bottom: 2px solid #1D5BC2;
     cursor: pointer;
     z-index: 10;
   }
 
-  .tagged .plant,
+  .tagged.plant,
   p.active-elem .inferred.plant {
     background: #DFFFDF;
     border-bottom: 2px solid #187117;
@@ -200,12 +200,16 @@ export default {
     z-index: 10;
   }
 
-  .tagged .event,
+  /*
+  .tagged.entity,
+  .tagged.event,
+  p.active-elem .inferred.entity,
   p.active-elem .inferred.event {
     background: #FFDFDF;
     border-bottom: 2px solid #AF7171;
     cursor: pointer;
     z-index: 10;
   }
+  */
 
 </style>

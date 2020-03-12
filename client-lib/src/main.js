@@ -5,6 +5,8 @@ import httpVueLoader from 'http-vue-loader'
 import VueYoutube from 'vue-youtube'
 import App from './App.vue'
 import store from './store'
+import 'vuetify/dist/vuetify.min.css'
+
 import 'leaflet'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
