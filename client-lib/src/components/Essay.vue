@@ -143,7 +143,6 @@ export default {
   #essay {
     padding-top: 32px;
     padding-right: 32px;
-    height: 100vh;
   }
 
   #essay h1, h2, h3, h4, h5, h6 {
@@ -164,6 +163,7 @@ export default {
   
   #essay p:hover {
     cursor: pointer;
+    background-color: #f7f7f7;;
   }
 
   .tagged.location,

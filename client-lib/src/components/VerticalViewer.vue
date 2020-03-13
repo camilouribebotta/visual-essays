@@ -197,16 +197,22 @@
 
   .v-tabs-bar {
     position: absolute;
-    top: 10px;
-    right: 80px;
+    top: 16px;
+    right: 16px;
     z-index: 2;
     background-color :white !important;
-    height: 30px !important;
+    height: 36px !important;
   }
 
   .v-tab {
     color: black !important;
     padding: 0 6px !important;
+  }
+
+  .v-slide-group__wrapper {
+    height: 36px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
   }
 
   .v-tab--active {

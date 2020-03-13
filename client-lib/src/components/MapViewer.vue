@@ -355,8 +355,13 @@ export default {
         float: left;
     }
 
+    .leaflet-top.leaflet-left {
+        top: 6px;
+        left: 6px;
+    }
+
     .leaflet-top.leaflet-right {
-        left: 10px;
+        left: 16px;
         top: 90px;
         right: unset;
     }
