@@ -1,59 +1,51 @@
 <template>
-  <v-card id="image-viewer" :style="`height:${viewport.height}px`">
-    <v-card-title></v-card-title>
-    <v-container fluid>
-      <v-row dense>
-        <v-col
-          v-for="image in images"
-          :key="image.id"
-          :cols="image.cols || 6"
-        >
-          <v-card>
-            <div :id="image.id" :style="`width:100%; height:${(image.cols || 6) * 50}px`"/>
-            <!-- 
-            <v-card-actions>
-              <v-spacer/>
-              <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
-              <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
-              <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
-            </v-card-actions>
-            -->
-            <v-card-title v-text="image.title">
-            </v-card-title>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
-  <!--
-  <div ref="imageViewer" id="imageViewer">
-    <ul class="listHorizontal">
-      <li v-for="image in images" :key="image.id">
-        <h3>{{ image.title }}</h3>
-        <div 
-          :id="image.id" 
-          class="image" 
-          :style="style"
-        />
-      </li>
-    </ul>
+  <div>
+    <v-card id="cards-image-viewer" :style="`height:${viewport.height}px`">
+      <v-container fluid>
+        <v-row dense>
+          <v-col
+            v-for="image in images"
+            :key="image.id"
+            :cols="image.cols || 6"
+          >
+            <v-card>
+              <div :id="image.id" :style="`width:100%; height:${(image.cols || 6) * 50}px`"/>
+              <!-- 
+              <v-card-actions>
+                <v-spacer/>
+                <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+                <v-btn icon><v-icon>mdi-bookmark</v-icon></v-btn>
+                <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
+              </v-card-actions>
+              -->
+              <v-card-title v-text="image.title">
+              </v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+    <hires-image-viewer :img="img" />
   </div>
-  -->
 </template>
 
 <script>
 import axios from 'axios'
 import OpenSeadragon from 'openseadragon'
+import HiresImageViewer from './HiresImageViewer'
+
 export default {
-  name: 'ImageViewer',
-  data: () => ({}),
+  name: 'CardsImageViewer',
+  components: {
+    HiresImageViewer
+  },
+  data: () => ({
+    currentId: undefined,
+    img: {}
+  }),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
-    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
-    style() { return {
-      width: '100%',
-      height: '300px'
-    }}
+    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
   },
   mounted() {
     this.images.forEach((image) => {
@@ -93,7 +85,8 @@ export default {
 </script>
 
 <style scoped>
-  #image-viewer {
+
+  #cards-image-viewer {
     background-color: #ddd;
     padding: 3px 10px 3px 3px;
     overflow-y: scroll;

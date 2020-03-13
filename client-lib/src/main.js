@@ -6,6 +6,7 @@ import VueYoutube from 'vue-youtube'
 import App from './App.vue'
 import store from './store'
 import 'vuetify/dist/vuetify.min.css'
+import Lingallery from 'lingallery';
 
 import 'leaflet'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
@@ -23,6 +24,8 @@ import VideoPlayer from './components/VideoPlayer'
 import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
+
+Vue.component('lingallery', Lingallery)
 
 const myMixin = {
   computed: {
