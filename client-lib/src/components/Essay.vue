@@ -163,6 +163,7 @@ export default {
   
   #essay p:hover {
     cursor: pointer;
+    background-color: #f7f7f7;;
   }
 
   .tagged.location,
