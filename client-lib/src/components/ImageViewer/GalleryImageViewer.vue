@@ -1,10 +1,12 @@
 <template>
   <div>
+    <!-- https://github.com/ChristophAnastasiades/Lingallery -->
     <lingallery
       :iid.sync="currentId"
       :width="width"
       :height="height"
       :items="items"
+      :showThumbnails="images.length > 1"
       disableImageClick
     />
     <hires-image-viewer :img="img" />

@@ -1,6 +1,6 @@
 {
   "name": "visual-essays",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --mode development --hot --port 8080 --output-public-path lib --contentBase ../docs",
