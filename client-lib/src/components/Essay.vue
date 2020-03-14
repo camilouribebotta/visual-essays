@@ -41,7 +41,7 @@ export default {
         prior = para.id
         const scene = this.$scrollmagic.scene({
           triggerElement: `#${para.id}`,
-          triggerHook: 0.25
+          triggerHook: 0.50
         })
         .on('enter', (e) => {
           this.setActiveElements(para.id)

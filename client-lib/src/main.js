@@ -144,12 +144,12 @@ function initApp() {
 
 //document.addEventListener('DOMContentLoaded', () => {
   let name
-  let href = window.location.href
+  let pathname = window.location.pathname
   const waitForContent = () => {
     // console.log('waitForContent')
     if (vm) {
-      if (href !== window.location.href) {
-        href = window.location.href
+      if (pathname !== window.location.pathname) {
+        pathname = window.location.pathname
         console.log('remove vm')
         vm = vm.$destroy()
       }
@@ -164,7 +164,7 @@ function initApp() {
             console.log(essayElem.title)
           }
         })
-        href = window.location.href
+        pathname = window.location.pathname
         name = essayElem.dataset.name
       }
     }

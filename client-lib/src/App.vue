@@ -31,7 +31,7 @@ export default {
       handler: function (width) {
         console.log(this.$store.getters.layout)
         if (width > 0) {
-          this.layout = this.$store.getters.layout || width >= breakpoint ? 'vertical' : 'horizontal'
+          this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vertical' : 'horizontal')
           console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
         }     
       },
@@ -59,7 +59,7 @@ export default {
 
   .container {
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0;
     max-width: none !important;
   }
 
