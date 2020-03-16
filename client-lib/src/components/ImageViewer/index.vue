@@ -8,9 +8,10 @@
               row
               dense
               hide-details=true
+              color="primary"
       >
         <v-radio label="Gallery" value="gallery"></v-radio>
-        <v-radio label="Cards (compare mode)" value="cards"></v-radio>
+        <v-radio label="Compare" value="cards"></v-radio>
       </v-radio-group>
     </div>
     <component v-bind:is="mode"/>
@@ -46,6 +47,10 @@ export default {
     border-radius: 4px;
     box-shadow: 0 1px 5px rgba(0,0,0,0.65);
     height: 36px;
+  }
+
+  .v-application .accent--text {
+    color: #1D5BC2 !important;
   }
 
   .v-input {

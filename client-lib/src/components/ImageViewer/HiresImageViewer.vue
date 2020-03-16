@@ -4,11 +4,9 @@
             v-if="isOpen"
             v-model="isOpen"
             @click:outside="close"
-            width="80vw"
-            :height="height"
     >
       <v-card dark>
-        <v-card-title v-html="img.caption"/>
+        <v-card-title v-html="img.caption" class="card-title"/>
         <v-card-actions class="close-button">
           <v-btn
                   @click="close"
@@ -37,9 +35,9 @@ export default {
   }),
   computed: {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
-    scale() { return this.viewport.height * .9 / this.img.height },
+    scale() { return this.viewport.height * .98 / this.img.height },
     // width() { return this.img.width * this.scale },
-    height() { return this.img.height * this.scale - 120}
+    height() { return this.img.height * this.scale - 150}
   },
   methods: {
     loadImage() {
@@ -93,15 +91,20 @@ export default {
 
 <style scoped>
   .v-overlay {
-    opacity: 0.95 !important;
+    opacity: 100 !important;
   }
 
   .theme--dark.v-sheet {
     background-color: black;
   }
 
+  .card-title {
+    padding-top: 16px !important;
+  }
+
   .v-card__title {
     background-color: #fff;
+    padding-left: 16px !important;
     border-bottom: 1px solid #acb0bc;
     color: #000;
   }
@@ -109,7 +112,7 @@ export default {
   .close-button {
     display: inline-block;
     position: absolute;
-    top: 0;
+    top: 3px;
     right: 0;
 
   }

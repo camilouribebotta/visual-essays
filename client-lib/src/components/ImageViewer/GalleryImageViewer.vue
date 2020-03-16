@@ -59,5 +59,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+  .lingallery figure {
+    background-color: #000;
+  }
+
+  .lingallery figure img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+  }
 </style>
