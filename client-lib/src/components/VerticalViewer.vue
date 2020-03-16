@@ -190,12 +190,15 @@
   }
 
   #viewer {
+    background-color: #000000;
     position: fixed;
     height: 100vh;
     box-shadow: none;
+    border-radius: 0;
   }
 
   .v-tabs-bar {
+    border-radius: 4px;
     position: absolute;
     top: 16px;
     right: 16px;
