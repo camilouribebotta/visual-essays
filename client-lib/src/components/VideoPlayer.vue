@@ -11,6 +11,7 @@
       @ready="ready"
       @playing="playing"
       @paused="paused"
+      class="youtube-iframe"
     />
   </v-card>
 </template>
@@ -60,3 +61,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .youtube-iframe {
+    position: absolute;
+    margin-top: 64px;
+  }
+</style>
