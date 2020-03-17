@@ -187,10 +187,6 @@
 
 <style>
 
-  path {
-    stroke-width: 2px;
-  }
-
   #viewer {
     background-color: #000000;
     position: fixed;

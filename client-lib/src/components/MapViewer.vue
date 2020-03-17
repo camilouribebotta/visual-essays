@@ -90,7 +90,7 @@ export default {
                   fillColor: feature.properties['fill'] || '#fff',
                   fillOpacity: feature.properties['fill-opacity'] || 0,
                   color: feature.properties['stroke'] || '#000',
-                  width: feature.properties['stroke-width'] || 1,
+                  weight: feature.properties['stroke-width'] || 1,
                   opacity: feature.properties['opacity'] || 1
               }
             }
@@ -310,7 +310,7 @@ export default {
     }
 
     .leaflet-interactive {
-        /* fill-opacity: 1; */
+      /* fill-opacity: 1; */
     }
 
     .leaflet-container {
