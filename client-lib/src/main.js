@@ -33,7 +33,7 @@ const myMixin = {
     activeElements() { return store.getters.activeElements },
     allItems() { return store.getters.items },
     groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems)) },
-    selectedItemID () { return store.getters.selectedItemID },
+    selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }
 }

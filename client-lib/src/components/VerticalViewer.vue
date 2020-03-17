@@ -52,6 +52,10 @@
     computed: {
       viewportHeight() { return this.$store.getters.height },
       viewportWidth() { return this.$store.getters.width },
+      primaryTab () {
+        const primary = this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary')
+        return primary ? primary.primary : undefined
+      },
       style() {
         return {
           display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
@@ -141,9 +145,7 @@
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
-        if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
-          this.activeTab = availableGroups.length > 0 ? availableGroups[0] : undefined
-        }
+        this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight() {
         if (this.spacer) {

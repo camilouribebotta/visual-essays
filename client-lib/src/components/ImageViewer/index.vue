@@ -2,13 +2,13 @@
   <div id="image-viewer">
     <div id="image-viewer-controls">
       <v-radio-group
-              v-if="images.length > 1"
-              id="image-viewer-mode-control"
-              v-model="mode"
-              row
-              dense
-              hide-details=true
-              color="primary"
+        v-if="images.length > 1"
+        id="image-viewer-mode-control"
+        v-model="mode"
+        row
+        dense
+        :hide-details="true"
+        color="primary"
       >
         <v-radio label="Gallery" value="gallery"></v-radio>
         <v-radio label="Compare" value="cards"></v-radio>

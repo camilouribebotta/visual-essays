@@ -33,7 +33,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video'}
+CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video', 'primary'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
