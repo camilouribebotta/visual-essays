@@ -8,6 +8,7 @@
       :items="items"
       :showThumbnails="images.length > 1"
       disableImageClick
+      background-color="red"
     />
     <hires-image-viewer :img="img" />
   </div>
@@ -37,7 +38,7 @@ export default {
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
-    height() { return this.viewport.width/2 * .8 }
+    height() { return this.viewport.height - 66 }
   },
   mounted() {
     document.querySelectorAll('figure')
@@ -58,5 +59,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+  .lingallery figure {
+    background-color: #000;
+  }
+
+  .lingallery figure img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+  }
 </style>

@@ -1,18 +1,20 @@
 <template>
   <div>
-    <v-dialog 
-      v-if="isOpen"
-      v-model="isOpen"
-      @click:outside="close"
-      :width="width"
-      :height="height"
+    <v-dialog
+            v-if="isOpen"
+            v-model="isOpen"
+            @click:outside="close"
     >
-      <v-card>
-        <v-card-title v-html="img.caption"/>
-        <div :style="`border:1px solid #eee; width:${width}px; height:${height}px;`" id="img"/>
-        <v-card-actions>
-          <v-btn @click="close">Close</v-btn>
+      <v-card dark>
+        <v-card-title v-html="img.caption" class="card-title"/>
+        <v-card-actions class="close-button">
+          <v-btn
+                  @click="close"
+                  color="primary"
+          >Exit
+          </v-btn>
         </v-card-actions>
+        <div :style="`width:${width}px; height:${height}px;`" id="img"/>
       </v-card>
     </v-dialog>
   </div>
@@ -33,9 +35,9 @@ export default {
   }),
   computed: {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
-    scale() { return this.viewport.height * .9 / this.img.height },
-    width() { return this.img.width * this.scale },
-    height() { return this.img.height * this.scale - 120}
+    scale() { return this.viewport.height * .98 / this.img.height },
+    // width() { return this.img.width * this.scale },
+    height() { return this.img.height * this.scale - 150}
   },
   methods: {
     loadImage() {
@@ -88,7 +90,30 @@ export default {
 </script>
 
 <style scoped>
-  .v-card__actions {
-    padding: 3px;
+  .v-overlay {
+    opacity: 100 !important;
+  }
+
+  .theme--dark.v-sheet {
+    background-color: black;
+  }
+
+  .card-title {
+    padding-top: 16px !important;
+  }
+
+  .v-card__title {
+    background-color: #fff;
+    padding-left: 16px !important;
+    border-bottom: 1px solid #acb0bc;
+    color: #000;
+  }
+
+  .close-button {
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    right: 0;
+
   }
 </style>

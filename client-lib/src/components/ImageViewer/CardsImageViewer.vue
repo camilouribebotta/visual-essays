@@ -87,8 +87,9 @@ export default {
 <style scoped>
 
   #cards-image-viewer {
-    background-color: #ddd;
-    padding: 3px 10px 3px 3px;
+    border-radius: 0;
+    background-color: #000;
+    padding: 62px 8px 8px 8px;
     overflow-y: scroll;
   }
 
@@ -105,6 +106,7 @@ export default {
     color: black;
     margin-bottom: 6px;
   }
+
   .listHorizontal {
     margin-top: 12px;
     display: flex;

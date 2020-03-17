@@ -159,6 +159,7 @@ export default {
 
   #essay p.active-elem {
     border-left: 12px solid #1D5BC2;
+    background-color: #fafafa;
   }
   
   #essay p:hover {

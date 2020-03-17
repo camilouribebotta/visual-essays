@@ -1,9 +1,17 @@
 <template>
   <div id="image-viewer">
     <div id="image-viewer-controls">
-      <v-radio-group v-if="images.length > 1" id="image-viewer-mode-control" v-model="mode" row>
+      <v-radio-group
+              v-if="images.length > 1"
+              id="image-viewer-mode-control"
+              v-model="mode"
+              row
+              dense
+              hide-details=true
+              color="primary"
+      >
         <v-radio label="Gallery" value="gallery"></v-radio>
-        <v-radio label="Cards (compare mode)" value="cards"></v-radio>
+        <v-radio label="Compare" value="cards"></v-radio>
       </v-radio-group>
     </div>
     <component v-bind:is="mode"/>
@@ -31,10 +39,26 @@ export default {
 
 <style>
   #image-viewer-controls {
-    margin-left: 10px !important;
-    height: 50px !important;
+    z-index: 300;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background-color: #fbfdff;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    height: 36px;
   }
+
+  .v-application .accent--text {
+    color: #1D5BC2 !important;
+  }
+
   .v-input {
-    margin: 6px 0 0 6px !important;
+    margin: 2px 0 0 4px !important;
   }
+
+  .component {
+    position: relative;
+  }
+
 </style>
