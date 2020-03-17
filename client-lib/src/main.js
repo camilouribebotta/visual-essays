@@ -128,6 +128,7 @@ function initApp() {
   vm.$store.dispatch('setLayout', qargs.layout || config.layout)
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
+  vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
   vm.$mount('#essay')

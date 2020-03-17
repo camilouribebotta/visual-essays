@@ -8,13 +8,15 @@ import { elemIdPath, itemsInElements, groupItems } from '../utils'
 export default {
   name: 'essay',
   data: () => ({
-    paragraphs: {}
+    paragraphs: {},
+    scenes: []
   }),
   computed: {
     html() { return this.$store.getters.essayHTML },
     debug() { return this.$store.getters.debug },
     viewportWidth() { return this.$store.getters.width },
-    allItems() { return this.$store.getters.items }
+    allItems() { return this.$store.getters.items },
+    trigger() { return this.$store.getters.trigger }
   },
   mounted() {
     groupItems(this.allItems)
@@ -41,7 +43,7 @@ export default {
         prior = para.id
         const scene = this.$scrollmagic.scene({
           triggerElement: `#${para.id}`,
-          triggerHook: 0.40
+          triggerHook: this.trigger,
         })
         .on('enter', (e) => {
           this.setActiveElements(para.id)
@@ -55,7 +57,7 @@ export default {
           scene.addIndicators()
         }
         this.$scrollmagic.addScene(scene)
-
+        this.scenes.push(scene)
       })
     },
     setActiveElements(elemId) {

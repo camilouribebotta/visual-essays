@@ -18,7 +18,8 @@ export default new Vuex.Store({
     selectedItemID: null,
     height: 0,
     width: 0,
-    topMargin: 0
+    topMargin: 0,
+    trigger: 0.30
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
@@ -43,7 +44,8 @@ export default new Vuex.Store({
       state.height = viewport.height
       state.width = viewport.width
     },
-    setTopMargin (state, height) { state.topMargin = height }
+    setTopMargin (state, height) { state.topMargin = height },
+    setTrigger (state, pos) { state.trigger = pos }
   },
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
@@ -57,7 +59,8 @@ export default new Vuex.Store({
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
-    setTopMargin: ({ commit }, height) => commit('setTopMargin', height)
+    setTopMargin: ({ commit }, height) => commit('setTopMargin', height),
+    setTrigger: ({ commit }, pos) => commit('setTrigger', pos)
   },
   getters: {
     layout: state => state.layout,
@@ -73,7 +76,8 @@ export default new Vuex.Store({
     selectedItemID: state => state.selectedItemID,
     height: state => state.height,
     width: state => state.width,
-    topMargin: state => state.topMargin
+    topMargin: state => state.topMargin,
+    trigger: state => state.trigger
   },
   modules: {
   }

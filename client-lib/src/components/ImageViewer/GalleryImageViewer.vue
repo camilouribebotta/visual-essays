@@ -38,7 +38,7 @@ export default {
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
-    height() { return this.viewport.height - 66 }
+    height() { return this.viewport.width/2 * .85 }
   },
   mounted() {
     document.querySelectorAll('figure')
@@ -59,15 +59,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .lingallery figure {
     background-color: #000;
   }
 
+  /*
   .lingallery figure img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
   }
+  */
 </style>
