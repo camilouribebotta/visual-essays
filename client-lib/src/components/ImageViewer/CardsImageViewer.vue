@@ -89,7 +89,7 @@ export default {
   #cards-image-viewer {
     border-radius: 0;
     background-color: #000;
-    padding: 62px 8px 8px 8px;
+    padding: 8px 8px 8px 8px;
     overflow-y: scroll;
   }
 

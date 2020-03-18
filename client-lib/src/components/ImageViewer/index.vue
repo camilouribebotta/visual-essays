@@ -46,8 +46,8 @@ export default {
     top: 16px;
     left: 16px;*/
     background-color: #fbfdff;
-    border-radius: 4px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    /*border-radius: 4px;*/
+    /*box-shadow: 0 1px 5px rgba(0,0,0,0.65);*/
     padding: 20px 10px !important;
     height: 70px !important;
   }
