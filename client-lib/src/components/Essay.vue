@@ -207,7 +207,6 @@ export default {
     z-index: 10;
   }
 
-  /*
   .tagged.entity,
   .tagged.event,
   p.active-elem .inferred.entity,
@@ -217,6 +216,5 @@ export default {
     cursor: pointer;
     z-index: 10;
   }
-  */
 
 </style>

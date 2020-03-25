@@ -175,10 +175,10 @@ class Essay(object):
         logger.info(f'{round(now()-st,3)}: phase 1')
         st = now()
         self._update_entities_from_knowledgegraph()
-        self.add_entity_classes()
         logger.info(f'{round(now()-st,3)}: phase 2')
         st = now()        
         self._find_and_tag_items()
+        self.add_entity_classes()
         self. _update_image_links()
         self._remove_empty_paragraphs()
         self._add_heading_ids()
@@ -275,7 +275,7 @@ class Essay(object):
     def add_entity_classes(self):
         for entity in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag, {'class': 'entity'})]:
             if 'category' in self.markup.get(entity.attrs.get('data-itemid'), {}):
-                entity.attrs['class'].append(self.markup[entity.attrs['data-itemid']]['category'])
+                entity.attrs['class'] = sorted(set([cls for cls in entity.attrs['class'] if cls != 'entity'] + [self.markup[entity.attrs['data-itemid']]['category']]))
 
     def _find_ve_markup(self):
         ve_markup = {}
