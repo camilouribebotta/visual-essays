@@ -15,6 +15,8 @@ import 'leaflet.control.opacity'
 import '../assets/styles/main.css'
 import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
 
+import '../assets/js/leaflet-fa-markers.js'
+
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'

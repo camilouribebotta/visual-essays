@@ -8,6 +8,9 @@
 
 <script>
 import axios from 'axios'
+const iconMap = {
+  garden: 'leaf'
+}
 
 export default {
   name: 'MapViewer',
@@ -42,6 +45,16 @@ export default {
   mounted() {
     console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
     this.$nextTick(() => { this.createBaseMap() })
+    this.smallIcon = new L.Icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon.png',
+      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-icon-2x.png',
+      iconSize:    [25, 41],
+      iconAnchor:  [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      shadowSize:  [41, 41]
+    })
+    console.log(this.smallIcon)
   },
   methods: {
     createBaseMap() {
@@ -75,25 +88,54 @@ export default {
         this.$refs.mapWrapperInner.style.paddingLeft = `${(wrapperWidth - mapWidth)/2}px`
       }
     },
+    makeMarker(latlng, props) {
+      const faIcon = iconMap[props['marker-symbol']] || props['marker-symbol'] || 'circle'
+      return L.marker(latlng, {
+        icon: L.icon.fontAwesome({
+          iconClasses: `fa fa-${faIcon}`, // you _could_ add other icon classes, not tested.
+          markerColor: props['marker-color'] || props['fill'] || '#2C84CB',
+          markerFillOpacity: props['opacity'] || 1,
+          markerStrokeColor: props['stroke'] || props['marker-color']|| props['fill'] || '#2C84CB',
+          markerStrokeWidth: props['stroke-width'] || 0,
+          iconColor: props['marker-symbol-color'] || '#FFF',
+          iconXOffset: props['marker-symbol-xoffset'] || 0,
+          iconYOffset: props['marker-symbol-yoffset'] || 0
+        })
+      })
+    },
+    makePopup(props) {
+      const label = props.label || props.title
+      let popup = `<h1>${label}</h1>`
+      if (props.images) {
+        popup += `<img src="${props.images[0]}">`
+        popup = `<div style="width: 125px !important; height:135px !important;">${popup}</div>`
+      }
+      return popup
+    },
     loadGeojson(def) {
-      console.log('loadGeojson', def.id, def.active)
       axios.get(def.url)
         .then(resp => {
+          const self = this
           let geojson = L.geoJson(resp.data, {
             // Pop Up
             onEachFeature: function(feature, layer) {
-              layer.bindPopup(`<p>${feature.properties.title}</p>`)
+              if (feature.properties.label || def.title) {
+                layer.bindPopup(self.makePopup({ ...def, ...feature.properties}))
+              }
             },
             // Style
             style: function(feature) {
               return {
-                  fillColor: feature.properties['fill'] || '#fff',
-                  fillOpacity: feature.properties['fill-opacity'] || 0,
                   color: feature.properties['stroke'] || '#000',
                   weight: feature.properties['stroke-width'] || 1,
-                  opacity: feature.properties['opacity'] || 1
+                  opacity: feature.properties['stroke-opacity'] || 1,                  
+                  fillColor: feature.properties['fill'] || '#FFF',
+                  fillOpacity: feature.properties['fill-opacity'] || 0,
               }
-            }
+            },
+            pointToLayer: function(feature, latlng) {
+              return self.makeMarker(latlng, feature.properties)
+            },
           })
           this.geojson[def.id] = geojson
           this.mapLayers.geojson[def.id] = {
@@ -125,6 +167,21 @@ export default {
           }
         }
       })
+    },
+    getLocationMarkers() {
+      const markers = []
+      this.locations.forEach((location) => {
+        const marker = this.makeMarker(location.coords[0], location)
+        marker.addEventListener('click', (e) => {
+          const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
+          this.$store.dispatch('setSelectedItemID', elemId)
+        })   
+        markers.push(marker)
+        const mll = marker.getLatLng()
+        this.featuresById[location.id] = marker
+        this.markersByLatLng[`${mll.lat},${mll.lng}`] = location.id
+      })
+      return markers
     },
     syncMapwarperLayers() {
       Object.keys(this.mapLayers.mapwarper).forEach(cur => {
@@ -200,22 +257,6 @@ export default {
               }
           ).addTo(this.map)
     },
-    getLocationMarkers() {
-      const markers = []
-      this.locations.forEach((location) => {
-        const marker = this.$L.marker(location.coords[0])
-        // .bindPopup(this.makePopup(location))
-        marker.addEventListener('click', (e) => {
-          const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
-          this.$store.dispatch('setSelectedItemID', elemId)
-        })   
-        markers.push(marker)
-        const mll = marker.getLatLng()
-        this.featuresById[location.id] = marker
-        this.markersByLatLng[`${mll.lat},${mll.lng}`] = location.id
-      })
-      return markers
-    },
     syncMarkerGroups() {
       for (const groupName in this.mapLayers.markerGroups) {
         const markerGroup = this.mapLayers.markerGroups[groupName]
@@ -240,14 +281,6 @@ export default {
         this.syncMarkerGroups()
         this.setControls()
       }
-    },
-    makePopup(item) {
-      let pu = `<h1>${item.label || item.title}</h1>`
-      if (item.images) {
-        pu += `<img src="${item.images[0]}">`
-        pu = `<div style="width: 125px !important; height:135px !important;">${pu}</div>`
-      }
-      return pu
     }
   },
   watch: {
@@ -299,6 +332,7 @@ export default {
 </script>
 
 <style>
+
 
     .wrapper {
         display: inherit;
@@ -366,7 +400,29 @@ export default {
         right: unset;
     }
 
+  .leaflet-fa-markers {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    text-align: center;
+    margin-left: -15px;
+    margin-top: -50px;
+    width: 160px;
+    height: 50px;
+  }
 
-  
+  .leaflet-fa-markers .marker-icon-svg {
+    position: absolute;
+  }
+
+  .leaflet-fa-markers .feature-icon {
+    position: absolute;
+    font-size: 18px;
+    line-height: 0px;
+    left: 8px;
+    top: 6px;
+    display: inline-block;
+  }
 
 </style>

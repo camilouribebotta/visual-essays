@@ -581,6 +581,7 @@ def add_vue_app(html, js_lib):
         #'https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.css',
 
         'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
+        # 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
         # 'https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css',
         # 'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
         ]:
@@ -596,6 +597,7 @@ def add_vue_app(html, js_lib):
 
         # 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
         # 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js',
         js_lib
         ]:
         lib = soup.new_tag('script')

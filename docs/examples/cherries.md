@@ -21,9 +21,17 @@
 
 <var title="The Tale of Genji" id="Q8269"></var>
 
-<var title="Washington, D. C." id="Q61"></var>
+<var title="Washington, D. C." 
+     id="Q61"
+     data-fill="#FF0000"
+     data-marker-symbol="landmark"
+     ></var>
 
-<var title="West Yorkshire" id="Q23083"></var>
+<var title="West Yorkshire"
+     id="Q23083"
+     data-fill="#FF0000"
+     data-marker-symbol="leaf"
+     ></var>
 
 
 ## Cherry Blossom
