@@ -16,6 +16,7 @@ import '../assets/styles/main.css'
 import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
 
 import '../assets/js/leaflet-fa-markers.js'
+import '../assets/js/fontawesome-pro.min.js'
 
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'

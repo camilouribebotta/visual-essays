@@ -597,7 +597,7 @@ def add_vue_app(html, js_lib):
 
         # 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
         # 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js',
+        # 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js',
         js_lib
         ]:
         lib = soup.new_tag('script')
