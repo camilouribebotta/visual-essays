@@ -136,6 +136,7 @@
         }
       },
       itemClickHandler(e) {
+        e.stopPropagation()
         const elemId = e.target.attributes['data-itemid'].value
         this.$store.dispatch('setSelectedItemID', elemId)
       }

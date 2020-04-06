@@ -19,7 +19,7 @@ export default new Vuex.Store({
     height: 0,
     width: 0,
     topMargin: 0,
-    trigger: 0.30
+    trigger: 0.25
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
