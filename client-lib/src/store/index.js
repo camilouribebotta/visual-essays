@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     essayHTML: undefined,
     layout: undefined,
-    // visualizerIsOpen: false,
+    showBanner: false,
     debug: false,
     context: undefined,
     content: [],
@@ -19,12 +19,12 @@ export default new Vuex.Store({
     height: 0,
     width: 0,
     topMargin: 0,
-    trigger: 0.20
+    trigger: 0.60
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setLayout (state, layout) { state.layout = layout },
-    // setVisualizerIsOpen (state, isOpen) { state.visualizerIsOpen = isOpen },
+    setShowBanner (state, showBanner) { state.showBanner = showBanner },
     setContext (state, context) { state.context = context },
     setDebug (state, debug) { state.debug = debug },
     setContent (state, elems) { state.content = elems },
@@ -50,7 +50,7 @@ export default new Vuex.Store({
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
-    // setVisualizerIsOpen: ({ commit }, isOpen) => commit('setVisualizerIsOpen', isOpen),
+    setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
     setContext: ({ commit }, context) => commit('setContext', context),
     setDebug: ({ commit }, debug) => commit('setDebug', debug),
     setContent: ({ commit }, content) => commit('setContent', content),
@@ -64,8 +64,8 @@ export default new Vuex.Store({
   },
   getters: {
     layout: state => state.layout,
+    showBanner: state => state.showBanner,
     essayHTML: state => state.essayHTML,
-    // visualizerIsOpen: state => state.visualizerIsOpen,
     context: state => state.context,
     debug: state => state.debug,
     content: state => state.content,

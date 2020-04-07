@@ -46,7 +46,9 @@
       activeTab: undefined,
       hoverElemId: undefined,
       selected: undefined,
-      viewerWidth: 0
+      viewerWidth: 0,
+      header: undefined,
+      position: 'relative'
     }),
     computed: {
       viewportHeight() { return this.$store.getters.height },
@@ -64,10 +66,40 @@
     },
     mounted() {
       console.log('VerticalViewer.mounted')
+      this.header = document.getElementById('appbar')
+      if (!this.$store.getters.showBanner) {
+          this.$refs.viewer.$el.style.top = '0px'
+          this.$refs.viewer.$el.style.position = 'fixed'
+          this.position = 'fixed'
+      }
+      document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
       this.$nextTick(() => this.init())
     },
     methods: {
+      throttle(callback, interval) {
+        let enableCall = true
+
+        return function(...args) {
+          if (!enableCall) return
+          enableCall = false
+          callback.apply(this, args)
+          setTimeout(() => enableCall = true, interval)
+        }
+      },
+      mouseMove(e) {
+        if (this.header.clientHeight === 56 && this.position === 'relative') {
+          this.$refs.viewer.$el.style.top = '56px'
+          this.$refs.viewer.$el.style.position = 'fixed'
+          this.position = 'fixed'
+          // console.log(`position=${this.position} ${this.header.offsetHeight}`)
+        } else if (this.position === 'fixed' && this.header.offsetHeight > 56) {
+          this.$refs.viewer.$el.style.top = '0px'
+          this.$refs.viewer.$el.style.position = 'relative'
+          this.position = 'relative'
+          // console.log(`position=${this.position} ${this.header.offsetHeight}`)
+        }
+      },
       waitForEssay() {
         console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
         if (document.getElementById('essay')) {
@@ -174,7 +206,7 @@
 
   #viewer {
     background-color: #000000;
-    position: fixed;
+    /* position: fixed; */
     height: 100vh;
     box-shadow: none;
     border-radius: 0;

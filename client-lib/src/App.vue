@@ -1,6 +1,36 @@
 <template>
   <v-app id="visual-essay" :class="path">
-    <component v-bind:is="layout"></component>
+
+    <v-card tile class="overflow-hidden">
+      <v-app-bar
+        v-if="showBanner"
+        id="appbar"
+        app
+        prominent
+        :height="bannerHeight"
+        elevate-on-scroll
+        fade-img-on-scroll
+        dark
+        shrink-on-scroll
+        src="https://picsum.photos/1200/225"
+        scroll-target="#scrollableContent"
+        :scroll-threshold="scrollThreshold"
+      >
+        <v-toolbar-title>test</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-app-bar>
+
+      <v-sheet
+        id="scrollableContent"
+        class="overflow-y-auto"
+      >
+        <v-container ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px`">
+          <component v-bind:is="layout"></component>
+        </v-container>
+
+      </v-sheet>
+
+    </v-card>
     <entity-infobox-dialog/>
   </v-app>
 </template>
@@ -25,10 +55,15 @@ export default {
     'vtr': VerticalLayout
   },
   data: () => ({
-    layout: undefined
+    layout: undefined,
+    bannerHeight: 600,
+    scrollThreshold: 550
   }),
   computed: {
-    viewportWidth() { return this.$store.getters.width }
+    viewportWidth() { return this.$store.getters.width },
+    height() { return this.$store.getters.height },
+    showBanner() { this.$store.getters.showBanner },
+    essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
   watch: {
     viewportWidth: {
@@ -70,6 +105,10 @@ export default {
   pre {
     margin-left: 36px;
     margin-bottom: 12px;
+  }
+
+  .v-toolbar, .v-footer, .v-navigation-drawer {
+    z-index: 200 !important;
   }
 
 </style>
