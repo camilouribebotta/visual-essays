@@ -19,12 +19,17 @@ export default new Vuex.Store({
     height: 0,
     width: 0,
     topMargin: 0,
-    trigger: 0.60
+    trigger: 0.25
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setLayout (state, layout) { state.layout = layout },
-    setShowBanner (state, showBanner) { state.showBanner = showBanner },
+    setShowBanner (state, showBanner) { 
+      state.showBanner = showBanner
+      if (state.showBanner) {
+        state.trigger = 0.6
+      }
+    },
     setContext (state, context) { state.context = context },
     setDebug (state, debug) { state.debug = debug },
     setContent (state, elems) { state.content = elems },

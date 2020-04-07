@@ -16,7 +16,7 @@
         scroll-target="#scrollableContent"
         :scroll-threshold="scrollThreshold"
       >
-        <v-toolbar-title>test</v-toolbar-title>
+        <v-toolbar-title>Visual essay</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-app-bar>
 
@@ -62,8 +62,11 @@ export default {
   computed: {
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
-    showBanner() { this.$store.getters.showBanner },
+    showBanner() { return this.$store.getters.showBanner },
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
+  },
+  mounted() {
+    console.log('App.mounted', this.showBanner)
   },
   watch: {
     viewportWidth: {
