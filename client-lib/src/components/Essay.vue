@@ -54,7 +54,7 @@ export default {
           }
         })
         if (this.debug) {
-          scene.addIndicators()
+          //scene.addIndicators()
         }
         this.$scrollmagic.addScene(scene)
         this.scenes.push(scene)
@@ -147,9 +147,15 @@ export default {
     padding-right: 32px;
   }
 
+  .vtl #essay  {
+    padding-right: 0px;
+  }
+
   #essay h1, h2, h3, h4, h5, h6 {
     padding-left: 32px;
   }
+
+
 
   #essay p {
     padding-left: 20px;
@@ -159,9 +165,23 @@ export default {
     z-index: 1;
   }
 
+  .vtl #essay p {
+    padding-right: 20px;
+    border-left: none;
+    border-right: 12px solid white;
+    font-size: 1.4em;
+    margin-bottom: 2.5em;
+    padding-left: 32px;
+  }
+
   #essay p.active-elem {
     border-left: 12px solid #1D5BC2;
     background-color: #fafafa;
+  }
+
+  .vtl #essay p.active-elem {
+    border-right: 12px solid #1D5BC2;
+    border-left: none;
   }
   
   #essay p:hover {
