@@ -23,7 +23,7 @@ export function addActivator(root, id, top, title, clickHandler) {
         style: {
           position: 'absolute',
           top: `${top}px`,
-          left: '-20px',
+          left: '0px',
           cursor: 'pointer'
         }
       },

@@ -1,16 +1,12 @@
 <template>
   <v-container>
-    <v-row no-gutters>
-      <v-col
-              class="map-pane"
-      >
-        <vertical-viewer/>
-      </v-col>
-      <v-col
-              class="essay-pane"
-      >
-        <essay/>
-      </v-col>
+    <v-row no-gutters v-if="layout === 'vtl'">
+      <v-col class="essay-pane"><essay/></v-col>
+      <v-col class="map-pane"><vertical-viewer/></v-col>
+    </v-row>
+    <v-row no-gutters v-else>
+      <v-col class="map-pane"><vertical-viewer/></v-col>
+      <v-col class="essay-pane"><essay/></v-col>
     </v-row>
   </v-container>
 </template>
@@ -21,6 +17,9 @@ export default {
   name: 'vertical-layout',
   components: {
     Essay
+  },
+  computed: {
+    layout() { return this.$store.getters.layout }
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-card ref="viewer" id="viewer" :style="style" >
 
-    <v-tabs v-if="visualizerIsOpen"
+    <v-tabs
       ref="tabs"
       v-model="activeTab"
       center-active
@@ -44,7 +44,6 @@
       spacer: undefined,
       tabs: [],
       activeTab: undefined,
-      visualizerIsOpen: true,
       hoverElemId: undefined,
       selected: undefined,
       viewerWidth: 0
@@ -58,12 +57,13 @@
       },
       style() {
         return {
-          display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
+          display: this.$refs.viewer ? 'block' : 'none',
           width: `${this.viewerWidth}px`
         }
       }
     },
     mounted() {
+      console.log('VerticalViewer.mounted')
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
       this.$nextTick(() => this.init())
     },
@@ -106,10 +106,8 @@
               if (prior) { prior.style.display = 'none' }
             }
             this.hoverElemId = undefined
-            if (!this.visualizerIsOpen) {
-              this.hoverElemId = elemId
-              document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
-            }
+            this.hoverElemId = elemId
+            document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
           })
         })
         this.addSpacer()
@@ -143,9 +141,11 @@
     },
     watch: {
       groups() {
+        console.log('VerticalViewer.watch.groups')
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
+        console.log(this.tabs)
         this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight() {
@@ -159,27 +159,11 @@
       activeElement(active, prior) {
         if (prior) {
           this.removeItemClickHandlers(prior)
-          // document.querySelector(`[data-id="${prior}"]`).style.display = 'none'
-          if (this.visualizerIsOpen) {
-            document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-          }
+          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
         if (active) {
-          // document.querySelector(`[data-id="${active}"]`).style.display = 'inline-block'
-          if (this.visualizerIsOpen) {
-            document.getElementById(active).classList.add('active-elem')
-          }
+          document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)
-        }
-      },
-      visualizerIsOpen(isOpen) {
-        if (this.$refs.viewer) {
-          this.$refs.viewer.$el.style.display = isOpen ? 'block' : 'none'
-        }
-        if (!isOpen) {
-          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
-        } else if (this.activeElement) {
-          document.getElementById(this.activeElement).classList.add('active-elem')
         }
       }
     }

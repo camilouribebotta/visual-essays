@@ -6,7 +6,7 @@ import VueYoutube from 'vue-youtube'
 import App from './App.vue'
 import store from './store'
 import 'vuetify/dist/vuetify.min.css'
-import Lingallery from 'lingallery';
+import Lingallery from '../assets/js/lingallery.umd.min.js'
 
 import 'leaflet'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'

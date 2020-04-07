@@ -18,7 +18,11 @@ export default {
   },
   components: {
     'horizontal': HorizontalLayout,
-    'vertical': VerticalLayout
+    'hc': HorizontalLayout,
+    'ho': HorizontalLayout,
+    'vertical': VerticalLayout,
+    'vtl': VerticalLayout,
+    'vtr': VerticalLayout
   },
   data: () => ({
     layout: undefined

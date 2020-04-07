@@ -29,18 +29,28 @@ export default {
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
     items() {
-      return this.images.map(img => { return {
-        id: img.id,
-        src: img.url,
-        thumbnail: img.thumbnail || img.url,
-        caption: img.title
-      }})
+      console.log('images')
+      this.$forceUpdate()
+      const items = this.images.map(image => { 
+        const mapped = {
+          id: image.id,
+          src: image.url,
+          thumbnail: image.thumbnail || image.url,
+          caption: image.title
+        }
+        console.log(mapped)
+        return mapped
+      })
+      this.currentId = items[0].id
+      console.log(this.currentId)
+      return items
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
     height() { return this.viewport.width/2 * .85 }
   },
   mounted() {
+    console.log('GalleryImageViewer.mounted')
     document.querySelectorAll('figure')
       .forEach(fig => {
         fig.addEventListener('click', (e) => {
@@ -55,6 +65,9 @@ export default {
           }
         })
       })
+  },
+  destroyed() {
+    console.log('GalleryImageViewer.destroyed')
   }
 }
 </script>

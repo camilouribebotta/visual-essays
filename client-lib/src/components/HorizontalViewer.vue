@@ -32,7 +32,7 @@
 
     <v-icon
       size="30"
-      style="color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;"
+      style="background:white;color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;z-index:1000;"
       @click="closeViewer"
     >
       mdi-close
@@ -43,7 +43,8 @@
 <script>
   import { addActivator } from './Activator'
   import { elemIdPath, itemsInElements } from '../utils'
-  const tabOrder = ['map', 'image', 'video', 'location', 'place', 'person', 'plant', 'building', 'written_work', 'fictional_character', 'entity']
+  // const tabOrder = ['map', 'image', 'video', 'location', 'place', 'person', 'plant', 'building', 'written_work', 'fictional_character', 'entity']
+  const tabOrder = ['map', 'image', 'video']
 
   export default {
     name: 'Viewer',
@@ -71,11 +72,16 @@
       }
     },
     mounted() {
+      if (this.$store.getters.layout === 'ho') {
+          this.visualizerIsOpen = true
+          document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
+      }
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
       // this.waitForEssay()
       this.$nextTick(() => this.init())
     },
     methods: {
+      /*
       waitForEssay() {
         console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
         if (document.getElementById('essay')) {
@@ -84,6 +90,7 @@
           setTimeout(() => { this.waitForEssay() }, 1000)
         }
       },
+      */
       init() {
         Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
           para.title = elemIdPath(para.id).join(',')
@@ -92,6 +99,7 @@
             items: itemsInElements(elemIdPath(para.id), this.allItems)
           }
           // Display/enable activator when cursor hovers over paragraph element
+          /*
           para.addEventListener('mouseenter', (e) => {
             const elemId = e.toElement.id
             if (this.hoverElemId && this.hoverElemId !== elemId) {
@@ -104,6 +112,7 @@
               document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
             }
           })
+          */
           /*
           para.addEventListener('mouseleave', (e) => {
             const elemId = e.toElement.id
@@ -114,9 +123,26 @@
             this.hoverElemId = undefined
           })
           */
+          para.addEventListener('click', (e) => {
+            this.visualizerIsOpen = true
+            const paraId = e.target.tagName === 'P'
+              ? e.target.id
+              : e.target.parentElement.id
+            if (this.paragraphs[paraId]) {
+              let offset = 100
+              let scrollable = document.getElementById('scrollableContent')
+              if (scrollable) {
+                offset = -80
+              } else {
+                scrollable = window
+              }
+              const scrollTo = this.paragraphs[paraId].top - offset
+              scrollable.scrollTo(0, scrollTo, )
+            }
+          })
         })
         this.addSpacer()
-        this.addActivators()
+        // cthis.addActivators()
       },
       addSpacer() {
         // Adds a spacer element that expands and contracts to match the size of the visualizer so
@@ -159,20 +185,39 @@
         const selectedParaId = e.target.parentElement.attributes['data-id'].value
         this.openViewer(selectedParaId)
       },
+      /*
       addItemClickHandlers(elemId) {
         document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
           entity.addEventListener('click', this.itemClickHandler)
         })
       },
       removeItemClickHandlers(elemId) {
-      const elem = document.getElementById(elemId)
+        const elem = document.getElementById(elemId)
         if (elem) {
           document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
             entity.removeEventListener('click', this.itemClickHandler)
           })
         }
       },
+      */
+      addItemClickHandlers(elemId) {
+        document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
+          entity.addEventListener('click', this.itemClickHandler)
+        })
+      },
+      removeItemClickHandlers(elemId) {
+        const elem = document.getElementById(elemId)
+        if (elem) {
+          document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
+            entity.removeEventListener('click', this.itemClickHandler)
+          })
+        }
+      },
       itemClickHandler(e) {
+        e.stopPropagation()
+        const elemId = e.target.attributes['data-itemid'].value
+        this.$store.dispatch('setSelectedItemID', elemId)
+        /*
         const selectedItemId = e.toElement.attributes['data-itemid'].value 
         let found = false
         for (let groupId in this.groups) {
@@ -186,6 +231,7 @@
         }
         this.selected = selectedItemId
         console.log(`itemClickHandler: selected=${this.selected} tab=${this.activeTab}`)
+        */
       }
     },
     watch: {
@@ -196,6 +242,14 @@
         if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
           this.activeTab = availableGroups.length > 0 ? availableGroups[0] : undefined
         }
+      },
+      groups() {
+        console.log('HorizontalViewer.watch.groups')
+        const availableGroups = []
+        tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
+        this.tabs = availableGroups
+        console.log(this.tabs)
+        this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight() {
         if (this.spacer) {
@@ -211,17 +265,15 @@
       activeElement(active, prior) {
         if (prior) {
           this.removeItemClickHandlers(prior)
-          // document.querySelector(`[data-id="${prior}"]`).style.display = 'none'
           if (this.visualizerIsOpen) {
             document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
           }
         }
         if (active) {
-          this.addItemClickHandlers(active)
-          // document.querySelector(`[data-id="${active}"]`).style.display = 'inline-block'
           if (this.visualizerIsOpen) {
             document.getElementById(active).classList.add('active-elem')
           }
+          this.addItemClickHandlers(active)
         }
       },
       visualizerIsOpen(isOpen) {
