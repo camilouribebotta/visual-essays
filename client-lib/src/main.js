@@ -7,6 +7,7 @@ import App from './App.vue'
 import store from './store'
 import 'vuetify/dist/vuetify.min.css'
 import Lingallery from '../assets/js/lingallery.umd.min.js'
+import marked from 'marked'
 
 import 'leaflet'
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
@@ -104,6 +105,7 @@ function initApp() {
   })
   Vue.use(VueYoutube)
   Vue.prototype.$L = L
+  Vue.prototype.$marked = marked
 
   Object.entries(components).forEach(component => {
     component[1].mixins = [myMixin]

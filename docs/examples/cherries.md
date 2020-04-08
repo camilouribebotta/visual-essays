@@ -41,10 +41,11 @@
 
 Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the <var id="Q956781">Tidal Basin</var>, cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale.
 <var title="West Yorkshire" id="Q23083"></var>
+<var data-primary="image"></var>
 <var data-image
-     data-title="Ornamental Cherry Tree In Full Bloom"
-     data-url="https://upload.wikimedia.org/wikipedia/commons/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG"
-     data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG/320px-Ornamental_Cherry_Tree_In_Full_Bloom.JPG"></var>
+     title="**Tidal Basin** cherry trees"
+     data-url="https://upload.wikimedia.org/wikipedia/commons/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"
+     data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg/155px-Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"></var>
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C.
 <var data-image
@@ -58,10 +59,6 @@ Although cherry blossoms became beloved fixtures of the city of Washington, atti
      title="Cherry blossoms at POSTECH"
      data-url="https://upload.wikimedia.org/wikipedia/commons/2/22/Cherry_blossoms_at_POSTECH.jpeg"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cherry_blossoms_at_POSTECH.jpeg/320px-Cherry_blossoms_at_POSTECH.jpeg"></var>
-<var data-image
-     title="Tidal Basin cherry trees" 
-     data-url="https://upload.wikimedia.org/wikipedia/commons/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"
-     data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg/155px-Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"></var>
 <var data-image 
      title="Rippl Sour Cherry Tree in Blossom 1909" 
      data-url="https://upload.wikimedia.org/wikipedia/commons/1/13/Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg"

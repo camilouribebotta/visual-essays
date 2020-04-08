@@ -5,6 +5,7 @@
       :iid.sync="currentId"
       :width="width"
       :height="height"
+      :defaultFit="defaultFit"
       :items="items"
       :showThumbnails="images.length > 1"
       disableImageClick
@@ -24,25 +25,27 @@ export default {
   },
   data: () => ({
     currentId: undefined,
+    defaultFit: 'cover',
     img: {}
   }),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
     items() {
       console.log('images')
-      this.$forceUpdate()
       const items = this.images.map(image => { 
         const mapped = {
           id: image.id,
           src: image.url,
           thumbnail: image.thumbnail || image.url,
-          caption: image.title
+          caption: image.title ? this.$marked(image.title) : '',
+          fit: image.fit || 'cover' // 'cover', 'contain;, 'fill', 'scale-down', or null
         }
-        console.log(mapped)
         return mapped
       })
       this.currentId = items[0].id
-      console.log(this.currentId)
+      this.defaultFit = items[0].fit || 'cover'
+      console.log('defaultFit', this.defaultFit)
+      console.log(items)
       return items
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },

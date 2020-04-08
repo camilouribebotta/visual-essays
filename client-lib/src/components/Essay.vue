@@ -54,7 +54,7 @@ export default {
           }
         })
         if (this.debug) {
-          //scene.addIndicators()
+          scene.addIndicators()
         }
         this.$scrollmagic.addScene(scene)
         this.scenes.push(scene)
