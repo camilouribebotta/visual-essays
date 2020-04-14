@@ -43,23 +43,29 @@ Cherry blossoms have formed an integral part of the identity of Washington, D. C
 <var title="West Yorkshire" id="Q23083"></var>
 <var data-primary="image"></var>
 <var data-image
-     title="**Tidal Basin** cherry trees"
+     title="Tidal Basin cherry trees"
+     data-fit="cover"
      data-url="https://upload.wikimedia.org/wikipedia/commons/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg/155px-Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"></var>
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C.
+<var data-primary="image"></var>
 <var data-image
+     data-fit="cover"
      data-title="Ornamental Cherry Tree In Full Bloom"
      data-url="https://upload.wikimedia.org/wikipedia/commons/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG/320px-Ornamental_Cherry_Tree_In_Full_Bloom.JPG"></var>
 <var data-image 
+     data-fit="contain"
      title="Cherry trees in Daw Nan Kyi hill" data-url="https://upload.wikimedia.org/wikipedia/commons/b/bb/Cherry_trees%2C_You_can_see_in_Daw_Nan_Kyi_hill.jpg"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Cherry_trees%2C_You_can_see_in_Daw_Nan_Kyi_hill.jpg/306px-Cherry_trees%2C_You_can_see_in_Daw_Nan_Kyi_hill.jpg"></var>
 <var data-image
+     data-fit="cover"
      title="Cherry blossoms at POSTECH"
      data-url="https://upload.wikimedia.org/wikipedia/commons/2/22/Cherry_blossoms_at_POSTECH.jpeg"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cherry_blossoms_at_POSTECH.jpeg/320px-Cherry_blossoms_at_POSTECH.jpeg"></var>
 <var data-image 
+     data-fit="cover"
      title="Rippl Sour Cherry Tree in Blossom 1909" 
      data-url="https://upload.wikimedia.org/wikipedia/commons/1/13/Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg"
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg/320px-Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg"></var>

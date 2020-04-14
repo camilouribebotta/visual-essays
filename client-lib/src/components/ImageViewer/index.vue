@@ -43,16 +43,25 @@ export default {
 <style>
 
   #image-viewer-controls {
-    /*z-index: 300;
+    z-index: 300;
     position: absolute;
     height: 36px;
-    top: 16px;
-    left: 16px;*/
-    background-color: #fbfdff;
+    top: 0px;
+    left: 16px;
+    /* background-color: #fbfdff; */
     /*border-radius: 4px;*/
     /*box-shadow: 0 1px 5px rgba(0,0,0,0.65);*/
     padding: 20px 10px !important;
     height: 70px !important;
+  }
+
+  #image-viewer-mode-control {
+    position: relative;
+    top: -10px;
+    background: white;
+    padding: 8px;
+    border-radius: 8px;
+    opacity: 1.0;
   }
 
   .v-application .accent--text {
