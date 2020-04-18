@@ -102,23 +102,23 @@ export function itemsInElements(elemIds, items) {
 export function groupItems(items) {
   const exclude = ['essay']
   const groups = {}
-  let lastMap = undefined
+  const maps = items.filter(item => item.type === 'map')
+  let lastMap = maps.length > 0 ? { ...maps[maps.length-1], ...{layers:{mapwarper:[], geojson:[]}} } : undefined
+  if (lastMap) {
+    groups.map = {component: 'gmap', label: 'Map', items: [lastMap]}
+  }
   items
     .filter(item => !exclude.includes(item.type))
     .forEach(item => {
       if (item.type === 'entity') {
         if (!groups[item.category]) { groups[item.category] = {component: 'entity', label: `${item.category}s`, items: []} }
         groups[item.category].items.push(item)
-      } else if (item.type === 'map') {
-        if (!groups[item.type]) { groups[item.type] = {component: `g${item.type}`, label: 'Map', items: []}  }
-        groups[item.type].items.push(item)
-        lastMap = item
-        lastMap.layers = {mapwarper:[], geojson:[]}
       } else if (item.type === 'map-layer') {
+        console.log('map-layer', item, lastMap)
         if (lastMap) {
           if (item['mapwarper-id']) {
             lastMap.layers.mapwarper.push(item)
-          } else if (item['url']) {
+          } else if (item.url) {
             lastMap.layers.geojson.push(item)
           }
         }

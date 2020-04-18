@@ -1,88 +1,127 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title></title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+  </style>
 </head>
-
 <body>
   <div id="app">
-    <v-app id="inspire">
-      <v-card class="mx-auto" max-width="500">
-        <v-system-bar color="indigo darken-2" dark>
+    <v-app>
+
+      <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
+        <v-list dense>
+          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="clicked(menuItem.file)">
+            <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
+            <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+  
+      <v-card tile class="overflow-hidden">
+        <v-app-bar
+          id="appbar"
+          app
+          prominent
+          :height="bannerHeight"
+          elevate-on-scroll
+          fade-img-on-scroll
+          dark
+          shrink-on-scroll
+          :src="banner"
+          scroll-target="#scrollableContent"
+          :scroll-threshold="scrollThreshold"
+        >
+  
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+          <v-toolbar-title>{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
+        </v-app-bar>
+  
+        <v-sheet id="scrollableContent" class="overflow-y-auto">
+          <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height: ${height}px;`">
+            <v-layout>
+              <v-flex><div ref="content" v-html="html"></div></v-flex>
+            </v-layout>
+          </v-container>
+        </v-sheet>
+  
+        <v-footer ref="footer" :fixed="fixed" app>
+          <v-flex class="text-xs-left"></v-flex>
+        </v-footer>
 
-          <v-icon>mdi-window-minimize</v-icon>
-
-          <v-icon>mdi-window-maximize</v-icon>
-
-          <v-icon>mdi-close</v-icon>
-        </v-system-bar>
-
-        <v-toolbar color="indigo" dark>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-          <v-toolbar-title>Discover</v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-btn icon>
-            <v-icon>mdi-magnify</v-icon>
-          </v-btn>
-        </v-toolbar>
-
-        <v-container fluid>
-          <v-row dense>
-            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-              <v-card>
-                <v-img :src="card.src" class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)" height="200px">
-                  <v-card-title v-text="card.title"></v-card-title>
-                </v-img>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                  </v-btn>
-
-                  <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
       </v-card>
     </v-app>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js"></script>
+
+  <script src="http://localhost:8080/lib/visual-essays.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
   <script>
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
       data: () => ({
-        cards: [
-          { title: 'Pre-fab homes', src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg', flex: 12 },
-          { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 6 },
-          { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 6 },
+        drawer: false,
+        fixed: false,
+        nav: [
+          { file: 'index', title: 'Home', icon: 'mdi-home' },
+          { file: 'about', title: 'About', icon: 'mdi-information' },
+          { file: 'help', title: 'Help', icon: 'mdi-help-circle' },
+          { file: 'contact', title: 'Contact', icon: 'mdi-contact-mail' },
+          { file: 'resources', title: 'Resources', icon: 'mdi-library' }
         ],
+        title: 'Visual Essay',
+        banner: 'https://picsum.photos/1200/225',
+        bannerHeight: 100,
+        scrollThreshold: 100,
+        height: 1000,
+        essayTopMargin: 100,
+        html: undefined,
+        service: 'TBD',
+        acct: undefined,
+        repo: undefined,
       }),
+      mounted() {
+        console.log(window.location)
+        const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(1)
+        let file
+        if (window.location.hostname === 'localhost') {
+          this.service = 'http://localhost:5000'
+        }
+        if (this.service === 'http://localhost:5000' && path.len > 1) {
+          file = path[0] !== '' ? path[0] : undefined
+        } else {
+          this.acct = path[0] !== '' ? path[0] : undefined
+          this.repo = path.length > 1 ? path[1] : undefined
+          file = path.length > 2 ? path[2] : undefined
+        }
+        console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo} file=${file}`)
+        this.load(file)
+      },
+      methods: {
+        clicked(title) {
+          console.log('clicked', title)
+          this.drawer = false
+          this.load(title)
+        },
+        load(file) {
+          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
+          console.log(`load ${url}`)
+          fetch(url).then(resp => resp.text())
+          .then(html => {
+            this.html = html
+            this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
+          })
+        }
+      },
+      watch: {
+      }
     })
   </script>
 </body>
-
 </html>

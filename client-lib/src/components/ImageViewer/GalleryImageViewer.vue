@@ -50,7 +50,7 @@ export default {
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
-    height() { return this.viewport.height - (this.items.length === 1 ? 0 : 65) }
+    height() { return this.viewport.height - (this.items.length === 1 ? 0 : 121) }
   },
   mounted() {
     console.log('GalleryImageViewer.mounted')

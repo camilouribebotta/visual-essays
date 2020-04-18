@@ -10,6 +10,8 @@ import Lingallery from '../assets/js/lingallery.umd.min.js'
 import marked from 'marked'
 
 import 'leaflet'
+import 'leaflet-polylinedecorator'
+
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
@@ -18,6 +20,8 @@ import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } 
 
 import '../assets/js/leaflet-fa-markers.js'
 import '../assets/js/fontawesome-pro.min.js'
+
+import 'leaflet.control.opacity'
 
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
@@ -42,6 +46,7 @@ const myMixin = {
   }
 }
 
+console.log('main.js')
 let vm
 
 let rtime
@@ -120,6 +125,7 @@ function initApp() {
     vuetify: new Vuetify()
   })
   vm.$store.dispatch('setEssayHTML', undefined)
+
   vm.$store.dispatch('setContent', [])
   vm.$store.dispatch('setItems', [])
 
@@ -130,15 +136,21 @@ function initApp() {
 
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', qargs.layout || config.layout)
+  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'vtl' )
   vm.$store.dispatch('setShowBanner', qargs.showBanner === 'true' || qargs.showBanner === '')
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
-  vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
+  // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
-  vm.$mount('#essay')
+  const essayMetadata = vm.$store.getters.items.find(item => item.type === 'essay')
+  if (window.NUXT && essayMetadata) {
+    console.log('essayMetadata', essayMetadata)
+    window.NUXT.$store.dispatch('setBanner', essayMetadata.banner)
+  }
 
+  vm.$mount('#essay')
+  
   setViewport()
   window.addEventListener('resize', () => {
     rtime = new Date()
@@ -149,32 +161,50 @@ function initApp() {
   })
 }
 
-//document.addEventListener('DOMContentLoaded', () => {
-  let name
-  let pathname = window.location.pathname
-  const waitForContent = () => {
-    // console.log('waitForContent')
+let current = undefined
+const waitForContent = () => {
+  console.log(`waitForContent: current=${current} window._essay=${window._essay}`)
+  const essayElem = document.getElementById('essay')
+  if (!window._essay && essayElem && essayElem.innerText.length > 0) {
+    window._essay = essayElem.dataset.name
+  }
+  if (current != window._essay) {
+    current = window._essay
     if (vm) {
-      if (pathname !== window.location.pathname) {
-        pathname = window.location.pathname
-        console.log('remove vm')
-        vm = vm.$destroy()
-      }
-    } else {
-      const essayElem = document.getElementById('essay')
-      // console.log('essay', name, essayElem, essayElem.innerText.length)
-      if (essayElem && essayElem.dataset.name !== name && essayElem.innerText.length > 0) {
-        initApp()
-        vm.$store.getters.items.forEach((item) => {
-          if (item.type === 'essay' && item.title) {
-            essayElem.title = item.title
-            console.log(essayElem.title)
-          }
-        })
-        pathname = window.location.pathname
-        name = essayElem.dataset.name
-      }
+      vm = vm.$destroy()
+    }
+    console.log(`essay.name=${current}`)
+    initApp()
+  }
+}
+setInterval(() => waitForContent(), 250)
+
+/*
+let name
+let pathname = window.location.pathname
+const waitForContent = () => {
+  // console.log('waitForContent')
+  if (vm) {
+    if (pathname !== window.location.pathname) {
+      pathname = window.location.pathname
+      console.log('remove vm')
+      vm = vm.$destroy()
+    }
+  } else {
+    const essayElem = document.getElementById('essay')
+    // console.log('essay', name, essayElem, essayElem.innerText.length)
+    if (essayElem && essayElem.dataset.name !== name && essayElem.innerText.length > 0) {
+      initApp()
+      vm.$store.getters.items.forEach((item) => {
+        if (item.type === 'essay' && item.title) {
+          essayElem.title = item.title
+          console.log(essayElem.title)
+        }
+      })
+      pathname = window.location.pathname
+      name = essayElem.dataset.name
     }
   }
-  setInterval(() => waitForContent(), 250)
-//}, false)
+}
+setInterval(() => waitForContent(), 250)
+*/

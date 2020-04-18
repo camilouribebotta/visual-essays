@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { elemIdPath, itemsInElements, groupItems } from '../utils'
+import { elemIdPath, itemsInElements, groupItems, eqSet } from '../utils'
 
 export default {
   name: 'essay',
@@ -16,7 +16,12 @@ export default {
     debug() { return this.$store.getters.debug },
     viewportWidth() { return this.$store.getters.width },
     allItems() { return this.$store.getters.items },
-    trigger() { return this.$store.getters.trigger }
+    contentStartPos() { return this.$store.getters.contentStartPos },
+    activeElements() { return this.$store.getters.activeElements },
+    triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height },
+  },
+  created() {
+
   },
   mounted() {
     groupItems(this.allItems)
@@ -43,25 +48,31 @@ export default {
         prior = para.id
         const scene = this.$scrollmagic.scene({
           triggerElement: `#${para.id}`,
-          triggerHook: this.trigger,
+          triggerHook: this.triggerHook,
         })
         .on('enter', (e) => {
           this.setActiveElements(para.id)
         })
         .on('leave', (e) => {
-          if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
+          //if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
             this.setActiveElements(this.paragraphs[para.id].prior)
-          }
+          //}
         })
         if (this.debug) {
-          scene.addIndicators()
+          scene.addIndicators({indent: this.viewportWidth/2})
         }
         this.$scrollmagic.addScene(scene)
         this.scenes.push(scene)
       })
+      this.setActiveElements(Array.from(document.body.querySelectorAll('p')).find(elem => elem.id).id)
     },
     setActiveElements(elemId) {
-      this.$store.dispatch('setActiveElements', elemIdPath(elemId))
+      if (elemId) {
+        const newActiveElements = elemIdPath(elemId)
+        if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
+          this.$store.dispatch('setActiveElements', newActiveElements)
+        }
+      }
     },
     getParagraphs(elem) {
       const paragraphs = []
@@ -136,6 +147,16 @@ export default {
         })
       })
     }
+  },
+  watch: {
+    triggerHook() {
+      this.scenes.forEach(scene => {
+        scene.triggerHook(this.triggerHook)
+      })
+    },
+    activeElements() {
+      console.log('activeElements', this.activeElements)
+    }
   }
 }
 </script>
@@ -155,14 +176,13 @@ export default {
     padding-left: 32px;
   }
 
-
-
   #essay p {
     padding-left: 20px;
     border-left: 12px solid white;
     font-size: 1em;
     line-height: 1.8;
     z-index: 1;
+    cursor: default;
   }
 
   .vtl #essay p {
@@ -184,8 +204,8 @@ export default {
     border-left: none;
   }
   
-  #essay p:hover {
-    cursor: pointer;
+  p.has-items:hover {
+    cursor: pointer !important;
     background-color: #f7f7f7;;
   }
 

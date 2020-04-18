@@ -1,9 +1,11 @@
 <template>
   <v-app id="visual-essay" :class="path">
 
-    <v-card tile class="overflow-hidden">
+    <v-card
+      v-if="showBanner && banner"
+      tile class="overflow-hidden"
+    >
       <v-app-bar
-        v-if="showBanner"
         id="appbar"
         app
         prominent
@@ -12,7 +14,7 @@
         fade-img-on-scroll
         dark
         shrink-on-scroll
-        src="https://picsum.photos/1200/225"
+        :src="banner"
         scroll-target="#scrollableContent"
         :scroll-threshold="scrollThreshold"
       >
@@ -31,6 +33,9 @@
       </v-sheet>
 
     </v-card>
+    <v-container v-else ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px`">
+      <component v-bind:is="layout"></component>
+    </v-container>
     <entity-infobox-dialog/>
   </v-app>
 </template>
@@ -62,6 +67,7 @@ export default {
   computed: {
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
+    banner() { return (this.$store.getters.items.filter(item => item.type === 'essay') || [{}])[0].banner },
     showBanner() { return this.$store.getters.showBanner },
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
@@ -71,7 +77,7 @@ export default {
   watch: {
     viewportWidth: {
       handler: function (width) {
-        console.log(this.$store.getters.layout)
+        console.log(`layout=${this.$store.getters.layout}`)
         if (width > 0) {
           this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vertical' : 'horizontal')
           console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)

@@ -67,12 +67,14 @@
     mounted() {
       console.log('VerticalViewer.mounted')
       this.header = document.getElementById('appbar')
-      if (!this.$store.getters.showBanner) {
-          this.$refs.viewer.$el.style.top = '0px'
-          this.$refs.viewer.$el.style.position = 'fixed'
-          this.position = 'fixed'
+      if (this.header) {
+        document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
+        this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
+      } else {
+        this.$refs.viewer.$el.style.top = '0px'
+        this.$refs.viewer.$el.style.position = 'fixed'
+        this.position = 'fixed'
       }
-      document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
       this.$nextTick(() => this.init())
     },
@@ -97,8 +99,11 @@
           this.$refs.viewer.$el.style.top = '0px'
           this.$refs.viewer.$el.style.position = 'relative'
           this.position = 'relative'
-          // console.log(`position=${this.position} ${this.header.offsetHeight}`)
         }
+        if (this.header.offsetHeight !== this.$store.getters.headerOffset) {
+          this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
+        }
+        // console.log(`position=${this.position} ${this.header.offsetHeight}`)
       },
       waitForEssay() {
         console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
@@ -111,35 +116,41 @@
       init() {
         Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
           para.title = elemIdPath(para.id).join(',')
+          const itemsInPara = itemsInElements(elemIdPath(para.id), this.allItems)
           this.paragraphs[para.id] = {
             top: para.offsetTop,
-            items: itemsInElements(elemIdPath(para.id), this.allItems)
+            items: itemsInPara
           }
-          para.addEventListener('click', (e) => {
-            const paraId = e.target.tagName === 'P'
-              ? e.target.id
-              : e.target.parentElement.id
-            if (this.paragraphs[paraId]) {
-              let offset = 100
-              let scrollable = document.getElementById('scrollableContent')
-              if (scrollable) {
-                offset = -80
-              } else {
-                scrollable = window
+          if (itemsInPara.length > 0) {
+            para.classList.add('has-items')
+            para.addEventListener('click', (e) => {
+              const paraId = e.target.tagName === 'P'
+                ? e.target.id
+                : e.target.parentElement.id
+              if (this.paragraphs[paraId]) {
+                let offset = 100
+                let scrollable = document.getElementById('scrollableContent')
+                if (scrollable) {
+                  offset = -80
+                } else {
+                  scrollable = window
+                }
+                const scrollTo = this.paragraphs[paraId].top - offset
+                scrollable.scrollTo(0, scrollTo, )
               }
-              const scrollTo = this.paragraphs[paraId].top - offset
-              scrollable.scrollTo(0, scrollTo, )
-            }
-          })
+            })
+          }
           para.addEventListener('mouseenter', (e) => {
             const elemId = e.toElement.id
             if (this.hoverElemId && this.hoverElemId !== elemId) {
               const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
               if (prior) { prior.style.display = 'none' }
             }
-            this.hoverElemId = undefined
             this.hoverElemId = elemId
-            document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
+            const elem = document.querySelector(`[data-id="${this.hoverElemId}"]`)
+            if (elem) {
+              elem.style.display = 'inline-block'
+            }
           })
         })
         this.addSpacer()
@@ -149,7 +160,7 @@
         // that content at the end of the article is still reachable by scrolling
         this.spacer = document.createElement('div')
         this.spacer.id = 'essay-spacer'
-        this.spacer.style.height = `${this.viewportHeight/2}px`
+        this.spacer.style.height = `${this.viewportHeight*.8}px`
         document.getElementById('essay').appendChild(this.spacer)
       },
       addItemClickHandlers(elemId) {
@@ -180,14 +191,22 @@
         console.log(this.tabs)
         this.activeTab = this.primaryTab || availableGroups[0] 
       },
-      viewportHeight() {
-        if (this.spacer) {
-          this.spacer.style.height = `${this.viewportHeight/2}px`
-        }
+      viewportHeight: {
+        handler: function (value, prior) {
+          console.log('viewportHeight', this.viewportHeight)
+          if (this.spacer) {
+            this.spacer.style.height = `${this.viewportHeight/2}px`
+          }
+        },
+        immediate: true
       },
-      viewportWidth() {
-        this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
-      }, 
+      viewportWidth: {
+        handler: function (value, prior) {
+          console.log(this.$refs.viewer.$el)
+          this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
+        },
+        immediate: false
+      },
       activeElement(active, prior) {
         if (prior) {
           this.removeItemClickHandlers(prior)
@@ -206,7 +225,7 @@
 
   #viewer {
     background-color: #000000;
-    /* position: fixed; */
+    /* position: relative; */
     height: 100vh;
     box-shadow: none;
     border-radius: 0;

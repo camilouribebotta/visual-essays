@@ -7,6 +7,7 @@ CONSTRUCT {
     ?item ?image_prop ?image .
     ?item rdf:type ?type .
     ?item ?coordinate_location_prop ?coords .
+    ?item ?whos_on_first_prop ?wof_id .
     ?item ?image_prop ?image .
     ?item schema:isPartOf ?wikipedia .
 
@@ -25,6 +26,7 @@ CONSTRUCT {
     BIND(wd:Q17334923 AS ?location) # location
 
     BIND(wdt:P625 AS ?coordinate_location_prop)
+    BIND(wdt:P6766 AS ?whos_on_first_prop)
     BIND(wdt:P18 AS ?image_prop)
 
     VALUES (?item) {}
@@ -85,6 +87,9 @@ CONSTRUCT {
     }
     OPTIONAL {
         ?item ?coordinate_location_prop ?coords .
+    }
+    OPTIONAL {
+        ?item ?whos_on_first_prop ?wof_id .
     }
 
 } ORDER BY ?item

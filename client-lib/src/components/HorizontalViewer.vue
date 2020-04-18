@@ -94,9 +94,10 @@
       init() {
         Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
           para.title = elemIdPath(para.id).join(',')
+          const itemsInPara = itemsInElements(elemIdPath(para.id), this.allItems)
           this.paragraphs[para.id] = {
             top: para.offsetTop,
-            items: itemsInElements(elemIdPath(para.id), this.allItems)
+            items: itemsInPara
           }
           // Display/enable activator when cursor hovers over paragraph element
           /*
@@ -123,23 +124,26 @@
             this.hoverElemId = undefined
           })
           */
-          para.addEventListener('click', (e) => {
-            this.visualizerIsOpen = true
-            const paraId = e.target.tagName === 'P'
-              ? e.target.id
-              : e.target.parentElement.id
-            if (this.paragraphs[paraId]) {
-              let offset = 100
-              let scrollable = document.getElementById('scrollableContent')
-              if (scrollable) {
-                offset = -80
-              } else {
-                scrollable = window
+          if (itemsInPara.length > 0) {
+            para.classList.add('has-items')
+            para.addEventListener('click', (e) => {
+              this.visualizerIsOpen = true
+              const paraId = e.target.tagName === 'P'
+                ? e.target.id
+                : e.target.parentElement.id
+              if (this.paragraphs[paraId]) {
+                let offset = 100
+                let scrollable = document.getElementById('scrollableContent')
+                if (scrollable) {
+                  offset = -80
+                } else {
+                  scrollable = window
+                }
+                const scrollTo = this.paragraphs[paraId].top - offset
+                scrollable.scrollTo(0, scrollTo, )
               }
-              const scrollTo = this.paragraphs[paraId].top - offset
-              scrollable.scrollTo(0, scrollTo, )
-            }
-          })
+            })
+          }
         })
         this.addSpacer()
         // cthis.addActivators()

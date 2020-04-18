@@ -4,21 +4,13 @@
      data-about="Q871991"></var>
 
 <var title="cherry blossom" id="Q871991"  data-category="plant"></var>
-
 <var title="Dumbarton Oaks" id="Q1264942"></var>
-
 <var title="Eleanor Patterson" id="Q5122270"></var>
-
 <var title="hanami" id="Q210150" data-category="activity"></var>
-
 <var title="Murasaki Shikibu" id="Q81731"></var>
-
 <var title="Prunus" id="Q190545"></var>
-
 <var title="Prunus serotina" id="Q158987"></var>
-
 <var title="Stockholm" id="Q1754"></var>
-
 <var title="The Tale of Genji" id="Q8269"></var>
 
 <var title="Washington, D. C." 
@@ -33,15 +25,19 @@
      data-marker-symbol="leaf"
      ></var>
 
-
 ## Cherry Blossom
-<var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2"></var>
+<var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2" data-hide-labels="true"></var>
+<var data-map-layer
+     title="Polyline Decorator Test"
+     data-type="geojson" 
+     data-url="https://jstor-labs.github.io/plant-humanities/geojson/polyline_decorator.json"
+     data-active="true"></var>
 
 ### Introduction
 
 Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the <var id="Q956781">Tidal Basin</var>, cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale.
 <var title="West Yorkshire" id="Q23083"></var>
-<var data-primary="image"></var>
+<var data-primary="map"></var>
 <var data-image
      title="Tidal Basin cherry trees"
      data-fit="cover"
@@ -71,13 +67,9 @@ Although cherry blossoms became beloved fixtures of the city of Washington, atti
      data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg/320px-Rippl_Sour_Cherry_Tree_in_Blossom_1909.jpg"></var>
 
 ### Cherry Trees in Japan
-<var data-map  id="japan-map" data-center="35.9,137.4" data-zoom="6"></var>
-<var title="Tokyo" id="Q1490"></var>
-<var data-map-layer
-     title="Japan"
-     data-type="geojson" 
-     data-url="https://data.whosonfirst.org/856/324/29/85632429.geojson"
-     data-active="true"></var>
+<var data-map  id="japan-map" data-center="Q17" data-zoom="4"></var>
+<var title="Tokyo" id="Q1490" data-scope="local"></var>
+<var title="Japan" id="Q17" data-scope="global"></var>
 
 The cherry blossom has been a repository of symbolism in Japanese culture for centuries: it has variously symbolized processes of life, death, reproductive power, love, rebirth, and the beauty of impermanence. By the end of the Edo period (1603-1868) cherry blossoms came to be a dominant symbol of Japanese identity, although their association with Japanese identity dates to at least the ninth century. During the early years of Japan’s rapid industrialization, cherry trees fell prey to an iconoclastic drive to erase reminders of the old feudal society. As Japan continued to negotiate its national identity, cherries were taken up again, now as symbols of a modern Japan that would be recognizable on an international scale. In the years leading up to World War II, the image of falling cherry blossoms, which had traditionally been associated with impermanence and death, was increasingly deployed to aestheticize self-sacrifice for the emperor. Cherry blossoms were planted in shrines glorifying fallen soldiers, and featured prominently in military imagery.
 
@@ -89,7 +81,7 @@ Flower-viewing or hanami is a centuries-old practice in Japan. Flower viewing st
 ### Cherries in the West
 
 Before the craze for Japanese cherries in the West at the start of the twentieth century, Europeans knew little of Japanese cherry blossoms, and Westerners who visited Japan often complained of how flowering Japanese cherry trees bore no fruit. As shipping techniques improved in the early 19th century, Japanese cherries began to trickle into European gardens in 1832, but remained unfashionable until the 1870s. When Japan opened its borders, greater contact with Japanese culture fueled interest in cherry blossoms among Westerners. By the 1890’s, Japan was marketing and exporting cherry trees to the West. However, cherries did not reach wide audiences in the West until Japan gave thousands of cherry trees to the United States in the early 20th century.
-<var data-map  data-center="48.8,-38.2" data-zoom="3"></var>
+<var data-map data-center="48.8,-38.2" data-zoom="3" data-show-labels="true"></var>
 <var title="Traverse City" id="Q984544"></var>
 
 #### Cherries in D.C.

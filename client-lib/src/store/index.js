@@ -7,8 +7,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     essayHTML: undefined,
-    layout: undefined,
+    layout: 'vtl',
     showBanner: false,
+    contentStartPos: 0,
+    triggerOffset: 250,
     debug: false,
     context: undefined,
     content: [],
@@ -18,18 +20,19 @@ export default new Vuex.Store({
     selectedItemID: null,
     height: 0,
     width: 0,
-    topMargin: 0,
-    trigger: 0.20
+    topMargin: 0
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setLayout (state, layout) { state.layout = layout },
     setShowBanner (state, showBanner) { 
       state.showBanner = showBanner
-      if (state.showBanner) {
-        state.trigger = 0.6
-      }
+      //if (state.showBanner) {
+      //  state.trigger = 0.5
+      //}
     },
+    setContentStartPos (state, pos) { state.contentStartPos = pos },
+    setTriggerOffset (state, triggerOffset) { state.triggerOffset = triggerOffset },
     setContext (state, context) { state.context = context },
     setDebug (state, debug) { state.debug = debug },
     setContent (state, elems) { state.content = elems },
@@ -49,13 +52,14 @@ export default new Vuex.Store({
       state.height = viewport.height
       state.width = viewport.width
     },
-    setTopMargin (state, height) { state.topMargin = height },
-    setTrigger (state, pos) { state.trigger = pos }
+    setTopMargin (state, height) { state.topMargin = height }
   },
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
     setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
+    setContentStartPos: ({ commit }, pos) => commit('setContentStartPos', pos),
+    setTriggerOffset: ({ commit }, triggerOffset) => commit('setTriggerOffset', triggerOffset),
     setContext: ({ commit }, context) => commit('setContext', context),
     setDebug: ({ commit }, debug) => commit('setDebug', debug),
     setContent: ({ commit }, content) => commit('setContent', content),
@@ -64,12 +68,13 @@ export default new Vuex.Store({
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
-    setTopMargin: ({ commit }, height) => commit('setTopMargin', height),
-    setTrigger: ({ commit }, pos) => commit('setTrigger', pos)
+    setTopMargin: ({ commit }, height) => commit('setTopMargin', height)
   },
   getters: {
     layout: state => state.layout,
     showBanner: state => state.showBanner,
+    contentStartPos: state => state.contentStartPos,
+    triggerOffset: state => state.triggerOffset,
     essayHTML: state => state.essayHTML,
     context: state => state.context,
     debug: state => state.debug,
@@ -81,8 +86,7 @@ export default new Vuex.Store({
     selectedItemID: state => state.selectedItemID,
     height: state => state.height,
     width: state => state.width,
-    topMargin: state => state.topMargin,
-    trigger: state => state.trigger
+    topMargin: state => state.topMargin
   },
   modules: {
   }

@@ -174,7 +174,7 @@ class Essay(object):
         self.markup = self._find_ve_markup()
         logger.info(f'{round(now()-st,3)}: phase 1')
         st = now()
-        self._update_entities_from_knowledgegraph()
+        self._update_entities_from_knowledgegraph(refresh=False)
         logger.info(f'{round(now()-st,3)}: phase 2')
         st = now()        
         self._find_and_tag_items()
@@ -186,6 +186,9 @@ class Essay(object):
         logger.info(f'{round(now()-st,3)}: phase 3')
 
     def _remove_empty_paragraphs(self):
+        for link in self._soup.findAll(lambda tag: tag.name in ('a',)):
+            if 'us-central1-visual-essay' in link.attrs['href']:
+                link.extract()
         for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
             if _is_empty(para_elem):
                 para_elem.extract()
@@ -195,7 +198,6 @@ class Essay(object):
             for heading in self._soup.findAll(lambda tag: tag.name in ('h%s' % lvl,)):
                 if 'id' not in heading.attrs:
                     heading.attrs['id'] = slugify(heading.text)
-                logger.info(heading)
 
     def _enclosing_section(self, elem):
         parent_section = None
@@ -240,15 +242,21 @@ class Essay(object):
         #for img in self._soup.html.body.article.find_all('img'):
         #    img.attrs['src'] = f'{self.site}{img.attrs["src"]}'
 
-    def _update_entities_from_knowledgegraph(self):
+    def _update_entities_from_knowledgegraph(self, refresh=False):
         qids = [item['qid'] for item in self.markup.values() if 'qid' in item]
         if qids:
             cache_key = hashlib.sha256(str(sorted(qids)).encode('utf-8')).hexdigest()
-            kg_entities = self.cache.get(cache_key)
+            kg_entities = self.cache.get(cache_key) if not refresh else None
             from_cache = kg_entities is not None
             if kg_entities is None:
                 kg_entities = self._get_entity_data(qids)['@graph']
                 self.cache[cache_key] = kg_entities
+            # logger.info(json.dumps(kg_entities, indent=2))
+            for entity in kg_entities:
+                if 'whos_on_first_id' in entity:
+                    wof = entity.pop('whos_on_first_id')
+                    wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
+                    entity['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
             for kg_props in kg_entities:
                 if kg_props['id'] in self.markup:
                     me = self.markup[kg_props['id']]
@@ -315,7 +323,6 @@ class Essay(object):
                 if 'zoom' in attrs:
                     attrs['zoom'] = round(float(attrs['zoom']), 1)
             elif  _type == 'map-layer':
-                logger.info(attrs)
                 if 'aliases' in attrs:
                     attrs['aliases'] = attrs['aliases'].split('|')
                 '''
@@ -404,7 +411,7 @@ class Essay(object):
             return True
 
         to_match = {}
-        for item in [item for item in self.markup.values() if item['type'] in ('entity', 'geojson')]:
+        for item in [item for item in self.markup.values() if item['type'] in ('entity', 'map-layer')]:
             if 'label' in item:
                 to_match[tm_regex(item['label'])] = {'str': item['label'], 'item': item}
             if item.get('aliases'):
@@ -536,7 +543,6 @@ class Essay(object):
                     _jsonld = {'@context': _context, '@graph': [_jsonld]}
                 return _jsonld
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
-            logger.info(sparql)
 
     def _get_geojson(self, url):
         logger.info(f'_get_geojson url={url}')
@@ -562,6 +568,10 @@ class Essay(object):
     def html(self):
         #return self._soup.prettify()
         return str(self._soup)
+
+    @property
+    def soup(self):
+        return self._soup
 
     def __str__(self):
         return self.html

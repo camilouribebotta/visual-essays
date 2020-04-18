@@ -40,6 +40,9 @@
         "title": {
             "@id": "http://labs-wiki.jstor.org/prop/direct/P118"
         },
+        "whos_on_first_id": {
+            "@id": "wdt:P6766"
+        },
         "wikipedia_page": {
             "@id": "schema:isPartOf",
             "@type": "@id"
