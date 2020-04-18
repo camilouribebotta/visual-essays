@@ -21,8 +21,7 @@ from bs4.element import Tag
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
-from flask import Flask, request
-app = Flask(__name__)
+import flask
 
 from essay import Essay
 from entity import KnowledgeGraph
@@ -38,10 +37,12 @@ cors_headers = {
     'Access-Control-Allow-Credentials': True
 }
 
-def get_gh_markdown(user, repo, file=None):
+def get_gh_markdown(acct, repo, file=None):
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        resp = requests.get(f'https://raw.githubusercontent.com/{user}/{repo}/master/{file}')
+        url = f'https://raw.githubusercontent.com/{acct}/{repo}/master/{file}'
+        resp = requests.get(url)
+        logger.info(f'{url} {resp.status_code}')
         if resp.status_code == 200:
             return {'fname': file.replace('.md', ''), 'text': resp.text}
 
@@ -160,61 +161,118 @@ def _set_logging_level(args):
         elif level == 'info':
             logger.setLevel(logging.INFO)
 
-@app.route('/entity/<qid>', methods=['GET'])
-def entity(qid):
-    if request.method == 'OPTIONS':
+def entity(*args, **kwargs):
+    global request
+    if args and 'request' not in globals():
+        _request = args[0]
+        _kwargs = dict([(k, request.args.get(k)) for k in request.args])
+        path = _request.path[1:].split('/')
+        qid = path[0]
+    else:
+        _request = request
+        qid = kwargs.get('qid')
+        _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+
+    logger.info(f'entity: qid={qid} kwargs={_kwargs}')
+    _set_logging_level(kwargs)
+
+    if _request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        args = dict([(k, request.args.get(k)) for k in request.args])
-        _set_logging_level(args)
-        logger.info(f'entity: qid={qid} args={args}')
-        entity = KnowledgeGraph(cache=cache, **args).entity(qid, **args)
+        entity = KnowledgeGraph(cache=cache, **_kwargs).entity(qid, **_kwargs)
         return (entity, 200, cors_headers)
 
-@app.route('/fingerprints', methods=['GET'])
 def fingerprints(*args, **kwargs):
-    if request.method == 'OPTIONS':
+    global request
+    if args and 'request' not in globals():
+        _request = args[0]
+        _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+    else:
+        _request = request
+        _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+
+    _set_logging_level(_kwargs)
+
+    if _request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        args = dict([(k, request.args.get(k)) for k in request.args])
-        _set_logging_level(args)
-        logger.info(f'fingerprints: args={args}')
-        if 'qids' in args:
+        logger.info(f'fingerprints: kwargs={_kwargs}')
+        if 'qids' in _kwargs:
             qids = set()
-            for qid in args['qids'].split(','):
+            for qid in _kwargs['qids'].split(','):
                 # ensure qids are namespaced
                 ns, qid = qid.split(':') if ':' in qid else ('wd', qid)
                 qids.add(f'{ns.strip()}:{qid.strip()}')
-        fingerprints = get_fingerprints(qids, args.get('language', 'en'))
+        fingerprints = get_fingerprints(qids, _kwargs.get('language', 'en'))
         logger.info(fingerprints)
         return (fingerprints, 200, cors_headers)
 
+def essay_local(*args, **kwargs):
+    _request = request
+    file = kwargs.get('file')
+    _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+    
+    logger.info(f'essay_local: file={file} kwargs={_kwargs}')
+    _set_logging_level(_kwargs)    
 
-@app.route('/<user>/<repo>', methods=['GET'])
-@app.route('/<user>/<repo>/<file>', methods=['GET'])
-def essay(user, repo, file=None):
-    if request.method == 'OPTIONS':
-        return ('', 204, cors_headers)
-    else:
-        baseUrl = f'https://raw.githubusercontent.com/{user}/{repo}/master'
-        markdown = get_gh_markdown(user, repo, file)
-        if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, baseUrl), cache=cache, **request.args)
-            return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
-        else:
-            return 'Not found', 404
-
-@app.route('/<file>', methods=['GET'])
-@app.route('/', methods=['GET'])
-def local_essay(file=None):
     baseUrl = 'http://localhost:5000'
     markdown = get_local_markdown(file)
     if markdown:
-        essay = Essay(html=markdown_to_html5(markdown, baseUrl), cache=cache, **request.args)
+        essay = Essay(html=markdown_to_html5(markdown, baseUrl), cache=cache, **_kwargs)
         return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
     else:
         return 'Not found', 404
 
+def essay(*args, **kwargs):
+    global request
+    if args and 'request' not in globals():
+        _request = args[0]
+        _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+        path = [pe for pe in _request.path[1:].split('/') if pe]
+        if len(path) > 1:
+            acct = path[0]
+            repo = path[1]
+            file = path[2] if len(path) > 2 else None
+        else:
+            acct = 'jstor-labs'
+            repo = 'visual-essays'
+            file = path[0] if len(path) == 1 else None
+    else:
+        _request = request
+        acct = kwargs.get('acct', 'jstor-labs')
+        repo = kwargs.get('repo', 'visual-essays')
+        file = kwargs.get('file')
+        _kwargs = dict([(k, _request.args.get(k)) for k in _request.args])
+    
+    logger.info(f'essay: acct={acct} repo={repo} file={file} kwargs={_kwargs}')
+    _set_logging_level(_kwargs)
+
+    if _request.method == 'OPTIONS':
+        return ('', 204, cors_headers)
+    else:
+        baseUrl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
+        markdown = get_gh_markdown(acct, repo, file)
+        if markdown:
+            essay = Essay(html=markdown_to_html5(markdown, baseUrl), cache=cache, **_kwargs)
+            return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
+        else:
+            return f'{baseUrl} Not found', 404
+
 if __name__ == '__main__':
+    logger.setLevel(logging.INFO)
+    from flask_cors import CORS
+    from flask import Flask, request
+    #from sqlitedict_cache import Cache
+    #cache = Cache()
+    app = flask.Flask(__name__)
+    app.config['JSON_SORT_KEYS'] = False
     VE_JS_LIB = 'http://localhost:8080/lib/visual-essays.js'
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    CORS(app)
+    app.add_url_rule('/fingerprints', 'fingerprints', fingerprints)
+    app.add_url_rule('/entity/<qid>', 'entity', entity)
+    app.add_url_rule('/essay/<acct>/<repo>/<file>', 'essay', essay)
+    app.add_url_rule('/essay/<acct>/<repo>', 'essay', essay)
+    app.add_url_rule('/essay/<file>', 'essay', essay)
+    app.add_url_rule('/local/<file>', 'essay_local', essay_local)
+
+    app.run(debug=True, host='0.0.0.0')

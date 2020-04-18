@@ -14,7 +14,7 @@
 
       <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
         <v-list dense>
-          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="clicked(menuItem.file)">
+          <v-list-item  v-cloak v-for="(menuItem, i) in nav" :key="i" @click="clicked(menuItem.file)">
             <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
             <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
           </v-list-item>
