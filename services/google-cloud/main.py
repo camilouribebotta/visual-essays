@@ -161,7 +161,7 @@ def _set_logging_level(args):
             logger.setLevel(logging.INFO)
 
 @app.route('/entity/<qid>', methods=['GET'])
-def get_entity(qid):
+def entity(qid):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
@@ -192,7 +192,7 @@ def fingerprints(*args, **kwargs):
 
 @app.route('/<user>/<repo>', methods=['GET'])
 @app.route('/<user>/<repo>/<file>', methods=['GET'])
-def get_gh_essay(user, repo, file=None):
+def essay(user, repo, file=None):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
@@ -206,7 +206,7 @@ def get_gh_essay(user, repo, file=None):
 
 @app.route('/<file>', methods=['GET'])
 @app.route('/', methods=['GET'])
-def get_local_essay(file=None):
+def local_essay(file=None):
     baseUrl = 'http://localhost:5000'
     markdown = get_local_markdown(file)
     if markdown:
