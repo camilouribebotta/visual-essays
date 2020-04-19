@@ -5,3 +5,4 @@ serverless.yml
 *-gcreds.json
 dist
 arbor_vitae.md
+*.pyc
