@@ -93,7 +93,7 @@
       }),
       mounted() {
         console.log(window.location)
-        const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname === 'jstor-labs.github.io' ? 2 : 1)
+        const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
         let file
         if (window.location.hostname === 'localhost') {
           this.service = 'http://localhost:5000'
