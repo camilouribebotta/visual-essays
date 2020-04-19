@@ -94,6 +94,10 @@
       mounted() {
         console.log(window.location)
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
+        logger.info('path', path)
+        this.acct = window.location.hostname.replace(/\.github\.io/, '')
+        this.repo = window.location.pathname.split('/')[0]
+        /*
         let file
         if (window.location.hostname === 'localhost') {
           this.service = 'http://localhost:5000'
@@ -105,7 +109,8 @@
           this.repo = path.length > 1 ? path[1] : undefined
           file = path.length > 2 ? path[2] : undefined
         }
-        console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo} file=${file}`)
+        */
+        console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo}`)
         this.load()
         this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
         window.addEventListener('resize', () => {
