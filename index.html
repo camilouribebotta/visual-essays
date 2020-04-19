@@ -96,7 +96,7 @@
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
         console.log('path', path)
         this.acct = window.location.hostname.replace(/\.github\.io/, '')
-        this.repo = window.location.pathname.split('/')[0]
+        this.repo = window.location.pathname.split('/')[1]
         /*
         let file
         if (window.location.hostname === 'localhost') {
@@ -110,7 +110,7 @@
           file = path.length > 2 ? path[2] : undefined
         }
         */
-        console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo}`)
+        console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo}`)
         this.setAndWatchHeight()
         this.load()
       },
@@ -125,7 +125,10 @@
           fetch(url).then(resp => resp.text())
           .then(html => {
             this.html = html
-            this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
+            this.$nextTick(() => {
+              window._essay = document.getElementById('essay').dataset.name
+              console.log(window.data)
+            })
           })
         },
         setAndWatchHeight() {
