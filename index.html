@@ -127,6 +127,9 @@
             this.html = html
             this.$nextTick(() => {
               window._essay = document.getElementById('essay').dataset.name
+              document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
+                eval(scr.text)
+              })
               console.log(window.data)
             })
           })
