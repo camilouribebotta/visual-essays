@@ -178,33 +178,3 @@ const waitForContent = () => {
   }
 }
 setInterval(() => waitForContent(), 250)
-
-/*
-let name
-let pathname = window.location.pathname
-const waitForContent = () => {
-  // console.log('waitForContent')
-  if (vm) {
-    if (pathname !== window.location.pathname) {
-      pathname = window.location.pathname
-      console.log('remove vm')
-      vm = vm.$destroy()
-    }
-  } else {
-    const essayElem = document.getElementById('essay')
-    // console.log('essay', name, essayElem, essayElem.innerText.length)
-    if (essayElem && essayElem.dataset.name !== name && essayElem.innerText.length > 0) {
-      initApp()
-      vm.$store.getters.items.forEach((item) => {
-        if (item.type === 'essay' && item.title) {
-          essayElem.title = item.title
-          console.log(essayElem.title)
-        }
-      })
-      pathname = window.location.pathname
-      name = essayElem.dataset.name
-    }
-  }
-}
-setInterval(() => waitForContent(), 250)
-*/

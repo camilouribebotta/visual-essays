@@ -24,6 +24,7 @@
   
       <v-card tile class="overflow-hidden">
         <v-app-bar
+          ref="header"
           id="appbar"
           app
           prominent
@@ -42,8 +43,8 @@
           <v-spacer></v-spacer>
         </v-app-bar>
   
-        <v-sheet id="scrollableContent" class="overflow-y-auto">
-          <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height: ${height}px;`">
+        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
+          <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
               <v-flex><div ref="content" v-html="html"></div></v-flex>
             </v-layout>
@@ -51,7 +52,7 @@
         </v-sheet>
   
         <v-footer ref="footer" :fixed="fixed" app>
-          <v-flex class="text-xs-left"></v-flex>
+          <v-flex ref="footer" class="text-xs-left"></v-flex>
         </v-footer>
 
       </v-card>
@@ -68,7 +69,7 @@
       vuetify: new Vuetify(),
       data: () => ({
         drawer: false,
-        fixed: false,
+        fixed: true,
         nav: [
           { file: 'index', title: 'Home', icon: 'mdi-home' },
           { file: 'about', title: 'About', icon: 'mdi-information' },
@@ -79,13 +80,16 @@
         title: 'Visual Essay',
         banner: 'https://picsum.photos/1200/225',
         bannerHeight: 200,
-        scrollThreshold: 100,
-        height: 1000,
-        essayTopMargin: 100,
+        scrollThreshold: 150,
+        height: 0,
+        essayTopMargin: 200,
         html: undefined,
         service: 'https://us-central1-visual-essay.cloudfunctions.net/essay',
         acct: undefined,
         repo: undefined,
+        rtime: undefined,
+        timeout: false,
+        delta: 200
       }),
       mounted() {
         console.log(window.location)
@@ -102,13 +106,20 @@
           file = path.length > 2 ? path[2] : undefined
         }
         console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo} file=${file}`)
-        this.load(file)
+        this.load()
+        this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
+        window.addEventListener('resize', () => {
+          this.rtime = new Date()
+          if (this.timeout === false) {
+            this.timeout = true
+            setTimeout(this.resizeend, this.delta)
+          }
+        })
       },
       methods: {
-        clicked(title) {
-          console.log('clicked', title)
+        clicked(page) {
           this.drawer = false
-          this.load(title)
+          this.load(page)
         },
         load(file) {
           const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
@@ -118,6 +129,14 @@
             this.html = html
             this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
           })
+        },
+        resizeend() {
+          if (new Date() - this.rtime < this.delta) {
+            setTimeout(this.resizeend, this.delta)
+          } else {
+            this.timeout = false
+            this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
+          }
         }
       },
       watch: {
