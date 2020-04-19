@@ -94,7 +94,7 @@
       mounted() {
         console.log(window.location)
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
-        logger.info('path', path)
+        console.log('path', path)
         this.acct = window.location.hostname.replace(/\.github\.io/, '')
         this.repo = window.location.pathname.split('/')[0]
         /*
@@ -111,15 +111,8 @@
         }
         */
         console.log(`essay: service=${this.service} acct=${this.acct} rep=${this.repo}`)
+        this.setAndWatchHeight()
         this.load()
-        this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
-        window.addEventListener('resize', () => {
-          this.rtime = new Date()
-          if (this.timeout === false) {
-            this.timeout = true
-            setTimeout(this.resizeend, this.delta)
-          }
-        })
       },
       methods: {
         clicked(page) {
@@ -133,6 +126,16 @@
           .then(html => {
             this.html = html
             this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
+          })
+        },
+        setAndWatchHeight() {
+          this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
+          window.addEventListener('resize', () => {
+            this.rtime = new Date()
+            if (this.timeout === false) {
+              this.timeout = true
+              setTimeout(this.resizeend, this.delta)
+            }
           })
         },
         resizeend() {
