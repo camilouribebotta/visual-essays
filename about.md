@@ -37,7 +37,3 @@ Maps may include optional layers.  Mapwarper tiles and GeoJSON feature layers ar
 Mapwarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  Mapwarper provides tools for fitting an image to base map geocoordinates by relating map feature points.
 
 ### GeoJSON feature layers
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc2NjQ1MTYwXX0=
--->
