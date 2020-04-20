@@ -1,6 +1,6 @@
 ## Example essays
 
-## Test
+## Testing
 
 **<big>[Great Expectations: a curated walk](examples/dickens.md)</big>**
 
