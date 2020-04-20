@@ -7,6 +7,3 @@
 **<big>[Cherry Blossom](/cherries)</big>**
 
 **<big>[Agave: An Ancient Plant with an Intoxicating History](examples/agave.md)</big>**
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY4MTMwNTk3M119
--->
