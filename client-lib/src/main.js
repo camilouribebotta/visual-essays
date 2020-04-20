@@ -134,7 +134,7 @@ function initApp() {
 
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'vtl' )
+  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'hc' )
   vm.$store.dispatch('setShowBanner', qargs.showBanner === 'true' || qargs.showBanner === '')
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
