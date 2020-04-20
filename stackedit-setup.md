@@ -7,7 +7,7 @@ StackEdit is a browser-based tool for editing markdown files.  Files created/edi
 To start using StackEdit to create/edit markdown files navigate to [https://stackedit.io](https://stackedit.io) where you should see a page like the following.
 
 <p align="center">
-  <img src="/static/images/stackedit-home.png" style="width:100%;max-width:400px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);border:1px solid #aaa;margin-bottom:6px;" ><br/>
+  <img src="static/images/stackedit-home.png" style="width:100%;max-width:400px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);border:1px solid #aaa;margin-bottom:6px;" ><br/>
   <span style="padding-top:24px;font-size:1.1em;font-weight:bold;">StackEdit Home Page</span>
 </p>
 
