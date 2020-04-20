@@ -1,6 +1,6 @@
 ## Example essays
 
-** Test
+## Test
 
 **<big>[Great Expectations: a curated walk](examples/dickens.md)</big>**
 
@@ -8,5 +8,5 @@
 
 **<big>[Agave: An Ancient Plant with an Intoxicating History](examples/agave.md)</big>**
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMzc0MTIyN119
+eyJoaXN0b3J5IjpbMTY4MTMwNTk3M119
 -->
