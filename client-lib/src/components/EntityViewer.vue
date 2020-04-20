@@ -28,9 +28,6 @@
     data: () => ({
       activeWindow: undefined
     }),
-    mounted() {
-      console.log(`${this.$options.name} mounted`)
-    },
     watch: {
       selected: {
         handler: function () {

@@ -65,7 +65,6 @@
       }
     },
     mounted() {
-      console.log('VerticalViewer.mounted')
       this.header = document.getElementById('appbar')
       if (this.header) {
         document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
@@ -106,7 +105,7 @@
         // console.log(`position=${this.position} ${this.header.offsetHeight}`)
       },
       waitForEssay() {
-        console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
+        // console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
         if (document.getElementById('essay')) {
           this.init()
         } else {
@@ -184,16 +183,14 @@
     },
     watch: {
       groups() {
-        console.log('VerticalViewer.watch.groups')
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
-        console.log(this.tabs)
         this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight: {
         handler: function (value, prior) {
-          console.log('viewportHeight', this.viewportHeight)
+          // console.log('viewportHeight', this.viewportHeight)
           if (this.spacer) {
             this.spacer.style.height = `${this.viewportHeight/2}px`
           }
@@ -202,7 +199,7 @@
       },
       viewportWidth: {
         handler: function (value, prior) {
-          console.log(this.$refs.viewer.$el)
+          // console.log(this.$refs.viewer.$el)
           this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
         },
         immediate: false

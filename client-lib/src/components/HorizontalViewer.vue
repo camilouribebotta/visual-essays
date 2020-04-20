@@ -248,11 +248,9 @@
         }
       },
       groups() {
-        console.log('HorizontalViewer.watch.groups')
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
-        console.log(this.tabs)
         this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight() {

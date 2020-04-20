@@ -71,16 +71,13 @@ export default {
     showBanner() { return this.$store.getters.showBanner },
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
-  mounted() {
-    console.log('App.mounted', this.showBanner)
-  },
   watch: {
     viewportWidth: {
       handler: function (width) {
-        console.log(`layout=${this.$store.getters.layout}`)
+        // console.log(`layout=${this.$store.getters.layout}`)
         if (width > 0) {
           this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vertical' : 'horizontal')
-          console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
+          // console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
         }     
       },
       immediate: true

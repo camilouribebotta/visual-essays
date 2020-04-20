@@ -33,9 +33,6 @@ export default {
   }),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') }
-  },
-  mounted() {
-    console.log('ImageViewer.mounted')
   }
 }
 </script>

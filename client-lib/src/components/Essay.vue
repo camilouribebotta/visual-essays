@@ -111,7 +111,6 @@ export default {
           content.push(section)
         })
       }
-      console.log('content', content)
       this.$store.dispatch('setContent', content)
     },
     itemsPartOf(elemId) {

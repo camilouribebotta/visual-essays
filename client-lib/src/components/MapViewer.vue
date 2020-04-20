@@ -40,11 +40,11 @@ export default {
     activeElements() { return this.$store.getters.activeElements },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
     entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
-    locations() { return this.itemsInActiveElements.filter(entity => {console.log(entity); return entity.coords || entity.geojson}) },
+    locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
   },
   mounted() {
-    console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
+    // console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
@@ -72,7 +72,7 @@ export default {
         // this.$refs.map.style.height = `${mapHeight - 52}px`
         this.$refs.map.style.height = `${mapHeight}px`
         this.$refs.map.style.width = `${mapWidth}px`
-        console.log(`wrapperWidth=${wrapperWidth} calculatedContainerHeight=${calculatedContainerHeight} mapHeight=${mapHeight} mapWidth=${mapWidth}`)
+        // console.log(`wrapperWidth=${wrapperWidth} calculatedContainerHeight=${calculatedContainerHeight} mapHeight=${mapHeight} mapWidth=${mapWidth}`)
         // center the map
         this.$refs.mapWrapperInner.style.paddingTop = 0
         this.$refs.mapWrapperInner.style.paddingBottom = 0
@@ -106,26 +106,22 @@ export default {
       return popup
     },
     loadGeojson(def) {
-      console.log('loadGeojson', def.url || def.geojson)
-      console.log('def', def)
+      // console.log('loadGeojson', def.url || def.geojson)
       return axios.get(def.url || def.geojson)
         .then(resp => {
           const self = this
           let geojson = L.geoJson(resp.data, {
             // Pop Up
             onEachFeature: function(feature, layer) {
-              console.log('layer', layer)
               //layer.bindPopup('layer', { autoClose: false, closeButton: false, closeOnClick: false })
               // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
               if (feature.properties.label || def.title) {
-                console.log('feature', feature.properties.label)
                 layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
                 if (feature.properties.label) {
                   layer.bindPopup(self.makePopup({ ...def, ...feature.properties}), { autoClose: false, closeButton: false, closeOnClick: false })
                 }
               }
               if (feature.properties.symbol) {
-                console.log(feature)
                 const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
                 const arrowHead = self.$L.polylineDecorator(polyline, {
                 patterns: [ { ...feature.properties, ...{offset: 0, endOffset: 0, repeat: '33%', symbol: self.$L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}}
@@ -162,23 +158,18 @@ export default {
     },
     syncGeojsonLayers() {
       let start = performance.now()
-      console.log('syncGeojsonLayers')
       Object.keys(this.mapLayers.geojson).forEach(cur => {
         if (this.addedLayers.has(cur) && !this.mapDef.layers.geojson.find(def => def.id === cur)) {
           this.addedLayers.delete(cur)
-          console.log('geojson.removeLayer')
           this.map.removeLayer(this.mapLayers.geojson[cur].layer)
         }
       })
-      console.log('remove', performance.now() - start)
       start = performance.now()
-      console.log(this.mapDef)
       this.mapDef.layers.geojson.forEach(def => {
         if (!this.addedLayers.has(def.id)) {
           if (this.mapLayers.geojson[def.id]) {
             this.addedLayers.add(def.id)
             const geojson = this.mapLayers.geojson[def.id].layer
-            console.log('geojson.addTo')
             geojson.addTo(this.map)
             if (!this.mapDef['hide-labels']) {
               geojson.eachLayer(feature => feature.openPopup())                      
@@ -186,11 +177,11 @@ export default {
           } else {
             const s1 = performance.now()
             this.loadGeojson(def)
-            console.log(performance.now() - s1)
+            // console.log(performance.now() - s1)
           }
         }
       })
-      console.log('add geojson', performance.now() - start)
+      //console.log('add geojson', performance.now() - start)
       start = performance.now()
       this.locations.filter(location => location.geojson).forEach(location => {
         // const wofId = location.geojson.substring(location.geojson.lastIndexOf('/') + 1).split('.')[0]
@@ -200,33 +191,30 @@ export default {
             const geojson = this.mapLayers.geojson[location.id].layer
             let s1 = performance.now()
             geojson.addTo(this.map)
-            console.log('geojson.add', location.id, this.featuresById, performance.now() - s1)
+            //console.log('geojson.add', location.id, this.featuresById, performance.now() - s1)
             if (!this.mapDef['hide-labels']) {
               geojson.eachLayer(feature => {
                 s1 = performance.now();
                 feature.openPopup();
-                console.log('openPopup', performance.now() - s1)})            
+                // console.log('openPopup', performance.now() - s1)
+              })            
             }
           } else {
             const s1 = performance.now()
             this.loadGeojson(location)
-            console.log('marker', performance.now() - s1)
+            // console.log('marker', performance.now() - s1)
           }
         }
       })
-      console.log('add marker geojson', performance.now() - start)
     },
     getLocationMarkers() {
-      console.log('getLocationMarkers', this.locations)
       const markers = []
       this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
         marker.addEventListener('click', (e) => {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
-          console.log('locationMarker.click', elemId)
           this.$store.dispatch('setSelectedItemID', elemId)
         })
-        console.log(location)
         if (location.label) {
           marker.bindPopup(this.makePopup(location), { autoClose: false, closeButton: false, closeOnClick: false })
         }
@@ -240,7 +228,6 @@ export default {
     syncMapwarperLayers() {
       Object.keys(this.mapLayers.mapwarper).forEach(cur => {
         if (this.addedLayers.has(cur) && !this.mapDef.layers.mapwarper.find(def => def.id === cur)) {
-          console.log('remove mapwarper', cur)
           this.addedLayers.delete(cur)
           this.map.removeLayer(this.mapLayers.mapwarper[cur].layer)
         }

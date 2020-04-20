@@ -90,7 +90,6 @@ function initApp() {
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
   })
-  console.log('lib.window.data', window.data)
 
   window.data.filter(item => item.type === 'component').forEach(customComponent => {
     // console.log('customComponent', customComponent)
@@ -129,7 +128,7 @@ function initApp() {
   vm.$store.dispatch('setItems', [])
 
   vm.$store.dispatch('setItems', prepItems(window.data.filter(item => item.type !== 'component')))
-  vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
+  // vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
 
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
@@ -142,16 +141,13 @@ function initApp() {
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
-  const essayMetadata = vm.$store.getters.items.find(item => item.type === 'essay')
-  if (window.app && essayMetadata) {
-    console.log('essayMetadata', essayMetadata)
-    window.app.banner = essayMetadata.banner
-    window.app.title = essayMetadata.title
+  const essayMetadata = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  if (window.app) {
+    window.app.essayMetadata = essayMetadata
   }
 
   vm.$mount('#essay')
   if (window.app) {
-    console.log('app', window.app)
     window.app.isLoaded = true
   }
 
@@ -167,7 +163,7 @@ function initApp() {
 
 let current = undefined
 const waitForContent = () => {
-  console.log(`waitForContent: current=${current} window._essay=${window._essay}`)
+  // console.log(`waitForContent: current=${current} window._essay=${window._essay}`)
   const essayElem = document.getElementById('essay')
   if (!window._essay && essayElem && essayElem.innerText.length > 0) {
     window._essay = essayElem.dataset.name

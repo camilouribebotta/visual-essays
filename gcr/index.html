@@ -59,35 +59,38 @@
     </v-app>
   </div>
 
-  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.7.min.js"></script>
-  <!-- <script src="http://localhost:8080/lib/visual-essays.js"></script> -->
+  <!-- 
+  <script src="http://localhost:8080/lib/visual-essays.js"></script>
+  -->
+  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.8.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
   <script>
-    // import VueRouter from 'vue-router'
-    Vue.use(VueRouter)
-    const router = new VueRouter({
-      mode: 'history',
-      routes: [{ path: '*', component: Vue }]
-    })
+    let defaults = {
+      acct: 'jstor-labs',
+      repo: 'visual-essays',
+      banner: 'https://picsum.photos/1200/225',
+      title: 'Visual Essay'
+    }
+    const default_acct = 'jstor-labs'
+    const default_repo = 'visual-essays'
+    
+
     window.app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
-      router,
       data: () => ({
         drawer: false,
         fixed: true,
         nav: [
-          { file: 'index', title: 'Home', icon: 'mdi-home' },
+          { title: 'Home', icon: 'mdi-home' },
           { file: 'about', title: 'About', icon: 'mdi-information' },
           { file: 'help', title: 'Help', icon: 'mdi-help-circle' },
           { file: 'contact', title: 'Contact', icon: 'mdi-contact-mail' },
           { file: 'resources', title: 'Resources', icon: 'mdi-library' }
         ],
-        title: 'Visual Essay',
-        banner: 'https://picsum.photos/1200/225',
+        essayMetadata: {},
         bannerHeight: 200,
         scrollThreshold: 150,
         height: 0,
@@ -100,53 +103,64 @@
         timeout: false,
         isLoaded: false,
         delta: 200,
-        files: []
+        essayCache: {}
       }),
+      computed: {
+        banner() { return this.essayMetadata.banner || defaults.banner },
+        title() { return this.essayMetadata.title || defaults.title },
+      },
       mounted() {
-        window.onpopstate = () => {
-          console.log('browser-back', this.files)
-          if (this.files.length > 1) {
-            this.files.pop()
-            this.loadEssay(this.files.pop())
-          }
+        window.onpopstate = (e) => {
+          console.log('onpopstate', e)
+          this.loadEssay(e.state.file, true)
         }        
         console.log(window.location)
-        const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
+        const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
         console.log('path', path)
         let file
-        if (path.length > 0) {
-          if (window.location.hostname === 'localhost') {
+        if (window.location.hostname === 'localhost') {
             this.service = 'http://localhost:5000/essay'
-          }
-          if (this.service === 'http://localhost:5000/essay' && path.len > 1) {
-            file = path[0] !== '' ? path[0] : undefined
-          } else {
-            this.acct = path[0] !== '' ? path[0] : undefined
-            this.repo = path.length > 1 ? path[1] : undefined
-            file = path.length > 2 ? path[2] : undefined
-          }
-        } else {
-          this.acct = window.location.hostname.replace(/\.github\.io/, '')
-          this.repo = window.location.pathname.split('/')[1]
         }
-        /*
-
-        */
+        if (path.length < 2) {
+          if (window.location.hostname.indexOf('.github.io') >= 0) {
+            this.acct = window.location.hostname.replace(/\.github\.io/, '')
+            this.repo = window.location.pathname.split('/')[1]
+          } else {
+            this.acct = defaults.acct
+            this.repo = defaults.repo
+          }
+          file = path.length === 1 && path[0] !== '' ? path[0] : undefined
+        } else {
+          this.acct = path[0]
+          this.repo = path[1]
+          file = path[2]
+        }
         console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
         this.setAndWatchHeight()
         this.loadEssay(file)
       },
       methods: {
-        menuItemClicked(page) {
+        menuItemClicked(file) {
           this.drawer = false
-          this.loadEssay(page)
+          this.loadEssay(file)
         },
-        loadEssay(file) {
-          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
-          console.log(`loadEssay ${url}`)
-          fetch(url).then(resp => resp.text())
+        cachingFetch(url) {
+          if (!this.essayCache[url]) {
+            this.essayCache[url] = fetch(url).then(resp => resp.text())
+          }
+          return this.essayCache[url]
+        },
+        loadEssay(file, replace) {
+          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '') + (this.service === 'http://localhost:5000/essay' ? '?mode=dev' : '')
+          console.log(`loadEssay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
+          this.cachingFetch(url)
           .then(html => {
-            this.files.push(file)
+            let browserPath = `${this.acct === defaults.acct ? '' : '/'+this.acct}${this.repo === defaults.repo ? '' : '/'+this.repo}${file ? '/'+file : ''}` || '/'
+            if (replace) {
+              history.replaceState({file: file}, '', browserPath)
+            } else {
+              history.pushState({file: file}, '', browserPath)
+            }
             this.html = html
             this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
           })
@@ -171,19 +185,18 @@
         }
       },
       watch: {
+        essayMetadata() {
+          console.log(`essayMetadata=${this.essayMetadata}`)
+        },
         isLoaded() {
           if (this.isLoaded) {
             this.isLoaded = false
             this.$nextTick(() => {
               // convert embedded essay links
               document.getElementById('essay').querySelectorAll('a').forEach(link => {
-                if (link.href.indexOf(this.service)) {
+                if (link.href.indexOf(this.service) === 0) {
                   const file = link.href.slice(link.href.lastIndexOf('/')+1)
-                  link.addEventListener('click', () => {
-                    this.loadEssay(file)
-                    //window.location = `http://localhost:5000/jstor-labs/visual-essays/${file}`
-                    this.$router.push(`/jstor-labs/visual-essays/${file}`)
-                  })
+                  link.addEventListener('click', () => this.loadEssay(file))
                   link.removeAttribute('href')
                 }
               })

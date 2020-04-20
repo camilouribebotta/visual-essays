@@ -33,7 +33,7 @@ from fingerprints import get_fingerprints
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.7.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.8.min.js'
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
@@ -57,14 +57,15 @@ def get_local_markdown(file=None):
             with open(path, 'r') as fp:
                 return {'fname': file.replace('.md', ''), 'text': fp.read()}
 
-def convert_relative_links(soup, acct=None, repo=None):
-    baseurl = f'https://visual-essay-atjcn6za6q-uc.a.run.app/essay/{acct}/{repo}' if acct else 'http://localhost:5000/essay'
+def convert_relative_links(soup, acct=None, repo=None, mode=None):
+    logger.info(f'mode={mode}')
+    baseurl = 'http://localhost:5000/essay' if mode == 'dev' else f'https://visual-essay-atjcn6za6q-uc.a.run.app/essay/{acct}/{repo}' 
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
-    baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master' if acct else 'http://localhost:5000'
+    baseurl = 'http://localhost:5000' if mode == 'dev' else f'https://raw.githubusercontent.com/{acct}/{repo}/master'
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
@@ -78,12 +79,12 @@ def _is_empty(elem):
     elem_contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
     return len(elem_contents) == 0
 
-def markdown_to_html5(markdown, acct=None, repo=None):
+def markdown_to_html5(markdown, acct=None, repo=None, mode=None):
     '''Transforms markdown generated HTML to semantic HTML'''
     html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, acct, repo)
+    convert_relative_links(soup, acct, repo, mode)
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
@@ -229,13 +230,14 @@ def essay(acct=None, repo=None, file=None):
         baseUrl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
         markdown = get_gh_markdown(acct, repo, file)
         if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, acct, repo), cache=cache, **kwargs)
+            essay = Essay(html=markdown_to_html5(markdown, acct, repo, **kwargs), cache=cache, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return f'{baseUrl} Not found', 404
 
 @app.route('/<acct>/<repo>/<file>', methods=['GET'])  
 @app.route('/<acct>/<repo>', methods=['GET'])  
+@app.route('/<file>', methods=['GET'])  
 @app.route('/', methods=['GET'])  
 def site(acct=None, repo=None, file=None):    
     acct = acct if acct else 'jstor-labs'

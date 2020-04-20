@@ -114,7 +114,7 @@ export function groupItems(items) {
         if (!groups[item.category]) { groups[item.category] = {component: 'entity', label: `${item.category}s`, items: []} }
         groups[item.category].items.push(item)
       } else if (item.type === 'map-layer') {
-        console.log('map-layer', item, lastMap)
+        // console.log('map-layer', item, lastMap)
         if (lastMap) {
           if (item['mapwarper-id']) {
             lastMap.layers.mapwarper.push(item)

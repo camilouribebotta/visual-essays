@@ -32,7 +32,6 @@ export default {
     context() { return this.$store.getters.context }
   },
   mounted() {
-    console.log('EntityInfobox.mounted', this.qid)
     console.log(this.entity.wikipedia_page);
     this.getSummaryInfo()
   },
