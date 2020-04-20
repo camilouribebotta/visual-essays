@@ -139,7 +139,7 @@
       methods: {
         menuItemClicked(page) {
           this.drawer = false
-          this.load(page)
+          this.loadEssay(page)
         },
         loadEssay(file) {
           const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')

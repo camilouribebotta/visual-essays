@@ -13,7 +13,7 @@ RUN set -e; \
 
 WORKDIR /usr/src/app
 
-ADD gcr/src src
+ADD src src
 ADD index.html .
 
 ENV PORT 8080

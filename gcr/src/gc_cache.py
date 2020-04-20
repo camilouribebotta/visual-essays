@@ -7,6 +7,7 @@ logger = logging.getLogger()
 
 import os
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
+logger.warning(f'SCRIPT_DIR={SCRIPT_DIR}')
 
 import sys
 import getopt
@@ -16,6 +17,8 @@ import json
 DEFAULT_PROJECT_NAME = 'visual-essays'
 DEFAULT_BUCKET_NAME = 'visual-essays-cache'
 DEFAULT_CREDS_PATH = os.path.join(SCRIPT_DIR, 'visual-essay-gcreds.json')
+logger.warning(f'DEFAULT_CREDS_PATH={DEFAULT_CREDS_PATH} exists={os.path.exists(DEFAULT_CREDS_PATH)}')
+
 DEFAULT_KEYFIELD = 'id'
 
 from google.oauth2 import service_account
