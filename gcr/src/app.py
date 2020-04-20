@@ -33,7 +33,7 @@ from fingerprints import get_fingerprints
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.9.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.10.min.js'
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
@@ -70,7 +70,7 @@ def convert_relative_links(soup, acct=None, repo=None, mode=None):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
+                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr] is not "/" else ""}{elem.attrs[attr]}'
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
