@@ -85,13 +85,12 @@ const components = {
 
 function initApp() {
   console.log('visual-essays.init')
-  console.log('window.data', window.data)
 
   window.data = []
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
   })
-  console.log('window.data', window.data)
+  console.log('lib.window.data', window.data)
 
   window.data.filter(item => item.type === 'component').forEach(customComponent => {
     // console.log('customComponent', customComponent)
@@ -144,13 +143,18 @@ function initApp() {
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
   const essayMetadata = vm.$store.getters.items.find(item => item.type === 'essay')
-  if (window.NUXT && essayMetadata) {
+  if (window.app && essayMetadata) {
     console.log('essayMetadata', essayMetadata)
-    window.NUXT.$store.dispatch('setBanner', essayMetadata.banner)
+    window.app.banner = essayMetadata.banner
+    window.app.title = essayMetadata.title
   }
 
   vm.$mount('#essay')
-  
+  if (window.app) {
+    console.log('app', window.app)
+    window.app.isLoaded = true
+  }
+
   setViewport()
   window.addEventListener('resize', () => {
     rtime = new Date()

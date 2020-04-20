@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 import os
 import sys
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
-BASEDIR = os.path.dirname(os.path.dirname(SCRIPT_DIR))
+BASEDIR = os.path.dirname(SCRIPT_DIR)
 sys.path.append(SCRIPT_DIR)
 
 import json
@@ -33,7 +33,7 @@ from fingerprints import get_fingerprints
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.5.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.6.min.js'
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
@@ -58,12 +58,12 @@ def get_local_markdown(file=None):
                 return {'fname': file.replace('.md', ''), 'text': fp.read()}
 
 def convert_relative_links(soup, acct=None, repo=None):
-    baseurl = f'https://visual-essay-atjcn6za6q-uc.a.run.app/{acct}/{repo}' if acct else 'http://localhost:5000'
+    baseurl = f'https://visual-essay-atjcn6za6q-uc.a.run.app/essay/{acct}/{repo}' if acct else 'http://localhost:5000/essay'
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr]}'
+                    elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
     baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master' if acct else 'http://localhost:5000'
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
@@ -216,13 +216,9 @@ def essay_local(file=None):
     else:
         return 'Not found', 404
 
-@app.route('/<acct>/<repo>/<file>', methods=['GET'])  
-@app.route('/<acct>/<repo>', methods=['GET'])  
-@app.route('/<file>', methods=['GET'])  
-@app.route('/', methods=['GET'])  
+@app.route('/essay/<acct>/<repo>/<file>', methods=['GET'])  
+@app.route('/essay/<acct>/<repo>', methods=['GET'])  
 def essay(acct=None, repo=None, file=None):    
-    acct = acct if acct else 'jstor-labs'
-    repo = repo if repo else 'visual-essays'
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     logger.info(f'essay: acct={acct} repo={repo} file={file} kwargs={kwargs}')
     _set_logging_level(kwargs)
@@ -237,6 +233,24 @@ def essay(acct=None, repo=None, file=None):
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return f'{baseUrl} Not found', 404
+
+@app.route('/<acct>/<repo>/<file>', methods=['GET'])  
+@app.route('/<acct>/<repo>', methods=['GET'])  
+@app.route('/', methods=['GET'])  
+def site(acct=None, repo=None, file=None):    
+    acct = acct if acct else 'jstor-labs'
+    repo = repo if repo else 'visual-essays'
+    kwargs = dict([(k, request.args.get(k)) for k in request.args])
+    logger.info(f'site: acct={acct} repo={repo} kwargs={kwargs}')
+    _set_logging_level(kwargs)
+
+    if request.method == 'OPTIONS':
+        return ('', 204, cors_headers)
+    else:
+        logger.info(f'{BASEDIR} {os.path.exists(os.path.join(BASEDIR, "index.html"))}')
+        logger.info(f'{SCRIPT_DIR} {os.path.exists(os.path.join(SCRIPT_DIR, "index.html"))}')
+        with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
+            return fp.read(), 200
 
 def usage():
     print('%s [hl:d]' % sys.argv[0])

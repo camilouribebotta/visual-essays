@@ -15,7 +15,7 @@
 
       <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
         <v-list dense  v-cloak>
-          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="clicked(menuItem.file)">
+          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)">
             <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
             <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
           </v-list-item>
@@ -46,7 +46,7 @@
         <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
           <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
-              <v-flex><div ref="content" v-html="html"></div></v-flex>
+              <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
             </v-layout>
           </v-container>
         </v-sheet>
@@ -59,14 +59,23 @@
     </v-app>
   </div>
 
-  <script src="https://github.com/JSTOR-Labs/visual-essays/blob/master/lib/visual-essays-0.4.5.min.js"></script>
+  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.6.min.js"></script>
+  <!-- <script src="http://localhost:8080/lib/visual-essays.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
   <script>
-    new Vue({
+    // import VueRouter from 'vue-router'
+    Vue.use(VueRouter)
+    const router = new VueRouter({
+      mode: 'history',
+      routes: [{ path: '*', component: Vue }]
+    })
+    window.app = new Vue({
       el: '#app',
       vuetify: new Vuetify(),
+      router,
       data: () => ({
         drawer: false,
         fixed: true,
@@ -84,54 +93,62 @@
         height: 0,
         essayTopMargin: 200,
         html: undefined,
-        service: 'https://visual-essay-atjcn6za6q-uc.a.run.app',
+        service: 'https://visual-essay-atjcn6za6q-uc.a.run.app/essay',
         acct: undefined,
         repo: undefined,
         rtime: undefined,
         timeout: false,
-        delta: 200
+        isLoaded: false,
+        delta: 200,
+        files: []
       }),
       mounted() {
+        window.onpopstate = () => {
+          console.log('browser-back', this.files)
+          if (this.files.length > 1) {
+            this.files.pop()
+            this.loadEssay(this.files.pop())
+          }
+        }        
         console.log(window.location)
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 2 : 1)
         console.log('path', path)
-        this.acct = window.location.hostname.replace(/\.github\.io/, '')
-        this.repo = window.location.pathname.split('/')[1]
-        /*
         let file
-        if (window.location.hostname === 'localhost') {
-          this.service = 'http://localhost:5000'
-        }
-        if (this.service === 'http://localhost:5000' && path.len > 1) {
-          file = path[0] !== '' ? path[0] : undefined
+        if (path.length > 0) {
+          if (window.location.hostname === 'localhost') {
+            this.service = 'http://localhost:5000/essay'
+          }
+          if (this.service === 'http://localhost:5000/essay' && path.len > 1) {
+            file = path[0] !== '' ? path[0] : undefined
+          } else {
+            this.acct = path[0] !== '' ? path[0] : undefined
+            this.repo = path.length > 1 ? path[1] : undefined
+            file = path.length > 2 ? path[2] : undefined
+          }
         } else {
-          this.acct = path[0] !== '' ? path[0] : undefined
-          this.repo = path.length > 1 ? path[1] : undefined
-          file = path.length > 2 ? path[2] : undefined
+          this.acct = window.location.hostname.replace(/\.github\.io/, '')
+          this.repo = window.location.pathname.split('/')[1]
         }
+        /*
+
         */
-        console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo}`)
+        console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
         this.setAndWatchHeight()
-        this.load()
+        this.loadEssay(file)
       },
       methods: {
-        clicked(page) {
+        menuItemClicked(page) {
           this.drawer = false
           this.load(page)
         },
-        load(file) {
+        loadEssay(file) {
           const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
-          console.log(`load ${url}`)
+          console.log(`loadEssay ${url}`)
           fetch(url).then(resp => resp.text())
           .then(html => {
+            this.files.push(file)
             this.html = html
-            this.$nextTick(() => {
-              window._essay = document.getElementById('essay').dataset.name
-              document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
-                eval(scr.text)
-              })
-              console.log(window.data)
-            })
+            this.$nextTick(() => window._essay = document.getElementById('essay').dataset.name)
           })
         },
         setAndWatchHeight() {
@@ -154,6 +171,25 @@
         }
       },
       watch: {
+        isLoaded() {
+          if (this.isLoaded) {
+            this.isLoaded = false
+            this.$nextTick(() => {
+              // convert embedded essay links
+              document.getElementById('essay').querySelectorAll('a').forEach(link => {
+                if (link.href.indexOf(this.service)) {
+                  const file = link.href.slice(link.href.lastIndexOf('/')+1)
+                  link.addEventListener('click', () => {
+                    this.loadEssay(file)
+                    //window.location = `http://localhost:5000/jstor-labs/visual-essays/${file}`
+                    this.$router.push(`/jstor-labs/visual-essays/${file}`)
+                  })
+                  link.removeAttribute('href')
+                }
+              })
+            })
+          }
+        }
       }
     })
   </script>
