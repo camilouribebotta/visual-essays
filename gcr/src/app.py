@@ -9,6 +9,7 @@ import os
 import sys
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.path.dirname(SCRIPT_DIR)
+DOCS_DIR = os.path.dirname(BASEDIR)
 sys.path.append(SCRIPT_DIR)
 
 import json
@@ -41,36 +42,55 @@ cors_headers = {
 }
 
 def get_gh_markdown(acct, repo, file=None):
+    baseurls = [
+        ['raw', f'https://raw.githubusercontent.com/{acct}/{repo}/master'],
+        ['ghp', f'https://{acct}.github.io/{repo}'],
+    ]
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        url = f'https://raw.githubusercontent.com/{acct}/{repo}/master/{file}'
-        resp = requests.get(url)
-        logger.info(f'{url} {resp.status_code}')
-        if resp.status_code == 200:
-            return {'fname': file.replace('.md', ''), 'text': resp.text}
+        for source, baseurl in baseurls:
+            url = f'{baseurl}/{file}'
+            resp = requests.get(url)
+            logger.info(f'{url} {resp.status_code}')
+            if resp.status_code == 200:
+                return {'source': source, 'fname': file.replace('.md', ''), 'text': resp.text}
+
+def get_gd_markdown(gdid):
+    url = f'https://drive.google.com/uc?export=download&id={gdid}'
+    resp = requests.get(url)
+    logger.info(f'{url} {resp.status_code}')
+    if resp.status_code == 200:
+        return {'source': 'gdid', 'fname': gdid, 'text': resp.text}
 
 def get_local_markdown(file=None):
+    logger.info(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        path = os.path.join(BASEDIR, file)
+        path = os.path.join(DOCS_DIR, file)
+        logger.info(path)
         if os.path.exists(path):
             with open(path, 'r') as fp:
-                return {'fname': file.replace('.md', ''), 'text': fp.read()}
+                return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
 
-def convert_relative_links(soup, acct=None, repo=None, mode=None):
-    logger.info(f'mode={mode}')
-    baseurl = 'http://localhost:5000/essay' if mode == 'dev' else f'https://visual-essay-atjcn6za6q-uc.a.run.app/essay/{acct}/{repo}' 
+def convert_relative_links(soup, acct=None, repo=None, source=None):
+    baseurl = 'http://localhost:5000/essay' if source == 'local' else f'https://visual-essays.app/essay/{acct}/{repo}' 
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
-    baseurl = 'http://localhost:5000' if mode == 'dev' else f'https://raw.githubusercontent.com/{acct}/{repo}/master'
+                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
+    if source == 'local':
+        baseurl = 'http://localhost:5000/static'
+    elif source == 'raw':
+        baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
+    else: # source == 'ghp':
+        baseurl = f'https://{acct}/github.io/{repo}'
+
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
-                if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr] is not "/" else ""}{elem.attrs[attr]}'
+                if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
+                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -79,12 +99,12 @@ def _is_empty(elem):
     elem_contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
     return len(elem_contents) == 0
 
-def markdown_to_html5(markdown, acct=None, repo=None, mode=None):
+def markdown_to_html5(markdown, acct=None, repo=None):
     '''Transforms markdown generated HTML to semantic HTML'''
     html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, acct, repo, mode)
+    convert_relative_links(soup, acct, repo, markdown['source'])
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
@@ -218,8 +238,9 @@ def essay_local(file=None):
         return 'Not found', 404
 
 @app.route('/essay/<acct>/<repo>/<file>', methods=['GET'])  
-@app.route('/essay/<acct>/<repo>', methods=['GET'])  
-def essay(acct=None, repo=None, file=None):    
+@app.route('/essay/<acct>/<repo>', methods=['GET'])
+@app.route('/essay', methods=['GET'])  
+def essay(acct=None, repo=None, file=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     logger.info(f'essay: acct={acct} repo={repo} file={file} kwargs={kwargs}')
     _set_logging_level(kwargs)
@@ -227,13 +248,20 @@ def essay(acct=None, repo=None, file=None):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        baseUrl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
-        markdown = get_gh_markdown(acct, repo, file)
+        if 'gdid' in kwargs:
+           markdown = get_gd_markdown(kwargs.pop('gdid'))
+        else:
+            acct = acct if acct else 'jstor-labs'
+            repo = repo if repo else 'visual-essays'
+            if kwargs.get('mode') == 'dev' and acct == 'jstor-labs' and repo == 'visual-essays':
+                markdown = get_local_markdown(file)
+            else:
+                markdown = get_gh_markdown(acct, repo, file)
         if markdown:
             essay = Essay(html=markdown_to_html5(markdown, acct, repo, **kwargs), cache=cache, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
-            return f'{baseUrl} Not found', 404
+            return 'Not found', 404
 
 @app.route('/<acct>/<repo>/<file>', methods=['GET'])  
 @app.route('/<acct>/<repo>', methods=['GET'])  
@@ -249,8 +277,6 @@ def site(acct=None, repo=None, file=None):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        logger.info(f'{BASEDIR} {os.path.exists(os.path.join(BASEDIR, "index.html"))}')
-        logger.info(f'{SCRIPT_DIR} {os.path.exists(os.path.join(SCRIPT_DIR, "index.html"))}')
         with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
             return fp.read(), 200
 
