@@ -128,7 +128,7 @@ function initApp() {
   vm.$store.dispatch('setItems', [])
 
   vm.$store.dispatch('setItems', prepItems(window.data.filter(item => item.type !== 'component')))
-  // vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
+  vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
 
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 

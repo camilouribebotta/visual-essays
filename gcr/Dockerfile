@@ -15,6 +15,7 @@ WORKDIR /usr/src/app
 
 ADD src src
 ADD index.html .
+ADD viewer.html .
 COPY favicon.ico src/static/favicon.ico
 
 ENV PORT 8080

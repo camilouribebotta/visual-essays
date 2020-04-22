@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 import os
 import sys
+import re
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.path.dirname(SCRIPT_DIR)
 DOCS_DIR = os.path.dirname(BASEDIR)
@@ -15,6 +16,7 @@ sys.path.append(SCRIPT_DIR)
 import json
 import traceback
 import getopt
+from urllib.parse import urlparse
 
 import markdown2
 from bs4 import BeautifulSoup
@@ -30,11 +32,20 @@ app = Flask(__name__)
 from essay import Essay
 from entity import KnowledgeGraph
 from fingerprints import get_fingerprints
+from specimens import get_specimens
 
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.10.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.11.min.js'
+ENV = 'prod'
+
+KNOWN_SITES = {
+    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
+    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
+    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities'},
+    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'}
+}
 
 cors_headers = {
     'Access-Control-Allow-Origin': '*',
@@ -46,6 +57,8 @@ def get_gh_markdown(acct, repo, file=None):
         ['raw', f'https://raw.githubusercontent.com/{acct}/{repo}/master'],
         ['ghp', f'https://{acct}.github.io/{repo}'],
     ]
+    if acct == 'jstor-labs' and repo == 'plant-humanities':
+        baseurls = [['ph', f'https://jstor-labs.github.io/plant-humanities/content']]
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
         for source, baseurl in baseurls:
@@ -53,14 +66,14 @@ def get_gh_markdown(acct, repo, file=None):
             resp = requests.get(url)
             logger.info(f'{url} {resp.status_code}')
             if resp.status_code == 200:
-                return {'source': source, 'fname': file.replace('.md', ''), 'text': resp.text}
+                return {'source': source, 'fname': file.replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
     resp = requests.get(url)
     logger.info(f'{url} {resp.status_code}')
     if resp.status_code == 200:
-        return {'source': 'gdid', 'fname': gdid, 'text': resp.text}
+        return {'source': 'gdid', 'fname': gdid, 'text': resp.content.decode('utf-8')}
 
 def get_local_markdown(file=None):
     logger.info(f'get_local_markdown: file={file}')
@@ -203,6 +216,30 @@ def entity(qid):
         entity = KnowledgeGraph(cache=cache, **kwargs).entity(qid, **kwargs)
         return (entity, 200, cors_headers)
 
+@app.route('/specimens/<taxon_name>', methods=['GET'])  
+def specimens(taxon_name):
+    kwargs = dict([(k, request.args.get(k)) for k in request.args])
+    accept = request.headers.get('Accept', 'application/json').split(',')
+    content_type = ([ct for ct in accept if ct in ('text/html', 'application/json', 'text/csv', 'text/tsv')] + ['application/json'])[0]
+    _set_logging_level(kwargs)
+    logger.info(f'specimens: taxon_name={taxon_name} kwargs={kwargs}')
+    if request.method == 'OPTIONS':
+        return ('', 204, cors_headers)
+    else:
+        taxon_name = taxon_name.replace('_', ' ')
+        refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
+        specimens = cache.get(taxon_name) if not refresh else None
+        if specimens is None:
+            specimens = get_specimens(taxon_name)
+            if specimens['specimens']:
+                cache[taxon_name] = specimens
+        else:
+            specimens['from_cache'] = True
+        if content_type == 'text/html':
+            return (open(os.path.join(BASEDIR, 'viewer.html'), 'r').read().replace("'{{DATA}}'", json.dumps(specimens)), 200, cors_headers)
+        else:
+            return (specimens, 200, cors_headers)
+
 @app.route('/fingerprints', methods=['GET'])  
 def fingerprints():
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
@@ -239,10 +276,10 @@ def essay_local(file=None):
 
 @app.route('/essay/<acct>/<repo>/<file>', methods=['GET'])  
 @app.route('/essay/<acct>/<repo>', methods=['GET'])
+@app.route('/essay/<file>', methods=['GET'])  
 @app.route('/essay', methods=['GET'])  
 def essay(acct=None, repo=None, file=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
-    logger.info(f'essay: acct={acct} repo={repo} file={file} kwargs={kwargs}')
     _set_logging_level(kwargs)
 
     if request.method == 'OPTIONS':
@@ -251,14 +288,16 @@ def essay(acct=None, repo=None, file=None):
         if 'gdid' in kwargs:
            markdown = get_gd_markdown(kwargs.pop('gdid'))
         else:
-            acct = acct if acct else 'jstor-labs'
-            repo = repo if repo else 'visual-essays'
-            if kwargs.get('mode') == 'dev' and acct == 'jstor-labs' and repo == 'visual-essays':
+            site = urlparse(request.base_url).hostname
+            acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
+            repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
+            logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')
+            if kwargs.pop('mode', ENV) == 'dev':
                 markdown = get_local_markdown(file)
             else:
                 markdown = get_gh_markdown(acct, repo, file)
         if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, acct, repo, **kwargs), cache=cache, **kwargs)
+            essay = Essay(html=markdown_to_html5(markdown, acct, repo), cache=cache, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return 'Not found', 404
@@ -268,17 +307,21 @@ def essay(acct=None, repo=None, file=None):
 @app.route('/<file>', methods=['GET'])  
 @app.route('/', methods=['GET'])  
 def site(acct=None, repo=None, file=None):    
-    acct = acct if acct else 'jstor-labs'
-    repo = repo if repo else 'visual-essays'
+    site = urlparse(request.base_url).hostname
+    acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
+    repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
-    logger.info(f'site: acct={acct} repo={repo} kwargs={kwargs}')
+    logger.info(f'site: site={site} acct={acct} repo={repo} kwargs={kwargs}')
     _set_logging_level(kwargs)
 
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
         with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
-            return fp.read(), 200
+            html = fp.read()
+            if ENV == 'dev':
+                html = re.sub(r'"https://JSTOR-Labs\.github\.io/visual-essays/lib/.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
+            return html, 200
 
 def usage():
     print('%s [hl:d]' % sys.argv[0])
@@ -305,6 +348,7 @@ if __name__ == '__main__':
             elif loglevel in ('debug',): logger.setLevel(logging.DEBUG)
         elif o in ('-d', '--dev'):
             VE_JS_LIB = 'http://localhost:8080/lib/visual-essays.js'
+            ENV = 'dev'
         elif o in ('-h', '--help'):
             usage()
             sys.exit()

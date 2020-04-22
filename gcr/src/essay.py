@@ -33,7 +33,7 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video', 'primary'}
+CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'video', 'primary', 'specimens'}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -314,6 +314,7 @@ class Essay(object):
                     attrs['scope'] = 'global'
                 if 'aliases' in attrs:
                     attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
+
             elif  _type == 'map':
                 if 'center' in attrs:
                     if is_qid(attrs['center']):
@@ -322,31 +323,17 @@ class Essay(object):
                         attrs['center'] = [float(c.strip()) for c in attrs['center'].replace(',', ' ').split()]
                 if 'zoom' in attrs:
                     attrs['zoom'] = round(float(attrs['zoom']), 1)
+
             elif  _type == 'map-layer':
                 if 'aliases' in attrs:
                     attrs['aliases'] = attrs['aliases'].split('|')
-                '''
-                geojson = self._get_geojson(attrs.get('url'))
-                attrs['geojson'] = geojson
-                geojson_props = geojson['features'][0].get('properties', {}) if 'features' in geojson and len(geojson['features']) > 0 else geojson.get('properties', {})
-                for attr, val in geojson_props.items():
-                    if attr == 'aliases':
-                        geojson_aliases = val.split('|') if isinstance(val, str) else val
-                        attrs['aliases'] = sorted(set(geojson_aliases + attrs.get('aliases', [])))
-                    else:
-                        attrs[attr] = val
-                '''
                 for attr in [f'data-{attr_suffix}' for attr_suffix in ('active', 'geojson', 'url')]:
                     if attr in vem_elem.attrs:
                         del vem_elem.attrs[attr]
-            #elif  _type == 'map-layer':
-            #    if 'url' in attrs:
-            #        attrs['geojson'] = self._get_geojson(attrs.get('url'))
+
             elif  _type == 'image':
                 if 'region' in attrs:
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
-            elif _type == 'config':
-                logger.info(attrs)
             
             if attrs['id'] in ve_markup:
                 attrs = ve_markup[attrs['id']]

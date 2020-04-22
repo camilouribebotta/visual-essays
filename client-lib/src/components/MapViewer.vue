@@ -353,6 +353,7 @@ export default {
     },
     mapDef: {
       handler: function (value, prior) {
+        console.log('MapViewer.watch.mapDef', this.mapDef.title)
         if (this.$refs.map) {
           if (this.items.length === 0) {
               this.$refs.mapWrapper.style.display = 'none'

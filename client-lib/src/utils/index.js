@@ -100,12 +100,14 @@ export function itemsInElements(elemIds, items) {
 }
 
 export function groupItems(items) {
+  console.log('groupItems', items.filter(item => item.type === 'map'))
   const exclude = ['essay']
   const groups = {}
   const maps = items.filter(item => item.type === 'map')
-  let lastMap = maps.length > 0 ? { ...maps[maps.length-1], ...{layers:{mapwarper:[], geojson:[]}} } : undefined
-  if (lastMap) {
-    groups.map = {component: 'gmap', label: 'Map', items: [lastMap]}
+  // let selectedMap = maps.length > 0 ? { ...maps[maps.length-1], ...{layers:{mapwarper:[], geojson:[]}} } : undefined
+  let selectedMap = maps.length > 0 ? { ...maps[0], ...{layers: {mapwarper:[], geojson:[]}} } : undefined
+  if (selectedMap) {
+    groups.map = {component: 'gmap', label: 'Map', items: [selectedMap]}
   }
   items
     .filter(item => !exclude.includes(item.type))
@@ -114,12 +116,12 @@ export function groupItems(items) {
         if (!groups[item.category]) { groups[item.category] = {component: 'entity', label: `${item.category}s`, items: []} }
         groups[item.category].items.push(item)
       } else if (item.type === 'map-layer') {
-        // console.log('map-layer', item, lastMap)
-        if (lastMap) {
+        // console.log('map-layer', item, selectedMap)
+        if (selectedMap) {
           if (item['mapwarper-id']) {
-            lastMap.layers.mapwarper.push(item)
+            selectedMap.layers.mapwarper.push(item)
           } else if (item.url) {
-            lastMap.layers.geojson.push(item)
+            selectedMap.layers.geojson.push(item)
           }
         }
       } else {
