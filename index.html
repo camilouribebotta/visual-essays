@@ -121,15 +121,12 @@
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()
-        console.log(`hostname=${this.hostname}`)
       },
       mounted() {
         window.onpopstate = (e) => {
-          console.log('onpopstate', e)
           this.loadEssay(e.state.file, true)
         }        
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
-        console.log('path', path)
         let file
         if (window.location.hostname === 'localhost') {
             this.service = 'http://localhost:5000/essay'
@@ -198,9 +195,6 @@
         }
       },
       watch: {
-        essayMetadata() {
-          console.log(`essayMetadata=${this.essayMetadata}`)
-        },
         isLoaded() {
           if (this.isLoaded) {
             this.isLoaded = false
