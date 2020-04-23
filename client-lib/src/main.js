@@ -33,6 +33,8 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
+console.log('main.js')
+
 Vue.component('lingallery', Lingallery)
 
 const myMixin = {

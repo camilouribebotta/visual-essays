@@ -1,0 +1,95 @@
+CONSTRUCT {
+
+    ?item schema:identifier ?qid .
+    ?item rdfs:label ?label .
+    ?item schema:description ?description .
+    ?item skos:altLabel ?alias .
+    ?item ?image_prop ?image .
+    ?item rdf:type ?type .
+    ?item ?coordinate_location_prop ?coords .
+    ?item ?whos_on_first_prop ?wof_id .
+    ?item ?image_prop ?image .
+    ?item schema:isPartOf ?wikipedia .
+
+} WHERE {
+
+    BIND(wd:Q35120 AS ?entity)
+    BIND(wd:Q5 AS ?human)
+    BIND(wd:Q756 AS ?plant)
+    BIND(wd:Q95074 AS ?fictional_character)
+    BIND(wd:Q729 AS ?animal)
+    BIND(wd:Q47461344 AS ?written_work)
+    BIND(wd:Q41176 AS ?building)
+    # BIND(wd:Q1048835 AS ?location) # political_territorial_entity
+    # BIND(wd:Q56061 AS ?location) # administrative_territorial_entity
+    # BIND(wd:Q486972 AS ?location) # human_settlement
+    BIND(wd:Q17334923 AS ?location) # location
+
+    BIND(wdt:P625 AS ?coordinate_location_prop)
+    BIND(wdt:P6766 AS ?whos_on_first_prop)
+    BIND(wdt:P18 AS ?image_prop)
+
+    VALUES (?item) {}
+
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?human .
+        BIND(?human AS ?type) .
+    }
+    OPTIONAL {
+        {
+        ?item wdt:P171+ ?plant .
+        hint:Prior hint:gearing "forward"
+        }
+        BIND(?plant AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?animal .
+        BIND(?animal AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?location .
+        BIND(?location AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?fictional_character .
+        BIND(?fictional_character AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?written_work .
+        BIND(?written_work AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?building .
+        BIND(?building AS ?type) .
+    }
+    OPTIONAL {
+        ?item p:P31/ps:P31/wdt:P279* ?entity .
+        BIND(?entity AS ?type) .
+    }
+
+    ?item rdfs:label ?label .
+    FILTER (lang(?label) = 'en') .
+    BIND(STRAFTER(STR(?item), '/entity/') AS ?qid) .
+    OPTIONAL {
+        ?item schema:description ?description .
+        FILTER (lang(?description) = 'en') .
+    }
+    OPTIONAL {
+        ?item skos:altLabel ?alias .
+        FILTER (lang(?alias) = 'en') .
+    }
+    OPTIONAL {
+        ?wikipedia schema:about ?item .
+        ?wikipedia schema:isPartOf <https://en.wikipedia.org/> .
+    }
+    OPTIONAL {
+        ?item ?image_prop ?image .
+    }
+    OPTIONAL {
+        ?item ?coordinate_location_prop ?coords .
+    }
+    OPTIONAL {
+        ?item ?whos_on_first_prop ?wof_id .
+    }
+
+} ORDER BY ?item
