@@ -49,6 +49,11 @@ const myMixin = {
 }
 
 console.log('main.js')
+
+const breakpoint = 480
+const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+const isMobile = screenWidth <= breakpoint
+
 let vm
 
 let rtime
@@ -136,7 +141,7 @@ function initApp() {
 
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', qargs.layout || config.layout || 'hc' )
+  vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || config.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', qargs.showBanner === 'true' || qargs.showBanner === '')
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')

@@ -42,125 +42,6 @@ def _is_empty(elem):
     elem_contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
     return len(elem_contents) == 0
 
-def mw_to_html5(html):
-    '''Transforms mediawiki generated HTML to semantic HTML'''
-    _input = BeautifulSoup(html, 'html5lib')
-    for elem in _input.find_all('span', {'class': 'mw-editsection'}):
-        elem.decompose()
-    for elem in _input.find_all(id='toc'):
-        elem.decompose()
-    base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
-    html5 = BeautifulSoup(base_html, 'html5lib')
-
-    article = html5.new_tag('article', id='essay')
-    article.attrs['data-app'] = 'true'
-    html5.html.body.append(article)
-
-    pnum = 0 # paragraph number within section
-    root = _input.find('div', {'class': 'mw-parser-output'})
-    sections = []
-    for elem in root.find_all(recursive=False):
-        if isinstance(elem, Tag):
-            if elem.name[0] == 'h' and elem.name[1:].isdigit():
-                headline = elem.find('span', {'class': 'mw-headline'})
-                if not headline:
-                    continue
-                level = int(elem.name[1:])
-                title = headline.string
-                tag = html5.new_tag('section', id=headline.attrs['id'])
-                head = html5.new_tag(f'h{level}')
-                head.string = title
-                tag.append(head)
-                section = {
-                    'id': headline.attrs['id'],
-                    'level': level,
-                    'parent': None,
-                    'tag': tag
-                }
-                pnum = 0
-                for s in sections[::-1]:
-                    if s['level'] < section['level']:
-                        section['parent'] = s['id']
-                        break
-                sections.append(section)
-            else:
-                parent = sections[-1]['tag'] if sections else article
-                if elem.name == 'p' and not _is_empty(elem):
-                    pnum += 1
-                    # ensure non-empty paragraphs have an ID
-                    if 'id' not in elem.attrs:
-                        elem.attrs['id'] = f'{parent.attrs["id"]}-{pnum}'
-                parent.append(elem)
-
-    sections = dict([(s['id'], s) for s in sections])
-
-    for section in sections.values():
-        parent = sections[section['parent']]['tag'] if section['parent'] else article
-        parent.append(section['tag'])
-
-    return str(html5)
-
-def md_to_html5(html, fname):
-    '''Transforms markdown generated HTML to semantic HTML'''
-    # logger.info(html)
-    _input = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-
-    base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
-    html5 = BeautifulSoup(base_html, 'html5lib')
-
-    article = html5.new_tag('article', id='essay')
-    article.attrs['data-app'] = 'true'
-    article.attrs['data-name'] = fname
-    html5.html.body.append(article)
-
-    snum = 0 # section number
-    pnum = 0 # paragraph number within section
-
-    root = _input.find('div', {'id': 'md-content'})
-
-    sections = []
-    for elem in root.find_all(recursive=False):
-        if isinstance(elem, Tag):
-            if elem.name[0] == 'h' and elem.name[1:].isdigit():
-                level = int(elem.name[1:])
-                title = elem.string
-                snum += 1
-                section_id = f'section-{snum}'
-                # logger.info(f'section: level={level} id={section_id} title="{title}')
-                tag = html5.new_tag('section', id=section_id)
-                head = html5.new_tag(f'h{level}')
-                head.string = title
-                tag.append(head)
-                section = {
-                    'id': section_id,
-                    'level': level,
-                    'parent': None,
-                    'tag': tag
-                }
-                pnum = 0
-                for s in sections[::-1]:
-                    if s['level'] < section['level']:
-                        section['parent'] = s['id']
-                        break
-                sections.append(section)
-            else:
-                parent = sections[-1]['tag'] if sections else article
-                if elem.name == 'p' and not _is_empty(elem):
-                    pnum += 1
-                    # ensure non-empty paragraphs have an ID
-                    if 'id' not in elem.attrs:
-                        elem.attrs['id'] = f'{parent.attrs["id"]}-{pnum}'
-                parent.append(elem)
-
-    sections = dict([(s['id'], s) for s in sections])
-
-    for section in sections.values():
-        parent = sections[section['parent']]['tag'] if section['parent'] else article
-        parent.append(section['tag'])
-
-    return str(html5)
-
-
 class Essay(object):
 
     def __init__(self, html, **kwargs):
@@ -568,56 +449,20 @@ def is_qid(s, ns_required=True):
     eid = s.split(':')
     return len(eid[-1]) > 1 and eid[-1][0] == 'Q' and eid[-1][1:].isdecimal()
 
-def add_vue_app(html, js_lib):
-    soup = html if isinstance(html, BeautifulSoup) else BeautifulSoup(html, 'html5lib')
-
-    for url in [
-        'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900',
-        'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css',
-        #'https://fonts.googleapis.com/css?family=Material+Icons',
-        #'https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.css',
-
-        'https://unpkg.com/leaflet@1.6.0/dist/leaflet.css',
-        # 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
-        # 'https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.1.12/vuetify.min.css',
-        # 'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
-        ]:
-        style = soup.new_tag('link')
-        style.attrs['rel'] = 'stylesheet'
-        style.attrs['href'] = url
-        soup.html.head.append(style)
-
-    for url in [
-        #'https://cdn.jsdelivr.net/npm/babel-polyfill/dist/polyfill.min.js',
-        #'https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js',
-        #'https://cdn.jsdelivr.net/npm/vuetify@2.2.17/dist/vuetify.min.js',
-
-        # 'https://unpkg.com/leaflet@1.6.0/dist/leaflet.js',
-        # 'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.1/openseadragon.min.js',
-        # 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js',
-        js_lib
-        ]:
-        lib = soup.new_tag('script')
-        lib.attrs['src'] = url
-        soup.html.body.append(lib)
-
-    return str(soup)
-
 def usage():
-    print(f'{sys.argv[0]} [hl:s:e:f:w] title')
+    print(f'{sys.argv[0]} [hl:s:e:f:] title')
     print(f'   -h --help          Print help message')
     print(f'   -l --loglevel      Logging level (default=warning)')
     print(f'   -s --site          Baseurl for source text (default="{DEFAULT_SITE}")')
     print(f'   -e --language      Language (default="en")')
     print(f'   -f --format        Format (json, html) (default=json)')
-    print(f'   -w --wikitext      Return wikitext')
 
 if __name__ == '__main__':
     logger.setLevel(logging.WARNING)
     kwargs = {}
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:], 'hl:s:e:f:w', ['help', 'loglevel', 'site', 'language', 'format', 'wikitext'])
+            sys.argv[1:], 'hl:s:e:f:w', ['help', 'loglevel', 'site', 'language', 'format'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err))  # will print something like "option -a not recognized"
@@ -635,8 +480,6 @@ if __name__ == '__main__':
             kwargs['site'] = a
         elif o in ('-e', '--language'):
             kwargs['language'] = a
-        elif o in ('-w', '--wikitext'):
-            kwargs['wikitext'] = True
         elif o in ('-f', '--format'):
             kwargs['content_type'] = 'text/html' if a == 'html' else 'application/json'
         elif o in ('-h', '--help'):

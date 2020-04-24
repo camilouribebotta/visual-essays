@@ -10,7 +10,8 @@ import sys
 import re
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.path.dirname(SCRIPT_DIR)
-DOCS_DIR = os.path.dirname(BASEDIR)
+DOCS_ROOT = os.path.dirname(BASEDIR)
+logger.warning(DOCS_ROOT)
 sys.path.append(SCRIPT_DIR)
 
 import json
@@ -37,15 +38,14 @@ from specimens import get_specimens
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.12.min.js'
-#VE_JS_LIB = 'https://raw.githubusercontent.com/JSTOR-Labs/visual-essays/master/lib/visual-essays-0.4.12.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.14.min.js'
 ENV = 'prod'
 
 KNOWN_SITES = {
-    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
-    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
-    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities'},
-    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'}
+    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': 'content'},
+    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': 'content'},
+    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities', 'root': 'docs/content'},
+    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens', 'root': ''}
 }
 
 cors_headers = {
@@ -53,21 +53,24 @@ cors_headers = {
     'Access-Control-Allow-Credentials': True
 }
 
+def content_baseurl(acct, repo):
+    root = ''
+    for site, site_data in KNOWN_SITES.items():
+        if site != 'localhost' and site_data['acct'] == acct and site_data['repo'] == repo:
+            root = site_data.get('root', '')
+            break
+    return f'https://raw.githubusercontent.com/{acct}/{repo}/master/{root}'
+
 def get_gh_markdown(acct, repo, file=None):
-    baseurls = [
-        ['raw', f'https://raw.githubusercontent.com/{acct}/{repo}/master'],
-        ['ghp', f'https://{acct}.github.io/{repo}'],
-    ]
-    if acct == 'jstor-labs' and repo == 'plant-humanities':
-        baseurls = [['ph', f'https://jstor-labs.github.io/plant-humanities/content']]
+    baseurl = content_baseurl(acct, repo)
+    logger.info(f'get_gh_markdown: acct={acct} repo={repo} baseurl={baseurl}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        for source, baseurl in baseurls:
-            url = f'{baseurl}/{file}'
-            resp = requests.get(url)
-            logger.info(f'{url} {resp.status_code}')
-            if resp.status_code == 200:
-                return {'source': source, 'fname': file.replace('.md', ''), 'text': resp.content.decode('utf-8')}
+        url = f'{baseurl}{file}'
+        resp = requests.get(url)
+        logger.info(f'{url} {resp.status_code}')
+        if resp.status_code == 200:
+            return {'source': 'gh', 'fname': file.replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
@@ -80,8 +83,8 @@ def get_local_markdown(file=None):
     logger.info(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        path = os.path.join(DOCS_DIR, file)
-        logger.info(path)
+        path = os.path.join(DOCS_ROOT, KNOWN_SITES['localhost']['root'], file)
+        logger.info(f'path={path}')
         if os.path.exists(path):
             with open(path, 'r') as fp:
                 return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
@@ -95,10 +98,8 @@ def convert_relative_links(soup, acct=None, repo=None, source=None):
                     elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
     if source == 'local':
         baseurl = 'http://localhost:5000/static'
-    elif source == 'raw':
+    elif source == 'gh':
         baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
-    else: # source == 'ghp':
-        baseurl = f'https://{acct}/github.io/{repo}'
 
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
@@ -289,7 +290,7 @@ def essay(acct=None, repo=None, file=None):
         if 'gdid' in kwargs:
            markdown = get_gd_markdown(kwargs.pop('gdid'))
         else:
-            use_local = kwargs.pop('mode', ENV) == 'dev' and acct is None
+            use_local = kwargs.pop('mode', ENV) == 'dev'
             site = urlparse(request.base_url).hostname
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
@@ -309,12 +310,12 @@ def essay(acct=None, repo=None, file=None):
 @app.route('/<file>', methods=['GET'])  
 @app.route('/', methods=['GET'])  
 def site(acct=None, repo=None, file=None):    
+    kwargs = dict([(k, request.args.get(k)) for k in request.args])
+    _set_logging_level(kwargs)
     site = urlparse(request.base_url).hostname
     acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
     repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-    kwargs = dict([(k, request.args.get(k)) for k in request.args])
     logger.info(f'site: site={site} acct={acct} repo={repo} kwargs={kwargs}')
-    _set_logging_level(kwargs)
 
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
@@ -322,8 +323,7 @@ def site(acct=None, repo=None, file=None):
         with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
             html = fp.read()
             if ENV == 'dev':
-                # html = re.sub(r'"https://JSTOR-Labs\.github\.io/visual-essays/lib/.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
-                html = re.sub(r'"https://raw.githubusercontent.com/JSTOR-Labs/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
+                html = re.sub(r'"https://JSTOR-Labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
             return html, 200
 
 def usage():
