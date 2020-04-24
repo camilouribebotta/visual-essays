@@ -44,7 +44,7 @@
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
 
-const breakpoint = 1000;
+const breakpoint = 768
 
 export default {
   name: 'app',
@@ -76,7 +76,7 @@ export default {
       handler: function (width) {
         // console.log(`layout=${this.$store.getters.layout}`)
         if (width > 0) {
-          this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vertical' : 'horizontal')
+          this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vtl' : 'hc')
           // console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
         }     
       },

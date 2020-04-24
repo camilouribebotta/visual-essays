@@ -1,3 +1,0 @@
-## Visual Essays contact
-
-updated
