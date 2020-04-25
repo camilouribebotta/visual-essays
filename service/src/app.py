@@ -42,10 +42,10 @@ VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.14
 ENV = 'prod'
 
 KNOWN_SITES = {
-    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': 'content'},
-    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': 'content'},
-    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities', 'root': 'docs/content'},
-    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens', 'root': ''}
+    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/content/'},
+    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/content/'},
+    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities', 'root': '/docs/content/'},
+    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens', 'root': '/'}
 }
 
 cors_headers = {
@@ -54,12 +54,12 @@ cors_headers = {
 }
 
 def content_baseurl(acct, repo):
-    root = ''
+    root = '/'
     for site, site_data in KNOWN_SITES.items():
         if site != 'localhost' and site_data['acct'] == acct and site_data['repo'] == repo:
             root = site_data.get('root', '')
             break
-    return f'https://raw.githubusercontent.com/{acct}/{repo}/master/{root}'
+    return f'https://raw.githubusercontent.com/{acct}/{repo}/master{root}'
 
 def get_gh_markdown(acct, repo, file=None):
     baseurl = content_baseurl(acct, repo)
@@ -83,24 +83,37 @@ def get_local_markdown(file=None):
     logger.info(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        path = os.path.join(DOCS_ROOT, KNOWN_SITES['localhost']['root'], file)
+        path = f'{DOCS_ROOT}/{KNOWN_SITES["localhost"]["root"]}/{file}'
         logger.info(f'path={path}')
         if os.path.exists(path):
             with open(path, 'r') as fp:
                 return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
 
-def convert_relative_links(soup, acct=None, repo=None, source=None):
-    baseurl = 'http://localhost:5000/essay' if source == 'local' else f'https://visual-essays.app/essay/{acct}/{repo}' 
+def convert_relative_links(soup, acct=None, repo=None, source=None, site=None):
+    logger.info(f'convert_relative_links: acct={acct} repo={repo} site={site}')
+    if site == 'localhost':
+        baseurl = 'http://localhost:5000/essay'
+        if acct:
+            baseurl += f'/{acct}/{repo}'
+    else:
+        baseurl = None
+        for site, site_data in KNOWN_SITES.items():
+            if site_data['acct'] == acct and site_data['repo'] == repo and site != 'localhost':
+                baseurl = f'http{"" if site == "localhost" else "s"}://{site}/essay'
+                break
+        if baseurl is None:
+            baseurl = f'https://visual-essays.app/essay/{acct}/{repo}' 
+
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
+    
     if source == 'local':
         baseurl = 'http://localhost:5000/static'
     elif source == 'gh':
-        baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
-
+        baseurl = content_baseurl(acct, repo)
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
@@ -114,12 +127,13 @@ def _is_empty(elem):
     elem_contents = [t for t in elem.contents if t and (isinstance(t, str) and t.strip()) or t.name not in ('br',) and t.string and t.string.strip()]
     return len(elem_contents) == 0
 
-def markdown_to_html5(markdown, acct=None, repo=None):
+def markdown_to_html5(markdown, acct=None, repo=None, site=None):
+    logger.info(f'markdown_to_html5: acct={acct} repo={repo} site={site}')
     '''Transforms markdown generated HTML to semantic HTML'''
     html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, acct, repo, markdown['source'])
+    convert_relative_links(soup, acct, repo, markdown['source'], site)
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
@@ -290,17 +304,17 @@ def essay(acct=None, repo=None, file=None):
         if 'gdid' in kwargs:
            markdown = get_gd_markdown(kwargs.pop('gdid'))
         else:
-            use_local = kwargs.pop('mode', ENV) == 'dev'
             site = urlparse(request.base_url).hostname
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-            logger.info(f'essay: site={site} use_local={use_local} acct={acct} repo={repo} file={file} kwargs={kwargs}')
+            logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')
+            use_local = kwargs.pop('mode', ENV) == 'dev'
             if use_local:
                 markdown = get_local_markdown(file)
             else:
                 markdown = get_gh_markdown(acct, repo, file)
         if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, acct, repo), cache=cache, **kwargs)
+            essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return 'Not found', 404
@@ -358,5 +372,5 @@ if __name__ == '__main__':
         else:
             assert False, 'unhandled option'
 
-    logger.info(f'VE_JS_LIB={VE_JS_LIB}')
+    logger.info(f'ENV={ENV} VE_JS_LIB={VE_JS_LIB}')
     app.run(debug=True, host='0.0.0.0')

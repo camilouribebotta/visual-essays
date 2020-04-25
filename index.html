@@ -16,7 +16,7 @@
 
       <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
         <v-list dense  v-cloak>
-          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)">
+          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)" v-if="menuItem.enabled">
             <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
             <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
           </v-list-item>
@@ -34,13 +34,13 @@
           fade-img-on-scroll
           dark
           shrink-on-scroll
-          :src="banner"
+          :src="essayBanner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
         >
   
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
+          <v-toolbar-title v-cloak>{{essayTitle}}</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-app-bar>
   
@@ -60,7 +60,7 @@
     </v-app>
   </div>
 
-  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.13.min.js"></script>
+  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.14.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
@@ -76,11 +76,11 @@
       return string_array.join(' ');
     }
     let defaults = {
-      'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays', banner: 'https://picsum.photos/1200/225'},
-      'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays', banner: 'https://picsum.photos/1200/225'},
-      'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays', banner: 'https://picsum.photos/1200/225'},
-      'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities', banner: 'https://picsum.photos/1200/225'},
-      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps', banner: 'https://picsum.photos/1200/225'}
+      'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities', banner: 'https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/master/banner.jpg'},
+      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
     }
 
     window.app = new Vue({
@@ -89,23 +89,23 @@
       data: () => ({
         drawer: false,
         fixed: true,
-        baseNav: [
-          { title: 'Home', icon: 'mdi-home' },
-          { file: 'about', title: 'About', icon: 'mdi-information' },
-          { file: 'contact', title: 'Contact', icon: 'mdi-contact-mail' }
-        ],
-        optionalNav: [
-          { file: 'help', title: 'Help', icon: 'mdi-help-circle' },
-          { file: 'resources', title: 'Resources', icon: 'mdi-library' }
+        nav: [
+          { title: 'Home', icon: 'mdi-home', enabled: true },
+          { file: 'about', title: 'About', icon: 'mdi-information', enabled: false },
+          { file: 'contact', title: 'Contact', icon: 'mdi-contact-mail', enabled: false },
+          { file: 'help', title: 'Help', icon: 'mdi-help-circle', enabled: false },
+          { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
         essayMetadata: {},
+        siteBanner: undefined,
+        siteTitle: undefined,
         bannerHeight: 200,
         scrollThreshold: 150,
         height: 0,
         essayTopMargin: 200,
         html: undefined,
-        service: 'https://visual-essays.app/essay',
+        service: undefined,
         acct: undefined,
         repo: undefined,
         rtime: undefined,
@@ -115,12 +115,16 @@
         essayCache: {}
       }),
       computed: {
-        banner() { return this.essayMetadata.banner || defaults[this.hostname].banner },
-        title() { return this.essayMetadata.title || this.repo ? this.repo.titleize() : '' },
-        nav() { return [...this.baseNav, ...(this.acct === 'jstor-labs' && this.repo === 'visual-essays' ? this.optionalNav : [])]}
+        essayBanner() { return this.essayMetadata.banner || this.siteBanner || defaults[this.hostname].banner },
+        essayTitle() { return this.essayMetadata.title || this.siteTitle || this.repo ? this.repo.titleize() : '' },
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()
+        if (window.location.hostname === 'localhost') {
+            this.service = 'http://localhost:5000/essay'
+        } else {
+          this.service = defaults[this.hostname] ? `https://${this.hostname}/essay` : `https://visual-essays.app/essay`
+        }
       },
       mounted() {
         window.onpopstate = (e) => {
@@ -128,9 +132,6 @@
         }        
         const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(window.location.hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
         let file
-        if (window.location.hostname === 'localhost') {
-            this.service = 'http://localhost:5000/essay'
-        }
         if (path.length < 2) {
           if (window.location.hostname.indexOf('.github.io') >= 0) {
             this.acct = window.location.hostname.replace(/\.github\.io/, '')
@@ -148,22 +149,33 @@
         console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
         this.setAndWatchHeight()
         this.loadEssay(file)
+        // Find and preload navigation pages
+        this.nav.filter(navItem => !navItem.enabled)
+        .forEach(navItem => {
+          this.cachingFetch(navItem.file)
+          .then(html => {
+            if (html) {
+              this.nav.map(item => item.enabled = item.enabled || item.file == navItem.file)
+            }
+          })
+        })
       },
       methods: {
         menuItemClicked(file) {
           this.drawer = false
           this.loadEssay(file)
         },
-        cachingFetch(url) {
+        cachingFetch(file) {
+          // const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '') + (this.service === 'http://localhost:5000/essay' ? '?mode=dev' : '')
+          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
+          console.log(`loadEssay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
           if (!this.essayCache[url]) {
-            this.essayCache[url] = fetch(url).then(resp => resp.text())
+            this.essayCache[url] = fetch(url).then((resp) => resp.ok ? resp.text() : null)
           }
           return this.essayCache[url]
         },
         loadEssay(file, replace) {
-          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '') + (this.service === 'http://localhost:5000/essay' ? '?mode=dev' : '')
-          console.log(`loadEssay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
-          this.cachingFetch(url)
+          this.cachingFetch(file)
           .then(html => {
             let browserPath = `${this.acct === defaults[this.hostname].acct && this.repo === defaults[this.hostname].repo ? '' : '/'+this.acct}${this.acct === defaults[this.hostname].acct && this.repo === defaults[this.hostname].repo ? '' : '/'+this.repo}${file ? '/'+file : ''}` || '/'
             if (replace) {
@@ -199,8 +211,15 @@
           if (this.isLoaded) {
             this.isLoaded = false
             this.$nextTick(() => {
+              console.log('isLoaded.nextTick', this.essayMetadata, this.siteBanner)
+              if (this.essayMetadata && this.essayMetadata.banner && !this.siteBanner) {
+                console.log('setting siteBanner', this.essayMetadata.banner)
+                this.siteBanner = this.essayMetadata.banner
+                this.siteTitle = this.essayMetadata.title
+              }
               // convert embedded essay links
               document.getElementById('essay').querySelectorAll('a').forEach(link => {
+                console.log(link.href, this.service)
                 if (link.href.indexOf(this.service) === 0) {
                   const file = link.href.slice(link.href.lastIndexOf('/')+1)
                   link.addEventListener('click', () => this.loadEssay(file))

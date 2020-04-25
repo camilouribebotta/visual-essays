@@ -68,7 +68,7 @@ class Essay(object):
 
     def _remove_empty_paragraphs(self):
         for link in self._soup.findAll(lambda tag: tag.name in ('a',)):
-            if 'us-central1-visual-essay' in link.attrs['href']:
+            if 'plant-humanities.app' in link.attrs['href'] and 'gdid' in link.attrs['href']:
                 link.extract()
         for para_elem in self._soup.findAll(lambda tag: tag.name in ('p',)):
             if _is_empty(para_elem):
@@ -240,7 +240,7 @@ class Essay(object):
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')
 
             ve_markup[attrs['id']] = attrs
-
+        logger.info(ve_markup)
         return ve_markup
 
     def add_stylesheet(self, **kwargs):

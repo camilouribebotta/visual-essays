@@ -149,6 +149,7 @@ function initApp() {
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
   const essayMetadata = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  console.log('essayMetadata', essayMetadata)
   if (window.app) {
     window.app.essayMetadata = essayMetadata
   }
