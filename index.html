@@ -60,7 +60,7 @@
     </v-app>
   </div>
 
-  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays-0.4.14.min.js"></script>
+  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
@@ -80,7 +80,8 @@
       'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities', banner: 'https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/master/banner.jpg'},
-      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
+      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'},
+      'dickens.kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
     }
 
     window.app = new Vue({
@@ -147,6 +148,7 @@
           file = path[2]
         }
         console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
+        this.siteBanner = defaults[this.hostname].banner
         this.setAndWatchHeight()
         this.loadEssay(file)
         // Find and preload navigation pages

@@ -6,4 +6,4 @@ serverless.yml
 dist
 arbor_vitae.md
 *.pyc
-build
+service/build

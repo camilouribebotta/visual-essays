@@ -13,9 +13,10 @@ module.exports = (env, argv) => {
     'visual-essays' : './src/main.js'
     },
     output: {
-      path: path.resolve(__dirname, '../dist/lib'),
+      path: path.resolve(__dirname, '../lib'),
       publicPath: '/lib/',
-      filename: argv.mode === 'production' ? `[name]-${BUNDLE_VERSION}.min.js` : `[name].js`
+      // filename: argv.mode === 'production' ? `[name]-${BUNDLE_VERSION}.min.js` : `[name].js`
+      filename: argv.mode === 'production' ? `[name].min.js` : `[name].js`
     },
     resolve: {
       extensions: ['.js', '.vue', '.json'],

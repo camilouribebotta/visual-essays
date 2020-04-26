@@ -42,8 +42,8 @@ VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.14
 ENV = 'prod'
 
 KNOWN_SITES = {
-    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/content/'},
-    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/content/'},
+    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/docs/'},
+    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/docs/'},
     'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities', 'root': '/docs/content/'},
     'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens', 'root': '/'}
 }
