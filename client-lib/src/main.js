@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-VERSION = '0.5.0'
+const VERSION = '0.5.0'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -49,8 +49,6 @@ const myMixin = {
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }
 }
-
-console.log('main.js')
 
 const breakpoint = 480
 const screenWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -154,7 +152,7 @@ function initApp() {
   console.log('essayMetadata', essayMetadata)
   if (window.app) {
     window.app.essayMetadata = essayMetadata
-    window.app.jslib_version = VERSION
+    window.app.libVersion = VERSION
   }
 
   vm.$mount('#essay')
