@@ -38,7 +38,7 @@ from specimens import get_specimens
 from gc_cache import Cache
 cache = Cache()
 
-VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays-0.4.14.min.js'
+VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays.min.js'
 ENV = 'prod'
 
 KNOWN_SITES = {
@@ -316,6 +316,34 @@ def essay(acct=None, repo=None, file=None):
         if markdown:
             essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
+        else:
+            return 'Not found', 404
+
+@app.route('/config/<acct>/<repo>', methods=['GET'])
+@app.route('/config', methods=['GET'])
+def config(acct=None, repo=None):
+    kwargs = dict([(k, request.args.get(k)) for k in request.args])
+    _set_logging_level(kwargs)
+
+    if request.method == 'OPTIONS':
+        return ('', 204, cors_headers)
+    else:
+        site = urlparse(request.base_url).hostname
+        acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
+        repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
+        baseurl = content_baseurl(acct, repo)
+        use_local = kwargs.pop('mode', ENV) == 'dev'
+        logger.info(f'config: site={site} acct={acct} repo={repo} baseurl={baseurl} use_local={use_local}')
+        _config = None
+        if use_local:
+            config_path = os.path.join(DOCS_ROOT, 'config.json')
+            if os.path.exists(config_path):
+                _config = json.load(open(config_path, 'r'))
+        else:
+            resp = requests.get(f'{baseurl}/config.json')
+            _config = resp.json() if resp.status_code == 200 else None
+        if _config:
+            return (_config, 200, cors_headers)
         else:
             return 'Not found', 404
 

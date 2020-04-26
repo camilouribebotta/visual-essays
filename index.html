@@ -20,9 +20,9 @@
             <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
             <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-content>Lib version: {{libVersion}}</v-list-item-content>
-          </v-list-item>        
+          <v-divider></v-divider>
+          <v-list-item><v-list-item-content style="font-size:0.8em;margin-top:36px;">App version: 0.2.1</v-list-item-content></v-list-item>        
+          <v-list-item><v-list-item-content style="font-size:0.8em;">Lib version: {{libVersion}}</v-list-item-content></v-list-item>        
         </v-list>
 
       </v-navigation-drawer>
@@ -38,13 +38,13 @@
           fade-img-on-scroll
           dark
           shrink-on-scroll
-          :src="essayBanner"
+          :src="banner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
         >
   
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak>{{essayTitle}}</v-toolbar-title>
+          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-app-bar>
   
@@ -83,7 +83,7 @@
       'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
-      'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities', banner: 'https://raw.githubusercontent.com/JSTOR-Labs/plant-humanities/master/banner.jpg'},
+      'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
       'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'},
       'dickens.kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
     }
@@ -102,9 +102,6 @@
           { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
-        essayMetadata: {},
-        siteBanner: undefined,
-        siteTitle: undefined,
         bannerHeight: 200,
         scrollThreshold: 150,
         height: 0,
@@ -117,18 +114,23 @@
         timeout: false,
         isLoaded: false,
         delta: 200,
-        essayCache: {}
+        essayCache: {},
+        libVersion: undefined,
+        siteConfig: {},
+        essayConfig: {}
       }),
       computed: {
-        essayBanner() { return this.essayMetadata.banner || this.siteBanner || defaults[this.hostname].banner },
-        essayTitle() { return this.essayMetadata.title || this.siteTitle || this.repo ? this.repo.titleize() : '' },
+        // banner() { return this.essayConfig.banner || this.siteConfig.banner },
+        // title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
+        banner() { return this.siteConfig.banner ? `${this.hostname === 'localhost' ? '/static' : ''}${this.siteConfig.banner}` : undefined },
+        title() { return this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()
         if (window.location.hostname === 'localhost') {
-            this.service = 'http://localhost:5000/essay'
+            this.service = 'http://localhost:5000'
         } else {
-          this.service = defaults[this.hostname] ? `https://${this.hostname}/essay` : `https://visual-essays.app/essay`
+          this.service = defaults[this.hostname] ? `https://${this.hostname}` : `https://visual-essays.app`
         }
       },
       mounted() {
@@ -152,7 +154,9 @@
           file = path[2]
         }
         console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
-        this.siteBanner = defaults[this.hostname].banner
+        const configUrl = `${this.service}/config` + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '')
+        fetch(configUrl).then(resp => resp.ok ? resp.json() : {}).then(config => this.siteConfig = config)
+        console.log('siteConfig', this.siteConfig)
         this.setAndWatchHeight()
         this.loadEssay(file)
         // Find and preload navigation pages
@@ -172,8 +176,7 @@
           this.loadEssay(file)
         },
         cachingFetch(file) {
-          // const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '') + (this.service === 'http://localhost:5000/essay' ? '?mode=dev' : '')
-          const url = this.service + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
+          const url = `${this.service}/essay` + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '') + (file ? `/${file}` : '')
           console.log(`loadEssay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
           if (!this.essayCache[url]) {
             this.essayCache[url] = fetch(url).then((resp) => resp.ok ? resp.text() : null)
@@ -217,15 +220,8 @@
           if (this.isLoaded) {
             this.isLoaded = false
             this.$nextTick(() => {
-              console.log('isLoaded.nextTick', this.essayMetadata, this.siteBanner)
-              if (this.essayMetadata && this.essayMetadata.banner && !this.siteBanner) {
-                console.log('setting siteBanner', this.essayMetadata.banner)
-                this.siteBanner = this.essayMetadata.banner
-                this.siteTitle = this.essayMetadata.title
-              }
               // convert embedded essay links
               document.getElementById('essay').querySelectorAll('a').forEach(link => {
-                console.log(link.href, this.service)
                 if (link.href.indexOf(this.service) === 0) {
                   const file = link.href.slice(link.href.lastIndexOf('/')+1)
                   link.addEventListener('click', () => this.loadEssay(file))
