@@ -155,8 +155,7 @@
         }
         console.log(`essay: service=${this.service} acct=${this.acct} repo=${this.repo} file=${file}`)
         const configUrl = `${this.service}/config` + (this.acct ? `/${this.acct}` : '') + (this.repo ? `/${this.repo}` : '')
-        fetch(configUrl).then(resp => resp.ok ? resp.json() : {}).then(config => this.siteConfig = config)
-        console.log('siteConfig', this.siteConfig)
+        fetch(configUrl).then(resp => resp.ok ? resp.json() : {}).then(config => {this.siteConfig = config; console.log('siteConfig', this.siteConfig)})
         this.setAndWatchHeight()
         this.loadEssay(file)
         // Find and preload navigation pages

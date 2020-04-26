@@ -335,8 +335,8 @@ def config(acct=None, repo=None):
         use_local = kwargs.pop('mode', ENV) == 'dev'
         logger.info(f'config: site={site} acct={acct} repo={repo} baseurl={baseurl} use_local={use_local}')
         _config = None
-        if use_local:
-            config_path = os.path.join(DOCS_ROOT, 'config.json')
+        if use_local:        
+            config_path = f'{DOCS_ROOT}/{KNOWN_SITES["localhost"]["root"]}/config.json'
             if os.path.exists(config_path):
                 _config = json.load(open(config_path, 'r'))
         else:
