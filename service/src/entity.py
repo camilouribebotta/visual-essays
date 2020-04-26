@@ -188,7 +188,7 @@ class KnowledgeGraph(object):
 
     def _properties(self, ns='wd'):
         '''Get property mappings for graph to map property entity IDs to labels'''
-        cached_props_path = f'{ns}-props.json'
+        cached_props_path = f'mappings/{ns}-props.json'
         if os.path.exists(cached_props_path):
             with open (cached_props_path, 'r') as fp:
                 props = json.load(fp)
@@ -223,7 +223,7 @@ class KnowledgeGraph(object):
 
     def _formatter_urls(self, ns='wd'):
         '''Get all formatter URLs for graph for converting external entity IDs to full URL'''
-        cached_path = f'{ns}-formatter-urls.json'
+        cached_path = f'mappings/{ns}-formatter-urls.json'
         if os.path.exists(cached_path):
             with open (cached_path, 'r') as fp:
                 formatter_urls = json.load(fp)

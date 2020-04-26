@@ -33,7 +33,9 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-console.log('main.js')
+VERSION = '0.5.0'
+
+console.log(`visual-essays js lib ${VERSION}`)
 
 Vue.component('lingallery', Lingallery)
 
@@ -152,6 +154,7 @@ function initApp() {
   console.log('essayMetadata', essayMetadata)
   if (window.app) {
     window.app.essayMetadata = essayMetadata
+    window.app.jslib_version = VERSION
   }
 
   vm.$mount('#essay')

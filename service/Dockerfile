@@ -14,8 +14,8 @@ RUN set -e; \
 WORKDIR /usr/src/app
 
 ADD src src
+ADD mappings mappings
 ADD index.html .
-ADD viewer.html .
 COPY favicon.ico src/static/favicon.ico
 
 ENV PORT 8080

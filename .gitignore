@@ -7,3 +7,4 @@ dist
 arbor_vitae.md
 *.pyc
 service/build
+.vscode
