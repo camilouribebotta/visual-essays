@@ -473,4 +473,9 @@ export default {
     display: inline-block;
   }
 
+.leaflet-popup-content {
+    margin: 5px 8px;
+    line-height: 1;
+}
+
 </style>
