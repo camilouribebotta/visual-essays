@@ -1,4 +1,6 @@
 {
     "title": "Visual Essays",
-    "banner": "/images/banner.jpg"
+    "banner": "/images/banner1.jpg",
+    "showFooter": true,
+    "logo": "/images/logo_black.png"
 }

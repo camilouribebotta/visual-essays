@@ -34,6 +34,7 @@
           app
           prominent
           :height="bannerHeight"
+          elevation="6" 
           elevate-on-scroll
           fade-img-on-scroll
           dark
@@ -44,11 +45,11 @@
         >
   
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
+          <v-toolbar-title v-cloak style="color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-app-bar>
   
-        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
+        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
           <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
               <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
@@ -56,10 +57,18 @@
           </v-container>
         </v-sheet>
   
-        <v-footer ref="footer" :fixed="fixed" app>
-          <v-flex ref="footer" class="text-xs-left"></v-flex>
-        </v-footer>
+        <v-app-bar v-if="siteConfig.showFooter" app bottom hide-on-scroll color="#eee" elevation="6" scroll-target="#scrollableContent">
+          <v-toolbar-title style="font-size:1.0em;">
+            Brought to you by <img style="margin-left:8px;" :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
+          </v-toolbar-title>
 
+          <v-spacer></v-spacer>
+          <!--
+            <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
+            <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+            <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+          -->
+        </v-app-bar>
       </v-card>
     </v-app>
   </div>
@@ -102,10 +111,10 @@
           { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
-        bannerHeight: 200,
-        scrollThreshold: 150,
+        bannerHeight: 300,
+        scrollThreshold: 250,
         height: 0,
-        essayTopMargin: 200,
+        essayTopMargin: 240,
         html: undefined,
         service: undefined,
         acct: undefined,
@@ -122,7 +131,8 @@
       computed: {
         // banner() { return this.essayConfig.banner || this.siteConfig.banner },
         // title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
-        banner() { return this.siteConfig.banner ? `${this.hostname === 'localhost' ? '/static' : ''}${this.siteConfig.banner}` : undefined },
+        imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
+        banner() { return this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
         title() { return this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
       },
       created() {
@@ -196,7 +206,7 @@
           })
         },
         setAndWatchHeight() {
-          this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
+          this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
           window.addEventListener('resize', () => {
             this.rtime = new Date()
             if (this.timeout === false) {
