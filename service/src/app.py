@@ -343,6 +343,10 @@ def config(acct=None, repo=None):
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
+            baseurl = content_baseurl(acct, repo)
+            for attr in ('banner',):
+                if attr in _config and _config[attr][0] == '/':
+                    _config[attr] = f'{baseurl}{_config[attr]}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404
