@@ -477,5 +477,8 @@ export default {
     margin: 5px 8px;
     line-height: 1;
 }
+.leaflet-popup-content-wrapper h1 {
+    margin-bottom: 0px;
+}
 
 </style>
