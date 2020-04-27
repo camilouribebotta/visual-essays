@@ -15,7 +15,7 @@
     <v-app>
 
       <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
-        <v-list dense  v-cloak>
+        <v-list dense v-cloak>
           <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)" v-if="menuItem.enabled">
             <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
             <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
@@ -32,13 +32,13 @@
           ref="header"
           id="appbar"
           app
-          prominent
           :height="bannerHeight"
           elevation="6" 
           elevate-on-scroll
           fade-img-on-scroll
           dark
           shrink-on-scroll
+          dense
           :src="banner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
@@ -57,15 +57,13 @@
           </v-container>
         </v-sheet>
   
-        <v-app-bar v-if="siteConfig.showFooter" app bottom hide-on-scroll color="#eee" elevation="6" scroll-target="#scrollableContent">
+        <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
           <v-toolbar-title style="font-size:1.0em;">
-            Brought to you by <img style="margin-left:8px;" :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
+            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
           <!--
-            <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
-            <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
             <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
           -->
         </v-app-bar>
@@ -111,10 +109,10 @@
           { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
-        bannerHeight: 300,
-        scrollThreshold: 250,
+        bannerHeight: 250,
+        scrollThreshold: 220,
         height: 0,
-        essayTopMargin: 240,
+        essayTopMargin: 200,
         html: undefined,
         service: undefined,
         acct: undefined,
@@ -220,7 +218,7 @@
             setTimeout(this.resizeend, this.delta)
           } else {
             this.timeout = false
-            this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - this.$refs.footer.$el.offsetHeight
+            this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
           }
         }
       },

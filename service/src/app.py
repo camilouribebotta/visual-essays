@@ -344,7 +344,7 @@ def config(acct=None, repo=None):
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
             baseurl = content_baseurl(acct, repo)
-            for attr in ('banner',):
+            for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
                     _config[attr] = f'{_config[attr]}' if use_local else f'{baseurl}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
             return (_config, 200, cors_headers)
