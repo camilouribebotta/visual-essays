@@ -421,6 +421,8 @@ export default {
     }
 
     .leaflet-popup-content-wrapper h1 {
+        max-width: 120px;
+        line-height: 1.2;
         margin-bottom: 0;
         font-size: 12px;
         font-weight: 500;

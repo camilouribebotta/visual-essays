@@ -119,6 +119,7 @@ h5,
 h6 {
     font-weight: bold;
     margin: 0;
+    display: inline-block;
 }
 h1 {
     font-size: 3em;
