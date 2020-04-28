@@ -151,6 +151,7 @@ export default {
     triggerHook() {
       this.scenes.forEach(scene => {
         scene.triggerHook(this.triggerHook)
+
       })
     },
     activeElements() {
