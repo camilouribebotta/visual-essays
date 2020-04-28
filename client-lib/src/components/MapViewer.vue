@@ -95,7 +95,7 @@ export default {
       })
     },
     makePopup(props) {
-      const label = props.label || props.title
+      const label = props.title || props.label
       let popup = `<h1>${label}</h1>`
       /*
       if (props.images) {
@@ -106,7 +106,7 @@ export default {
       return popup
     },
     cachedGeojson(def) {
-      // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
+      console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
         cacheObj[def.id] = axios.get(def.url || def.geojson)
@@ -125,25 +125,39 @@ export default {
             // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
             if (feature.properties.label || def.title) {
               layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
-              if (feature.properties.label) {
+              if (feature.properties.label || def.title) {
                 layer.bindPopup(self.makePopup({ ...def, ...feature.properties}), { autoClose: false, closeButton: false, closeOnClick: false })
               }
             }
-            if (feature.properties.symbol) {
+            if (feature.properties.decorators) {
               const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
-              const arrowHead = self.$L.polylineDecorator(polyline, {
-              patterns: [ { ...feature.properties, ...{offset: 0, endOffset: 0, repeat: '33%', symbol: self.$L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}}
-              ]})
+              const patterns = []
+              feature.properties.decorators.forEach(decoratorProps => {
+                console.log('decorator', decoratorProps)
+                if (decoratorProps.symbol === 'arrow') {
+                  patterns.push(decoratorProps)
+                  decoratorProps.symbol = self.$L.Symbol.arrowHead({
+                    pixelSize: 15,
+                    polygon: false,
+                    pathOptions: {
+                      stroke: true,
+                      width: feature.properties['stroke-width'] || 4,
+                      color: feature.properties.stroke || '#FB683F'
+                    }
+                  })
+                }
+                const decorator = self.$L.polylineDecorator(polyline, {patterns}).addTo(self.map)
+              })
             }
           },
           // Style
           style: function(feature) {
             return {
-                color: feature.properties['stroke'] || '#000',
-                weight: feature.properties['stroke-width'] || 1,
+                color: feature.properties['stroke'] || '#FB683F',
+                weight: feature.properties['stroke-width'] || 4,
                 opacity: feature.properties['stroke-opacity'] || 1,                  
-                fillColor: feature.properties['fill'] || '#FFF',
-                fillOpacity: feature.properties['fill-opacity'] || 0,
+                fillColor: feature.properties['fill'] || '#32C125',
+                fillOpacity: feature.properties['fill-opacity'] || 0.5,
             }
           },
           pointToLayer: function(feature, latlng) {
@@ -192,8 +206,7 @@ export default {
         }
       })
       //console.log('add geojson', performance.now() - start)
-      /*
-      this.locations.filter(location => location.geojson).forEach(location => {
+      this.locations.filter(location => location.geojson && location['prefer-geojson'] && location['prefer-geojson'].toLowerCase() === 'true').forEach(location => {
         if (!this.addedLayers.has(location.id)) {
           if (this.mapLayers.geojson[location.id]) {
             this.addedLayers.add(location.id)
@@ -209,13 +222,12 @@ export default {
           }
         }
       })
-      */
      return layers
     },
     getLocationMarkers() {
       const markers = []
       // this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
-      this.locations.filter(location => location.coords).forEach((location) => {
+      this.locations.filter(location => location.coords && !(location.geojson !== undefined && location['prefer-geojson'] && location['prefer-geojson'].toLowerCase() === 'true')).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
         marker.addEventListener('click', (e) => {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]

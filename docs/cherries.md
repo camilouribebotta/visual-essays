@@ -18,6 +18,7 @@
      id="Q61"
      data-fill="#FF0000"
      data-marker-symbol="landmark"
+     data-prefer-geojson="true"
      ></var>
 
 <var title="West Yorkshire"
@@ -52,7 +53,7 @@ Cherry blossoms have formed an integral part of the identity of Washington, D. C
 <var data-specimens data-taxon-name="Prunus serrulata"></var>
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C.
-<var data-primary="map"></var>
+<var data-primary="image"></var>
 <var data-image
      data-fit="cover"
      data-title="Ornamental Cherry Tree In Full Bloom"
@@ -76,7 +77,7 @@ Although cherry blossoms became beloved fixtures of the city of Washington, atti
 ### Cherry Trees in Japan
 <var data-map  id="japan-map" data-center="Q17" data-zoom="4"></var>
 <var title="Tokyo" id="Q1490" data-scope="local"></var>
-<var title="Japan" id="Q17" data-scope="global"></var>
+<var title="Japan" id="Q17" data-scope="global" data-prefer-geojson="true"></var>
 
 The cherry blossom has been a repository of symbolism in Japanese culture for centuries: it has variously symbolized processes of life, death, reproductive power, love, rebirth, and the beauty of impermanence. By the end of the Edo period (1603-1868) cherry blossoms came to be a dominant symbol of Japanese identity, although their association with Japanese identity dates to at least the ninth century. During the early years of Japan’s rapid industrialization, cherry trees fell prey to an iconoclastic drive to erase reminders of the old feudal society. As Japan continued to negotiate its national identity, cherries were taken up again, now as symbols of a modern Japan that would be recognizable on an international scale. In the years leading up to World War II, the image of falling cherry blossoms, which had traditionally been associated with impermanence and death, was increasingly deployed to aestheticize self-sacrifice for the emperor. Cherry blossoms were planted in shrines glorifying fallen soldiers, and featured prominently in military imagery.
 

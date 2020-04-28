@@ -252,7 +252,7 @@ def specimens(taxon_name):
         else:
             specimens['from_cache'] = True
         if content_type == 'text/html':
-            return (open(os.path.join(BASEDIR, 'viewer.html'), 'r').read().replace("'{{DATA}}'", json.dumps(specimens)), 200, cors_headers)
+            return (open(os.path.join(BASEDIR, 'src', 'viewer.html'), 'r').read().replace("'{{DATA}}'", json.dumps(specimens)), 200, cors_headers)
         else:
             return (specimens, 200, cors_headers)
 

@@ -112,7 +112,6 @@ sparql_template = '''
 
         ?specimen jwdt:P17 jwd:Q14316 ;
                 jwdt:P501 '<TAXON NAME>' ;
-                jwdt:P1660 ?wdItem ;
                 schema:description ?description ;
                 jwdt:P1106 ?jstorPlantsId ;
                 jwdt:P1661 ?specimenType ;
@@ -142,7 +141,6 @@ sparql_template = '''
 def get_specimens(taxon_name):
     logger.info(f'get_specimens: taxon_name={taxon_name}')
     sparql = sparql_template.replace('<TAXON NAME>', taxon_name)
-    logger.debug(sparql)
     data = {'taxonName': taxon_name, 'specimens': []}
     for _ in range(2):
         resp = requests.post(
@@ -169,7 +167,11 @@ def get_specimens(taxon_name):
                     "@type": "Specimen"
                 }
             )
-            data['specimens'] = _framed['@graph']
+            if '@graph' in _framed:
+                data['specimens'] = _framed['@graph']
+            else:
+                _framed.pop('@context')
+                data['specimens'] = [_framed]
             for specimen in data['specimens']:
                 for attr in ('taxonName', '@type'):
                     specimen.pop(attr)
