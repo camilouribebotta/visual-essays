@@ -164,12 +164,13 @@ export default {
 <style >
 
   #essay {
+    background-color: #dadada;
     padding-top: 32px;
     padding-right: 32px;
   }
 
   .vtl #essay  {
-    padding-right: 0px;
+    padding-right: 0;
   }
 
   #essay h1, h2, h3, h4, h5, h6 {
@@ -188,19 +189,20 @@ export default {
   .vtl #essay p {
     padding-right: 20px;
     border-left: none;
-    border-right: 12px solid white;
+    border-right: 40px solid white;
     font-size: 1.4em;
     margin-bottom: 2.5em;
     padding-left: 32px;
   }
 
   #essay p.active-elem {
-    border-left: 12px solid #1D5BC2;
-    background-color: #fafafa;
+    border-left: 40px solid #1D5BC2;
+    background-color: #ffffff;
+    box-shadow:  4px 4px 4px 0 rgb(0,0,0,0.25)
   }
 
   .vtl #essay p.active-elem {
-    border-right: 12px solid #1D5BC2;
+    border-right: 40px solid #1D5BC2;
     border-left: none;
   }
   
