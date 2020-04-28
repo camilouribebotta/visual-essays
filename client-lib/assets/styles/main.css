@@ -119,6 +119,7 @@ h5,
 h6 {
     font-weight: bold;
     margin: 0;
+    display: inline-block;
 }
 h1 {
     font-size: 3em;
@@ -155,10 +156,10 @@ blockquote {
     font-size: 1em;
     margin: 0 0 1.5em;
     line-height: 1.5;
-    -webkit-hyphens: auto;
-       -moz-hyphens: auto;
-        -ms-hyphens: auto;
-            hyphens: auto;
+    -webkit-hyphens: none;
+       -moz-hyphens: none;
+        -ms-hyphens: none;
+            hyphens: none;
 }
 p a:link,
 p a:visited {
