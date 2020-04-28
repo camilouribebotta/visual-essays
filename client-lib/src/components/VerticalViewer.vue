@@ -221,7 +221,7 @@
 <style>
 
   #viewer {
-    background-color: #000000;
+    background-color: #f5f5f5;
     /* position: relative; */
     height: 100vh;
     box-shadow: none;

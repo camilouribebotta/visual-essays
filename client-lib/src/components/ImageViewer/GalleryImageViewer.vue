@@ -70,7 +70,7 @@ export default {
 
 <style scoped>
   .lingallery figure {
-    background-color: #000;
+    background-color: #f5f5f5;
   }
 
   /*
