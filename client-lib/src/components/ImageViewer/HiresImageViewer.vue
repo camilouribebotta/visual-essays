@@ -43,7 +43,6 @@ export default {
     loadImage() {
       console.log(`src=${this.img.src} width=${this.img.width} height=${this.img.height}`)
       const url = `https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=${this.img.src}`
-      console.log(url)
       let dziURL = axios.get(url).then((resp) => {
         let viewer = OpenSeadragon({
           id: 'img',

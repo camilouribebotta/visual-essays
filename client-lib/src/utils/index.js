@@ -100,7 +100,6 @@ export function itemsInElements(elemIds, items) {
 }
 
 export function groupItems(items) {
-  console.log('groupItems', items.filter(item => item.type === 'map'))
   const exclude = ['essay']
   const groups = {}
   const maps = items.filter(item => item.type === 'map')

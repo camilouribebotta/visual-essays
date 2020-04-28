@@ -10,6 +10,7 @@
         app
         prominent
         :height="bannerHeight"
+        elevation="5"
         elevate-on-scroll
         fade-img-on-scroll
         dark
@@ -20,6 +21,9 @@
       >
         <v-toolbar-title>Visual essay</v-toolbar-title>
         <v-spacer></v-spacer>
+        <template v-slot:extension v-if="extended">
+          <div>EXTENSION</div>
+        </template>
       </v-app-bar>
 
       <v-sheet
@@ -62,7 +66,8 @@ export default {
   data: () => ({
     layout: undefined,
     bannerHeight: 600,
-    scrollThreshold: 550
+    scrollThreshold: 550,
+    extended: false
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
@@ -74,7 +79,7 @@ export default {
   watch: {
     viewportWidth: {
       handler: function (width) {
-        // console.log(`layout=${this.$store.getters.layout}`)
+        // console.log(`width=${width} layout=${this.$store.getters.layout}`)
         if (width > 0) {
           this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vtl' : 'hc')
           // console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)

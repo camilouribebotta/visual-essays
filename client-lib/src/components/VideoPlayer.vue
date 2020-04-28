@@ -56,7 +56,7 @@ export default {
       this.isPlaying = false
     },
     ready() {
-      console.log('Video player ready')
+      // console.log('Video player ready')
     }
   }
 }

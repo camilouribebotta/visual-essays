@@ -50,8 +50,8 @@ export default {
   methods: {
     createBaseMap() {
       this.positionMapContainer()
-      this.map = this.$L.map('lmap', {zoomSnap: 0.1})
-      this.map.setView(this.mapDef.center, this.mapDef.zoom || 10)
+      // console.log(`createBaseMap: title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom}`)
+      this.map = this.$L.map('lmap', {center: this.mapDef.center, zoom: this.mapDef.zoom || 10, zoomSnap: 0.1})
       this.mapLayers.baseLayer = this.$L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
       this.map.addLayer(
         this.mapLayers.baseLayer,
@@ -105,58 +105,69 @@ export default {
       */
       return popup
     },
+    cachedGeojson(def) {
+      // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
+      if (!this.$store.getters.geoJsonCache[def.id]) {
+        const cacheObj = {}
+        cacheObj[def.id] = axios.get(def.url || def.geojson)
+        this.$store.dispatch('addToGeoJsonCache', cacheObj)
+      }
+      return this.$store.getters.geoJsonCache[def.id]
+    },
     loadGeojson(def) {
-      // console.log('loadGeojson', def.url || def.geojson)
-      return axios.get(def.url || def.geojson)
-        .then(resp => {
-          const self = this
-          let geojson = L.geoJson(resp.data, {
-            // Pop Up
-            onEachFeature: function(feature, layer) {
-              //layer.bindPopup('layer', { autoClose: false, closeButton: false, closeOnClick: false })
-              // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
-              if (feature.properties.label || def.title) {
-                layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
-                if (feature.properties.label) {
-                  layer.bindPopup(self.makePopup({ ...def, ...feature.properties}), { autoClose: false, closeButton: false, closeOnClick: false })
-                }
+      this.cachedGeojson(def)
+      .then(resp => {
+        const self = this
+        let geojson = L.geoJson(resp.data, {
+          // Pop Up
+          onEachFeature: function(feature, layer) {
+            //layer.bindPopup('layer', { autoClose: false, closeButton: false, closeOnClick: false })
+            // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
+            if (feature.properties.label || def.title) {
+              layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
+              if (feature.properties.label) {
+                layer.bindPopup(self.makePopup({ ...def, ...feature.properties}), { autoClose: false, closeButton: false, closeOnClick: false })
               }
-              if (feature.properties.symbol) {
-                const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
-                const arrowHead = self.$L.polylineDecorator(polyline, {
-                patterns: [ { ...feature.properties, ...{offset: 0, endOffset: 0, repeat: '33%', symbol: self.$L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}}
-                ]}).addTo(self.map)
-              }
-            },
-            // Style
-            style: function(feature) {
-              return {
-                  color: feature.properties['stroke'] || '#000',
-                  weight: feature.properties['stroke-width'] || 1,
-                  opacity: feature.properties['stroke-opacity'] || 1,                  
-                  fillColor: feature.properties['fill'] || '#FFF',
-                  fillOpacity: feature.properties['fill-opacity'] || 0,
-              }
-            },
-            pointToLayer: function(feature, latlng) {
-              return self.makeMarker(latlng, feature.properties)
             }
-          })
-          this.geojson[def.id] = geojson
-          this.mapLayers.geojson[def.id] = {
-            id: def.id,
-            name: def.title,
-            active: (def.active || 'false') === 'true',
-            layer: geojson
+            if (feature.properties.symbol) {
+              const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
+              const arrowHead = self.$L.polylineDecorator(polyline, {
+              patterns: [ { ...feature.properties, ...{offset: 0, endOffset: 0, repeat: '33%', symbol: self.$L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}}
+              ]})
+            }
+          },
+          // Style
+          style: function(feature) {
+            return {
+                color: feature.properties['stroke'] || '#000',
+                weight: feature.properties['stroke-width'] || 1,
+                opacity: feature.properties['stroke-opacity'] || 1,                  
+                fillColor: feature.properties['fill'] || '#FFF',
+                fillOpacity: feature.properties['fill-opacity'] || 0,
+            }
+          },
+          pointToLayer: function(feature, latlng) {
+            return self.makeMarker(latlng, feature.properties)
           }
-          this.addedLayers.add(def.id)
-          geojson.addTo(this.map)
-          //if (!this.mapDef['hide-labels']) {
-            geojson.eachLayer(feature => feature.openPopup())                      
-          //}
-        })
+        }).addTo(this.map)
+        this.geojson[def.id] = geojson
+        this.mapLayers.geojson[def.id] = {
+          id: def.id,
+          name: def.title,
+          active: (def.active || 'false') === 'true',
+          layer: geojson
+        }
+        this.addedLayers.add(def.id)
+        //if (!this.mapDef['hide-labels']) {
+          geojson.eachLayer(feature => feature.openPopup())                      
+        //}
+        // this.map.flyTo(this.mapDef.center, this.mapDef.zoom || 10)
+        this.map.setView(this.mapDef.center, this.mapDef.zoom || 10)
+        return geojson
+      })
     },
     syncGeojsonLayers() {
+      const layers = []
       let start = performance.now()
       Object.keys(this.mapLayers.geojson).forEach(cur => {
         if (this.addedLayers.has(cur) && !this.mapDef.layers.geojson.find(def => def.id === cur)) {
@@ -175,41 +186,36 @@ export default {
               geojson.eachLayer(feature => feature.openPopup())                      
             }
           } else {
-            const s1 = performance.now()
-            this.loadGeojson(def)
+            layers.push(this.loadGeojson(def))
             // console.log(performance.now() - s1)
           }
         }
       })
       //console.log('add geojson', performance.now() - start)
-      start = performance.now()
+      /*
       this.locations.filter(location => location.geojson).forEach(location => {
-        // const wofId = location.geojson.substring(location.geojson.lastIndexOf('/') + 1).split('.')[0]
         if (!this.addedLayers.has(location.id)) {
           if (this.mapLayers.geojson[location.id]) {
             this.addedLayers.add(location.id)
             const geojson = this.mapLayers.geojson[location.id].layer
-            let s1 = performance.now()
             geojson.addTo(this.map)
-            //console.log('geojson.add', location.id, this.featuresById, performance.now() - s1)
             if (!this.mapDef['hide-labels']) {
               geojson.eachLayer(feature => {
-                s1 = performance.now();
                 feature.openPopup();
-                // console.log('openPopup', performance.now() - s1)
               })            
             }
           } else {
-            const s1 = performance.now()
             this.loadGeojson(location)
-            // console.log('marker', performance.now() - s1)
           }
         }
       })
+      */
+     return layers
     },
     getLocationMarkers() {
       const markers = []
-      this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
+      // this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
+      this.locations.filter(location => location.coords).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
         marker.addEventListener('click', (e) => {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
@@ -326,6 +332,7 @@ export default {
         this.syncMapwarperLayers()
         this.syncMarkerGroups()
         this.setControls()
+
       }
     }
   },
@@ -353,7 +360,6 @@ export default {
     },
     mapDef: {
       handler: function (value, prior) {
-        console.log('MapViewer.watch.mapDef', this.mapDef.title)
         if (this.$refs.map) {
           if (this.items.length === 0) {
               this.$refs.mapWrapper.style.display = 'none'
@@ -362,7 +368,8 @@ export default {
               if (this.items.length > 0) {
                 const curMap = this.items[0]
                 // this.map.setView(curMap.center, curMap.zoom || 10)
-                this.map.flyTo(curMap.center, curMap.zoom || 10)
+
+                this.map.flyTo(this.mapDef.center, this.mapDef.zoom || 10)
               }
             } else {
               this.createBaseMap()

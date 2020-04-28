@@ -182,7 +182,6 @@ const waitForContent = () => {
     if (vm) {
       vm = vm.$destroy()
     }
-    console.log(`essay.name=${current}`)
     initApp()
   }
 }

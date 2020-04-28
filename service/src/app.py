@@ -301,10 +301,10 @@ def essay(acct=None, repo=None, file=None):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
+        site = urlparse(request.base_url).hostname
         if 'gdid' in kwargs:
            markdown = get_gd_markdown(kwargs.pop('gdid'))
         else:
-            site = urlparse(request.base_url).hostname
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
             logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')

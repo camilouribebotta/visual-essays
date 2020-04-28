@@ -31,7 +31,6 @@ export default {
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
     items() {
-      console.log('images')
       const items = this.images.map(image => { 
         const mapped = {
           id: image.id,
@@ -44,8 +43,6 @@ export default {
       })
       this.currentId = items[0].id
       this.defaultFit = items[0].fit || 'cover'
-      console.log('defaultFit', this.defaultFit)
-      console.log(items)
       return items
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
@@ -53,7 +50,6 @@ export default {
     height() { return this.viewport.height - (this.items.length === 1 ? 0 : 121) }
   },
   mounted() {
-    console.log('GalleryImageViewer.mounted')
     document.querySelectorAll('figure')
       .forEach(fig => {
         fig.addEventListener('click', (e) => {
@@ -68,9 +64,6 @@ export default {
           }
         })
       })
-  },
-  destroyed() {
-    console.log('GalleryImageViewer.destroyed')
   }
 }
 </script>

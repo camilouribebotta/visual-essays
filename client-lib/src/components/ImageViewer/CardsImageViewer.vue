@@ -50,7 +50,6 @@ export default {
   mounted() {
     this.images.forEach((image) => {
       const url = 'https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url
-      console.log(url)
       let dziURL = axios.get('https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=' + image.url).then((resp) => {
         let viewer = OpenSeadragon({
           id: image.id,

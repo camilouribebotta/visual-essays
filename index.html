@@ -29,26 +29,24 @@
   
       <v-card tile class="overflow-hidden">
         <v-app-bar
+          app
           ref="header"
           id="appbar"
-          app
           :height="bannerHeight"
           elevation="6" 
           elevate-on-scroll
           fade-img-on-scroll
           dark
           shrink-on-scroll
-          dense
           :src="banner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
         >
-  
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title v-cloak style="color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-app-bar>
-  
+
         <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
           <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
@@ -100,7 +98,6 @@
       vuetify: new Vuetify(),
       data: () => ({
         drawer: false,
-        fixed: true,
         nav: [
           { title: 'Home', icon: 'mdi-home', enabled: true },
           { file: 'about', title: 'About', icon: 'mdi-information', enabled: false },
