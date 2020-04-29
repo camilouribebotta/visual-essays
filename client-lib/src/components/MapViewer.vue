@@ -20,6 +20,12 @@ const baseLayers = {
         {	subdomains: 'abcd', minZoom: 1, maxZoom: 16, ext: 'jpg', attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }]
 }
 
+const defaults = {
+  basemap: 'OpenStreetMap',
+  center: [25, 0],
+  zoom: 2.5
+}
+
 const iconMap = {
   garden: 'leaf'
 }
@@ -62,8 +68,8 @@ export default {
     createBaseMap() {
       this.positionMapContainer()
       console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom}`)  
-      this.map = this.$L.map('lmap', {center: this.mapDef.center, zoom: this.mapDef.zoom || 10, zoomSnap: 0.1})
-      this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || 'OpenStreetMap'])
+      this.map = this.$L.map('lmap', {center: this.mapDef.center || defaults.center, zoom: this.mapDef.zoom || defaults.zoom, zoomSnap: 0.1})
+      this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
       this.map.addLayer(this.mapLayers.baseLayer)
 
       this.updateLayers()
@@ -182,7 +188,7 @@ export default {
           geojson.eachLayer(feature => feature.openPopup())                      
         //}
         // this.map.flyTo(this.mapDef.center, this.mapDef.zoom || 10)
-        this.map.setView(this.mapDef.center, this.mapDef.zoom || 10)
+        this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
         return geojson
       })
     },
@@ -387,7 +393,7 @@ export default {
                 const curMap = this.items[0]
                 // this.map.setView(curMap.center, curMap.zoom || 10)
 
-                this.map.flyTo(this.mapDef.center, this.mapDef.zoom || 10)
+                this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
               }
             } else {
               this.createBaseMap()

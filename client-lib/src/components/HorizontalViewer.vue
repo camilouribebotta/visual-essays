@@ -72,6 +72,7 @@
       }
     },
     mounted() {
+      this.$store.dispatch('setTriggerOffset', 100)
       if (this.$store.getters.layout === 'ho') {
           this.visualizerIsOpen = true
           document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')

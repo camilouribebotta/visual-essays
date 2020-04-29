@@ -61,6 +61,12 @@ def content_baseurl(acct, repo):
             break
     return f'https://raw.githubusercontent.com/{acct}/{repo}/master{root}'
 
+def get_markdown(url):
+    resp = requests.get(url)
+    logger.info(f'{url} {resp.status_code}')
+    if resp.status_code == 200:
+        return {'source': 'url', 'fname': url.split('/')[-1].replace('.md', ''), 'text': resp.content.decode('utf-8')}
+
 def get_gh_markdown(acct, repo, file=None):
     baseurl = content_baseurl(acct, repo)
     logger.info(f'get_gh_markdown: acct={acct} repo={repo} baseurl={baseurl}')
@@ -159,7 +165,8 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
                 # logger.info(f'section: level={level} id={section_id} title="{title}')
                 tag = html5.new_tag('section', id=section_id)
                 head = html5.new_tag(f'h{level}')
-                head.string = title
+                logger.info(title)
+                head.string = title if title else ''
                 tag.append(head)
                 section = {
                     'id': section_id,
@@ -302,13 +309,26 @@ def essay(acct=None, repo=None, file=None):
         return ('', 204, cors_headers)
     else:
         site = urlparse(request.base_url).hostname
-        if 'gdid' in kwargs:
-           markdown = get_gd_markdown(kwargs.pop('gdid'))
+        src = None
+        gdid = None
+        for arg in ('src', 'gd', 'gdid', 'gdrive'):
+            if arg in kwargs:
+                val = kwargs.pop(arg)
+                if val.startswith('https://drive.google.com'):
+                    gdid = val.split('/')[5]
+                elif arg == 'src':
+                    src = val
+                else:
+                    gdid = val
+        if src:
+            markdown = get_markdown(src)
+        elif gdid:
+            markdown = get_gd_markdown(gdid)
         else:
+            use_local = kwargs.pop('mode', ENV) == 'dev' and not acct
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
             logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')
-            use_local = kwargs.pop('mode', ENV) == 'dev'
             if use_local:
                 markdown = get_local_markdown(file)
             else:
