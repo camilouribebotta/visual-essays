@@ -74,10 +74,17 @@ export default {
             document.getElementById('triangle').remove();
           }
           this.$store.dispatch('setActiveElements', newActiveElements)
+
+          //attach triangular shadow
           let tri = document.createElement("div");
           tri.setAttribute("id", "triangle");
           document.getElementById(newActiveElements[0]).append(tri)
 
+          //move tab controls to active paragraph
+          //let ctrlTabs = document.getElementById('control-tabs')
+          //ctrlTabs.parentNode.removeChild(ctrlTabs);
+          //alert(document.getElementsByTagName('active-elem').size)
+          //document.getElementsByClassName('active-elem')[0].append(ctrlTabs)
         }
       }
     },
@@ -196,7 +203,7 @@ export default {
   .vtl #essay p {
     padding-right: 32px;
     border-left: none;
-    border-right: 1px solid  #dadada;;
+
     font-size: 1.4em;
     margin-bottom: 2.5em;
     padding-left: 32px;
@@ -209,10 +216,10 @@ export default {
   }
 
   .vtl #essay p.active-elem {
-    border-right: 1px solid gray;
+
     border-left: none;
     width: calc(100% + 40px);
-    padding-right: 60px
+    padding-right: 72px
   }
   
   p.has-items:hover {

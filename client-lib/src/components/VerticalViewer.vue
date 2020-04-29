@@ -2,12 +2,14 @@
   <v-card ref="viewer" id="viewer" :style="style" >
 
     <v-tabs
+      id="control-tabs"
       ref="tabs"
       v-model="activeTab"
+      :vertical=true
       center-active
       show-arrows
     >
-      <v-tab 
+      <v-tab
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
         {{groups[tab].label || tab}}
@@ -18,10 +20,10 @@
         reverse-transition="fade-transition"
         v-for="tab in tabs" :key="`tab-item-${tab}`"
         :value="tab"
-      >    
-        <component 
-          v-bind:is="groups[tab].component" 
-          :items="groups[tab].items" 
+      >
+        <component
+          v-bind:is="groups[tab].component"
+          :items="groups[tab].items"
           :selected="selected"
           :max-width="viewerWidth"
           :max-height="viewportHeight"
