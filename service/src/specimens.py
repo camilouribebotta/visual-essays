@@ -28,6 +28,7 @@ context = {
         "rdfs":  "http://www.w3.org/2000/01/rdf-schema#",
         "schema": "http://schema.org/",
         "wd": "http://www.wikidata.org/entity/",
+        "wdt": "http://www.wikidata.org/prop/direct/",
         "xsd": "http://www.w3.org/2001/XMLSchema#",
 
         "Specimen": "jwd:Q14316",
@@ -50,10 +51,6 @@ context = {
             "@id": "jwdt:P1666",
             "@type": "@id"
         },
-        "herbariumName": {
-            "@id": "rdfs:label",
-            "@language": "en"
-        },
         "images": {
             "@id": "jp:P1467",
             "@type": "@id",
@@ -69,6 +66,13 @@ context = {
         "jstorPlantsId": {
             "@id": "jwdt:P1106"
         },
+        "locationCollected": {
+            "@id": "jwdt:P1665"
+        },
+        "label": {
+            "@id": "rdfs:label",
+            "@language": "en"
+        },
         "specimenOf": {
             "@id": "jwdt:P1660",
             "@type": "@id"
@@ -78,6 +82,9 @@ context = {
         },
         "taxonName": {
             "@id": "jwdt:P501"
+        },
+        "wofId": {
+            "@id": "wdt:P6766"
         }
     }
 }
@@ -88,6 +95,7 @@ sparql_template = '''
     PREFIX jp: <http://kg.jstor.org/prop/>
     PREFIX jps: <http://kg.jstor.org/prop/statement/>
     PREFIX jpq: <http://kg.jstor.org/prop/qualifier/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
     CONSTRUCT {
     
@@ -96,6 +104,7 @@ sparql_template = '''
                   rdf:type jwd:Q14316 ;
                   jwdt:P1663 ?collectionDate ;
                   jwdt:P1662 ?collector ;
+                  jwdt:P1665 ?locationCollected ;
                   jwdt:P1106 ?jstorPlantsId ;
                   jwdt:P1661 ?specimenType ;
                   jwdt:P501 ?taxonName ;
@@ -108,6 +117,10 @@ sparql_template = '''
         ?availableAt jps:P1666 ?wdID ;
                      rdfs:label ?herbariumName .
 
+        ?locationCollected jps:P1665 ?locId ;
+                     rdfs:label ?locationName ;
+                     wdt:P6766 ?wofId .
+
     } WHERE {
 
         ?specimen jwdt:P17 jwd:Q14316 ;
@@ -117,7 +130,7 @@ sparql_template = '''
                 jwdt:P1661 ?specimenType ;
                 jwdt:P501 ?taxonName ;
                 jp:P1467 [ jps:P1467 ?img ;
-                            jpq:P1669 ?imgSize ] .
+                           jpq:P1669 ?imgSize ] .
         OPTIONAL {
             ?specimen jwdt:P1660 ?specimenOf .
         }
@@ -127,6 +140,16 @@ sparql_template = '''
         OPTIONAL {
             ?specimen jwdt:P1662 ?collector .
         }
+        OPTIONAL {
+            ?specimen jwdt:P1665 ?locationCollected .
+            SERVICE <https://query.wikidata.org/sparql> {
+                ?locationCollected rdfs:label ?locationName .
+                FILTER(LANG(?locationName) = 'en')
+                OPTIONAL {
+                    ?locationCollected wdt:P6766 ?wofId .
+                }
+            }
+        }        
         OPTIONAL {
             ?specimen jwdt:P1666 ?availableAt .
             SERVICE <https://query.wikidata.org/sparql> {
@@ -179,6 +202,10 @@ def get_specimens(taxon_name):
                     data['id'] = specimen.pop('specimenOf')
                 if 'collectionDate' in specimen:
                     specimen['collectionDate'] = specimen['collectionDate'].split('T')[0]
+                if 'locationCollected' in specimen and 'wofId' in specimen['locationCollected']:
+                    wof = specimen['locationCollected'].pop('wofId')
+                    wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
+                    specimen['locationCollected']['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
                 specimen['images'] = [{'url': img['id'], 'type': img['imgSize']} for img in specimen['images']]
     return data
 

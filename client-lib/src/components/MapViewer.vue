@@ -9,6 +9,17 @@
 <script>
 import axios from 'axios'
 
+const baseLayers = {
+  'OpenStreetMap': ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { maxZoom: 18, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' }],
+  'Esri_WorldPhysical': ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', 
+        { maxZoom: 8, attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service' }],
+  'OpenTopoMap': ['https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        { maxZoom: 17, attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)' }],
+  'Stamen_Watercolor': ['https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}',
+        {	subdomains: 'abcd', minZoom: 1, maxZoom: 16, ext: 'jpg', attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }]
+}
+
 const iconMap = {
   garden: 'leaf'
 }
@@ -44,22 +55,17 @@ export default {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
   },
   mounted() {
-    // console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
+    console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
     createBaseMap() {
       this.positionMapContainer()
-      // console.log(`createBaseMap: title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom}`)
+      console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom}`)  
       this.map = this.$L.map('lmap', {center: this.mapDef.center, zoom: this.mapDef.zoom || 10, zoomSnap: 0.1})
-      this.mapLayers.baseLayer = this.$L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-      this.map.addLayer(
-        this.mapLayers.baseLayer,
-        {
-          maxZoom: 18,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }
-      )
+      this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || 'OpenStreetMap'])
+      this.map.addLayer(this.mapLayers.baseLayer)
+
       this.updateLayers()
     },
     positionMapContainer() {

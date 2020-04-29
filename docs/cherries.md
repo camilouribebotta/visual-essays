@@ -28,7 +28,7 @@
      ></var>
 
 ## Cherry Blossom
-<var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2" data-hide-labels="true"></var>
+<var data-map id="intro-map" data-center="51.4,0.53" data-zoom="2" data-hide-labels="true" data-basemap="Esri_WorldPhysical"></var>
 <var data-map-layer
      title="Polyline Decorator Test"
      data-type="geojson" 
