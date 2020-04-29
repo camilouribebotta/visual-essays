@@ -70,7 +70,14 @@ export default {
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
         if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
+          if (document.getElementById('triangle')) {
+            document.getElementById('triangle').remove();
+          }
           this.$store.dispatch('setActiveElements', newActiveElements)
+          let tri = document.createElement("div");
+          tri.setAttribute("id", "triangle");
+          document.getElementById(newActiveElements[0]).append(tri)
+
         }
       }
     },
@@ -187,9 +194,9 @@ export default {
   }
 
   .vtl #essay p {
-    padding-right: 20px;
+    padding-right: 32px;
     border-left: none;
-    border-right: 40px solid white;
+    border-right: 1px solid  #dadada;;
     font-size: 1.4em;
     margin-bottom: 2.5em;
     padding-left: 32px;
@@ -198,12 +205,14 @@ export default {
   #essay p.active-elem {
     border-left: 40px solid #1D5BC2;
     background-color: #ffffff;
-    box-shadow:  4px 4px 4px 0 rgb(0,0,0,0.25)
+    box-shadow:  4px 4px 4px 0 rgba(0,0,0,0.25)
   }
 
   .vtl #essay p.active-elem {
-    border-right: 40px solid #1D5BC2;
+    border-right: 1px solid gray;
     border-left: none;
+    width: calc(100% + 40px);
+    padding-right: 60px
   }
   
   p.has-items:hover {
@@ -257,6 +266,20 @@ export default {
     border-bottom: 2px solid #AF7171;
     cursor: pointer;
     z-index: 10;
+  }
+
+  #triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 40px 40px 0 0;
+    border-color: #666666 transparent transparent transparent;
+    position: absolute;
+    right: -40px;
+  }
+
+  section {
+    position: relative
   }
 
 </style>

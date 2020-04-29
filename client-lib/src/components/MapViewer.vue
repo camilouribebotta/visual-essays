@@ -509,7 +509,6 @@ export default {
 
   .leaflet-fa-markers .feature-icon {
     position: absolute;
-    font-size: 14px;
     line-height: 0px;
     left: 8px;
     top: 10px;
