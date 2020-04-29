@@ -1,12 +1,12 @@
 <template>
   <v-container>
     <v-row no-gutters v-if="layout === 'vtr'">
-      <v-col class="essay-pane vtr "><essay/></v-col>
       <v-col class="map-pane vtr"><vertical-viewer/></v-col>
+      <v-col class="essay-pane vtr "><essay/></v-col>
     </v-row>
     <v-row no-gutters v-else>
-      <v-col class="map-pane vtl"><vertical-viewer/></v-col>
       <v-col class="essay-pane vtl"><essay/></v-col>
+      <v-col class="map-pane vtl"><vertical-viewer/></v-col>
     </v-row>
   </v-container>
 </template>
