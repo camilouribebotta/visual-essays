@@ -1,6 +1,6 @@
 ## About Visual Essays
 
-The `visual essays` service creates an interactive web page merging text content with external data, including:
+[JSTOR Labs]([https://labs.jstor.org](https://labs.jstor.org))' `visual essays` service creates an interactive web page merging text content with external data, including:
 
 * information from knowledge graphs such as [Wikidata](https://www.wikidata.org),
 * maps with optional tile layers and geojson features
