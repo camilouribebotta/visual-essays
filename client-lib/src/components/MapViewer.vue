@@ -106,8 +106,7 @@ export default {
         })
       })
     },
-    makePopup(props) {
-      const label = props.title || props.label
+    makePopup(label) {
       let popup = `<h1>${label}</h1>`
       /*
       if (props.images) {
@@ -130,15 +129,18 @@ export default {
       this.cachedGeojson(def)
       .then(resp => {
         const self = this
+        let numFeatureLabels = 0
         let geojson = L.geoJson(resp.data, {
           // Pop Up
           onEachFeature: function(feature, layer) {
             //layer.bindPopup('layer', { autoClose: false, closeButton: false, closeOnClick: false })
             // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
-            if (feature.properties.label || def.title) {
-              layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
-              if (feature.properties.label || def.title) {
-                layer.bindPopup(self.makePopup({ ...def, ...feature.properties}), { autoClose: false, closeButton: false, closeOnClick: false })
+            if (!def.title) {
+              const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || undefined : undefined
+              if (label) {
+                layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
+                layer.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
+                numFeatureLabels += 1
               }
             }
             if (feature.properties.decorators) {
@@ -176,6 +178,7 @@ export default {
             return self.makeMarker(latlng, feature.properties)
           }
         }).addTo(this.map)
+
         this.geojson[def.id] = geojson
         this.mapLayers.geojson[def.id] = {
           id: def.id,
@@ -183,11 +186,28 @@ export default {
           active: (def.active || 'false') === 'true',
           layer: geojson
         }
+       
+        if (numFeatureLabels === 0) {
+          const label = def.title
+            ? def.title
+            : geojson.properties
+              ? geojson.properties.label || geojson.properties.name || geojson.properties.title || undefined
+              : undefined
+          if (label) {
+            geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
+            if (this.mapDef['hide-labels'] !== true) {
+              const t = performance.now()
+              geojson.openPopup()
+              console.log('open geojson popup', Math.round(performance.now() - t))
+            }
+          }
+        }
+
         this.addedLayers.add(def.id)
         if (this.mapDef['hide-labels'] !== true) {
           const t = performance.now()
           geojson.eachLayer(feature => feature.openPopup())
-          console.log('open geojson popup', Math.round(performance.now() - t))
+          console.log('open geojson feature popup', Math.round(performance.now() - t))
         }
         this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
         return geojson
@@ -248,8 +268,8 @@ export default {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
           this.$store.dispatch('setSelectedItemID', elemId)
         })
-        if (location.label) {
-          marker.bindPopup(this.makePopup(location), { autoClose: false, closeButton: false, closeOnClick: false })
+        if (location.title || location.label) {
+          marker.bindPopup(this.makePopup(location.title || location.label), { autoClose: false, closeButton: false, closeOnClick: false })
         }
         markers.push(marker)
         const mll = marker.getLatLng()

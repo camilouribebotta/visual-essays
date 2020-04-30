@@ -92,7 +92,7 @@
         }
       },
       mouseMove(e) {
-        console.log(this.header.clientHeight)
+        // console.log(this.header.clientHeight)
         if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
           this.$refs.viewer.$el.style.top = `${this.headerSize}px`
           this.$refs.viewer.$el.style.position = 'fixed'
