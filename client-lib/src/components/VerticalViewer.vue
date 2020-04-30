@@ -230,6 +230,8 @@
     height: 100vh;
     box-shadow: none;
     border-radius: 0;
+    position:fixed;
+    top: 0px;
   }
 
   .v-tabs-bar {
