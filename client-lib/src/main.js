@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.2'
+const VERSION = '0.5.3'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -142,7 +142,7 @@ function initApp() {
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
   vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || config.layout || 'hc' ))
-  vm.$store.dispatch('setShowBanner', qargs.showBanner === 'true' || qargs.showBanner === '')
+  vm.$store.dispatch('setShowBanner', !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)

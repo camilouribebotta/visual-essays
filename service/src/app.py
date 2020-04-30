@@ -165,7 +165,6 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
                 # logger.info(f'section: level={level} id={section_id} title="{title}')
                 tag = html5.new_tag('section', id=section_id)
                 head = html5.new_tag(f'h{level}')
-                logger.info(title)
                 head.string = title if title else ''
                 tag.append(head)
                 section = {

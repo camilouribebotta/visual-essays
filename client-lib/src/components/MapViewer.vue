@@ -184,10 +184,11 @@ export default {
           layer: geojson
         }
         this.addedLayers.add(def.id)
-        //if (!this.mapDef['hide-labels']) {
-          geojson.eachLayer(feature => feature.openPopup())                      
-        //}
-        // this.map.flyTo(this.mapDef.center, this.mapDef.zoom || 10)
+        if (this.mapDef['hide-labels'] !== true) {
+          const t = performance.now()
+          geojson.eachLayer(feature => feature.openPopup())
+          console.log('open geojson popup', Math.round(performance.now() - t))
+        }
         this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
         return geojson
       })
@@ -209,7 +210,9 @@ export default {
             const geojson = this.mapLayers.geojson[def.id].layer
             geojson.addTo(this.map)
             if (!this.mapDef['hide-labels']) {
+              const t = performance.now()
               geojson.eachLayer(feature => feature.openPopup())                      
+              console.log('open added geojson popup', Math.round(performance.now() - t))
             }
           } else {
             layers.push(this.loadGeojson(def))
@@ -225,9 +228,9 @@ export default {
             const geojson = this.mapLayers.geojson[location.id].layer
             geojson.addTo(this.map)
             if (!this.mapDef['hide-labels']) {
-              geojson.eachLayer(feature => {
-                feature.openPopup();
-              })            
+              const t = performance.now()
+              geojson.eachLayer(feature => feature.openPopup())            
+              console.log('open added geojson location popup', Math.round(performance.now() - t)) 
             }
           } else {
             this.loadGeojson(location)
@@ -346,7 +349,9 @@ export default {
       }
       layer.addTo(this.map)
       if (!this.mapDef['hide-labels']) {
+        var t = performance.now()
         markers.forEach(marker => marker.openPopup())
+        console.log('open marker popup', Math.round(performance.now() - t))
       }
       this.mapLayers.markerGroups = currentMarkerGroups
     },
@@ -509,6 +514,7 @@ export default {
 
   .leaflet-fa-markers .feature-icon {
     position: absolute;
+    font-size: 14px;
     line-height: 0px;
     left: 8px;
     top: 10px;

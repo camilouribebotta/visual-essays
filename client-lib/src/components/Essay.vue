@@ -180,12 +180,12 @@ export default {
 <style >
 
   #essay {
-    background-color: #dadada;
     padding-top: 32px;
     padding-right: 32px;
   }
 
   .vtl #essay  {
+    background-color: #dadada;
     padding-right: 0;
   }
 
