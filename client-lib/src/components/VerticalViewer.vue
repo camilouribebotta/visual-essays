@@ -257,5 +257,8 @@
     background-color :#1D5BC2 !important;
   }
 
+  .v-tabs-bar .v-tabs-bar__content {
+    flex-direction: column;
+  }
 </style>
 
