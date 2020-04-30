@@ -46,7 +46,7 @@
           ref="header"
           id="appbar"
           :height="bannerHeight"
-          elevation="6" 
+          elevation="6"
           elevate-on-scroll
           fade-img-on-scroll
           dark
@@ -62,11 +62,11 @@
         <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
           <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
-              <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
+              <v-flex> <div id="content" ref="content" v-html="html"></div></v-flex>
             </v-layout>
           </v-container>
         </v-sheet>
-  
+
         <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
           <v-toolbar-title style="font-size:1.0em;">
             <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
@@ -84,7 +84,7 @@
             </v-layout>
           </v-container>
         </v-sheet>
-  
+
         <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
           <v-toolbar-title style="font-size:1.0em;">
             <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
