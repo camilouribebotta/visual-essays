@@ -8,8 +8,10 @@
       <v-app-bar
         id="appbar"
         app
-        prominent
+        dense
         :height="bannerHeight"
+        extended
+        :extension-height="extensionHeight"
         elevation="5"
         elevate-on-scroll
         fade-img-on-scroll
@@ -22,15 +24,14 @@
         <v-toolbar-title>Visual essay</v-toolbar-title>
         <v-spacer></v-spacer>
         <template v-slot:extension v-if="extended">
-          <div>EXTENSION</div>
+          <essay-summary></essay-summary>
         </template>
       </v-app-bar>
-
       <v-sheet
         id="scrollableContent"
         class="overflow-y-auto"
       >
-        <v-container ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px`">
+        <v-container ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px;border:1px solid black;`">
           <component v-bind:is="layout"></component>
         </v-container>
 
@@ -47,6 +48,7 @@
 <script>
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
+import EssaySummary from './components/EssaySummary'
 
 const breakpoint = 768
 
@@ -61,20 +63,25 @@ export default {
     'ho': HorizontalLayout,
     'vertical': VerticalLayout,
     'vtl': VerticalLayout,
-    'vtr': VerticalLayout
+    'vtr': VerticalLayout,
+    EssaySummary
   },
   data: () => ({
     layout: undefined,
-    bannerHeight: 600,
-    scrollThreshold: 550,
-    extended: false
+    bannerHeight: 300,
+    extensionHeight: 100,
+    scrollThreshold: 350,
+    extended: true
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
     banner() { return (this.$store.getters.items.filter(item => item.type === 'essay') || [{}])[0].banner },
     showBanner() { return this.$store.getters.showBanner },
-    essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
+    essayTopMargin() { return this.showBanner ? this.bannerHeight + this.extensionHeight * 2: 0 }
+  },
+  created() {
+    this.$store.dispatch('setHeaderSize', 48 + this.extensionHeight)
   },
   watch: {
     viewportWidth: {
@@ -120,6 +127,13 @@ export default {
 
   .v-toolbar, .v-footer, .v-navigation-drawer {
     z-index: 200 !important;
+  }
+
+  .v-toolbar__extension {
+    padding: 0 !important;
+    /* height: 100px !important; */
+    background: white;
+    color: black;
   }
 
 </style>

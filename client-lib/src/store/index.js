@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     essayHTML: undefined,
     layout: 'vtl',
-    showBanner: false,
+    showBanner: true,
+    headerSize: 0,
     contentStartPos: 0,
     triggerOffset: 250,
     debug: false,
@@ -26,12 +27,8 @@ export default new Vuex.Store({
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setLayout (state, layout) { state.layout = layout },
-    setShowBanner (state, showBanner) { 
-      state.showBanner = showBanner
-      //if (state.showBanner) {
-      //  state.trigger = 0.5
-      //}
-    },
+    setShowBanner (state, showBanner) { state.showBanner = showBanner},
+    setHeaderSize (state, headerSize) { state.headerSize = headerSize},
     setContentStartPos (state, pos) { state.contentStartPos = pos },
     setTriggerOffset (state, triggerOffset) { state.triggerOffset = triggerOffset },
     setContext (state, context) { state.context = context },
@@ -60,6 +57,7 @@ export default new Vuex.Store({
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
     setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
+    setHeaderSize: ({ commit }, headerSize) => commit('setHeaderSize', headerSize),
     setContentStartPos: ({ commit }, pos) => commit('setContentStartPos', pos),
     setTriggerOffset: ({ commit }, triggerOffset) => commit('setTriggerOffset', triggerOffset),
     setContext: ({ commit }, context) => commit('setContext', context),
@@ -76,6 +74,7 @@ export default new Vuex.Store({
   getters: {
     layout: state => state.layout,
     showBanner: state => state.showBanner,
+    headerSize: state => state.headerSize,
     contentStartPos: state => state.contentStartPos,
     triggerOffset: state => state.triggerOffset,
     essayHTML: state => state.essayHTML,

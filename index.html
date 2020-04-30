@@ -8,6 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
     [v-cloak] { display: none; }
+    .v-toolbar__extension {
+      padding: 0 !important;
+      height: 200px !important;
+      background: white;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -28,8 +34,15 @@
       </v-navigation-drawer>
   
       <v-card tile class="overflow-hidden">
+
+        <v-app-bar app dense dark id="appbar">
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-toolbar-title v-cloak style="color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
+          <v-spacer></v-spacer>
+        </v-app-bar>
+
         <v-app-bar
-          app
+          dense
           ref="header"
           id="appbar"
           :height="bannerHeight"
@@ -44,9 +57,26 @@
         >
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
           <v-toolbar-title v-cloak style="color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
-          <v-spacer></v-spacer>
         </v-app-bar>
 
+        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
+          <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
+            <v-layout>
+              <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
+            </v-layout>
+          </v-container>
+        </v-sheet>
+  
+        <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
+          <v-toolbar-title style="font-size:1.0em;">
+            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
+          </v-toolbar-title>
+
+          <v-spacer></v-spacer>
+          <!--
+            <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+          -->
+        </v-app-bar>
         <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
           <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
@@ -106,7 +136,7 @@
           { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
-        bannerHeight: 250,
+        bannerHeight: 500,
         scrollThreshold: 220,
         height: 0,
         essayTopMargin: 200,
@@ -124,11 +154,11 @@
         essayConfig: {}
       }),
       computed: {
-        // banner() { return this.essayConfig.banner || this.siteConfig.banner },
-        // title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
         imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
-        banner() { return this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
-        title() { return this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
+        banner() { return this.essayConfig.banner || this.siteConfig.banner },
+        title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
+        // banner() { return this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
+        // title() { return this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()

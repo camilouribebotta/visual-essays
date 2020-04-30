@@ -50,11 +50,12 @@
       selected: undefined,
       viewerWidth: 0,
       header: undefined,
-      position: 'relative'
+      position: 'relative',
     }),
     computed: {
       viewportHeight() { return this.$store.getters.height },
       viewportWidth() { return this.$store.getters.width },
+      headerSize() { return this.$store.getters.headerSize },
       primaryTab () {
         const primary = this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary')
         return primary ? primary.primary : undefined
@@ -91,12 +92,13 @@
         }
       },
       mouseMove(e) {
-        if (this.header.clientHeight === 56 && this.position === 'relative') {
-          this.$refs.viewer.$el.style.top = '56px'
+        console.log(this.header.clientHeight)
+        if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
+          this.$refs.viewer.$el.style.top = `${this.headerSize}px`
           this.$refs.viewer.$el.style.position = 'fixed'
           this.position = 'fixed'
           // console.log(`position=${this.position} ${this.header.offsetHeight}`)
-        } else if (this.position === 'fixed' && this.header.offsetHeight > 56) {
+        } else if (this.position === 'fixed' && this.header.offsetHeight > this.headerSize) {
           this.$refs.viewer.$el.style.top = '0px'
           this.$refs.viewer.$el.style.position = 'relative'
           this.position = 'relative'
