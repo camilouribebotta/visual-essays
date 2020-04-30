@@ -5,14 +5,15 @@
         <v-col cols="12" sm="5">
           <h3>Title of Essay</h3>
           <p id="author-name">The Author</p>
-          <p id="author-role">The Author's Role</p>
+          <small id="author-role">The Author's Role</small>
 
         </v-col>
-        <v-col cols="12" sm="4">
-          another
+        <v-col cols="12" sm="4" style="margin-top: 38px;">
+          <small>Published: date</small><br>
+          <small>Share: </small>
         </v-col>
-        <v-col class="align-end" cols="12" sm="3" >
-          last
+        <v-col class="align-end" cols="12" sm="3" style="text-align: right">
+          <small>This visual essay contains:</small>
         </v-col>
 
 
