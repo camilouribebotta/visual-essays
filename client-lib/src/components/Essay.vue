@@ -81,10 +81,12 @@ export default {
           document.getElementById(newActiveElements[0]).append(tri)
 
           //move tab controls to active paragraph
-          //let ctrlTabs = document.getElementById('control-tabs')
-          //ctrlTabs.parentNode.removeChild(ctrlTabs);
-          //alert(document.getElementsByTagName('active-elem').size)
-          //document.getElementsByClassName('active-elem')[0].append(ctrlTabs)
+          let ctrlTabs = document.querySelectorAll('[role="tablist"]');
+          if (ctrlTabs) {
+            console.log('got control tabs ', ctrlTabs)
+           // ctrlTabs.parentNode.removeChild(ctrlTabs);
+            document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
+          }
         }
       }
     },

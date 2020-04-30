@@ -233,8 +233,8 @@
   .v-tabs-bar {
     border-radius: 4px;
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 44px;
+    right: -42px;
     z-index: 2;
     background-color :white !important;
     height: 36px !important;
