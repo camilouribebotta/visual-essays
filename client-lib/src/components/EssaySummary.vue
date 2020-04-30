@@ -2,9 +2,7 @@
   <v-container class="summary">
     <v-row style="height:100%;" no-gutters>
       <v-col cols="12" sm="12">
-        <v-card class="pa-2" tile style="height:100%;">
-          Essay summary will go here
-        </v-card>
+          Essay title and summary/metadata
       </v-col>
     </v-row>
   </v-container>

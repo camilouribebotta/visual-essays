@@ -10,21 +10,21 @@
         app
         dense
         :height="bannerHeight"
-
         elevation="5"
         elevate-on-scroll
-
         dark
         shrink-on-scroll
         :src="banner"
-        scroll-target="#scrollableContent"
+
         :scroll-threshold="scrollThreshold"
       >
-        <v-toolbar-title>Visual essay, plus more metadata</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <!--<template v-slot:extension v-if="extended">
+        <v-toolbar-title>
           <essay-summary></essay-summary>
-        </template>-->
+          </v-toolbar-title>
+
+
+        <v-spacer></v-spacer>
+
       </v-app-bar>
       <v-sheet
         id="scrollableContent"
