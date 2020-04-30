@@ -229,7 +229,7 @@ export default {
             this.addedLayers.add(def.id)
             const geojson = this.mapLayers.geojson[def.id].layer
             geojson.addTo(this.map)
-            if (!this.mapDef['hide-labels']) {
+            if (this.mapDef['hide-labels'] !== true) {
               const t = performance.now()
               geojson.eachLayer(feature => feature.openPopup())                      
               console.log('open added geojson popup', Math.round(performance.now() - t))
@@ -247,7 +247,7 @@ export default {
             this.addedLayers.add(location.id)
             const geojson = this.mapLayers.geojson[location.id].layer
             geojson.addTo(this.map)
-            if (!this.mapDef['hide-labels']) {
+            if (this.mapDef['hide-labels'] !== true) {
               const t = performance.now()
               geojson.eachLayer(feature => feature.openPopup())            
               console.log('open added geojson location popup', Math.round(performance.now() - t)) 

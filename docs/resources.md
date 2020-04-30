@@ -1,5 +1,3 @@
-<var data-essay data-layout="horizontal"></var>
-
 This page provides links, overviews and howto information for some helpful resources that can used when building a visual essay.
 
 ### MapWarper

@@ -89,7 +89,7 @@ def get_local_markdown(file=None):
     logger.info(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        path = f'{DOCS_ROOT}/{KNOWN_SITES["localhost"]["root"]}/{file}'
+        path = f'{DOCS_ROOT}{KNOWN_SITES["localhost"]["root"]}{file}'
         logger.info(f'path={path}')
         if os.path.exists(path):
             with open(path, 'r') as fp:
@@ -124,7 +124,7 @@ def convert_relative_links(soup, acct=None, repo=None, source=None, site=None):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
+                    elem.attrs[attr] = f'{baseurl}{elem.attrs[attr] if elem.attrs[attr][0] != "/" else elem.attrs[attr][1:]}'
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -324,7 +324,7 @@ def essay(acct=None, repo=None, file=None):
         elif gdid:
             markdown = get_gd_markdown(gdid)
         else:
-            use_local = kwargs.pop('mode', ENV) == 'dev' and not acct
+            use_local = kwargs.pop('mode', ENV) == 'dev'
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
             logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')

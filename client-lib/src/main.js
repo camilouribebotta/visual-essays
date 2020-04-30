@@ -91,7 +91,7 @@ const components = {
 }
 
 function initApp() {
-  console.log('visual-essays.init')
+  console.log('visual-essays.init', window.app)
 
   window.data = []
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
@@ -142,7 +142,7 @@ function initApp() {
   const qargs = parseQueryString()
   const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
   vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || config.layout || 'hc' ))
-  vm.$store.dispatch('setShowBanner', !(qargs.nobanner === 'true' || qargs.nobanner === ''))
+  vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || config.context)
   vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)

@@ -240,7 +240,7 @@ class Essay(object):
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')
 
             ve_markup[attrs['id']] = attrs
-        # logger.info(json.dumps(ve_markup, indent=2))
+        logger.info(json.dumps(ve_markup, indent=2))
         return ve_markup
 
     def add_stylesheet(self, **kwargs):
