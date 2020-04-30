@@ -18,6 +18,7 @@ export default {
     allItems() { return this.$store.getters.items },
     contentStartPos() { return this.$store.getters.contentStartPos },
     activeElements() { return this.$store.getters.activeElements },
+    layout() { return this.$store.getters.layout },
     triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height },
   },
   created() {
@@ -76,6 +77,8 @@ export default {
             }
             this.$store.dispatch('setActiveElements', newActiveElements)
 
+         
+          if (this.layout === 'vtl') {
             //attach triangular shadow
             let tri = document.createElement("div");
             tri.setAttribute("id", "triangle");
@@ -83,13 +86,15 @@ export default {
 
             //move tab controls to active paragraph
             let ctrlTabs = document.querySelectorAll('[role="tablist"]');
-            if (ctrlTabs) {
+            if (ctrlTabs && ctrlTabs.length > 0) {
               console.log('got control tabs ', ctrlTabs)
-            // ctrlTabs.parentNode.removeChild(ctrlTabs);
+              // ctrlTabs.parentNode.removeChild(ctrlTabs);
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
           }
+
         }
+
       }
     },
     getParagraphs(elem) {

@@ -138,7 +138,7 @@ export default {
     background-color: rgba(20%, 20%, 20%, .6);
     width: 120%;
     margin-left: -20px;
-    padding-left: 20px;
     margin-right: -20px;
+    padding: 8px 36px!important;
   }
 </style>
