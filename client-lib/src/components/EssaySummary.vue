@@ -8,9 +8,9 @@
           <small id="author-role">The Author's Role</small>
 
         </v-col>
-        <v-col cols="12" sm="4" >
-          <small>Published</small><br>
-          <small>Share</small>
+        <v-col cols="12" sm="4" style="margin-top: 38px;">
+          <small>Published: date</small><br>
+          <small>Share: </small>
         </v-col>
         <v-col class="align-end" cols="12" sm="3" style="text-align: right">
           <small>This visual essay contains:</small>

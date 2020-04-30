@@ -76,7 +76,6 @@ export default {
           }
           this.$store.dispatch('setActiveElements', newActiveElements)
 
-
           if (this.layout === 'vtl') {
             //attach triangular shadow
             let tri = document.createElement("div");

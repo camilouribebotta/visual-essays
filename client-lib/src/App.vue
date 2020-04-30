@@ -18,9 +18,11 @@
 
         :scroll-threshold="scrollThreshold"
       >
-        <v-toolbar-title>
+        <v-toolbar-title v-if="this.$store.getters.layout==='vtl'">
+
           <essay-summary></essay-summary>
           </v-toolbar-title>
+        <v-toolbar-title v-else>Plant Humanities Essyas</v-toolbar-title>
 
 
         <v-spacer></v-spacer>
