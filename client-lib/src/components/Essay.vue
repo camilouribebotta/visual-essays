@@ -70,14 +70,12 @@ export default {
     setActiveElements(elemId) {
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
-        if (newActiveElements.length > 0) {
-          if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
-            if (document.getElementById('triangle')) {
-              document.getElementById('triangle').remove();
-            }
-            this.$store.dispatch('setActiveElements', newActiveElements)
+        if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
+          if (document.getElementById('triangle')) {
+            document.getElementById('triangle').remove();
+          }
+          this.$store.dispatch('setActiveElements', newActiveElements)
 
-         
           if (this.layout === 'vtl') {
             //attach triangular shadow
             let tri = document.createElement("div");
@@ -92,9 +90,7 @@ export default {
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
           }
-
         }
-
       }
     },
     getParagraphs(elem) {
@@ -118,8 +114,9 @@ export default {
     findContent() {
       const content = this.getParagraphs(document.getElementById('essay'))
       for (let i = 1; i < 9; i++) {
-        document.body.querySelectorAll(`h${i}`).forEach((heading) => {
+        document.body.querySelectorAll(`#essay h${i}`).forEach((heading) => {
           const sectionElem = heading.parentElement
+          console.log(sectionElem)
           const sectionId = sectionElem.attributes.id.value
           //sectionElem.title = `${sectionId} (${sectionElem.offsetTop})`
           const section = {
