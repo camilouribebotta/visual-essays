@@ -10,22 +10,21 @@
         app
         dense
         :height="bannerHeight"
-        extended
-        :extension-height="extensionHeight"
+
         elevation="5"
         elevate-on-scroll
-        fade-img-on-scroll
+
         dark
         shrink-on-scroll
         :src="banner"
         scroll-target="#scrollableContent"
         :scroll-threshold="scrollThreshold"
       >
-        <v-toolbar-title>Visual essay</v-toolbar-title>
+        <v-toolbar-title>Visual essay, plus more metadata</v-toolbar-title>
         <v-spacer></v-spacer>
-        <template v-slot:extension v-if="extended">
+        <!--<template v-slot:extension v-if="extended">
           <essay-summary></essay-summary>
-        </template>
+        </template>-->
       </v-app-bar>
       <v-sheet
         id="scrollableContent"
@@ -69,9 +68,9 @@ export default {
   data: () => ({
     layout: undefined,
     bannerHeight: 300,
-    extensionHeight: 100,
+    extensionHeight: 0,
     scrollThreshold: 350,
-    extended: true
+    extended: false
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
@@ -136,4 +135,11 @@ export default {
     color: black;
   }
 
+  .v-toolbar__title {
+    background-color: rgba(20%, 20%, 20%, .6);
+    width: 120%;
+    margin-left: -20px;
+    padding-left: 20px;
+    margin-right: -20px;
+  }
 </style>
