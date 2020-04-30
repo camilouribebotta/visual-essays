@@ -69,23 +69,25 @@ export default {
     setActiveElements(elemId) {
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
-        if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
-          if (document.getElementById('triangle')) {
-            document.getElementById('triangle').remove();
-          }
-          this.$store.dispatch('setActiveElements', newActiveElements)
+        if (newActiveElements.length > 0) {
+          if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
+            if (document.getElementById('triangle')) {
+              document.getElementById('triangle').remove();
+            }
+            this.$store.dispatch('setActiveElements', newActiveElements)
 
-          //attach triangular shadow
-          let tri = document.createElement("div");
-          tri.setAttribute("id", "triangle");
-          document.getElementById(newActiveElements[0]).append(tri)
+            //attach triangular shadow
+            let tri = document.createElement("div");
+            tri.setAttribute("id", "triangle");
+            document.getElementById(newActiveElements[0]).append(tri)
 
-          //move tab controls to active paragraph
-          let ctrlTabs = document.querySelectorAll('[role="tablist"]');
-          if (ctrlTabs) {
-            console.log('got control tabs ', ctrlTabs)
-           // ctrlTabs.parentNode.removeChild(ctrlTabs);
-            document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
+            //move tab controls to active paragraph
+            let ctrlTabs = document.querySelectorAll('[role="tablist"]');
+            if (ctrlTabs) {
+              console.log('got control tabs ', ctrlTabs)
+            // ctrlTabs.parentNode.removeChild(ctrlTabs);
+              document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
+            }
           }
         }
       }

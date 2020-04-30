@@ -93,15 +93,17 @@
       },
       mouseMove(e) {
         // console.log(this.header.clientHeight)
-        if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
-          this.$refs.viewer.$el.style.top = `${this.headerSize}px`
-          this.$refs.viewer.$el.style.position = 'fixed'
-          this.position = 'fixed'
-          // console.log(`position=${this.position} ${this.header.offsetHeight}`)
-        } else if (this.position === 'fixed' && this.header.offsetHeight > this.headerSize) {
-          this.$refs.viewer.$el.style.top = '0px'
-          this.$refs.viewer.$el.style.position = 'relative'
-          this.position = 'relative'
+        if (this.$refs.viewer) {
+          if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
+            this.$refs.viewer.$el.style.top = `${this.headerSize}px`
+            this.$refs.viewer.$el.style.position = 'fixed'
+            this.position = 'fixed'
+            // console.log(`position=${this.position} ${this.header.offsetHeight}`)
+          } else if (this.position === 'fixed' && this.header.offsetHeight > this.headerSize) {
+            this.$refs.viewer.$el.style.top = '0px'
+            this.$refs.viewer.$el.style.position = 'relative'
+            this.position = 'relative'
+          }
         }
         if (this.header.offsetHeight !== this.$store.getters.headerOffset) {
           this.$store.dispatch('setContentStartPos', this.header.offsetHeight)

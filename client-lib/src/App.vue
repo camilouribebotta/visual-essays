@@ -68,7 +68,6 @@ export default {
   data: () => ({
     layout: undefined,
     bannerHeight: 300,
-    extensionHeight: 0,
     scrollThreshold: 350,
     extended: false
   }),
@@ -77,10 +76,10 @@ export default {
     height() { return this.$store.getters.height },
     banner() { return (this.$store.getters.items.filter(item => item.type === 'essay') || [{}])[0].banner },
     showBanner() { return this.$store.getters.showBanner },
-    essayTopMargin() { return this.showBanner ? this.bannerHeight + this.extensionHeight * 2: 0 }
+    essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
   created() {
-    this.$store.dispatch('setHeaderSize', 48 + this.extensionHeight)
+    this.$store.dispatch('setHeaderSize', 48)
   },
   watch: {
     viewportWidth: {
