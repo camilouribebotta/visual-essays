@@ -107,7 +107,7 @@
                 </v-col>-->
                 <v-col class="align-end" cols="12" sm="3" style="text-align: right">
                     <b>This visual essay contains:</b> <br/>
-                    {{numLocations}} map locations &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i> <br/>
+                    {{numLocations}} interactive maps &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i> <br/>
                     {{numImages}} images &nbsp;&nbsp;<i class="fal fa-map-marked-alt"></i> <br/>
                     {{numSpecimens}} plant specimens &nbsp;&nbsp;<i class="fal fa-image"></i> <br/>
                     {{numPrimarySources}} primary source materials &nbsp;&nbsp;<i class="fal fa-book-alt"></i>
@@ -115,7 +115,8 @@
 
 
               </v-row>
-              <v-row><v-progress-linear value="15"></v-progress-linear></v-row>
+              {{progress}}
+              <v-row><v-progress-linear value="progress"></v-progress-linear></v-row>
             </v-container>
           </v-toolbar-title>
          <!-- <v-spacer></v-spacer>
@@ -250,6 +251,7 @@
         essayTopMargin() { return this.bannerHeight },
         //essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
         scrollThreshold() { return this.essayConfig ? 400 : 350 },
+        progress() { return this.progress }
 
       },
       created() {
