@@ -11,6 +11,45 @@
     .v-toolbar__extension {
       background-color: #272727 !important;
     }
+
+    #essay>p>a {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-family: 'Georgia', serif;
+      max-width: 80vw;
+      font-size: 40px;
+      position: absolute;
+      top: calc(50% - 65px);
+      margin-left: 20px;
+    }
+
+    .hero-title span {
+      padding: 8px;
+      background-color: black;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      margin-bottom: 0 !important;
+    }
+
+    .v-application--is-ltr .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-application--is-ltr .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
+      margin-left: -21px;
+    }
+
+    #appbar, .v-toolbar__image, .v-toolbar__content {
+      min-height: 104px!important;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      padding: 0 24px 8px;
+      width: 100%;
+      box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.1);
+      border-top: 1px solid #d4d4d4;
+    }
   </style>
 </head>
 <body>
@@ -29,27 +68,57 @@
         </v-list>
 
       </v-navigation-drawer>
-  
+
       <v-card tile class="overflow-hidden">
         <v-app-bar
           ref="header"
           id="appbar"
           app
-          dense
+          prominent
           elevation="6"
           :height="bannerHeight"
           elevate-on-scroll
-          fade-img-on-scroll
           dark
           shrink-on-scroll
           :src="banner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
+          id="app-bar"
         >
-  
+
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
-          <v-spacer></v-spacer>
+
+          <div v-if="!essayConfig" class="hero-title" >
+            <span>Explore the cultural history of plants and their influence on human societies.</span>
+          </div>
+
+          <v-toolbar-title v-if="essayConfig">
+            <v-container class="summary">
+              <v-row style="height:100%;" no-gutters>
+
+                <v-col cols="12" sm="9">
+                  <h3>{{title}}</h3>
+                  <p id="author-name">{{author}}</p>
+                  <small id="author-role">The Author's Role</small>
+
+                </v-col>
+                <!--<v-col cols="12" sm="4" style="margin-top: 38px;">
+                  <small>Published: date</small><br>
+                  <small>Share: </small>
+                </v-col>-->
+                <v-col class="align-end" cols="12" sm="3" style="text-align: right">
+                  <small>This visual essay contains:</small>
+                  &nbsp;&nbsp;{{numLocations}} map locations<br/>
+                  &nbsp;&nbsp;{{numImages}} images<br/>
+                  &nbsp;&nbsp;{{numSpecimens}} plant specimens<br/>
+                  &nbsp;&nbsp;{{numPrimarySources}} primary source materials
+                </v-col>
+
+
+              </v-row>
+            </v-container>
+          </v-toolbar-title>
+         <!-- <v-spacer></v-spacer>
           <template v-slot:extension v-if="essayConfig">
             <div style="position:relative; left:60px; top:-24px; height:96px; width:100%">
               <v-container>
@@ -71,7 +140,7 @@
                 </v-row>
               </v-container>
             </div>
-          </template>        
+          </template>-->
         </v-app-bar>
 
         <v-sheet ref="scrollableContent" id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
@@ -82,16 +151,35 @@
           </v-container>
         </v-sheet>
 
-        <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
-          <v-toolbar-title style="font-size:1.0em;">
-            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
-          </v-toolbar-title>
 
+        <div class="footer" v-if="siteConfig.showFooter">
+          <v-row>
+            <v-col cols="6">
+              <span style="padding-bottom: 8px; font-weight: bold; display: block">A collaboration between:</span>
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/do.jpg" height="30px"> &nbsp;&nbsp;&nbsp;&nbsp;
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/labs.jpg" height="30px">
+            </v-col>
+
+            <v-col cols="6">
+              <span style="padding-bottom: 8px; font-weight: bold; display: block">Funded by:</span>
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/Mellon.jpg" height="30px">
+            </v-col>
+
+          </v-row>
+
+
+        </div>
+
+       <!-- <div v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollaleContent">
+          <div style="font-size:1.0em;">
+            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
+          </div>
+-->
           <v-spacer></v-spacer>
           <!--
             <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
           -->
-        </v-app-bar>
+        </div>
       </v-card>
     </v-app>
   </div>
@@ -154,12 +242,13 @@
         imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
         banner() { return this.essayConfig ? this.essayConfig.banner : this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
         title() { return this.essayConfig ? this.essayConfig.title : this.siteConfig.title || this.repo ? this.repo.titleize() : '' },
-        numLocations() { return this.essayConfig ? this.essayConfig['num-locations'] || 0 : 0 },
-        numOverlays() { return this.essayConfig ? this.essayConfig['num-overlays'] || 0 : 0 },
-        numImages() { return this.essayConfig ? this.essayConfig['num-images'] || 0 : 0 },
+        numLocations() { return this.essayConfig ? this.essayConfig['data-num-locations'] || 0 : 0 },
+        numImages() { return this.essayConfig ? this.essayConfig['data-num-images'] || 0 : 0 },
+        numSpecimens() { return this.essayConfig ? this.essayConfig['data-num-specimens'] || 0 : 0 },
         numPrimarySources() { return this.essayConfig ? this.essayConfig['num-primary-sources'] || 0 : 0 },
         author() { return this.essayConfig ? this.essayConfig['author'] || '' : '' },
-        essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
+        essayTopMargin() { return this.bannerHeight },
+        //essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
         scrollThreshold() { return this.essayConfig ? 400 : 350 }
       },
       created() {
