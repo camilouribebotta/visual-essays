@@ -409,6 +409,7 @@ export default {
     },
     mapDef: {
       handler: function (value, prior) {
+        console.log(value)
         if (this.$refs.map) {
           if (this.items.length === 0) {
               this.$refs.mapWrapper.style.display = 'none'
