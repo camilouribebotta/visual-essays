@@ -39,7 +39,7 @@
     }
 
     #appbar, .v-toolbar__image, .v-toolbar__content {
-      min-height: 104px!important;
+      /*min-height: 104px!important;*/
     }
 
     .footer {
@@ -84,11 +84,12 @@
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
           id="app-bar"
+
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-          <div v-if="!essayConfig" class="hero-title" >
+          <div v-if="!essayConfig" v-cloak="true" class="hero-title" >
             <span>Explore the cultural history of plants and their influence on human societies.</span>
           </div>
 
@@ -152,7 +153,7 @@
         </v-sheet>
 
 
-        <div class="footer" v-if="siteConfig.showFooter">
+        <div class="footer" v-if="!essayConfig && siteConfig.showFooter">
           <v-row>
             <v-col cols="6">
               <span style="padding-bottom: 8px; font-weight: bold; display: block">A collaboration between:</span>
