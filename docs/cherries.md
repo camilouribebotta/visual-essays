@@ -2,6 +2,11 @@
      title="Cherry Blossom"
      data-banner="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/USA-Cherry_Blossom0.jpg/800px-USA-Cherry_Blossom0.jpg"
      data-layout="vtl"
+     data-num-locations="5"
+     data-num-overlays="15"
+     data-num-images="9"
+     data-num-primary-sources="2"
+     data-author="JSTOR Labs team"
      data-about="Q871991"></var>
 
 <var title="cherry blossom" id="Q871991"  data-category="plant"></var>
@@ -80,6 +85,11 @@ Although cherry blossoms became beloved fixtures of the city of Washington, atti
 <var title="Japan" id="Q17" data-scope="global" data-prefer-geojson="true"></var>
 
 The cherry blossom has been a repository of symbolism in Japanese culture for centuries: it has variously symbolized processes of life, death, reproductive power, love, rebirth, and the beauty of impermanence. By the end of the Edo period (1603-1868) cherry blossoms came to be a dominant symbol of Japanese identity, although their association with Japanese identity dates to at least the ninth century. During the early years of Japan’s rapid industrialization, cherry trees fell prey to an iconoclastic drive to erase reminders of the old feudal society. As Japan continued to negotiate its national identity, cherries were taken up again, now as symbols of a modern Japan that would be recognizable on an international scale. In the years leading up to World War II, the image of falling cherry blossoms, which had traditionally been associated with impermanence and death, was increasingly deployed to aestheticize self-sacrifice for the emperor. Cherry blossoms were planted in shrines glorifying fallen soldiers, and featured prominently in military imagery.
+<var data-image 
+     data-fit="cover"
+     title="Holotype of Prunus serrulata Lindley f. shibayama E. H. Wilson [family ROSACEAE]" 
+     data-url="https://plants.jstor.org/seqapp/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&rft_id=/jp2/fpx/16/gpi-a-typspe-01-42/a0000/a00032200.jp2"
+     data-thumbnail="https://plants.jstor.org/fsi/img/size1/alukaplant/a/phase_01/a0000/a00032200.jpg"></var>
 
 #### Cherry viewing in Japan
 

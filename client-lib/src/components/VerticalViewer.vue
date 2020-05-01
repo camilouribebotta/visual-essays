@@ -69,6 +69,7 @@
     },
     mounted() {
       this.header = document.getElementById('appbar')
+      console.log('header', this.header)
       if (this.header) {
         document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
         this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
@@ -92,7 +93,7 @@
         }
       },
       mouseMove(e) {
-        // console.log(this.header.clientHeight)
+        // console.log(this.header.clientHeight, this.headerSize)
         if (this.$refs.viewer) {
           if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
             this.$refs.viewer.$el.style.top = `${this.headerSize}px`
@@ -232,7 +233,7 @@
     height: 100vh;
     box-shadow: none;
     border-radius: 0;
-    position:fixed;
+    position:relative;
     top: 0px;
   }
 

@@ -81,7 +81,7 @@ export default {
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
   created() {
-    this.$store.dispatch('setHeaderSize', 48)
+    this.$store.dispatch('setHeaderSize', 96)
   },
   watch: {
     viewportWidth: {

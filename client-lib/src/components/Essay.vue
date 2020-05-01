@@ -70,7 +70,7 @@ export default {
     setActiveElements(elemId) {
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
-        if (!eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
+        if (newActiveElements.length > 0 && !eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
           if (document.getElementById('triangle')) {
             document.getElementById('triangle').remove();
           }
