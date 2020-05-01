@@ -22,7 +22,7 @@
       max-width: 80vw;
       font-size: 40px;
       position: absolute;
-      top: calc(50% - 90px);
+      top: calc(50% - 65px);
       margin-left: 20px;
     }
 
@@ -34,8 +34,12 @@
       margin-bottom: 0 !important;
     }
 
-    .v-toolbar__title {
-      margin-left: -55px !important;
+    .v-application--is-ltr .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-application--is-ltr .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
+      margin-left: -21px;
+    }
+
+    #appbar, .v-toolbar__image, .v-toolbar__content {
+      min-height: 104px!important;
     }
 
     .footer {
@@ -64,13 +68,13 @@
         </v-list>
 
       </v-navigation-drawer>
-  
+
       <v-card tile class="overflow-hidden">
         <v-app-bar
           ref="header"
           id="appbar"
           app
-          dense
+          prominent
           elevation="6"
           :height="bannerHeight"
           elevate-on-scroll
@@ -79,6 +83,7 @@
           :src="banner"
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
+          id="app-bar"
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -91,16 +96,16 @@
             <v-container class="summary">
               <v-row style="height:100%;" no-gutters>
 
-                <v-col cols="12" sm="5">
+                <v-col cols="12" sm="9">
                   <h3>{{title}}</h3>
                   <p id="author-name">{{author}}</p>
                   <small id="author-role">The Author's Role</small>
 
                 </v-col>
-                <v-col cols="12" sm="4" style="margin-top: 38px;">
+                <!--<v-col cols="12" sm="4" style="margin-top: 38px;">
                   <small>Published: date</small><br>
                   <small>Share: </small>
-                </v-col>
+                </v-col>-->
                 <v-col class="align-end" cols="12" sm="3" style="text-align: right">
                   <small>This visual essay contains:</small>
                   &nbsp;&nbsp;{{numLocations}} map locations<br/>
