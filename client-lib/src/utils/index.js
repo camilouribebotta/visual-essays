@@ -106,7 +106,7 @@ export function groupItems(items) {
   // let selectedMap = maps.length > 0 ? { ...maps[maps.length-1], ...{layers:{mapwarper:[], geojson:[]}} } : undefined
   let selectedMap = maps.length > 0 ? { ...maps[0], ...{layers: {mapwarper:[], geojson:[]}} } : undefined
   if (selectedMap) {
-    groups.map = {component: 'gmap', label: 'Map', items: [selectedMap]}
+    groups.map = {component: 'gmap', label: 'Map', icon: 'fa-map-marker-alt', items: [selectedMap]}
   }
   items
     .filter(item => !exclude.includes(item.type))
@@ -125,7 +125,14 @@ export function groupItems(items) {
         }
       } else {
         const groupName = item.type
-        if (!groups[groupName]) { groups[groupName] = {component: `g${item.type}`, label: `${item.type}s`, items: []}  }
+        if (!groups[groupName]) { 
+          groups[groupName] = {component: `g${item.type}`, label: `${item.type}s`, items: []}
+          if (item.type === 'image') {
+            groups[groupName]['icon'] = 'fa-file-image'
+          } else if (item.type === 'video') {
+            groups[groupName]['icon'] = 'fa-video'
+          }
+        }
         groups[groupName].items.push(item)
       }
     })
