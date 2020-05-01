@@ -1,6 +1,5 @@
 <template>
   <v-card ref="viewer" id="viewer" :style="style" >
-
     <v-tabs
       id="control-tabs"
       ref="tabs"
@@ -12,7 +11,13 @@
       <v-tab
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
-        {{groups[tab].label || tab}}
+        <span v-if="tab === 'map'">
+          <!-- map icon here -->
+        </span>
+        <span v-else>
+           {{groups[tab].label || tab}}
+        </span>
+
       </v-tab>
 
       <v-tab-item

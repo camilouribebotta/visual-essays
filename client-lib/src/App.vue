@@ -21,7 +21,8 @@
         <v-toolbar-title v-if="this.$store.getters.layout==='vtl'">
 
           <essay-summary></essay-summary>
-          </v-toolbar-title>
+          <!--<v-progress-linear value="percentScrolled"></v-progress-linear>-->
+        </v-toolbar-title>
         <v-toolbar-title v-else>Take an interactive and guided tour through the cultural history of plants</v-toolbar-title>
 
 
@@ -71,7 +72,7 @@ export default {
     layout: undefined,
     bannerHeight: 300,
     scrollThreshold: 350,
-    extended: false
+    extended: false,
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
