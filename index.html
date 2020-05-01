@@ -48,7 +48,6 @@
           elevation="6"
           :height="bannerHeight"
           elevate-on-scroll
-          fade-img-on-scroll
           dark
           shrink-on-scroll
           :src="banner"
@@ -57,8 +56,33 @@
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
-          <v-spacer></v-spacer>
+          <v-toolbar-title >
+            <v-container class="summary">
+              <v-row style="height:100%;" no-gutters>
+
+                <v-col cols="12" sm="5">
+                  <h3>{{title}}</h3>
+                  <p id="author-name">{{author}}</p>
+                  <small id="author-role">The Author's Role</small>
+
+                </v-col>
+                <v-col cols="12" sm="4" style="margin-top: 38px;">
+                  <small>Published: date</small><br>
+                  <small>Share: </small>
+                </v-col>
+                <v-col class="align-end" cols="12" sm="3" style="text-align: right">
+                  <small>This visual essay contains:</small>
+                  &nbsp;&nbsp;{{numLocations}} map locations<br/>
+                  &nbsp;&nbsp;{{numImages}} images<br/>
+                  &nbsp;&nbsp;{{numSpecimens}} plant specimens<br/>
+                  &nbsp;&nbsp;{{numPrimarySources}} primary source materials
+                </v-col>
+
+
+              </v-row>
+            </v-container>
+          </v-toolbar-title>
+         <!-- <v-spacer></v-spacer>
           <template v-slot:extension v-if="essayConfig">
             <div style="position:relative; left:60px; top:-24px; height:96px; width:100%">
               <v-container>
@@ -80,7 +104,7 @@
                 </v-row>
               </v-container>
             </div>
-          </template>
+          </template>-->
         </v-app-bar>
 
         <v-sheet ref="scrollableContent" id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
@@ -183,12 +207,13 @@
         imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
         banner() { return this.essayConfig ? this.essayConfig.banner : this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
         title() { return this.essayConfig ? this.essayConfig.title : this.siteConfig.title || this.repo ? this.repo.titleize() : '' },
-        numLocations() { return this.essayConfig ? this.essayConfig['num-locations'] || 0 : 0 },
-        numOverlays() { return this.essayConfig ? this.essayConfig['num-overlays'] || 0 : 0 },
-        numImages() { return this.essayConfig ? this.essayConfig['num-images'] || 0 : 0 },
+        numLocations() { return this.essayConfig ? this.essayConfig['data-num-locations'] || 0 : 0 },
+        numImages() { return this.essayConfig ? this.essayConfig['data-num-images'] || 0 : 0 },
+        numSpecimens() { return this.essayConfig ? this.essayConfig['data-num-specimens'] || 0 : 0 },
         numPrimarySources() { return this.essayConfig ? this.essayConfig['num-primary-sources'] || 0 : 0 },
         author() { return this.essayConfig ? this.essayConfig['author'] || '' : '' },
-        essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
+        essayTopMargin() { return this.bannerHeight },
+        //essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
         scrollThreshold() { return this.essayConfig ? 400 : 350 }
       },
       created() {
