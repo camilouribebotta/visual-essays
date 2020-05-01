@@ -148,7 +148,7 @@ function initApp() {
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
-  const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay')
   console.log('essayConfig', essayConfig)
   if (window.app) {
     window.app.essayConfig = essayConfig
