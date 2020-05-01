@@ -89,6 +89,17 @@ export default {
             if (ctrlTabs && ctrlTabs.length > 0) {
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
+            //this.setActiveElements(this.paragraphs[para.id].prior)
+            /*console.log("THE PARAGRAPHS")
+              console.log(newActiveElements)
+              console.log(this.paragraphs)
+            console.log(this.paragraphs.length)
+            let idx = 0;
+            for (let i = 0; i < this.paragraphs.length; i++) {
+              console.log(this.paragraphs[i])
+            }*/
+            //console.log(this.paragraphs.indexOf(newActiveElements[0] + ' of ' + this.paragraphs.length))
+
           }
         }
       }

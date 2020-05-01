@@ -84,7 +84,6 @@
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
           id="app-bar"
-
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -116,6 +115,7 @@
 
 
               </v-row>
+              <v-row><v-progress-linear value="15"></v-progress-linear></v-row>
             </v-container>
           </v-toolbar-title>
          <!-- <v-spacer></v-spacer>
