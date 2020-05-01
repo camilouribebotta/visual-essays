@@ -2,12 +2,12 @@
      title="Cherry Blossom"
      data-banner="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/USA-Cherry_Blossom0.jpg/800px-USA-Cherry_Blossom0.jpg"
      data-layout="vtl"
-     data-num-locations="5"
-     data-num-overlays="15"
+     data-num-maps="5"
+     data-num-specimens="15"
      data-num-images="9"
      data-num-primary-sources="2"
      data-author="JSTOR Labs team"
-     data-about="Q871991"></var>
+></var>
 
 <var title="cherry blossom" id="Q871991"  data-category="plant"></var>
 <var title="Dumbarton Oaks" id="Q1264942"></var>
