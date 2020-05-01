@@ -83,11 +83,11 @@
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-          <div v-if="layout !== 'vtl'" class="hero-title" >
+          <div v-if="!essayConfig" class="hero-title" >
             <span>Explore the cultural history of plants and their influence on human societies.</span>
           </div>
 
-          <v-toolbar-title >
+          <v-toolbar-title v-if="essayConfig">
             <v-container class="summary">
               <v-row style="height:100%;" no-gutters>
 

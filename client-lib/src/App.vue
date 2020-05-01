@@ -140,7 +140,7 @@ export default {
   .v-toolbar__title {
     background-color: rgba(20%, 20%, 20%, .6);
     width: 120%;
-    margin-left: -20px;
+    margin-left: -54px;
     margin-right: -20px;
     padding: 8px 36px!important;
   }
