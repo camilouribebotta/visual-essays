@@ -12,6 +12,27 @@
       background-color: #272727 !important;
     }
 
+    #essay>p>a {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .hero-title {
+      font-family: 'Georgia', serif;
+      max-width: 80vw;
+      font-size: 40px;
+      position: absolute;
+      top: calc(50% - 90px);
+    }
+
+    .hero-title span {
+      padding: 8px;
+      background-color: black;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      margin-bottom: 0 !important;
+    }
+
     .footer {
       position: absolute;
       bottom: 0;
@@ -56,6 +77,11 @@
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+          <div v-if="layout !== 'vtl'" class="hero-title" >
+            <span>Explore the cultural history of plants and their influence on human societies.</span>
+          </div>
+
           <v-toolbar-title >
             <v-container class="summary">
               <v-row style="height:100%;" no-gutters>
@@ -122,7 +148,6 @@
               <span style="padding-bottom: 8px; font-weight: bold; display: block">A collaboration between:</span>
               <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/do.jpg" height="30px"> &nbsp;&nbsp;&nbsp;&nbsp;
               <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/labs.jpg" height="30px">
-
             </v-col>
 
             <v-col cols="6">
