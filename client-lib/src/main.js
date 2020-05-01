@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.13'
+const VERSION = '0.5.14'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -129,6 +129,8 @@ function initApp() {
     render: h => h(App),
     vuetify: new Vuetify()
   })
+  console.log(`geoJsonCache cache_size=${Object.keys(vm.$store.getters.geoJsonCache).length}`)
+
   vm.$store.dispatch('setEssayHTML', undefined)
 
   vm.$store.dispatch('setContent', [])
