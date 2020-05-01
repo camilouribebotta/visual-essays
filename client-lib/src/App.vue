@@ -82,12 +82,12 @@ export default {
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
   created() {
-    this.$store.dispatch('setHeaderSize', 96)
+    this.$store.dispatch('setHeaderSize', 104)
   },
   watch: {
     viewportWidth: {
       handler: function (width) {
-        // console.log(`width=${width} layout=${this.$store.getters.layout}`)
+        console.log(`width=${width} layout=${this.$store.getters.layout}`)
         if (width > 0) {
           this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vtl' : 'hc')
           // console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
