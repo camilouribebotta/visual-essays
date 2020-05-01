@@ -117,6 +117,7 @@ export default {
       return popup
     },
     cachedGeojson(def) {
+      console.log(`loadGeojson cache_size=${Object.keys(this.$store.getters.geoJsonCache).length}`)
       console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
