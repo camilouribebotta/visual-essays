@@ -68,6 +68,8 @@ export default {
       this.setActiveElements(Array.from(document.body.querySelectorAll('p')).find(elem => elem.id).id)
     },
     setActiveElements(elemId) {
+      //console.log('SCENES ', this.scenes);
+      //console.log('PARAGRAPHS ', this.paragraphs)
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
         if (newActiveElements.length > 0 && !eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
@@ -85,8 +87,6 @@ export default {
             //move tab controls to active paragraph
             let ctrlTabs = document.querySelectorAll('[role="tablist"]');
             if (ctrlTabs && ctrlTabs.length > 0) {
-              console.log('got control tabs ', ctrlTabs)
-              // ctrlTabs.parentNode.removeChild(ctrlTabs);
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
           }
@@ -224,7 +224,7 @@ export default {
   .vtl #essay p.active-elem {
 
     border-left: none;
-    width: calc(100% + 40px);
+    width: calc(100% + 20px);
     padding-right: 72px
   }
   
@@ -285,10 +285,10 @@ export default {
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 40px 40px 0 0;
+    border-width: 20px 20px 0 0;
     border-color: #666666 transparent transparent transparent;
     position: absolute;
-    right: -40px;
+    right: -20px;
   }
 
   section {
