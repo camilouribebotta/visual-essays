@@ -11,6 +11,15 @@
     .v-toolbar__extension {
       background-color: #272727 !important;
     }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      padding: 0 24px 8px;
+      width: 100%;
+      box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.1);
+      border-top: 1px solid #d4d4d4;
+    }
   </style>
 </head>
 <body>
@@ -32,8 +41,6 @@
   
       <v-card tile class="overflow-hidden">
         <v-app-bar
-          app
-          dense
           ref="header"
           id="appbar"
           app
@@ -50,8 +57,30 @@
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak style="color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
+          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
           <v-spacer></v-spacer>
+          <template v-slot:extension v-if="essayConfig">
+            <div style="position:relative; left:60px; top:-24px; height:96px; width:100%">
+              <v-container>
+                <v-row no-gutters>
+                  <v-col md="9">
+                    <v-card class="pa-2" flat style="margin-top: 50px; font-size:14pt !important; line-height:1.2em; background-color:#272727; color:white">
+                      Author: {{author}}
+                    </v-card>
+                  </v-col>
+                  <v-col md="3">
+                    <v-card class="pa-2" flat style="padding:4px !important; font-size:10pt!important; line-height:1.2em; background-color:#272727; color:white">
+                      <b>This visual essay contains:</b><br/>
+                      &nbsp;&nbsp;{{numLocations}} map locations<br/>
+                      &nbsp;&nbsp;{{numOverlays}} map overlays<br/>
+                      &nbsp;&nbsp;{{numImages}} images<br/>
+                      &nbsp;&nbsp;{{numPrimarySources}} primary source materials
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </div>
+          </template>
         </v-app-bar>
 
         <v-sheet ref="scrollableContent" id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
@@ -62,16 +91,36 @@
           </v-container>
         </v-sheet>
 
-        <v-app-bar v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollableContent">
-          <v-toolbar-title style="font-size:1.0em;">
-            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
-          </v-toolbar-title>
 
+        <div class="footer" v-if="siteConfig.showFooter">
+          <v-row>
+            <v-col cols="6">
+              <span style="padding-bottom: 8px; font-weight: bold; display: block">A collaboration between:</span>
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/do.jpg" height="30px"> &nbsp;&nbsp;&nbsp;&nbsp;
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/labs.jpg" height="30px">
+
+            </v-col>
+
+            <v-col cols="6">
+              <span style="padding-bottom: 8px; font-weight: bold; display: block">Funded by:</span>
+              <img src="https://ithaka-labs.s3.amazonaws.com/static-files/images/plants/Mellon.jpg" height="30px">
+            </v-col>
+
+          </v-row>
+
+
+        </div>
+
+       <!-- <div v-if="siteConfig.showFooter" v-cloak app bottom hide-on-scroll dense color="#eee" elevation="6" scroll-target="#scrollaleContent">
+          <div style="font-size:1.0em;">
+            <img :src="`${imgBase}${siteConfig.logo}`" height="25px"/>
+          </div>
+-->
           <v-spacer></v-spacer>
           <!--
             <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
           -->
-        </v-app-bar>
+        </div>
       </v-card>
     </v-app>
   </div>
@@ -113,8 +162,7 @@
           { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
         ],
         hostname: undefined,
-        bannerHeight: 250,
-        scrollThreshold: 220,
+        bannerHeight: 400,
         height: 0,
         html: undefined,
         service: undefined,
@@ -133,8 +181,15 @@
         // banner() { return this.essayConfig.banner || this.siteConfig.banner },
         // title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
         imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
-        banner() { return this.essayConfig && (this.essayConfig.banner || (this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined)) },
-        title() { return this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
+        banner() { return this.essayConfig ? this.essayConfig.banner : this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
+        title() { return this.essayConfig ? this.essayConfig.title : this.siteConfig.title || this.repo ? this.repo.titleize() : '' },
+        numLocations() { return this.essayConfig ? this.essayConfig['num-locations'] || 0 : 0 },
+        numOverlays() { return this.essayConfig ? this.essayConfig['num-overlays'] || 0 : 0 },
+        numImages() { return this.essayConfig ? this.essayConfig['num-images'] || 0 : 0 },
+        numPrimarySources() { return this.essayConfig ? this.essayConfig['num-primary-sources'] || 0 : 0 },
+        author() { return this.essayConfig ? this.essayConfig['author'] || '' : '' },
+        essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
+        scrollThreshold() { return this.essayConfig ? 400 : 350 }
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()
