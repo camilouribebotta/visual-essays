@@ -9,7 +9,7 @@ export default new Vuex.Store({
     essayHTML: undefined,
     layout: 'vtl',
     showBanner: true,
-    headerSize: 0,
+    headerSize: 96,
     contentStartPos: 0,
     triggerOffset: 250,
     debug: false,
