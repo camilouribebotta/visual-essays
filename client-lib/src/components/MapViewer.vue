@@ -209,7 +209,10 @@ export default {
           geojson.eachLayer(feature => feature.openPopup())
           console.log('open geojson feature popup', Math.round(performance.now() - t))
         }
-        this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
+        // this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
+        console.log('flyTo', this.mapDef.center || defaults.center)
+        this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
+
         return geojson
       })
     },
@@ -418,7 +421,7 @@ export default {
               if (this.items.length > 0) {
                 const curMap = this.items[0]
                 // this.map.setView(curMap.center, curMap.zoom || 10)
-
+                console.log('flyto', this.mapDef.center || defaults.center)
                 this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
               }
             } else {
