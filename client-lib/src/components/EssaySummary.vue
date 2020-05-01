@@ -16,7 +16,6 @@
           <small>This visual essay contains:</small>
         </v-col>
 
-
     </v-row>
   </v-container>
 </template>
@@ -32,7 +31,7 @@
 
 <style>
   .summary {
-    font-size: 14px;
+    font-size: 12px;
     height: 100%;
   }
 
