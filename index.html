@@ -8,8 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
     [v-cloak] { display: none; }
-    .v-toolbar__extension, .v-toolbar__title {
-      background-color: #2E2E2E !important;
+    .v-toolbar__extension {
+      background-color: #272727 !important;
     }
   </style>
 </head>
@@ -32,13 +32,12 @@
   
       <v-card tile class="overflow-hidden">
         <v-app-bar
-          app
-          dense
           ref="header"
           id="appbar"
-          :height="bannerHeight"
-
+          app
+          dense
           elevation="6"
+          :height="bannerHeight"
           elevate-on-scroll
           fade-img-on-scroll
           dark
@@ -47,35 +46,36 @@
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
         >
+  
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-          <v-toolbar-title v-cloak style="margin-left:-80px !important; padding-left:80px !important; color:#fff;font-weight:bold;">{{title}}</v-toolbar-title>
-          
+          <v-toolbar-title v-cloak>{{title}}</v-toolbar-title>
+          <v-spacer></v-spacer>
           <template v-slot:extension v-if="essayConfig">
-            <div style="position:relative; top:-24px; height:96px; width:100%">
+            <div style="position:relative; left:60px; top:-24px; height:96px; width:100%">
               <v-container>
                 <v-row no-gutters>
-                  <v-col>
-                    <v-card class="pa-2" flat style="margin-top: 45px; margin-left: 46px; font-size:14pt !important; line-height:1.2em; background-color:#2E2E2E; color:white">
-                      Author
+                  <v-col md="9">
+                    <v-card class="pa-2" flat style="margin-top: 50px; font-size:14pt !important; line-height:1.2em; background-color:#272727; color:white">
+                      Author: {{author}}
                     </v-card>
                   </v-col>
-                  <v-col>
-                    <v-card class="pa-2" flat style="padding:4px !important; font-size:10pt!important; line-height:1.2em; background-color:#2E2E2E; color:white">
-                      <b>This visual essay contains</b><br/>
-                      map locations<br/>
-                      map overlays<br/>
-                      images<br/>
-                      primary source materials
+                  <v-col md="3">
+                    <v-card class="pa-2" flat style="padding:4px !important; font-size:10pt!important; line-height:1.2em; background-color:#272727; color:white">
+                      <b>This visual essay contains:</b><br/>
+                      &nbsp;&nbsp;{{numLocations}} map locations<br/>
+                      &nbsp;&nbsp;{{numOverlays}} map overlays<br/>
+                      &nbsp;&nbsp;{{numImages}} images<br/>
+                      &nbsp;&nbsp;{{numPrimarySources}} primary source materials
                     </v-card>
                   </v-col>
                 </v-row>
               </v-container>
             </div>
-          </template>
+          </template>        
         </v-app-bar>
 
-        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;margin-top:60px`">
-          <v-container id="contentContainer" ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:100%;`">
+        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
+          <v-container id="contentContainer" ref="contentContainer" :style="`!important; margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
               <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
             </v-layout>
@@ -134,9 +134,7 @@
         ],
         hostname: undefined,
         bannerHeight: 400,
-        scrollThreshold: 400,
         height: 0,
-        essayTopMargin: 432,
         html: undefined,
         service: undefined,
         acct: undefined,
@@ -155,7 +153,14 @@
         // title() { return this.essayConfig.title || this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
         imgBase() { return this.hostname === 'localhost' ? '/static' : '' },
         banner() { return this.essayConfig ? this.essayConfig.banner : this.siteConfig.banner ? `${this.imgBase}${this.siteConfig.banner}` : undefined },
-        title() { return this.essayConfig ? this.essayConfig.title : this.siteConfig.title || this.repo ? this.repo.titleize() : '' }
+        title() { return this.essayConfig ? this.essayConfig.title : this.siteConfig.title || this.repo ? this.repo.titleize() : '' },
+        numLocations() { return this.essayConfig ? this.essayConfig['num-locations'] || 0 : 0 },
+        numOverlays() { return this.essayConfig ? this.essayConfig['num-overlays'] || 0 : 0 },
+        numImages() { return this.essayConfig ? this.essayConfig['num-images'] || 0 : 0 },
+        numPrimarySources() { return this.essayConfig ? this.essayConfig['num-primary-sources'] || 0 : 0 },
+        author() { return this.essayConfig ? this.essayConfig['author'] || '' : '' },
+        essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
+        scrollThreshold() { return this.essayConfig ? 400 : 350 }
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()
@@ -166,6 +171,7 @@
         }
       },
       mounted() {
+        window.scrollTo(0, scrollTo )
         window.onpopstate = (e) => {
           this.loadEssay(e.state.file, true)
         }        
