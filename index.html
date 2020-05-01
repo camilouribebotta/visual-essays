@@ -74,7 +74,7 @@
           </template>        
         </v-app-bar>
 
-        <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
+        <v-sheet ref="scrollableContent" id="scrollableContent" class="overflow-y-auto" :style="`height:${height}px;`">
           <v-container id="contentContainer" ref="contentContainer" :style="`!important; margin-top: ${essayTopMargin}px; height:100%;`">
             <v-layout>
               <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
@@ -171,7 +171,9 @@
         }
       },
       mounted() {
-        window.scrollTo(0, scrollTo )
+
+        document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
+        // this.$refs.scrollableContent.$el.scrollTo(0, 600)
         window.onpopstate = (e) => {
           this.loadEssay(e.state.file, true)
         }        
@@ -208,6 +210,20 @@
         })
       },
       methods: {
+        throttle(callback, interval) {
+          let enableCall = true
+          return function(...args) {
+            if (!enableCall) return
+            enableCall = false
+            callback.apply(this, args)
+            setTimeout(() => enableCall = true, interval)
+          }
+        },
+        scrollContent(e) {
+          const wheelDelta = e.wheelDelta
+          // console.log(`scrollDirection ${wheelDelta > 0 ? 'down' : 'up'} ${wheelDelta}`)
+          this.$refs.scrollableContent.$el.scrollTo(0, this.$refs.scrollableContent.$el.scrollTop - wheelDelta)
+        },
         menuItemClicked(file) {
           this.drawer = false
           this.loadEssay(file)
