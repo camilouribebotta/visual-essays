@@ -82,7 +82,7 @@ export default {
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
   },
   created() {
-    this.$store.dispatch('setHeaderSize', 56)
+    this.$store.dispatch('setHeaderSize', `56`)
   },
   watch: {
     viewportWidth: {
@@ -138,10 +138,11 @@ export default {
   }
 
   .v-toolbar__title {
-    background-color: rgba(20%, 20%, 20%, .6);
+    background-color: rgba(0, 0, 0, .75);
     width: 120%;
-    margin-left: -43px;
+    margin-left: -52px;
     margin-right: -20px;
     padding: 8px 36px!important;
   }
+
 </style>

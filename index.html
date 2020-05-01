@@ -38,8 +38,8 @@
       margin-left: -21px;
     }
 
-    #appbar, .v-toolbar__image, .v-toolbar__content {
-      /*min-height: 104px!important;*/
+   .v-toolbar__image .v-image, .v-toolbar__content, #appbar{
+      min-height: 104px!important;
     }
 
     .footer {
@@ -84,23 +84,21 @@
           scroll-target="#scrollableContent"
           :scroll-threshold="scrollThreshold"
           id="app-bar"
-
         >
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
           <div v-if="!essayConfig" v-cloak="true" class="hero-title" >
             <span>Explore the cultural history of plants and their influence on human societies.</span>
           </div>
 
-          <v-toolbar-title v-if="essayConfig">
+          <v-toolbar-title v-if="essayConfig" v-cloak="true" style="min-height: 104px;">
             <v-container class="summary">
               <v-row style="height:100%;" no-gutters>
 
                 <v-col cols="12" sm="9">
                   <h3>{{title}}</h3>
                   <p id="author-name">{{author}}</p>
-                  <small id="author-role">The Author's Role</small>
+                  <!--<small id="author-role">The Author's Role</small>-->
 
                 </v-col>
                 <!--<v-col cols="12" sm="4" style="margin-top: 38px;">
@@ -108,15 +106,16 @@
                   <small>Share: </small>
                 </v-col>-->
                 <v-col class="align-end" cols="12" sm="3" style="text-align: right">
-                  <small>This visual essay contains:</small>
-                  &nbsp;&nbsp;{{numLocations}} map locations<br/>
-                  &nbsp;&nbsp;{{numImages}} images<br/>
-                  &nbsp;&nbsp;{{numSpecimens}} plant specimens<br/>
-                  &nbsp;&nbsp;{{numPrimarySources}} primary source materials
+                    <b>This visual essay contains:</b> <br/>
+                    {{numLocations}} map locations &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i> <br/>
+                    {{numImages}} images &nbsp;&nbsp;<i class="fal fa-map-marked-alt"></i> <br/>
+                    {{numSpecimens}} plant specimens &nbsp;&nbsp;<i class="fal fa-image"></i> <br/>
+                    {{numPrimarySources}} primary source materials &nbsp;&nbsp;<i class="fal fa-book-alt"></i>
                 </v-col>
 
 
               </v-row>
+              <v-row><v-progress-linear value="15"></v-progress-linear></v-row>
             </v-container>
           </v-toolbar-title>
          <!-- <v-spacer></v-spacer>
@@ -152,7 +151,7 @@
           </v-container>
         </v-sheet>
 
-
+      </v-card>
         <div class="footer" v-if="!essayConfig && siteConfig.showFooter">
           <v-row>
             <v-col cols="6">
@@ -250,7 +249,8 @@
         author() { return this.essayConfig ? this.essayConfig['author'] || '' : '' },
         essayTopMargin() { return this.bannerHeight },
         //essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
-        scrollThreshold() { return this.essayConfig ? 400 : 350 }
+        scrollThreshold() { return this.essayConfig ? 400 : 350 },
+
       },
       created() {
         this.hostname = window.location.hostname.toLowerCase()

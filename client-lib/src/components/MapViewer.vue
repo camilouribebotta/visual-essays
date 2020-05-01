@@ -501,8 +501,8 @@ export default {
     }
 
     .leaflet-bar a, .leaflet-bar a:hover {
-        height: 30px;
-        width: 36px;
+        height: 30px !important;
+        width: 36px !important;
     }
     
     .leaflet-right .leaflet-control {
@@ -511,13 +511,14 @@ export default {
 
     .leaflet-top.leaflet-left {
         top: 6px;
-        left: 6px;
+        right: 16px;
+        left: unset;
     }
 
     .leaflet-top.leaflet-right {
-        left: 16px;
+        left: unset;
         top: 90px;
-        right: unset;
+        right: 6px;
     }
 
   .leaflet-fa-markers {
