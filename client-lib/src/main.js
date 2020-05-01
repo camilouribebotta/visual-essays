@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.14'
+const VERSION = '0.5.15'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -90,8 +90,16 @@ const components = {
   entityInfoboxDialog: EntityInfoboxDialog
 }
 
+const initialStateCopy = JSON.parse(JSON.stringify(store.state))
+
+function resetState () {
+  store.replaceState(JSON.parse(JSON.stringify(initialStateCopy)))
+}
+
 function initApp() {
   console.log('visual-essays.init', window.app)
+
+  resetState()
 
   window.data = []
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
