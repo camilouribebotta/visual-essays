@@ -370,6 +370,9 @@
                   const file = link.href.slice(link.href.lastIndexOf('/')+1)
                   link.addEventListener('click', () => this.loadEssay(file))
                   link.removeAttribute('href')
+                } else {
+                  link.innerHTML += '<sup><i class="fal fa-external-link-alt" style="margin-left:4px;font-size:0.8em;color:blue;"></i></sup>'
+                  link.setAttribute('target', '_blank')
                 }
               })
             })
