@@ -28,9 +28,15 @@ export default {
     'cards': CardsImageViewer,
     'gallery': GalleryImageViewer
   },
+  props: {
+    initialMode: { type: String, default: 'gallery' }
+  },
   data: () => ({
     mode: 'gallery',
   }),
+  created() {
+    this.mode = this.initialMode || this.mode
+  },
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') }
   },

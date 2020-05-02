@@ -28,6 +28,7 @@
           :selected="selected"
           :max-width="viewerWidth"
           :max-height="viewportHeight"
+          :initial-mode="mode"
         />
       </v-tab-item>
 
@@ -57,10 +58,9 @@
       viewportHeight() { return this.$store.getters.height },
       viewportWidth() { return this.$store.getters.width },
       headerSize() { return this.$store.getters.headerSize },
-      primaryTab () {
-        const primary = this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary')
-        return primary ? primary.primary : undefined
-      },
+      primary() {return this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary') },
+      primaryTab() { return this.primary ? this.primary.primary : undefined },
+      mode() { return this.primary ? this.primary.mode : undefined },
       style() {
         return {
           display: this.$refs.viewer ? 'block' : 'none',
