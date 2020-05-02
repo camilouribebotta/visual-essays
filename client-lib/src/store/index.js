@@ -22,6 +22,7 @@ export default new Vuex.Store({
     height: 0,
     width: 0,
     topMargin: 0,
+    progress: 0,
     geoJsonCache: {}
   },
   mutations: {
@@ -51,6 +52,7 @@ export default new Vuex.Store({
       state.width = viewport.width
     },
     setTopMargin (state, height) { state.topMargin = height },
+    setProgress (state, progress) { state.progress = progress },
     addToGeoJsonCache (state, geoJson) { state.geoJsonCache = { ...state.geoJsonCache, ...geoJson} }
   },
   actions: {
@@ -69,6 +71,7 @@ export default new Vuex.Store({
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
     setTopMargin: ({ commit }, height) => commit('setTopMargin', height),
+    setProgress: ({ commit }, progress) => commit('setProgress', progress),
     addToGeoJsonCache: ({ commit }, geoJson) => commit('addToGeoJsonCache', geoJson)
   },
   getters: {
@@ -89,6 +92,7 @@ export default new Vuex.Store({
     height: state => state.height,
     width: state => state.width,
     topMargin: state => state.topMargin,
+    progress: state => state.progress,
     geoJsonCache: state => state.geoJsonCache
   },
   modules: {

@@ -90,15 +90,17 @@ export default {
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
             //this.setActiveElements(this.paragraphs[para.id].prior)
-            /*console.log("THE PARAGRAPHS")
-              console.log(newActiveElements)
-              console.log(this.paragraphs)
-            console.log(this.paragraphs.length)
+            console.log("THE PARAGRAPHS")
+
+            //console.log(this.paragraphs.size)
             let idx = 0;
-            for (let i = 0; i < this.paragraphs.length; i++) {
-              console.log(this.paragraphs[i])
-            }*/
-            //console.log(this.paragraphs.indexOf(newActiveElements[0] + ' of ' + this.paragraphs.length))
+            for (let i = 0; i < Object.keys(this.paragraphs).length; i++) {
+              if(Object.keys(this.paragraphs)[i] === newActiveElements[0]) {
+                idx = i;
+                break;
+              }
+            }
+            //this.setActiveElements(Math.round(idx/Object.keys(this.paragraphs).length))
 
           }
         }

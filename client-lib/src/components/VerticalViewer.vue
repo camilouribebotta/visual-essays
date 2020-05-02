@@ -11,12 +11,8 @@
       <v-tab
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
-        <span v-if="tab === 'map'">
-          <!-- map icon here -->
-        </span>
-        <span v-else>
-           {{groups[tab].label || tab}}
-        </span>
+        <i :class="groups[tab].icon" class="fal"></i>
+
 
       </v-tab>
 
@@ -243,30 +239,32 @@
   }
 
   .v-tabs-bar {
-    border-radius: 4px;
+    border-radius: 0px;
     position: absolute;
-    top: 44px;
-    right: -42px;
+    top: 43px;
+    right: -20px;
     z-index: 2;
+    height: unset;
     background-color :white !important;
-    height: 36px !important;
   }
 
   .v-tab {
     color: black !important;
-    padding: 0 6px !important;
-  }
+    padding:6px !important;
+
+     min-width: 30px;
+     max-width: 30px;
+    font-size: 1.2em
+   }
 
   .v-slide-group__wrapper {
-    height: 36px;
-    border-radius: 4px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    border-radius: 0px;
+    /*box-shadow: 0 1px 5px rgba(0,0,0,0.65);*/
   }
 
   .v-tab--active {
     color: white !important;
-    padding: 0 6px !important;
-    background-color :#1D5BC2 !important;
+    background-color: #1D5BC2 !important;
   }
 
   .v-tabs-bar .v-tabs-bar__content {
