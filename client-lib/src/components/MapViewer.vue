@@ -140,7 +140,7 @@ export default {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || undefined : undefined
               if (label) {
                 layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
-                layer.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
+                layer.bindPopup(self.makePopup(label), { autoClose: true, closeButton: false, closeOnClick: true })
                 numFeatureLabels += 1
               }
             }
@@ -196,7 +196,8 @@ export default {
               : undefined
           if (label) {
             geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
-            if (this.mapDef['hide-labels'] !== true) {
+            // console.log(`open geojson popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+            if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
               geojson.openPopup()
               console.log('open geojson popup', Math.round(performance.now() - t))
@@ -205,7 +206,8 @@ export default {
         }
 
         this.addedLayers.add(def.id)
-        if (this.mapDef['hide-labels'] !== true) {
+        // console.log(`open geojson feature popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+        if (this.mapDef['hide-labels'] !== 'true') {
           const t = performance.now()
           geojson.eachLayer(feature => feature.openPopup())
           console.log('open geojson feature popup', Math.round(performance.now() - t))
@@ -233,7 +235,8 @@ export default {
             this.addedLayers.add(def.id)
             const geojson = this.mapLayers.geojson[def.id].layer
             geojson.addTo(this.map)
-            if (this.mapDef['hide-labels'] !== true) {
+            // console.log(`open added geojson popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+            if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
               geojson.eachLayer(feature => feature.openPopup())                      
               console.log('open added geojson popup', Math.round(performance.now() - t))
@@ -251,7 +254,8 @@ export default {
             this.addedLayers.add(location.id)
             const geojson = this.mapLayers.geojson[location.id].layer
             geojson.addTo(this.map)
-            if (this.mapDef['hide-labels'] !== true) {
+            console.log(`open added geojson location popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+            if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
               geojson.eachLayer(feature => feature.openPopup())            
               console.log('open added geojson location popup', Math.round(performance.now() - t)) 
@@ -372,7 +376,8 @@ export default {
         layer
       }
       layer.addTo(this.map)
-      if (!this.mapDef['hide-labels']) {
+      // console.log(`open marker popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+      if (this.mapDef['hide-labels'] !== 'true') {
         var t = performance.now()
         markers.forEach(marker => marker.openPopup())
         console.log('open marker popup', Math.round(performance.now() - t))

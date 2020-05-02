@@ -291,6 +291,7 @@ class Essay(object):
             context_set = set(context)
             snorm = e.string.lower()
             matches = []
+            tagged = set()
             for tm in sorted(to_match.keys(), key=len, reverse=True):
                 item = to_match[tm]['item']
                 try:
@@ -338,7 +339,7 @@ class Essay(object):
 
                     logger.debug(f'{rec["matched"]} tagged_in={item["tagged_in"]} scope={item.get("scope")} context={context} in_scope={len(set(item["tagged_in"]).intersection(context_set)) > 0}')
 
-                    if item.get('scope') == 'global' or (item.get('scope') not in ('element',) and set(item['tagged_in']).intersection(context_set)):
+                    if item['id'] not in tagged and (item.get('scope') == 'global' or (item.get('scope') not in ('element',) and set(item['tagged_in']).intersection(context_set))):
                         # make tag for matched item
                         seg = self._soup.new_tag('span')
                         seg.string = rec['matched']
@@ -351,6 +352,7 @@ class Essay(object):
                             item['found_in'] = []
                         if context[0] not in item['found_in']:
                             item['found_in'].append(context[0])
+                        tagged.add(item['id'])
                     else:
                         seg = s[cursor:cursor+len(rec['matched'])]
 
