@@ -1,10 +1,10 @@
 <template>
-  <div id="image-viewer">
-    <div id="image-viewer-controls">
+  <div id="image-viewer" >
+    <div id="image-viewer-controls" @click="click()">
       <v-radio-group
         v-if="images.length > 1"
         id="image-viewer-mode-control"
-        v-model="mode"
+        :value="mode"
         row
         dense
         :hide-details="true"
@@ -33,6 +33,11 @@ export default {
   }),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') }
+  },
+  methods: {
+    click() {
+      this.mode = this.mode === 'cards' ? 'gallery' : 'cards'
+    }
   }
 }
 </script>

@@ -6,8 +6,7 @@
      data-num-specimens="15"
      data-num-images="9"
      data-num-primary-sources="2"
-     data-author="JSTOR Labs team"
-></var>
+     data-author="JSTOR Labs team"></var>
 
 <var title="cherry blossom" id="Q871991"  data-category="plant"></var>
 <var title="Dumbarton Oaks" id="Q1264942"></var>
