@@ -61,7 +61,6 @@ export default {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
   },
   mounted() {
-    console.log(`${this.$options.name} mounted maxWidth=${this.maxWidth}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
@@ -117,7 +116,6 @@ export default {
       return popup
     },
     cachedGeojson(def) {
-      console.log(`loadGeojson cache_size=${Object.keys(this.$store.getters.geoJsonCache).length}`)
       console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
@@ -140,6 +138,7 @@ export default {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || undefined : undefined
               if (label) {
                 layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
+                feature.properties.label = label
                 layer.bindPopup(self.makePopup(label), { autoClose: true, closeButton: false, closeOnClick: true })
                 numFeatureLabels += 1
               }
@@ -148,7 +147,7 @@ export default {
               const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
               const patterns = []
               feature.properties.decorators.forEach(decoratorProps => {
-                console.log('decorator', decoratorProps)
+                // console.log('decorator', decoratorProps)
                 if (decoratorProps.symbol === 'arrow') {
                   patterns.push(decoratorProps)
                   decoratorProps.symbol = self.$L.Symbol.arrowHead({
@@ -196,20 +195,19 @@ export default {
               : undefined
           if (label) {
             geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
-            // console.log(`open geojson popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
+            console.log(this.mapDef)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
               geojson.openPopup()
-              console.log('open geojson popup', Math.round(performance.now() - t))
+              console.log('open geojson popup', Math.round(performance.now() - t), label)
             }
           }
         }
 
         this.addedLayers.add(def.id)
-        // console.log(`open geojson feature popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
         if (this.mapDef['hide-labels'] !== 'true') {
           const t = performance.now()
-          geojson.eachLayer(feature => feature.openPopup())
+          geojson.eachLayer(feature => {feature.openPopup(); console.log(feature.properties)})
           console.log('open geojson feature popup', Math.round(performance.now() - t))
         }
         // this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
@@ -235,10 +233,9 @@ export default {
             this.addedLayers.add(def.id)
             const geojson = this.mapLayers.geojson[def.id].layer
             geojson.addTo(this.map)
-            // console.log(`open added geojson popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
-              geojson.eachLayer(feature => feature.openPopup())                      
+              geojson.eachLayer(feature => {feature.openPopup(); console.log(feature)})                      
               console.log('open added geojson popup', Math.round(performance.now() - t))
             }
           } else {
@@ -254,10 +251,9 @@ export default {
             this.addedLayers.add(location.id)
             const geojson = this.mapLayers.geojson[location.id].layer
             geojson.addTo(this.map)
-            console.log(`open added geojson location popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
-              geojson.eachLayer(feature => feature.openPopup())            
+              geojson.eachLayer(feature => {feature.openPopup(); console.log(feature)})
               console.log('open added geojson location popup', Math.round(performance.now() - t)) 
             }
           } else {
@@ -378,9 +374,11 @@ export default {
       layer.addTo(this.map)
       // console.log(`open marker popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
       if (this.mapDef['hide-labels'] !== 'true') {
-        var t = performance.now()
-        markers.forEach(marker => marker.openPopup())
-        console.log('open marker popup', Math.round(performance.now() - t))
+        markers.forEach(marker => {
+          var t = performance.now()
+          marker.openPopup()
+          console.log('open marker popup', Math.round(performance.now() - t), marker._popup._content)
+        })
       }
       this.mapLayers.markerGroups = currentMarkerGroups
     },
@@ -397,7 +395,7 @@ export default {
   watch: {
     selected: {
       handler: function (value, prior) {
-        console.log('selected', this.selected)
+        // console.log('selected', this.selected)
         //if (this.featuresById[this.selected]) {
         //  this.featuresById[this.selected].openPopup()
         //}
@@ -418,7 +416,6 @@ export default {
     },
     mapDef: {
       handler: function (value, prior) {
-        console.log(value)
         if (this.$refs.map) {
           if (this.items.length === 0) {
               this.$refs.mapWrapper.style.display = 'none'

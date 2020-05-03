@@ -34,15 +34,20 @@ export default {
   data: () => ({
     mode: 'gallery',
   }),
-  created() {
-    this.mode = this.initialMode || this.mode
-  },
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') }
   },
   methods: {
     click() {
       this.mode = this.mode === 'cards' ? 'gallery' : 'cards'
+    }
+  },
+  watch: {
+    initialMode: {
+      handler: function (mode) {
+        this.mode = this.initialMode || 'gallery'
+      },
+      immediate: true
     }
   }
 }
