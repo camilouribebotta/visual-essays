@@ -97,10 +97,10 @@ export default {
             for (let i = 0; i < Object.keys(this.paragraphs).length; i++) {
               if(Object.keys(this.paragraphs)[i] === newActiveElements[0]) {
                 idx = i;
-                break;
               }
             }
-            //this.setActiveElements(Math.round(idx/Object.keys(this.paragraphs).length))
+            this.$store.dispatch('setProgress', Math.round((idx/Object.keys(this.paragraphs).length)*100))
+
 
           }
         }
