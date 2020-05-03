@@ -245,6 +245,51 @@ export default {
   }
 
   .tagged.location,
+  p.active-elem .inferred.location,
+  .tagged.building,
+  p.active-elem .inferred.building,
+  .tagged.place,
+  p.active-elem .inferred.place,
+  .tagged.person,
+  p.active-elem .inferred.person,
+  .tagged.fictional_character,
+  p.active-elem .inferred.fictional_character,
+  .tagged.written_work,
+  p.active-elem .inferred.written_work,
+  .tagged.plant,
+  p.active-elem .inferred.plant,
+  .tagged.entity,
+  p.active-elem .inferred.entity,
+  .tagged.event,
+  p.active-elem .inferred.event {
+    border-bottom: 2px solid #A9AC00;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .tagged.location:hover,
+  p.active-elem .inferred.location:hover,
+  .tagged.building:hover,
+  p.active-elem .inferred.building:hover,
+  .tagged.place:hover,
+  p.active-elem .inferred.place:hover,
+  .tagged.person:hover,
+  p.active-elem .inferred.person:hover,
+  .tagged.fictional_character:hover,
+  p.active-elem .inferred.fictional_character:hover,
+  .tagged.written_work:hover,
+  p.active-elem .inferred.written_work:hover,
+  .tagged.plant:hover,
+  p.active-elem .inferred.plant:hover,
+  .tagged.entity:hover,
+  p.active-elem .inferred.entity:hover,
+  .tagged.event:hover,
+  p.active-elem .inferred.event:hover {
+    background: #EBECBB;
+  }
+
+  /*
+  .tagged.location,
   .tagged.building,
   .tagged.place,
   p.active-elem .inferred.location,
@@ -266,8 +311,8 @@ export default {
     z-index: 10;
   }
 
-  /* primary sources */
-  .tagged.written_work {
+  .tagged.written_work,
+  p.active-elem .inferred.written_work {
     background: #E2EDFF;
     border-bottom: 2px solid #1D5BC2;
     cursor: pointer;
@@ -291,6 +336,7 @@ export default {
     cursor: pointer;
     z-index: 10;
   }
+  */
 
   #triangle {
     width: 0;
