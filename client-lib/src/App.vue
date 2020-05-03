@@ -143,6 +143,21 @@ export default {
     margin-left: -52px;
     margin-right: -20px;
     padding: 8px 36px!important;
+    position: relative;
+    top: 4px;
+  }
+  #prog {
+  height: 7px;
+    margin-left: -36px;
+    width: calc(100% + 72px);
+    margin-right: -36px;
+    position: relative;
+    top: 8px;
+  }
+
+  .v-application .v-progress-linear__background.primary, .v-application .v-progress-linear__determinate.primary {
+    background-color: #71CB2B!important;
+    border-color: #71CB2B!important;
   }
 
 </style>
