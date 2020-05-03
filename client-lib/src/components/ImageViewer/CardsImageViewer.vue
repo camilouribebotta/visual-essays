@@ -49,6 +49,7 @@ export default {
   },
   mounted() {
     this.images.forEach((image) => {
+      // const url = image.url
       // const url = `https://lwljoqf02g.execute-api.us-east-1.amazonaws.com/prod/generate?url=${image.url}`
       const url = `https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=${image.url}`
       let dziURL = axios.get(url).then((resp) => {

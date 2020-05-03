@@ -90,7 +90,6 @@ export default {
               document.getElementById(newActiveElements[0]).append(ctrlTabs[0])
             }
             //this.setActiveElements(this.paragraphs[para.id].prior)
-            console.log("THE PARAGRAPHS")
 
             //console.log(this.paragraphs.size)
             let idx = 0;
@@ -129,7 +128,6 @@ export default {
       for (let i = 1; i < 9; i++) {
         document.body.querySelectorAll(`#essay h${i}`).forEach((heading) => {
           const sectionElem = heading.parentElement
-          console.log(sectionElem)
           const sectionId = sectionElem.attributes.id.value
           //sectionElem.title = `${sectionId} (${sectionElem.offsetTop})`
           const section = {

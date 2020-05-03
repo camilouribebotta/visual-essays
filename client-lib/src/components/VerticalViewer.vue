@@ -70,7 +70,6 @@
     },
     mounted() {
       this.header = document.getElementById('appbar')
-      console.log('header', this.header)
       if (this.header) {
         document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
         this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
