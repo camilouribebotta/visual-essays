@@ -236,7 +236,7 @@ export default {
 
     border-left: none;
     width: calc(100% + 20px);
-    padding-right: 72px
+    padding-right: 52px
   }
   
   p.has-items:hover {
