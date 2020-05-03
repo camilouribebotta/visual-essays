@@ -35,7 +35,7 @@ export default {
     init() {
       this.findContent()
       this.linkTaggedItems()
-      this.addFootnotesHover()
+      // this.addFootnotesHover()
 
       // Setup ScrollMagic (https://scrollmagic.io/)
       let prior

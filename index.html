@@ -365,11 +365,25 @@
           if (this.isLoaded) {
             this.isLoaded = false
             this.$nextTick(() => {
+              const scrollableContent = document.getElementById('scrollableContent')
+              if (scrollableContent) {
+                scrollableContent.scrollTo(0, 0)
+              }
               // convert embedded essay links
               document.getElementById('essay').querySelectorAll('a').forEach(link => {
                 if (link.href.indexOf(this.service) === 0) {
-                  const file = link.href.slice(link.href.lastIndexOf('/')+1)
-                  link.addEventListener('click', () => this.loadEssay(file))
+                  const parsedUrl = parseUrl(link.href)
+                  const target = parsedUrl.hash === '' 
+                    ? parsedUrl.pathname.slice(parsedUrl.pathname.lastIndexOf('/')+1)
+                    : parsedUrl.hash
+                  console.log(`target=${target}`)
+                  link.addEventListener('click', () => {
+                    if (target[0] === '#') {
+                      document.querySelector(target).scrollIntoView({block:'center'})
+                    } else {
+                      this.loadEssay(target)
+                    }
+                  })
                   link.removeAttribute('href')
                 } else {
                   link.innerHTML += '<sup><i class="fal fa-external-link-alt" style="margin-left:4px;font-size:0.8em;color:blue;"></i></sup>'
@@ -381,6 +395,19 @@
         }
       }
     })
+    function parseUrl (href) {
+      const match = href.match(/^(https?)\:\/\/(([^:\/?#]*)(?:\:([0-9]+))?)(\/[^?#]*)(\?[^#]*|)(#.*|)$/)
+      return match && {
+        protocol: match[1],
+        host: match[2],
+        hostname: match[3],
+        origin: `${match[1]}://${match[2]}`,
+        port: match[4],
+        pathname: match[5],
+        search: match[6],
+        hash: match[7]
+      }
+    }
   </script>
 </body>
 </html>

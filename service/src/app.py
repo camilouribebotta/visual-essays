@@ -95,7 +95,7 @@ def get_local_markdown(file=None):
             with open(path, 'r') as fp:
                 return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
 
-def convert_relative_links(soup, acct=None, repo=None, source=None, site=None):
+def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, site=None):
     logger.info(f'convert_relative_links: acct={acct} repo={repo} site={site}')
     if site == 'localhost':
         baseurl = 'http://localhost:5000/essay'
@@ -114,6 +114,9 @@ def convert_relative_links(soup, acct=None, repo=None, source=None, site=None):
         for elem in soup.find_all(tag):
             for attr in ('href',):
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
+                    if elem.attrs[attr].startswith('#'):
+                        elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
+                        # logger.info(elem.attrs[attr])
                     elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
     
     if source == 'local':
@@ -139,7 +142,7 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
     html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, acct, repo, markdown['source'], site)
+    convert_relative_links(soup, acct, repo, markdown['fname'], markdown['source'], site)
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
