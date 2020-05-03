@@ -52,7 +52,12 @@ export default new Vuex.Store({
       state.width = viewport.width
     },
     setTopMargin (state, height) { state.topMargin = height },
-    setProgress (state, progress) { state.progress = progress },
+    setProgress (state, progress) {
+      state.progress = progress
+      if (window.app) {
+        window.app.progress = state.progress
+      }
+    },
     addToGeoJsonCache (state, geoJson) { state.geoJsonCache = { ...state.geoJsonCache, ...geoJson} }
   },
   actions: {

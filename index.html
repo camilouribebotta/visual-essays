@@ -235,7 +235,8 @@
         essayCache: {},
         libVersion: undefined,
         siteConfig: {},
-        essayConfig: undefined
+        essayConfig: undefined,
+        progress: undefined
       }),
       computed: {
         // banner() { return this.essayConfig.banner || this.siteConfig.banner },
@@ -251,7 +252,6 @@
         essayTopMargin() { return this.bannerHeight },
         //essayTopMargin() { return this.bannerHeight + (this.essayConfig ? 96 : 0) },
         scrollThreshold() { return this.essayConfig ? 400 : 350 },
-        progress() { return this.$store.getters.progress}
 
       },
       created() {
