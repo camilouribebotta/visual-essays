@@ -47,7 +47,7 @@ export default {
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
-    height() { return this.viewport.height - (this.items.length === 1 ? 0 : 165) }
+    height() { return this.viewport.height - (this.items.length === 1 ? 100 : 172) }
   },
   mounted() {
     document.querySelectorAll('figure')
@@ -68,11 +68,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .lingallery figure {
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
   }
 
+  .lingallery_caption {
+    font-weight: bold !important;
+    font-size: 1.2em !important;
+  }
 
   /*
   .lingallery figure img {

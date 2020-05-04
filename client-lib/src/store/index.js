@@ -11,7 +11,7 @@ export default new Vuex.Store({
     showBanner: true,
     headerSize: 96,
     contentStartPos: 0,
-    triggerOffset: 250,
+    triggerOffset: 300,
     debug: false,
     context: undefined,
     content: [],
