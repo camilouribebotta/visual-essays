@@ -72,7 +72,8 @@ export default {
   .lingallery figure {
     background-color: #f5f5f5;
   }
-  
+
+
   /*
   .lingallery figure img {
     position: absolute;

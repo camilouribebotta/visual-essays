@@ -162,7 +162,7 @@ export default {
     width: calc(100% + 72px);
     margin-right: -36px;
     position: relative;
-    top: 8px;
+    top: 3px;
   }
 
   .v-application .v-progress-linear__background.primary, .v-application .v-progress-linear__determinate.primary {
