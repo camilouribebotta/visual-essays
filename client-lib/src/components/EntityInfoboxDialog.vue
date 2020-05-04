@@ -1,17 +1,18 @@
 <template>
   <div>
     <v-dialog v-if="selectedItemID" v-model="isOpen" @click:outside="clearSelectedItemID" width="500">
+        <v-btn
+                small
+                color="white"
+                class="infobox-close"
+                icon
+                @click="clearSelectedItemID">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       <v-card class="infobox">
-          <entity-infobox :qid="selectedItemID"/>
+        <entity-infobox :qid="selectedItemID"/>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!--<v-btn
-            color="primary"
-            text
-            @click="clearSelectedItemID"
-          >
-            Close
-          </v-btn>-->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -70,5 +71,15 @@ export default {
     float: left;
     padding-left: 8px;
   }
+
+  .infobox-close {
+    background-color: #1D5BC2;
+    border: 1px solid white;
+    z-index: 1000;
+    position: absolute;
+    margin-top: -10px;
+    margin-left: 480px;
+  }
+
 
 </style>
