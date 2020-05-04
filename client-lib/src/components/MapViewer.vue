@@ -329,33 +329,38 @@ export default {
           }
         })
       })
+      /*
       for (const layerId in this.mapLayers.markerGroups) {
         const layer = this.mapLayers.markerGroups[layerId]
         allLayers[layer.name] = this.mapLayers.markerGroups[layerId].layer
       }
+      */
 
       if (this.controls.layers) {
         this.map.removeControl(this.controls.layers)
       }
-      this.controls.layers =
-        this.$L.control.layers(
-          {}, // baseLayers,
-          allLayers, 
-          { collapsed: true } //options
-        ).addTo(this.map)
-      
+      if (Object.keys(allLayers).length > 0) {
+        this.controls.layers =
+          this.$L.control.layers(
+            {}, // baseLayers,
+            allLayers, 
+            { collapsed: true } //options
+          ).addTo(this.map)
+      }
       // opacity control
       if (this.controls.opacity) {
         this.map.removeControl(this.controls.opacity)
       }
-      this.controls.opacity =
-          this.$L.control.opacity(
-              fadeableLayers,
-              {
-                // label: 'Layers Opacity',
-                collapsed: true
-              }
-          ).addTo(this.map)
+      if (Object.keys(fadeableLayers).length > 0) {
+        this.controls.opacity =
+            this.$L.control.opacity(
+                fadeableLayers,
+                {
+                  // label: 'Layers Opacity',
+                  collapsed: true
+                }
+            ).addTo(this.map)
+      }
     },
     syncMarkerGroups() {
       for (const groupName in this.mapLayers.markerGroups) {
