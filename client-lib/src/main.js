@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.25'
+const VERSION = '0.5.26'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
