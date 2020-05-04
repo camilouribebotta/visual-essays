@@ -247,7 +247,7 @@
 
      min-width: 30px;
      max-width: 30px;
-    font-size: 1.2em
+    font-size: 1.1em
    }
 
   .v-slide-group__wrapper {

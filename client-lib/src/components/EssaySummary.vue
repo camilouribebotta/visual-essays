@@ -35,11 +35,18 @@
     height: 100%;
   }
 
+  .summary div.row {
+    position: relative;
+    top: 5px;
+  }
+
   .summary h3 {
     font-family: Georgia, serif;
     padding-left: 0px;
-    font-size: 1.7em;
+    font-size: 2.2em;
+    font-weight: 500;
     margin-bottom: .5em;
+    margin-top: .7em;
   }
 
   #author-name {
