@@ -137,10 +137,20 @@ export default {
     color: black;
   }
 
+  .v-toolbar__content {
+    position: relative;
+  }
+
+  .v-app-bar__nav-icon {
+    z-index: 20;
+    margin-left: -22px!important;
+    margin-top: 8px;
+  }
+
   .v-toolbar__title {
     background-color: rgba(0, 0, 0, .75);
     width: 120%;
-    margin-left: -52px;
+    margin-left: -42px;
     margin-right: -20px;
     padding: 8px 36px!important;
     position: relative;
