@@ -78,7 +78,7 @@ export default {
     z-index: 1000;
     position: absolute;
     margin-top: -10px;
-    margin-left: -10px;
+    margin-left: 480px;
   }
 
 
