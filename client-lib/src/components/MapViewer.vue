@@ -116,7 +116,7 @@ export default {
       return popup
     },
     cachedGeojson(def) {
-      console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
+      // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
         cacheObj[def.id] = axios.get(def.url || def.geojson)
@@ -137,7 +137,7 @@ export default {
             if (!def.title) {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || undefined : undefined
               if (label) {
-                layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
+                // layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
                 feature.properties.label = label
                 layer.bindPopup(self.makePopup(label), { autoClose: true, closeButton: false, closeOnClick: true })
                 numFeatureLabels += 1
@@ -195,11 +195,11 @@ export default {
               : undefined
           if (label) {
             geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
-            console.log(this.mapDef)
+            // console.log(this.mapDef)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
               geojson.openPopup()
-              console.log('open geojson popup', Math.round(performance.now() - t), label)
+              // console.log('open geojson popup', Math.round(performance.now() - t), label)
             }
           }
         }
@@ -207,11 +207,11 @@ export default {
         this.addedLayers.add(def.id)
         if (this.mapDef['hide-labels'] !== 'true') {
           const t = performance.now()
-          geojson.eachLayer(feature => {feature.openPopup(); console.log(feature.properties)})
-          console.log('open geojson feature popup', Math.round(performance.now() - t))
+          geojson.eachLayer(feature => {feature.openPopup()})
+          // console.log('open geojson feature popup', Math.round(performance.now() - t))
         }
         // this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
-        console.log('flyTo', this.mapDef.center || defaults.center)
+        // console.log('flyTo', this.mapDef.center || defaults.center)
         this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
 
         return geojson
@@ -235,8 +235,8 @@ export default {
             geojson.addTo(this.map)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
-              geojson.eachLayer(feature => {feature.openPopup(); console.log(feature)})                      
-              console.log('open added geojson popup', Math.round(performance.now() - t))
+              geojson.eachLayer(feature => {feature.openPopup()})                      
+              // console.log('open added geojson popup', Math.round(performance.now() - t))
             }
           } else {
             layers.push(this.loadGeojson(def))
@@ -253,8 +253,8 @@ export default {
             geojson.addTo(this.map)
             if (this.mapDef['hide-labels'] !== 'true') {
               const t = performance.now()
-              geojson.eachLayer(feature => {feature.openPopup(); console.log(feature)})
-              console.log('open added geojson location popup', Math.round(performance.now() - t)) 
+              geojson.eachLayer(feature => feature.openPopup())
+              // console.log('open added geojson location popup', Math.round(performance.now() - t)) 
             }
           } else {
             this.loadGeojson(location)
@@ -377,7 +377,7 @@ export default {
         markers.forEach(marker => {
           var t = performance.now()
           marker.openPopup()
-          console.log('open marker popup', Math.round(performance.now() - t), marker._popup._content)
+          // console.log('open marker popup', Math.round(performance.now() - t), marker._popup._content)
         })
       }
       this.mapLayers.markerGroups = currentMarkerGroups
@@ -424,7 +424,7 @@ export default {
               if (this.items.length > 0) {
                 const curMap = this.items[0]
                 // this.map.setView(curMap.center, curMap.zoom || 10)
-                console.log('flyto', this.mapDef.center || defaults.center)
+                // console.log('flyto', this.mapDef.center || defaults.center)
                 this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
               }
             } else {

@@ -219,6 +219,7 @@
         if (active) {
           document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)
+          document.querySelector('.v-tabs-bar').style.top = `${this.paragraphs[active].top}px`
         }
       }
     }
