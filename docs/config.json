@@ -1,6 +1,11 @@
 {
     "title": "Visual Essays",
     "banner": "/images/banner1.jpg",
+    "tagline": "Explore the cultural history of plants and their influence on human societies.",
     "showFooter": true,
-    "logo": "/images/logo_black.png"
+    "logo": "/images/logo_black.png",
+    "customComponents": {
+        "essayHeader": "/components/EssayHeader.vue",
+        "siteFooter": "/components/SiteFooter.vue"
+    }
 }

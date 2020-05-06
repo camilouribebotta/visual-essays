@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.29'
+const VERSION = '0.5.30'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -159,7 +159,6 @@ function initApp() {
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
   const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay')
-  console.log('essayConfig', essayConfig)
   if (window.app) {
     window.app.essayConfig = essayConfig
     window.app.libVersion = VERSION

@@ -88,12 +88,12 @@
         }
 
         function isWikidataRef(string) {
-            var re = /wd:Q\d/;
+            var re = /^wd:Q\d/;
             return re.test(string);
         }
 
         function isJstorRef(string) {
-            var re = /jstor:Q\d/;
+            var re = /^jwd:Q\d/;
             return re.test(string);
         }
 
@@ -119,7 +119,8 @@
                 html += `<a href="https://www.wikidata.org/entity/` + json.substring(3,json.length) + '" class="json-string">' + json + '</a>';
             } else if (options.withLinks && isJstorRef(json)) {
                 // html += '<a href="/entity/' + json.substring(3,json.length) + '" class="json-string" target="_blank">' + json + '</a>';
-                html += `<a href="/${window.location.pathname.split('/')[1]}/entity/` + json.substring(6,json.length) + '" class="json-string">' + json + '</a>';
+                // html += `<a href="/${window.location.pathname.split('/')[1]}/entity/` + json.substring(6,json.length) + '" class="json-string">' + json + '</a>';
+                html += `<a href="https://kg.jstor.org/entity/` + json.substring(4,json.length) + '" class="json-string">' + json + '</a>';
             } else {
             // Escape double quotes in the rendered non-URL string.
             json = json.replace(/&quot;/g, '\\&quot;');

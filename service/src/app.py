@@ -26,7 +26,7 @@ from bs4.element import Tag
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 
 app = Flask(__name__)
 
@@ -353,22 +353,22 @@ def config(acct=None, repo=None):
         site = urlparse(request.base_url).hostname
         acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
         repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-        baseurl = content_baseurl(acct, repo)
         use_local = kwargs.pop('mode', ENV) == 'dev'
-        logger.info(f'config: site={site} acct={acct} repo={repo} baseurl={baseurl} use_local={use_local}')
+        logger.info(f'config: site={site} acct={acct} repo={repo} use_local={use_local}')
         _config = None
-        if use_local:        
+        if use_local:
+            baseurl = 'http://localhost:5000/'     
             config_path = f'{DOCS_ROOT}/{KNOWN_SITES["localhost"]["root"]}/config.json'
             if os.path.exists(config_path):
                 _config = json.load(open(config_path, 'r'))
         else:
+            baseurl = content_baseurl(acct, repo)
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            baseurl = content_baseurl(acct, repo)
             for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
-                    _config[attr] = f'{_config[attr]}' if use_local else f'{baseurl}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
+                    _config[attr] = f'{baseurl}{"static/" if use_local else ""}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404
@@ -393,6 +393,14 @@ def site(acct=None, repo=None, file=None):
             if ENV == 'dev':
                 html = re.sub(r'"https://JSTOR-Labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
             return html, 200
+
+@app.route('/images/<fname>', methods=['GET'])  
+def images(fname):
+    return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'images'), fname, as_attachment=False)
+
+@app.route('/components/<fname>', methods=['GET'])  
+def components(fname):
+    return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'components'), fname, as_attachment=False)
 
 def usage():
     print('%s [hl:d]' % sys.argv[0])
