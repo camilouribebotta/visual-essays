@@ -59,7 +59,8 @@ def content_baseurl(acct, repo):
         if site != 'localhost' and site_data['acct'] == acct and site_data['repo'] == repo:
             root = site_data.get('root', '')
             break
-    return f'https://raw.githubusercontent.com/{acct}/{repo}/master{root}'
+    # return f'https://raw.githubusercontent.com/{acct}/{repo}/master{root}'
+    return f'https://{acct}.github.io/{repo}'
 
 def get_markdown(url):
     resp = requests.get(url)
@@ -72,7 +73,7 @@ def get_gh_markdown(acct, repo, file=None):
     logger.info(f'get_gh_markdown: acct={acct} repo={repo} baseurl={baseurl}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        url = f'{baseurl}{file}'
+        url = f'{baseurl}/{file}'
         resp = requests.get(url)
         logger.info(f'{url} {resp.status_code}')
         if resp.status_code == 200:
@@ -117,17 +118,17 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
                     if elem.attrs[attr].startswith('#'):
                         elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
                         # logger.info(elem.attrs[attr])
-                    elem.attrs[attr] = f'{baseurl}{"/" if elem.attrs[attr][0] is not "/" else ""}{elem.attrs[attr]}'
+                    elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
     
     if source == 'local':
-        baseurl = 'http://localhost:5000/static'
+        baseurl = 'http://localhost:5000'
     elif source == 'gh':
         baseurl = content_baseurl(acct, repo)
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
-                    elem.attrs[attr] = f'{baseurl}{elem.attrs[attr] if elem.attrs[attr][0] != "/" else elem.attrs[attr][1:]}'
+                    elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -363,12 +364,13 @@ def config(acct=None, repo=None):
                 _config = json.load(open(config_path, 'r'))
         else:
             baseurl = content_baseurl(acct, repo)
+            logger.info(f'{baseurl}/config.json')
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            for attr in ('banner', 'logo'):
-                if attr in _config and not _config[attr].startswith('http'):
-                    _config[attr] = f'{baseurl}{"static/" if use_local else ""}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
+            #for attr in ('banner', 'logo'):
+            #    if attr in _config and not _config[attr].startswith('http'):
+            #        _config[attr] = f'{baseurl}{"static/" if use_local else ""}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404
@@ -390,7 +392,7 @@ def site(acct=None, repo=None, file=None):
     else:
         with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
             html = fp.read()
-            if ENV == 'dev':
+            if site == 'localhost':
                 html = re.sub(r'"https://JSTOR-Labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
             return html, 200
 
