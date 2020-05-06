@@ -368,9 +368,13 @@ def config(acct=None, repo=None):
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            #for attr in ('banner', 'logo'):
-            #    if attr in _config and not _config[attr].startswith('http'):
-            #        _config[attr] = f'{baseurl}{"static/" if use_local else ""}{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
+            for attr in ('banner', 'logo'):
+                if attr in _config and not _config[attr].startswith('http'):
+                    _config[attr] = f'{baseurl}/{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
+            for comp in _config.get('customComponents', {}):
+                comp_url = _config['customComponents'][comp]
+                if not comp_url.startswith('http'):
+                    _config['customComponents'][comp] = f'{baseurl}/{comp_url[1:] if comp_url[0] == "/" else comp_url}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404

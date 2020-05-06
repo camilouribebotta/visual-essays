@@ -2,12 +2,12 @@
     <v-row>
       <v-col cols="6" nogutter>
         <span style="padding-bottom: 8px; font-weight: bold; display: block">A collaboration between:</span>
-        <img src="/images/do.jpg" height="30px"> &nbsp;&nbsp;&nbsp;&nbsp;
-        <img src="/images/labs.jpg" height="30px">
+        <img src="https://jstor-labs.github.io/visual-essays/images/do.jpg" height="30px"> &nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="https://jstor-labs.github.io/visual-essays/images/labs.jpg" height="30px">
       </v-col>
       <v-col cols="6">
         <span style="padding-bottom: 8px; font-weight: bold; display: block">Funded by:</span>
-        <img src="/images/Mellon.jpg" height="30px">
+        <img src="https://jstor-labs.github.io/visual-essays/images/Mellon.jpg" height="30px">
       </v-col>
     </v-row>
 </template>
