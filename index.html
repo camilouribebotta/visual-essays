@@ -118,7 +118,7 @@
     </v-app>
   </div>
 
-  <script src="https://JSTOR-Labs.github.io/visual-essays/dist/visual-essays.min.js"></script>
+  <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
@@ -249,7 +249,9 @@
           this.loadEssay(file)
         },
         cachingFetch(file) {
-          const url = `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '')
+          const url = file === 'help'
+            ? 'https://visual-essays.app/essay/help'
+            : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '')
           console.log(`loadEssay: service=${service} acct=${acct} repo=${repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
           if (!this.essayCache[url]) {
             this.essayCache[url] = fetch(url).then((resp) => resp.ok ? resp.text() : null)
