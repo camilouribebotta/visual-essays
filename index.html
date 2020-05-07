@@ -301,7 +301,7 @@
               }
               // convert embedded essay links
               document.getElementById('essay').querySelectorAll('a').forEach(link => {
-                if (link.href.indexOf(service) === 0) {
+                if (link.href.indexOf(service) === 0 || link.href.indexOf('https://visual-essays.app/essay/help#') === 0 ) {
                   const parsedUrl = parseUrl(link.href)
                   const target = parsedUrl.hash === '' 
                     ? parsedUrl.pathname.slice(parsedUrl.pathname.lastIndexOf('/')+1)

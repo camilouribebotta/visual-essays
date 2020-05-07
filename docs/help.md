@@ -1,46 +1,60 @@
-[JSTOR Labs](https://labs.jstor.org) `visual essays` service creates an interactive web page merging text content with external data, including:
+## Quick start
 
-## About essay markup
+
+## Essay markup
+
+Visual essays are text files that can be rendered as interactive web pages with maps and other multimedia providing context and depth to the
+textual content.  The essays are written in Markdown, a lightweight markup language that is easy to learn and portable.  Markdown has become something of a defacto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
 
 ### Markdown
+
+Markdown is a lightweight language used to add formatting to plain text documents.  It can be used to easily define section headings, lists, and text styling in plain text with minimal syntax.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.
 
 ### HTML
 
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly 
-supported by markdown.
-
-To define visualizations to add to an essay the `var` HTML tag is used with a number of custom attributes.  The __var__ tags that are used to define visual essay behavior generally do not include text and thus are not visible when the document is rendered.  The __var__ tags evaluated by the visual essay processor will include a null data attribute defining the type.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the example below defines a `map` tag type with the map specific `center` and `zoom` attributes.
+supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require a end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
 
 ```html
 <var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
 ```
 
 ```html
-<param data-map data-center="42.2813, -83.7483" data-zoom="6"/>
+<param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-## Visual Essay HTML tags
+In whichever tag is use the type of visual essay directive is defined using a null value attribute.  This attribute can be sepcified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the examples above defines a `map` tag type with the map specific `center` and `zoom` attributes.
+
+## Visual essay directives
+
+Visual essay directives currently include:
 
 - [data-essay](#data-essay) - Essay metadata for defining title, banner image, layout, and other custom attributes
-- [data-entity](#data-entity) - Associates an entity with the essay or element
-- [data-map](#data-map) - Associates a map with a section or paragraph
-- [data-image](#data-image) - Associates an image with a section or paragraph
+- [data-entity](#data-entity) - Associates an entity with an element
+- [data-map](#data-map) - Defines a map to add to the essay
+- [data-map-layer](#data-map) - Defines a map layer to add to current map
+- [data-image](#data-image) - Associates an image with an element
+- [data-video](#data-video) - Associates a vide with an element
+- [data-primary](#data-primary) - Identifies the content type to initially show when multiple are available for an element
 
-information from knowledge graphs such as [Wikidata](https://www.wikidata.org),
-maps with optional tile layers and geojson features
+### data-essay
 
-The text content is written in plain text with [markdown]([https://daringfireball.net/projects/markdown/syntax](https://daringfireball.net/projects/markdown/syntax)) or [wikitext]([https://meta.wikimedia.org/wiki/Help:Wikitext_examples](https://meta.wikimedia.org/wiki/Help:Wikitext_examples)) markup for simple formatting.  External data is linked to the text through the addition of HTML `var` tags that provide instructions and hints adding contextualized interactive features in the rendered page.
+### data-entity
 
-Initially, the rendered page only displays the formatted text content.  Interactive features are enabled when page sections are selected.  Selecting a page section (generally a paragraph) be clicking on the text will open a visualization pane in the lower section of the page.
+### data-map
 
-When the visualization pane is enabled supplemental information associated with the corresponding text in the top portion of the page is available for viewing and in many cases interaction.  For example, if a location is mentioned in the text a map could be displayed showing the location of the place mentioned on an interactive map.  As another example, if a person is mentioned in the text more information (including images) can be displayed providing context and background on the person mentioned.
+- __data-basemap__: `mapwarper` or `geojson`
 
-```html
-<var data-essay
-     data-title="Essay title"
-     data-layout="vtl"></var>
-<var data-map data-center="Q1234"></var>
-```
+### data-map-layer
+
+- __data-type__: `mapwarper` or `geojson`
+
+### data-image
+
+### data-video
+
+### data-primary
+
 
 ## Entities
 
@@ -52,6 +66,7 @@ When an entity is declared in a text using a `var` tag the software will use inf
 
 Other attributes available for entity declarations include:
 * `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
+
 
 ## Maps
 
