@@ -1,15 +1,48 @@
 ## About Visual Essays
 
-[JSTOR Labs]([https://labs.jstor.org](https://labs.jstor.org))' `visual essays` service creates an interactive web page merging text content with external data, including:
+[JSTOR Labs](https://labs.jstor.org) `visual essays` service creates an interactive web page merging text content with external data, including:
 
-* information from knowledge graphs such as [Wikidata](https://www.wikidata.org),
-* maps with optional tile layers and geojson features
+## About essay markup
+
+### Markdown
+
+### HTML
+
+Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly 
+supported by markdown.
+
+To define visualizations to add to an essay the `var` HTML tag is used with a number of custom attributes.  The __var__ tags that are used to define visual essay behavior generally do not include text and thus are not visible when the document is rendered.  The __var__ tags evaluated by the visual essay processor will include a null data attribute defining the type.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the example below defines a `map` tag type with the map specific `center` and `zoom` attributes.
+
+```html
+<var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
+```
+
+```html
+<param data-map data-center="42.2813, -83.7483" data-zoom="6"/>
+```
+
+## Visual Essay HTML tags
+
+- [data-essay](#data-essay) - Essay metadata for defining title, banner image, layout, and other custom attributes
+- [data-entity](#data-entity) - Associates an entity with the essay or element
+- [data-map](#data-map) - Associates a map with a section or paragraph
+- [data-image](#data-image) - Associates an image with a section or paragraph
+
+information from knowledge graphs such as [Wikidata](https://www.wikidata.org),
+maps with optional tile layers and geojson features
 
 The text content is written in plain text with [markdown]([https://daringfireball.net/projects/markdown/syntax](https://daringfireball.net/projects/markdown/syntax)) or [wikitext]([https://meta.wikimedia.org/wiki/Help:Wikitext_examples](https://meta.wikimedia.org/wiki/Help:Wikitext_examples)) markup for simple formatting.  External data is linked to the text through the addition of HTML `var` tags that provide instructions and hints adding contextualized interactive features in the rendered page.
 
 Initially, the rendered page only displays the formatted text content.  Interactive features are enabled when page sections are selected.  Selecting a page section (generally a paragraph) be clicking on the text will open a visualization pane in the lower section of the page.
 
 When the visualization pane is enabled supplemental information associated with the corresponding text in the top portion of the page is available for viewing and in many cases interaction.  For example, if a location is mentioned in the text a map could be displayed showing the location of the place mentioned on an interactive map.  As another example, if a person is mentioned in the text more information (including images) can be displayed providing context and background on the person mentioned.
+
+```html
+<var data-essay
+     data-title="Essay title"
+     data-layout="vtl"></var>
+<var data-map data-center="Q1234"></var>
+```
 
 ## Entities
 
@@ -37,3 +70,5 @@ Maps may include optional layers.  Mapwarper tiles and GeoJSON feature layers ar
 Mapwarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  Mapwarper provides tools for fitting an image to base map geocoordinates by relating map feature points.
 
 ### GeoJSON feature layers
+
+### data-essay

@@ -42,10 +42,10 @@ VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays.min.js
 ENV = 'prod'
 
 KNOWN_SITES = {
-    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/docs/'},
-    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays', 'root': '/docs/'},
-    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities', 'root': '/docs/content/'},
-    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens', 'root': '/'}
+    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
+    'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
+    'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities'},
+    'dickens.kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'}
 }
 
 cors_headers = {
@@ -54,13 +54,7 @@ cors_headers = {
 }
 
 def content_baseurl(acct, repo):
-    root = '/'
-    for site, site_data in KNOWN_SITES.items():
-        if site != 'localhost' and site_data['acct'] == acct and site_data['repo'] == repo:
-            root = site_data.get('root', '')
-            break
-    # return f'https://raw.githubusercontent.com/{acct}/{repo}/master{root}'
-    return f'https://{acct}.github.io/{repo}'
+    return f'https://{acct}.github.io/{repo}{"/content" if repo == "plant-humanities" else ""}'
 
 def get_markdown(url):
     resp = requests.get(url)
@@ -90,7 +84,7 @@ def get_local_markdown(file=None):
     logger.info(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
-        path = f'{DOCS_ROOT}{KNOWN_SITES["localhost"]["root"]}{file}'
+        path = f'{DOCS_ROOT}/docs/{file}'
         logger.info(f'path={path}')
         if os.path.exists(path):
             with open(path, 'r') as fp:
@@ -124,11 +118,13 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
         baseurl = 'http://localhost:5000'
     elif source == 'gh':
         baseurl = content_baseurl(acct, repo)
+    logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
     for tag in ('img', 'var', 'span'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
+                    logger.info(elem.attrs[attr])
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -334,10 +330,12 @@ def essay(acct=None, repo=None, file=None):
             logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')
             if use_local:
                 markdown = get_local_markdown(file)
+                baseurl = 'http://localhost:5000'
             else:
                 markdown = get_gh_markdown(acct, repo, file)
+                baseurl = content_baseurl(acct, repo)
         if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, **kwargs)
+            essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, baseurl=baseurl, **kwargs)
             return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return 'Not found', 404
@@ -358,12 +356,12 @@ def config(acct=None, repo=None):
         logger.info(f'config: site={site} acct={acct} repo={repo} use_local={use_local}')
         _config = None
         if use_local:
-            baseurl = 'http://localhost:5000/'     
-            config_path = f'{DOCS_ROOT}/{KNOWN_SITES["localhost"]["root"]}/config.json'
+            baseurl = 'http://localhost:5000'     
+            config_path = f'{DOCS_ROOT}/docs/config.json'
             if os.path.exists(config_path):
                 _config = json.load(open(config_path, 'r'))
         else:
-            baseurl = content_baseurl(acct, repo)
+            baseurl =f'https://{acct}.github.io/{repo}'
             logger.info(f'{baseurl}/config.json')
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None

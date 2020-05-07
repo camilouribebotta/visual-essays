@@ -49,6 +49,7 @@ class Essay(object):
         self.cache = kwargs.get('cache', {})
         self.context = kwargs.pop('context', None)
         self.site = kwargs.get('site', DEFAULT_SITE)
+        self.baseurl = kwargs.pop('baseurl')
         self._soup = BeautifulSoup(html, 'html5lib')
         for comment in self._soup(text=lambda text: isinstance(text, Comment)):
             comment.extract()
@@ -215,7 +216,10 @@ class Essay(object):
             elif  _type == 'image':
                 if 'region' in attrs:
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
-            
+                for attr in ('url', 'thumbnail'):
+                    if attr in attrs and not attrs[attr].startswith('http'):
+                        attrs[attr] = f'{self.baseurl}/{attrs[attr][1:] if attrs[attr][0] == "/" else attrs[attr]}'
+
             if attrs['id'] in ve_markup:
                 attrs = ve_markup[attrs['id']]
             else:
