@@ -43,7 +43,7 @@ Any valid HTML can be used in markdown.  HTML tags are often used in a markdown 
 <param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute de.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
+In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
 
 ## Visual essay directives
 
@@ -187,6 +187,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0NDI4NDkzNTgsLTEyMzE3ODE4NDUsMT
-M4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMz
+g5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
