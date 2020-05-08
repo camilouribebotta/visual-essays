@@ -155,7 +155,7 @@ This example illustrates the incorporation of custom attributes and an absolute 
 
 ### data-entity
 
-The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that 
+The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  
 
 ### data-map
 
@@ -252,8 +252,8 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY2NjE4MDM1OSwyMDQ5OTIyNDI2LC0xOT
-c5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2
-MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC
-0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbNjMzMzU4NzUxLDIwNDk5MjI0MjYsLTE5Nz
+k4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYy
+NSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLT
+IxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
