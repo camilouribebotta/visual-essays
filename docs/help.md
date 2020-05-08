@@ -14,7 +14,7 @@
   - [Custom Components](#custom-components)
   - [Custom Site Configuration](#custom-site-configuration)
 
-## Introductions
+## Introduction
 
 Visual essays are web pages created from annotated text files.  The text files can be formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with 
@@ -194,5 +194,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMz
+g5NjM2Njk0XX0=
 -->
