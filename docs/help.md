@@ -159,10 +159,14 @@ The `data-entity` associates an element (again, anything from a word to the enti
 
 Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `data-qid` attribute in a `data-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `data-qid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
 
-Since `data-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper and simple `id` attribute can be used in place of the `data-qid`, for instance,:
+Since `data-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper and simple `id` attribute can be used in place of the `data-qid`.  For instance, the following directives are equivalent:
 
 ```html
-<param
+<param data-entity data-qid="Q10302">
+```
+
+```html
+<param 
 ```
 
 #### data-entity attributes
@@ -269,9 +273,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODg1Mjg0NjAxLC0xNDM0NzE3NDkyLC0xOD
-g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
-MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
-0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
-OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTEyODg4NzIzNCwtMTQzNDcxNzQ5MiwtMT
+g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
+MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
+wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
+ODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
