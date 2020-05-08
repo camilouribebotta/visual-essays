@@ -185,7 +185,7 @@ The `data-map` directive indicates that a map should be added as a visualization
 	<param data-map data-center="42.2813, -83.7483">
 	<param data-map data-center="Q485172">
 	```
-- __data-zoom__:   This attribute defines the starti
+- __data-zoom__:   This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `data-zoom="3.4"`
 - __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 
 ### data-map-layer
@@ -279,7 +279,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg0MjA2NTg1NywtMTQzNDcxNzQ5MiwtMT
+eyJoaXN0b3J5IjpbLTMwODE4NDQwMywtMTQzNDcxNzQ5MiwtMT
 g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
 MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
 wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
