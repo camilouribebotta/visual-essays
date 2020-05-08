@@ -179,7 +179,7 @@ In the interest of maintainability and future proofing the longer form version i
 - __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
 - __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
-- __data-prefer-geojson__:  Location entities are automatically added to map components visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo
+- __data-prefer-geojson__:  Location entities are automatically added to map components visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  Many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as regi
 
 ### data-map
 
@@ -280,7 +280,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzc3ODM5NDI1LC0xNDM0NzE3NDkyLC0xOD
+eyJoaXN0b3J5IjpbNzE3Njk1MTk0LC0xNDM0NzE3NDkyLC0xOD
 g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
 MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
 0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
