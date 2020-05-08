@@ -31,7 +31,7 @@ open data (LOD) sources may be provided in future versions.
 
 ## Essay markup
 
-The essays are written in plain text and can be formatted using Markdown, a lightweight text markup language.  Markdown has become something of a defacto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
+The essays are written in plain text and can be formatted using Markdown, a lightweight text markup language.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
 
 ### Markdown
 
@@ -50,7 +50,7 @@ supported by markdown.  The visual essay directives are defined using HTML tags 
 <param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be sepcified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
+In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
 
 ## Visual essay directives
 
@@ -126,7 +126,6 @@ Other attributes available for entity declarations include:
 
 - `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
 
-
 ## Maps
 
 Maps are added to the visualization pane using a `var` tag with a `data-map` attribute defined.  In declaring a map a `data-center` attribute must be provided indicating the map center point.  Optionally, a `data-zoom` attribute can be provided defining the initial zoom level for the interactive map.
@@ -181,11 +180,11 @@ Maps are added to the visualization pane using a `var` tag with a `data-map` att
 
 ### Map layers
 
-Maps may include optional layers.  Mapwarper tiles and GeoJSON feature layers are currently supported.
+Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers are currently supported.
 
-#### Mapwarper tile layers
+#### MapWarper tile layers
 
-Mapwarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  Mapwarper provides tools for fitting an image to base map geocoordinates by relating map feature points.
+MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
 
 ## Essay Authoring
 
@@ -194,3 +193,6 @@ Mapwarper is an open source tool and online service that generates map tiles fro
 ### Custom Components
 
 ### Custom Site Configuration
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTExNTg4MTAyNTddfQ==
+-->
