@@ -141,14 +141,14 @@ Below is an example of a `data-essay` directive defining a banner image (using a
 This example illustrates the incorporation of custom attributes and an absolute URL for the banner image:
 
 ```html
-<var data-essay
-	 title="Cacao: An indigenous network and global commodity"
-	 data-banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
-     data-layout="vtl"
-     data-num-plant-specimens="1"
-     data-num-maps="7"
-     data-num-images="20"
-     data-num-primary-sources="14">
+<param data-essay
+	   title="Cacao: An indigenous network and global commodity"
+	   data-banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
+       data-layout="vtl"
+       data-num-plant-specimens="1"
+       data-num-maps="7"
+       data-num-images="20"
+       data-num-primary-sources="14">
 ```
 
 ### data-entity
@@ -250,7 +250,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3NjU3OTA5ODMsNzQ4NTUwMjc4LC0xNT
-QxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYz
-NjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1ND
+E4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2
+Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
