@@ -226,6 +226,17 @@ Associates an image with a text element.
 
 ### data-video
 
+Associates a video with a text element.
+
+#### data-video attributes
+
+- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
+- __title__:  
+- __data-url__:  
+- __data-thumbnail__:  
+- __data-best__:  
+- __data-fit__:
+
 ### data-primary
 
 
@@ -309,10 +320,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTQ5OTUzNDg1LDEyNzI5ODg3MDYsLTE0Mz
-Q3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1
-OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMy
-w3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIz
-MTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2Mz
-Y2OTRdfQ==
+eyJoaXN0b3J5IjpbMTU2NzU5ODM4OSw1NDk5NTM0ODUsMTI3Mj
+k4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0
+ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OC
+wtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUw
+ODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2Mz
+YyOTEsMTM4OTYzNjY5NF19
 -->
