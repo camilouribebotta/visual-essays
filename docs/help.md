@@ -187,6 +187,12 @@ The `data-map` directive indicates that a map should be added as a visualization
 
 - __data-basemap__:   
 - __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent:
+	```html
+	<param data-map data-center="42.2813, -83.7483">
+	```
+		```html
+	<param data-map data-center="42.2813, -83.7483">
+	```
 - __data-zoom__:   
 - __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 
@@ -281,7 +287,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NjY4ODE1NzMsLTE0MzQ3MTc0OTIsLT
+eyJoaXN0b3J5IjpbLTIwNzkyNjUzNjksLTE0MzQ3MTc0OTIsLT
 E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
 OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
 gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
