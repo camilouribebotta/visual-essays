@@ -179,10 +179,11 @@ In the interest of maintainability and future proofing the longer form version i
 - __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
 - __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
+- __data-prefer-geojson__:  Location entities are automatically 
 
 ### data-map
 
-The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or o
+The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or overlays to be applied to the map.  When a may
 
 - __data-basemap__:   
 - __data-center__:   
@@ -279,9 +280,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzQzNjM0MTY5LC0xNDM0NzE3NDkyLC0xOD
-g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
-MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
-0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
-OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTE0MTgyMDkyMjUsLTE0MzQ3MTc0OTIsLT
+E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
+OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
+gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
+Mzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
