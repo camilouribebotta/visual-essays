@@ -201,8 +201,8 @@ The map shown for an active element can be augmented with one or more layers.  T
 - __data-type__:  `mapwarper` or `geojson`
 - __title__:  
 - __data-url__:  
-- __data-mapwarper-id__:  Defines the ID
-- __data-active__:  
+- __data-mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
+- __data-active__:  `true` (default) or `false`.  
 
 ### data-image
 
@@ -291,7 +291,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM0MTQ5MjQ1OCwxMjcyOTg4NzA2LC0xND
+eyJoaXN0b3J5IjpbLTkwNjEyNDQ5NSwxMjcyOTg4NzA2LC0xND
 M0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4
 NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MT
 MsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEy
