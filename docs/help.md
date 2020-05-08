@@ -49,6 +49,8 @@ In whichever tag form is used the type of visual essay directive is defined usin
 
 Throughout this document the association of visual essay directives to text _elements_ are described.  A text element can be be a single word or phrase, a single paragraph, multiple paragraphs in a section, or even the entire essay.  The placement of the visual essay directive in the text defines the type and scope of text element to which it applies.
 
+It is common to add Markdown headings to documents and for longer documents nested heading levels are often used resulting in a document that is 
+
 ## Visual essay directives
 
 Visual essay directives currently include:
@@ -193,7 +195,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzMyOTQzNDgzLC02NTA4MjUxMTYsLTEyMz
-E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
-Njk0XX0=
+eyJoaXN0b3J5IjpbLTE4MzYzNzAyMDMsLTY1MDgyNTExNiwtMT
+IzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2
+MzY2OTRdfQ==
 -->
