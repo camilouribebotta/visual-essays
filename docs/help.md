@@ -91,7 +91,7 @@ Similarly, a directive defined before Heading 1 would apply to all text in the e
 
 ### Active Paragraphs
 
- 
+ An essay is comprised of one or more paragraphs that are often hierarchical bae
 
 ## Visual essay directives
 
@@ -237,7 +237,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjc1NzkxMzA5LC02NTA4MjUxMTYsLTEyMz
-E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
-Njk0XX0=
+eyJoaXN0b3J5IjpbLTEwMjQ5Nzk1NjcsLTY1MDgyNTExNiwtMT
+IzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2
+MzY2OTRdfQ==
 -->
