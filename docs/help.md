@@ -184,6 +184,7 @@ The `data-map` directive indicates that a map should be added as a visualization
 
 - __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __data-basemap__:   By default, [OpenStreetMap (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
+
   -  [OpenSteetMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
   - [OpenTopoMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
   - [Stamen_Watercolor](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
@@ -324,10 +325,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEyNDg2MjAwNywtODAwOTE3MjM5LDU0OT
-k1MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0
-ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNi
-wtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQx
-ODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNj
-Y5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTg5NjkxMjA5LC04MDA5MTcyMzksNTQ5OT
+UzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4
+MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC
+0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4
+NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Nj
+k0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
