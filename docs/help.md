@@ -81,6 +81,7 @@ Paragraph 2b1 ...
 Paragraph 2b2 ...
 ```
 
+Given this document, a map directive associated with Paragraph 1b1 would  
 
 ## Visual essay directives
 
@@ -226,7 +227,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjQ4NzcyNjM3LC02NTA4MjUxMTYsLTEyMz
+eyJoaXN0b3J5IjpbNjQxMjMyMzA0LC02NTA4MjUxMTYsLTEyMz
 E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
 Njk0XX0=
 -->
