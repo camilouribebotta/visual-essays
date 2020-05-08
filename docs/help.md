@@ -33,7 +33,7 @@ Markdown is a lightweight language used to add formatting to plain text document
 
 ### HTML
 
-Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent as "wrapper" for the visual essay directives and can be used interchangeably this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require a end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The other form uses the `param` tag that does not require an end tag as it can be self closing.
+Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably a little more readable.  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
 
 ```html
 <var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
@@ -43,7 +43,7 @@ Any valid HTML can be used in markdown.  HTML tags are often used in a markdown 
 <param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
+In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute de.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
 
 ## Visual essay directives
 
@@ -187,6 +187,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjk2MTM4NjI1LC0xMjMxNzgxODQ1LDEzOD
-k2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbLTE0NDI4NDkzNTgsLTEyMzE3ODE4NDUsMT
+M4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
 -->
