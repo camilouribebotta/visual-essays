@@ -54,7 +54,7 @@ Visual essay directives currently include:
 - [data-map](#data-map) - Defines a map to add to the essay
 - [data-map-layer](#data-map) - Defines a map layer to add to current map
 - [data-image](#data-image) - Associates an image with an element
-- [data-video](#data-video) - Associates a vide with an element
+- [data-video](#data-video) - Associates a video with an element
 - [data-primary](#data-primary) - Identifies the content type to initially show when multiple are available for an element
 
 ### data-essay directive
@@ -187,6 +187,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMz
-g5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbNTM4NTQyOTc3LC02NTA4MjUxMTYsLTEyMz
+E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
+Njk0XX0=
 -->
