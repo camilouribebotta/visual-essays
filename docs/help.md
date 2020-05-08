@@ -49,24 +49,38 @@ In whichever tag form is used the type of visual essay directive is defined usin
 
 Throughout this document the association of visual essay directives to text _elements_ are described.  A text element can be be a single word or phrase, a single paragraph, multiple paragraphs in a section, or even the entire essay.  The placement of the visual essay directive in the text defines the type and scope of text element to which it applies.
 
-It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.  For instance, given the following document:
+It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.  For instance, consider the following document:
 
 ```markdown
 # Heading 1
+
 ## Subheading 1a
+
 Paragraph 1a1 ...
+
 Paragraph 1a2 ...
+
 ## Subheading 1b
+
 Paragraph 1b1 ...
+
 Paragraph 1b2 ...
+
 # Heading 2
+
 ## Subheading 2a
+
 Paragraph 2a1 ...
+
 Paragraph 2a2 ...
+
 ## Subheading 2b
+
 Paragraph 2b1 ...
+
 Paragraph 2b2 ...
 ```
+
 
 ## Visual essay directives
 
@@ -212,7 +226,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU3Mjg1OTE4OSwtNjUwODI1MTE2LC0xMj
-MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
-NjY5NF19
+eyJoaXN0b3J5IjpbMjQ4NzcyNjM3LC02NTA4MjUxMTYsLTEyMz
+E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
+Njk0XX0=
 -->
