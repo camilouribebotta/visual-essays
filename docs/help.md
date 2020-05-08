@@ -91,7 +91,7 @@ Similarly, a directive defined before Heading 1 would apply to all text in the e
 
 ### Active Paragraphs
 
- An essay is comprised of one or more paragraphs that are often hierarchical bae
+ An essay is comprised of one or more paragraphs that are often hierarchical based on the nesting level of the headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is displayed with a visual treatme
 
 ## Visual essay directives
 
@@ -237,7 +237,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwMjQ5Nzk1NjcsLTY1MDgyNTExNiwtMT
-IzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2
-MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbLTI5ODkxMzE5MywtNjUwODI1MTE2LC0xMj
+MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
+NjY5NF19
 -->
