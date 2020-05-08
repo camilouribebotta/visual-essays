@@ -71,7 +71,7 @@ repository in which the essay text is hosted, for instance `data-banner="images/
 
 #### Custom data-essay attributes
 
-The `data-essay` directive can also be used for site-specific custom attributes.  For instance, the __Plant humanities__ project uses the following attributes to define values used in
+The `data-essay` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
 a custom header:
 
 - __data-num-maps__:  The number of maps used in the essay
@@ -187,7 +187,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTM4NTQyOTc3LC02NTA4MjUxMTYsLTEyMz
-E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
-Njk0XX0=
+eyJoaXN0b3J5IjpbLTQ4NDY5ODUwMywtNjUwODI1MTE2LC0xMj
+MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
+NjY5NF19
 -->
