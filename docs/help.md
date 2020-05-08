@@ -129,7 +129,7 @@ a custom header:
 
 #### Example data-essay directives
 
-Below is an example of a `data-essay` directive defining a banner image and layout for the essay:
+Below is an example of a `data-essay` directive defining a banner image (using a relative URL)and layout for the essay:
 
 ```html
 <param data-essay
@@ -138,14 +138,17 @@ Below is an example of a `data-essay` directive defining a banner image and layo
        data-layout="vtl">
 ```
 
-This example illustrates the incorporation of custom attributes:
+This example illustrates the incorporation of custom attributes and :
 
 ```html
-<param data-essay
-       data-title="Charles Dickens"
-       data-banner="images/Viking_Bay_Broadstairs.jpg"
-       data-layout="vtl"
-       >
+<var data-essay
+	 title="Cacao: An indigenous network and global commodity"
+	 data-banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
+     data-layout="vtl"
+     data-num-plant-specimens="1"
+     data-num-maps="7"
+     data-num-images="20"
+     data-num-primary-sources="14">
 ```
 
 ### data-entity
@@ -247,7 +250,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTcwNDY0MDM1Miw3NDg1NTAyNzgsLTE1ND
-E4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2
-Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbNjM5MjU0NTUzLDc0ODU1MDI3OCwtMTU0MT
+g3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2
+OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
