@@ -13,7 +13,7 @@ Markdown is a lightweight language used to add formatting to plain text document
 ### HTML
 
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly 
-supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
+supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
 
 ```html
 <var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
@@ -129,5 +129,5 @@ Mapwarper is an open source tool and online service that generates map tiles fro
 
 Something about GetJSON..
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODU2NjE2OTkyXX0=
+eyJoaXN0b3J5IjpbLTE2OTMyNDAyNjcsODU2NjE2OTkyXX0=
 -->
