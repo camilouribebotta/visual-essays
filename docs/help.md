@@ -167,6 +167,7 @@ In the interest of maintainability and future proofing the longer form version i
 
 #### data-entity attributes
 
+- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 
   When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
@@ -212,10 +213,15 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ### data-image
 
-#### data-image attributes
-
 Associates an image with a text element.
 
+#### data-image attributes
+
+- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
+- __data-type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
+- __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
+- __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
+- 
 ### data-video
 
 ### data-primary
@@ -301,10 +307,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM3MTM5MDAyNiwxMjcyOTg4NzA2LC0xND
-M0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4
-NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MT
-MsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEy
-MzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5Nj
-M2Njk0XX0=
+eyJoaXN0b3J5IjpbNTY0NzA0MTY1LDEyNzI5ODg3MDYsLTE0Mz
+Q3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1
+OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMy
+w3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIz
+MTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2Mz
+Y2OTRdfQ==
 -->
