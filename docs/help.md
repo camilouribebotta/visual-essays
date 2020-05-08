@@ -182,7 +182,7 @@ In the interest of maintainability and future proofing the longer form version i
 
 ### data-map
 
-The `data-map` directive indicates that a map should be added as a visualization component for associated text elements.
+The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or o
 
 - __data-basemap__:   
 - __data-center__:   
@@ -279,7 +279,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIzMjc0MTEzLC0xNDM0NzE3NDkyLC0xOD
+eyJoaXN0b3J5IjpbMzQzNjM0MTY5LC0xNDM0NzE3NDkyLC0xOD
 g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
 MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
 0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
