@@ -163,9 +163,9 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 - __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
-- __data-scope__:  Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit scope to the scope associated with the directive location.
-- __data-aliases__:  The number of primary sources used in the essay
-
+- __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
+- __data-aliases__:  When tagging entities in the essay text the etiit
+- 
 ### data-map
 
 - __data-basemap__: `mapwarper` or `geojson`
@@ -261,9 +261,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTYwMDk2Nzg1MSwxMjg1MTA0ODIzLC0xNT
-g4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4
-OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC
-0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4
-OTYzNjY5NF19
+eyJoaXN0b3J5IjpbLTE3MDY5MDE2NzgsMTI4NTEwNDgyMywtMT
+U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
+ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
+wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
+ODk2MzY2OTRdfQ==
 -->
