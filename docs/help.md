@@ -52,8 +52,13 @@ Throughout this document the association of visual essay directives to text _ele
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.  For instance, given the following document:
 
 ```markdown
-# Top heading 1
-## Subhead
+# Heading 1
+## Subheading 1a
+Paragraph 1a1 
+## Subheading 1b
+# Heading 2
+## Subheading 2a
+## Subheading 2b
 ```
 
 ## Visual essay directives
@@ -200,7 +205,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMyNTg0MTQ5LC02NTA4MjUxMTYsLTEyMz
+eyJoaXN0b3J5IjpbNjMzMzU1NTEyLC02NTA4MjUxMTYsLTEyMz
 E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
 Njk0XX0=
 -->
