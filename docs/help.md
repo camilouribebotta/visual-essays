@@ -87,6 +87,8 @@ To associate a directive with an entire section the directive is located within 
 
 If we wanted to associate a directive with all text in section 1 the directive would be placed between Heading 1 and Subheading 1a making its scope section 1.  That directive would then be associated with the text element that included paragraphs 1a1, 1a2, 1b1, and 1b2.
 
+Similarly, a directive defined before Heading 1 would apply to all text in the essay as the scope would be global since it was not defined within a section or subsection.
+
 ### Active Paragraphs
 
  
@@ -235,7 +237,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NTE0NDQwMjIsLTY1MDgyNTExNiwtMT
-IzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2
-MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbNjc1NzkxMzA5LC02NTA4MjUxMTYsLTEyMz
+E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
+Njk0XX0=
 -->
