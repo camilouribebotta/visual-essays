@@ -236,7 +236,11 @@ Associates a video with a text element.
 
 ### data-primary
 
-Defines the content type to initially display for an active element when multiple are available.  This directive uses the value for the directive type attribute to defi
+Defines the content type to initially display for an active element when multiple are available.  This directive uses the value for the directive type attribute to define the primary content type.  For instance:
+
+```html
+<param data-primary="image">
+```
 
 
 ## Entities
@@ -319,7 +323,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MzAxMDA0NSw1NDk5NTM0ODUsMTI3Mj
+eyJoaXN0b3J5IjpbLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mj
 k4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0
 ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OC
 wtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUw
