@@ -91,7 +91,7 @@ Similarly, a directive defined before Heading 1 would apply to all text in the e
 
 ### Active Paragraphs
 
- An essay is comprised of one or more paragraphs that are often hierarchical based on the nesting level of the headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is a paragraph in the top portion of the browser window and displayed with a visual treatment that identifies it as the active paragraph.  Any visualization components associated with the active paragraph are displayed in the visualization panel.  Multiple visualization components can be associated with a single paragraph.  In some cases the comp
+ An essay is comprised of one or more paragraphs that are often hierarchical based on the nesting level of the headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is a paragraph in the top portion of the browser window and displayed with a visual treatment that identifies it as the active paragraph.  Any visualization components associated with the active paragraph are displayed in the visualization panel.  Multiple visualization components can be associated with a single paragraph.  In some cases the components are explicitly associated with the paragraph as the corresponding directive(s) were attached to the paragraph, and in other cases the associations are implied by the scope of the directive placement.  
 
 ## Visual essay directives
 
@@ -237,7 +237,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQzMjc1Nzc1OCwtNjUwODI1MTE2LC0xMj
-MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
-NjY5NF19
+eyJoaXN0b3J5IjpbNjA3MjUwNzg1LC02NTA4MjUxMTYsLTEyMz
+E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
+Njk0XX0=
 -->
