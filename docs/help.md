@@ -81,7 +81,8 @@ Paragraph 2b1 ...
 Paragraph 2b2 ...
 ```
 
-This defines a document with 2 top level sections, each with 2 subsections which contain 2 paragraphs for a total of
+This defines a document with 2 top level sections, each with 2 subsections that each contain 2 paragraphs resulting in a 3 level hierarchy with a total of 8 paragraphs.
+ 
 Given this document, a map associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes the paragraph text without an intervening blank line.
 
 To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after subheading 1b, paragraph 1b1, or paragraph 1b2.  Since it was defined within the scope of section 1b it would be associated with all paragraphs contained in section 1b.  In that way, when we say that a directive is associated with a text element we're referring to all text within the scope of the directive location.  In this example that would include paragraphs 1b1 and 1b2.
@@ -251,7 +252,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxNDUwNzgyNjksMjA0OTkyMjQyNiwtMT
+eyJoaXN0b3J5IjpbLTE4OTIyODE1NTMsMjA0OTkyMjQyNiwtMT
 k3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcx
 NjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NC
 wtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
