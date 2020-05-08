@@ -249,7 +249,7 @@
           this.loadEssay(file)
         },
         cachingFetch(file) {
-          const url = file === 'help'
+          const url = file === 'help' && hostname !== 'localhost'
             ? 'https://visual-essays.app/essay/help'
             : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '')
           console.log(`loadEssay: service=${service} acct=${acct} repo=${repo} file=${file} cached=${this.essayCache[url] !== undefined}`)

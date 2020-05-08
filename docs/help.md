@@ -1,10 +1,37 @@
-## Quick start
+## Visual Essay Help
 
+- [Introduction](#introduction)
+- [Essay Markup](#essay-markup)
+- [Essay Authoring](#essay-authoring)
+- [Resources](#resources)
+  - [Linked Open Data](#linked-open-data)
+    - [Wikidata Knowledge Graoh](#wikidata-knowledge-graph)
+    - [JSTOR Knowledge Graph](#jstor-knowledge-graph)
+    - [Supplementing Knowledge Graph Data](#supplementing-knowledge-graph-data)
+  - [MapWarper](#mapwarper)
+  - [GeoJSON](#geojson)
+- [Creating and Hosting Custom Sites](#creating-and-hosting-custom-sites)
+  - [Custom Components](#custom-components)
+  - [Custom Site Configuration](#custom-site-configuration)
+
+## Introduction
+
+Visual essays are web pages created from annotated text files.  The text files can be formatted using [Markdown](https://www.markdownguide.org/getting-started/),
+a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with 
+sections of text that can be a small as a single word or include the entire essay.  The visual essay tools add interactive visualizations to the rendered web page 
+using information contained in the tags.
+
+Visual essays are especially well suited for story telling that uses maps, images, and videos.  Adding a few simple tags to a text can result in an engaging web page 
+that provides context and depth to the written text
+
+The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge
+graphs such as Wikidata to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities
+associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked
+open data (LOD) sources may be provided in future versions.
 
 ## Essay markup
 
-Visual essays are text files that can be rendered as interactive web pages with maps and other multimedia providing context and depth to the
-textual content.  The essays are written in Markdown, a lightweight markup language that is easy to learn and portable.  Markdown has become something of a defacto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
+The essays are written in plain text and can be formatted using Markdown, a lightweight text markup language.  Markdown has become something of a defacto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
 
 ### Markdown
 
@@ -13,7 +40,7 @@ Markdown is a lightweight language used to add formatting to plain text document
 ### HTML
 
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly 
-supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require a end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
+supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require a end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The other form uses the `param` tag that does not require an end tag as it can be self closing.
 
 ```html
 <var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
@@ -23,7 +50,7 @@ supported by markdown.  The visual essay directives are defined using HTML tags 
 <param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-In whichever tag is use the type of visual essay directive is defined using a null value attribute.  This attribute can be sepcified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the examples above defines a `map` tag type with the map specific `center` and `zoom` attributes.
+In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be sepcified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a corresponding value.  For instance, the examples above defines a `map` tag type with the map `center` and `zoom` attributes.
 
 ## Visual essay directives
 
@@ -37,7 +64,38 @@ Visual essay directives currently include:
 - [data-video](#data-video) - Associates a vide with an element
 - [data-primary](#data-primary) - Identifies the content type to initially show when multiple are available for an element
 
-### data-essay
+### data-essay directive
+
+The `data-essay` directive is used to define essay metadata.
+
+#### Standard data-essay attributes
+
+- __title__:  The essay title
+- __data-author__:  The essay author name(s)
+- __data-banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
+repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
+- __data-layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
+
+#### Custom data-essay attributes
+
+The `data-essay` directive can also be used for site-specific custom attributes.  For instance, the __Plant humanities__ project uses the following attributes to define values used in
+a custom header:
+
+- __data-num-maps__:  The number of maps used in the essay
+- __data-num-images__:  The number of images used in the essay
+- __data-num-primary-sources__:  The number of primary sources used in the essay
+- __data-num-plant-specimens__:  The number of plan specimens used in the essay
+
+#### Example data-essay directives
+
+Below is an example of a `data-essay` directive using a local banner image and vtl layout:
+
+```html
+<param data-essay
+       data-title="Charles Dickens"
+       data-banner="images/Viking_Bay_Broadstairs.jpg"
+       data-layout="vtl">
+```
 
 ### data-entity
 
@@ -125,6 +183,10 @@ Maps may include optional layers.  Mapwarper tiles and GeoJSON feature layers ar
 
 Mapwarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  Mapwarper provides tools for fitting an image to base map geocoordinates by relating map feature points.
 
-#### GeoJSON feature layers
+## Essay Authoring
 
-Something about GetJSON..
+## Custom Sites
+
+### Custom Components
+
+### Custom Site Configuration

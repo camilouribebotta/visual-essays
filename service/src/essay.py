@@ -171,7 +171,7 @@ class Essay(object):
         ve_markup = {}
 
         # custom markup is defined in a var or span elements.  Custom properties are defined with element data-* attribute
-        for vem_elem in [vem_elem for vem_tag in ('var', 'span', 'param', 'entity') for vem_elem in self._soup.find_all(vem_tag)]:
+        for vem_elem in [vem_elem for vem_tag in ('var', 'span', 'param') for vem_elem in self._soup.find_all(vem_tag)]:
             attrs = dict([k.replace('data-',''),v] for k,v in vem_elem.attrs.items() if k not in ['class']) if vem_elem.attrs else {}
             matches = CUSTOM_MARKUP.intersection(set(attrs.keys()))
             if len(matches) == 1:
@@ -180,6 +180,7 @@ class Essay(object):
                 _type = 'entity'
             else:
                 continue
+
             for k in sorted(attrs.keys()):
                 if not attrs[k]:
                     del attrs[k]
@@ -244,7 +245,7 @@ class Essay(object):
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')
 
             ve_markup[attrs['id']] = attrs
-        logger.info(json.dumps(ve_markup, indent=2))
+        # logger.info(json.dumps(ve_markup, indent=2))
         return ve_markup
 
     def add_stylesheet(self, **kwargs):
