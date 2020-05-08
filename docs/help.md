@@ -83,7 +83,7 @@ Paragraph 2b2 ...
 
 Given this document, a map associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes the paragraph text without an intervening blank line.
 
-To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after Subheading 1b, Paragraph 1b1, or Paragraph 1b2.  Since it was defined within the scope of section 1b it would be associated with all paragraphs contained in section 1b.  In that way, when we say that a directive is associated with a text element we're referring to all text within the scope of the directive location.  In this example that would include paragraphs 1b1 and 1b2.
+To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after subheading 1b, paragraph 1b1, or paragraph 1b2.  Since it was defined within the scope of section 1b it would be associated with all paragraphs contained in section 1b.  In that way, when we say that a directive is associated with a text element we're referring to all text within the scope of the directive location.  In this example that would include paragraphs 1b1 and 1b2.
 
 If we wanted to associate a directive with all text in section 1 the directive would be placed between Heading 1 and Subheading 1a making its scope section 1.  That directive would then be associated with the text element that included paragraphs 1a1, 1a2, 1b1, and 1b2.
 
@@ -250,8 +250,8 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTQwMDI4MjUwLC0xOTc5ODU2OTgsLTk2Nz
-g5ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTEx
-NiwtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLD
-EzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Nj
+c4OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUx
+MTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MS
+wxMzg5NjM2Njk0XX0=
 -->
