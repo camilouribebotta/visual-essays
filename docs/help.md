@@ -159,7 +159,7 @@ The `data-entity` associates an element (again, anything from a word to the enti
 
 Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `data-qid` attribute in a `data-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `data-qid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
 
-
+Since `data-entity` directives are used so frequently they are the default directive type and can be used in an un-type
 
 #### data-entity attributes
 
@@ -265,7 +265,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwOTI5MDY0ODcsLTE0MzQ3MTc0OTIsLT
+eyJoaXN0b3J5IjpbLTE3OTQ5MTI1NzcsLTE0MzQ3MTc0OTIsLT
 E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
 OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
 gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
