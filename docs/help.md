@@ -185,10 +185,12 @@ The `data-map` directive indicates that a map should be added as a visualization
   - [Stamen_Watercolor](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
   - [Esri_WorldPhysical](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
 - __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
+
 	```html
 	<param data-map data-center="42.2813, -83.7483">
 	<param data-map data-center="Q485172">
 	```
+
 - __data-zoom__:   This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `data-zoom="3.4"`
 - __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 
@@ -285,10 +287,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODQwMjM2NTUxLDEyNzI5ODg3MDYsLTE0Mz
-Q3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1
-OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMy
-w3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIz
-MTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2Mz
-Y2OTRdfQ==
+eyJoaXN0b3J5IjpbLTY3MjExMTcsMTI3Mjk4ODcwNiwtMTQzND
+cxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5
+MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLD
+c0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMx
+NzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNj
+Y5NF19
 -->
