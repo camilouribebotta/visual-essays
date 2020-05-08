@@ -180,10 +180,10 @@ In the interest of maintainability and future proofing the longer form version i
 The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or overlays to be applied to the map.  When a may
 
 - __data-basemap__:   By default, [Open Street Map (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
-  -  *OpenSteetMap - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
-  - OpenTopoMap - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
-  - Stamen_Watercolor - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
-  - Esri_WorldPhysical - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
+  -  [_OpenSteetMap_](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
+  - [_OpenTopoMap_ - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
+  - [_Stamen_Watercolor_ - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
+  - [_Esri_WorldPhysical_ - [https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
 - __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
 	```html
 	<param data-map data-center="42.2813, -83.7483">
@@ -283,9 +283,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc3NTU2NTM2NSwtMTQzNDcxNzQ5MiwtMT
-g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
-MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
-wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
-ODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbLTE3MDI3MTkxMjYsLTE0MzQ3MTc0OTIsLT
+E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
+OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
+gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
+Mzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
