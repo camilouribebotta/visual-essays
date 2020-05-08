@@ -188,6 +188,7 @@ The `data-map` directive indicates that a map should be added as a visualization
 - __data-basemap__:   
 - __data-center__:   
 - __data-zoom__:   
+- __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default beha
 
 ### data-map-layer
 
@@ -280,9 +281,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjU1NjkyNDQ3LC0xNDM0NzE3NDkyLC0xOD
-g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
-MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
-0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
-OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTUzMjQ4MTMyMywtMTQzNDcxNzQ5MiwtMT
+g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
+MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
+wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
+ODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
