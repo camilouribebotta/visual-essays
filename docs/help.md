@@ -29,7 +29,7 @@ The essays are written in plain text and are formatted using Markdown.  Markdown
 
 ### Markdown
 
-Markdown is a lightweight language used to add formatting to plain text documents.  Markdown can be used to easily define section headings, lists, and text styling in plain text documents.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.  More information on creating and modifying essay text files can be found in the [essay authoring](#essay-authoring) section.
+Markdown is a lightweight language that is commonly used to add simple formatting to plain text documents.  Markdown can be used to easily define section headings, lists, and text styling in plain text documents.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.  More information on creating and modifying essay text files can be found in the [essay authoring](#essay-authoring) section.
 
 ### HTML
 
@@ -159,6 +159,8 @@ The `data-entity` associates an element (again, anything from a word to the enti
 
 Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `data-qid` attribute in a `data-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `data-qid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
 
+
+
 #### data-entity attributes
 
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
@@ -263,9 +265,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMT
-I4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5
-ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2Mj
-UsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0y
-MTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbLTEwOTI5MDY0ODcsLTE0MzQ3MTc0OTIsLT
+E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
+OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
+gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
+Mzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
