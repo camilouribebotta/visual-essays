@@ -54,11 +54,18 @@ It is common to add Markdown headings to documents to define sections of related
 ```markdown
 # Heading 1
 ## Subheading 1a
-Paragraph 1a1 
+Paragraph 1a1 ...
+Paragraph 1a2 ...
 ## Subheading 1b
+Paragraph 1b1 ...
+Paragraph 1b2 ...
 # Heading 2
 ## Subheading 2a
+Paragraph 2a1 ...
+Paragraph 2a2 ...
 ## Subheading 2b
+Paragraph 2b1 ...
+Paragraph 2b2 ...
 ```
 
 ## Visual essay directives
@@ -205,7 +212,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjMzMzU1NTEyLC02NTA4MjUxMTYsLTEyMz
-E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
-Njk0XX0=
+eyJoaXN0b3J5IjpbMTU3Mjg1OTE4OSwtNjUwODI1MTE2LC0xMj
+MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
+NjY5NF19
 -->
