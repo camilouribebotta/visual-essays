@@ -162,14 +162,14 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 Since `data-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper and simple `id` attribute can be used in place of the `data-qid`.  For instance, the following directives are equivalent:
 
 ```html
-<param data-entity data-qid="Q10302">
+<param data-entity data-qid="Q10302" title="France">
 ```
 
 ```html
 <param id="Q10302">
 ```
 
-In the interest of future proofing the longer form version is recommended.
+In the interest of maintainability and future proofing the longer form version is recommended.
 
 #### data-entity attributes
 
@@ -181,6 +181,8 @@ In the interest of future proofing the longer form version is recommended.
 - __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
 
 ### data-map
+
+The `
 
 - __data-basemap__: `mapwarper` or `geojson`
 
@@ -275,9 +277,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU5MDY4NDgyLC0xNDM0NzE3NDkyLC0xOD
-g2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTky
-MjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC
-0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4
-OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTI1ODYwOTI1NywtMTQzNDcxNzQ5MiwtMT
+g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
+MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
+wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
+ODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
