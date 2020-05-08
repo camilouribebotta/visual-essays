@@ -161,10 +161,10 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 
 #### data-entity attributes
 
-- __data-num-maps__:  The number of maps used in the essay
-- __data-num-images__:  The number of images used in the essay
-- __data-num-primary-sources__:  The number of primary sources used in the essay
-
+- __title__:  The number of maps used in the essay
+- __data-qid__:  The number of images used in the essay
+- __data-scope__:  The number of primary sources used in the essay
+- __data-aliases__:  The number of primary sources used in the essay
 
 ### data-map
 
@@ -261,8 +261,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODAzMTc4NTg2LC0xNTg4ODU5MDkzLDIwND
-k5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3
-OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LD
-EzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMD
+Q5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAy
+NzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NS
+wxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+
 -->
