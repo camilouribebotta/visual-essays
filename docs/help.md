@@ -186,7 +186,7 @@ In the interest of maintainability and future proofing the longer form version i
 The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or overlays to be applied to the map.  When a may
 
 - __data-basemap__:   
-- __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and logi
+- __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent:
 - __data-zoom__:   
 - __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 
@@ -281,9 +281,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzkzNTUxNywtMTQzNDcxNzQ5MiwtMTg4Nj
-UxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0
-MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMT
-U0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2
-MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbLTE5NjY4ODE1NzMsLTE0MzQ3MTc0OTIsLT
+E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
+OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
+gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
+Mzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
