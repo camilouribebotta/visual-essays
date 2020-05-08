@@ -45,6 +45,8 @@ Any valid HTML can be used in markdown.  HTML tags are often used in a markdown 
 
 In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
 
+### Text Elements
+
 ## Visual essay directives
 
 Visual essay directives currently include:
@@ -92,7 +94,7 @@ Below is an example of a `data-essay` directive defining a banner image and layo
 
 ### data-entity
 
-The `data-entity` associates an entity with 
+The `data-entity` associates an entity with a
 
 ### data-map
 
@@ -189,7 +191,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjE1MTQzNzI3LC02NTA4MjUxMTYsLTEyMz
+eyJoaXN0b3J5IjpbMjg5ODcxMjAxLC02NTA4MjUxMTYsLTEyMz
 E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
 Njk0XX0=
 -->
