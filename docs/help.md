@@ -81,7 +81,7 @@ a custom header:
 
 #### Example data-essay directives
 
-Below is an example of a `data-essay` directive using a local banner image and vtl layout:
+Below is an example of a `data-essay` directive defining a banner image and layout for the essay:
 
 ```html
 <param data-essay
@@ -91,6 +91,8 @@ Below is an example of a `data-essay` directive using a local banner image and v
 ```
 
 ### data-entity
+
+The `data-entity` associates an entity with 
 
 ### data-map
 
@@ -187,7 +189,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ4NDY5ODUwMywtNjUwODI1MTE2LC0xMj
-MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
-NjY5NF19
+eyJoaXN0b3J5IjpbNjE1MTQzNzI3LC02NTA4MjUxMTYsLTEyMz
+E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
+Njk0XX0=
 -->
