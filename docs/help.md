@@ -83,7 +83,7 @@ Paragraph 2b2 ...
 
 Given this document, a map directive associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes the paragraph text without an intervening blank line.
 
-To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after Subheading 1b, Paragraph 1b1, or Paragraph 1b2.  Since 
+To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after Subheading 1b, Paragraph 1b1, or Paragraph 1b2.  Since it was defined within the scope of section 1b it would be associated with all paragraphs in section 1b 
 
 ### Active Paragraphs
 
@@ -233,7 +233,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjkyNjcwMjksLTY1MDgyNTExNiwtMT
-IzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2
-MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbMTYxODQ3NDIzOSwtNjUwODI1MTE2LC0xMj
+MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
+NjY5NF19
 -->
