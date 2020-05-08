@@ -138,6 +138,16 @@ Below is an example of a `data-essay` directive defining a banner image and layo
        data-layout="vtl">
 ```
 
+This example illustrates the incorporation of custom attributes:
+
+```html
+<param data-essay
+       data-title="Charles Dickens"
+       data-banner="images/Viking_Bay_Broadstairs.jpg"
+       data-layout="vtl"
+       >
+```
+
 ### data-entity
 
 The `data-entity` associates an entity with a
@@ -237,7 +247,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NT
-A4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYz
-NjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTcwNDY0MDM1Miw3NDg1NTAyNzgsLTE1ND
+E4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2
+Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
