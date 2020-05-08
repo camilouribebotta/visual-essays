@@ -81,7 +81,7 @@ Paragraph 2b1 ...
 Paragraph 2b2 ...
 ```
 
-Given this document, a map directive associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive is adjacent paragraph text without an intervening blank line.
+Given this document, a map directive associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes paragraph text without an intervening blank line.
 
 ### Active Paragraphs
 
@@ -231,7 +231,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTI5NDM0MTY1LC02NTA4MjUxMTYsLTEyMz
-E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
-Njk0XX0=
+eyJoaXN0b3J5IjpbLTQ1MjA0MTUyNywtNjUwODI1MTE2LC0xMj
+MxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYz
+NjY5NF19
 -->
