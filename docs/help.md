@@ -218,10 +218,12 @@ Associates an image with a text element.
 #### data-image attributes
 
 - __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
-- __data-type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
-- __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
-- __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
-- 
+- __title__:  
+- __data-url__:  
+- __data-thumbnail__:  
+- __data-best__:  
+- __data-fit__:
+
 ### data-video
 
 ### data-primary
@@ -307,7 +309,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTY0NzA0MTY1LDEyNzI5ODg3MDYsLTE0Mz
+eyJoaXN0b3J5IjpbNTQ5OTUzNDg1LDEyNzI5ODg3MDYsLTE0Mz
 Q3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1
 OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMy
 w3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIz
