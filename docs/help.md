@@ -16,9 +16,9 @@
 
 ## Introduction
 
-Visual essays are web pages created from annotated text files.  The text files can be formatted using [Markdown](https://www.markdownguide.org/getting-started/),
+Visual essays are web pages created from annotated text files.  The text files are formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with 
-sections of text that can be a small as a single word or include the entire essay.  The visual essay tools add interactive visualizations to the rendered web page 
+sections of text, typically paragraphs but that can be a small as a single word or include the entire essay.  The visual essay tools add interactive visualizations to the rendered web page 
 using information contained in the tags.
 
 Visual essays are especially well suited for story telling that uses maps, images, and videos.  Adding a few simple tags to a text can result in an engaging web page 
@@ -194,6 +194,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMj
-EyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTIzMzQ4OTQ1MywtMTIzMTc4MTg0NSwxMz
+g5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 -->
