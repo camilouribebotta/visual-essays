@@ -29,7 +29,7 @@ The essays are written in plain text and are formatted using Markdown.  Markdown
 
 ### Markdown
 
-Markdown is a lightweight language used to add formatting to plain text documents.  Markdown can be used to easily define section headings, lists, and text styling in plain text documents.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.
+Markdown is a lightweight language used to add formatting to plain text documents.  Markdown can be used to easily define section headings, lists, and text styling in plain text documents.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.  More information on creating and modifying essay text files can be found in the [Es
 
 ### HTML
 
@@ -188,6 +188,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NDQ3NDE3OTAsLTEyMzE3ODE4NDUsMT
+eyJoaXN0b3J5IjpbLTIwOTM0MDE5MzEsLTEyMzE3ODE4NDUsMT
 M4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
 -->
