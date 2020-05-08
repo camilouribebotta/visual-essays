@@ -21,11 +21,11 @@ a lightweight markup language.  The essay text can be annotated with simple tags
 
 Visual essays are especially well suited for story telling that uses maps, images, and videos.  Adding a few simple tags to a text can result in an engaging web page that provides context and depth to the written text
 
-The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as Wikidata to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
+The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
 
 ## Essay markup
 
-The essays are written in plain text and can be formatted using Markdown, a lightweight text markup language.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
+The essays are written in plain text and are formatted using Markdown.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
 
 ### Markdown
 
@@ -188,6 +188,6 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NDY4MTI2ODksLTEyMzE3ODE4NDUsMT
-M4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMjAzMjg2MTY3LC0xMjMxNzgxODQ1LDEzOD
+k2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
