@@ -4,7 +4,7 @@
 ## Essay markup
 
 Visual essays are text files that can be rendered as interactive web pages with maps and other multimedia providing context and depth to the
-textual content.  The essays are written in Markdown, a lightweight markup language that is easy to learn and portable.  Markdown has become something of a defacto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
+textual content.  The essays are written in Markdown, a lightweight markup language that is easy to learn and portable.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML.  The visual essay processing code takes advantage of the ability to use HTML in Markdown.  Directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with custom attributes. 
 
 ### Markdown
 
@@ -13,7 +13,7 @@ Markdown is a lightweight language used to add formatting to plain text document
 ### HTML
 
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly 
-supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require a end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
+supported by markdown.  The visual essay directives are defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these are equivalent this document will typically use the `param` tag as it is a self-closing tag and more concise and arguably more readable.  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>` to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus requires a `</var>` end tag to close.  The `param` tag does not require an end tag as it can be self closing.
 
 ```html
 <var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
@@ -23,7 +23,7 @@ supported by markdown.  The visual essay directives are defined using HTML tags 
 <param data-map data-center="42.2813, -83.7483" data-zoom="6">
 ```
 
-In whichever tag is use the type of visual essay directive is defined using a null value attribute.  This attribute can be sepcified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the examples above defines a `map` tag type with the map specific `center` and `zoom` attributes.
+In whichever tag is use the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute.  A null data attribute is an attribute with the prefix `data-` without a value.  For instance, the examples above defines a `map` tag type with the map specific `center` and `zoom` attributes.
 
 ## Visual essay directives
 
@@ -80,7 +80,7 @@ Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers ar
 
 ### MapWarper tile layers
 
-MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geocoordinates by relating map feature points.
+MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
 
 ### GeoJSON feature layers
 
@@ -102,7 +102,7 @@ When the visualization pane is enabled supplemental information associated with 
 
 ### Entities
 
-The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind WIkipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 80 million entities (as of Feb 2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
+The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 80 million entities (as of Feb 2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
 Connecting text to a Wikidata entity is accomplished by adding an HTML `var` tag to the text with an `id` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<var id=“Q62”></var>` is added to the text.  The `var` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
 
@@ -129,5 +129,5 @@ Mapwarper is an open source tool and online service that generates map tiles fro
 
 Something about GetJSON..
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQyNzgyODg5Nl19
+eyJoaXN0b3J5IjpbODU2NjE2OTkyXX0=
 -->
