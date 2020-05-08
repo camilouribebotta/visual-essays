@@ -179,6 +179,8 @@ In the interest of maintainability and future proofing the longer form version i
 
 The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or overlays to be applied to the map.  When a may
 
+#### data-map attributes
+
 - __data-basemap__:   By default, [OpenStreetMap (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
   -  [OpenSteetMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
   - [OpenTopoMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
@@ -198,6 +200,7 @@ The `data-map` directive indicates that a map should be added as a visualization
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
 
+
 - __data-type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
 - __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
 - __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
@@ -205,6 +208,8 @@ The map shown for an active element can be augmented with one or more layers.  T
 - __data-active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
 
 ### data-image
+
+Associates an image with a text element.
 
 ### data-video
 
@@ -291,10 +296,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzY2ODU1MDI2LDEyNzI5ODg3MDYsLTE0Mz
-Q3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1
-OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMy
-w3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIz
-MTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2Mz
-Y2OTRdfQ==
+eyJoaXN0b3J5IjpbMTkwOTg2MjcyNSwxMjcyOTg4NzA2LC0xND
+M0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4
+NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MT
+MsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEy
+MzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5Nj
+M2Njk0XX0=
 -->
