@@ -200,7 +200,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 - __data-type__:  `mapwarper` or `geojson`
 - __title__:  
-- __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  
+- __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL is absolute.
 - __data-mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
 - __data-active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
 
@@ -291,10 +291,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NDE4NDMsMTI3Mjk4ODcwNiwtMTQzND
-cxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5
-MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLD
-c0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMx
-NzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNj
-Y5NF19
+eyJoaXN0b3J5IjpbLTk2NTQwNjUwMywxMjcyOTg4NzA2LC0xND
+M0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4
+NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MT
+MsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEy
+MzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5Nj
+M2Njk0XX0=
 -->
