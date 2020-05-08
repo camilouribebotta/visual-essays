@@ -188,6 +188,7 @@ The `data-map` directive indicates that a map should be added as a visualization
   - [OpenTopoMap](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
   - [Stamen_Watercolor](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
   - [Esri_WorldPhysical](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
+
 - __data-center__:   This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
 
 	```html
@@ -323,10 +324,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mj
-k4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0
-ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OC
-wtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUw
-ODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2Mz
-YyOTEsMTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbMTEyNDg2MjAwNywtODAwOTE3MjM5LDU0OT
+k1MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0
+ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNi
+wtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQx
+ODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNj
+Y5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
 -->
