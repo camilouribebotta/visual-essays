@@ -81,7 +81,7 @@ Paragraph 2b1 ...
 Paragraph 2b2 ...
 ```
 
-This defines a document with 2 top level sections, each with 2 subsections that each contain 2 paragraphs resulting in a 3 level hierarchy with a total of 8 paragraphs.
+This defines a document with 2 top level sections, each with 2 subsections that each contain 2 paragraphs resulting in a 3 level document hierarchy with a total of 8 paragraphs.
  
 Given this document, a map associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes the paragraph text without an intervening blank line.
 
@@ -252,7 +252,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4OTIyODE1NTMsMjA0OTkyMjQyNiwtMT
+eyJoaXN0b3J5IjpbLTE5NTA2NjU2MDAsMjA0OTkyMjQyNiwtMT
 k3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcx
 NjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NC
 wtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
