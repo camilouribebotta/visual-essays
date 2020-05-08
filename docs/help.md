@@ -198,7 +198,8 @@ The `data-map` directive indicates that a map should be added as a visualization
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
 
-- __data-type__: `mapwarper` or `geojson`
+- __data-type__:  `mapwarper` or `geojson`
+- __data-url__: `mapwarper` or `geojson`
 
 ### data-image
 
@@ -287,10 +288,10 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY3MjExMTcsMTI3Mjk4ODcwNiwtMTQzND
-cxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5
-MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLD
-c0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMx
-NzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4OTYzNj
-Y5NF19
+eyJoaXN0b3J5IjpbMTQyNTUxOTkyNywxMjcyOTg4NzA2LC0xND
+M0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4
+NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MT
+MsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEy
+MzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5Nj
+M2Njk0XX0=
 -->
