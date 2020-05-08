@@ -47,6 +47,8 @@ In whichever tag form is used the type of visual essay directive is defined usin
 
 ### Text Elements
 
+Throughout this document the association of visual essay directives to text _elements_ are described.  A text le
+
 ## Visual essay directives
 
 Visual essay directives currently include:
@@ -191,7 +193,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjg5ODcxMjAxLC02NTA4MjUxMTYsLTEyMz
+eyJoaXN0b3J5IjpbMzY5NzkxMTM4LC02NTA4MjUxMTYsLTEyMz
 E3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2
 Njk0XX0=
 -->
