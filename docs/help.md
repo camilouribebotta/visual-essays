@@ -161,7 +161,7 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 
 #### data-entity attributes
 
-- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often 
+- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 - __data-qid__:  The number of images used in the essay
 - __data-scope__:  The number of primary sources used in the essay
 - __data-aliases__:  The number of primary sources used in the essay
@@ -261,9 +261,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczODYwODY2NywxMjg1MTA0ODIzLC0xNT
-g4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4
-OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC
-0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEsMTM4
-OTYzNjY5NF19
+eyJoaXN0b3J5IjpbMjI5MTg5MjczLDEyODUxMDQ4MjMsLTE1OD
+g4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5
+MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLT
+EyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5
+NjM2Njk0XX0=
 -->
