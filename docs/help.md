@@ -157,7 +157,7 @@ This example illustrates the incorporation of custom attributes and an absolute 
 
 The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  The entity identifier prefix for Wikidata is `http://www.wikidata.org/entity/`.  The JSTOR knowledge graph prefix is `http://kg.jstor.org/entity/`.  For both the Wikidata and JSTOR knowledge graphs a complete identifier consists of the prefix and a knowledge graph specific identifier that starts with the letter `Q` followed by one or more number, commonly referred to as a "Q" identifier or "QID".  The `data-entity` directive requires the inclusion of a `data-qid` attribute specifying the QID of the entity.  
 
-Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the county of Portugal.  In Wikidata the identifier for Portugal is `http://www.wikidata.org/entity/Q45`.  The QID "Q45" (or http://kg.jstor.org/entity/Q45) in the JSTOR knowledge graph is associated with 
+Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the county of Portugal.  In Wikidata the identifier for Portugal is `http://www.wikidata.org/entity/Q45`.  The QID "Q45" (or http://kg.jstor.org/entity/Q45) in the JSTOR knowledge graph is associated with the entity _concretization_.  Simply including 
 
 ### data-map
 
@@ -254,9 +254,9 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MDQ4ODMwMTAsLTE1ODg4NTkwOTMsMj
-A0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUw
-Mjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4ND
-UsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTQ2MjI2MjY3OSwtMTU4ODg1OTA5MywyMD
+Q5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAy
+NzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NS
+wxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
 
 -->
