@@ -155,7 +155,7 @@ This example illustrates the incorporation of custom attributes and an absolute 
 
 ### data-entity
 
-The `data-entity` associates an entity with a
+The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (per
 
 ### data-map
 
@@ -252,8 +252,8 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NTA2NjU2MDAsMjA0OTkyMjQyNiwtMT
-k3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcx
-NjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NC
-wtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMjc3NzMzMzYwLDIwNDk5MjI0MjYsLTE5Nz
+k4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYy
+NSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLT
+IxMjU2MzYyOTEsMTM4OTYzNjY5NF19
 -->
