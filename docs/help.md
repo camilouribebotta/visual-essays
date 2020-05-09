@@ -232,12 +232,12 @@ Associates an image with a text element.  The directive provides the ability to 
 
 ### data-video
 
-Associates a video with a text element.  Youtthe current version of the visual essay 
+Associates a video with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
 
 #### data-video attributes
 
 - __id__:  The Youtube video ID.
-- __title__:  
+- __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __data-start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
 ### data-primary
@@ -329,7 +329,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MTQyMDE2MjMsMTk2MTI5NjA3MSw1Mj
+eyJoaXN0b3J5IjpbLTE1MTQ5ODU2NjAsMTk2MTI5NjA3MSw1Mj
 YzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcw
 NiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC
 0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3
