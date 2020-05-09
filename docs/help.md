@@ -220,9 +220,9 @@ Associates an image with a text element.  The directive provides the ability to 
 
 - __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  
-- __data-url__:  The URL to the 
-- __data-thumbnail__:  The URL to a thumbnail sized version of the image.
-- __data-hires__:  
+- __data-url__:  The URL to the default version of the image.
+- __data-thumbnail__:  The URL to a thumbnail sized version of the image.  If this is not provided the default version of the imaged will be scaled when a thumbnail is needed.
+- __data-hires__:  The URL to the best version of the image.  This version will
 - __data-fit__:
 
 ### data-video
@@ -324,7 +324,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkxNzM2MDEyLDE5NjEyOTYwNzEsNTI2Mz
+eyJoaXN0b3J5IjpbNDAwNDg2NjAyLDE5NjEyOTYwNzEsNTI2Mz
 Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
 LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
 U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
