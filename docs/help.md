@@ -225,7 +225,10 @@ Associates an image with a text element.  The directive provides the ability to 
 - __data-hires__:  The URL to the best version of the image.  This version will be used in the high resolution image viewers and automatically converted to IIIF format (and cached) for zooming and panning.
 - __data-fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
 
-  -  `co `cover` (default), `fill`, and `scale-down`.  
+  -  _contain_:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
+  -  _cover_:  
+  - _fill_:  The replaced content is sized to fill the element's content box. If necessary, the object will be stretched or squished to fit
+  - _scale-down_:    
 
 ### data-video
 
@@ -326,11 +329,11 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTQ0OTg1MTkwNiwxOTYxMjk2MDcxLDUyNj
-M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
-LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
-E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
-OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
-YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
-Mzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTIwMDkyNDAwODksMTk2MTI5NjA3MSw1Mj
+YzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcw
+NiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC
+0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3
+ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MT
+E2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEs
+MTM4OTYzNjY5NF19
 -->
