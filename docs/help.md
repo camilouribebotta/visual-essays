@@ -274,7 +274,7 @@ Using JSONLD ...
 
 ### Maps
 
-Maps are added to the visualization pane using a `data-map` directive.  In declaring a map a `data-center` attribute must be provided indicating the map center point.  Optionally, a `data-zoom` attribute can be provided defining the initial zoom level for the interactive map.
+Maps are added to the visualization pane using a `data-map` directive.  The visual essay tools use the [leaflet](https://leafletjs.com/) javascript library for map rendering.
 
 - `data-center` attribute values may be expressed as longitude/latitude coordinates (comma-separated float values) or using a QID for an entity than contains a position coordinate.
 - `data-zoom` attribute values are expressed as an integer or a floating point number (with tenths precision).  The higher the value the more detailed the map.
@@ -310,7 +310,7 @@ When the visualization pane is enabled supplemental information associated with 
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3MzcwODgxMywxOTYxMjk2MDcxLDUyNj
+eyJoaXN0b3J5IjpbMjExNTEzNjM2NywxOTYxMjk2MDcxLDUyNj
 M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
 LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
 E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
