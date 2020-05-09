@@ -214,7 +214,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ### data-image
 
-Associates an image with a text element.  The directive can define 3 versions of the image URL, the defaa
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a
 
 #### data-image attributes
 
@@ -324,11 +324,11 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMjE1NzkwMzgsMTk2MTI5NjA3MSw1Mj
-YzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcw
-NiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC
-0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3
-ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MT
-E2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEs
-MTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbMTgyMjY5ODg2NiwxOTYxMjk2MDcxLDUyNj
+M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
+LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
+E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
+OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
+YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
+Mzg5NjM2Njk0XX0=
 -->
