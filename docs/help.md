@@ -170,7 +170,7 @@ In the interest of maintainability and future proofing the longer form version i
 - __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 
-  When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
+ When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
 - __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
 - __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
@@ -325,10 +325,11 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OT
-UzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4
-MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC
-0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4
-NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Nj
-k0LC0yMTI1NjM2MjkxLDEzODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbMzg4Njg2NzIxLDUyNjM0Nzc4MywtODAwOT
+E3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDky
+LC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMj
+A0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4OTg5MTMsNzQ4NTUw
+Mjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMTYsLTEyMzE3ODE4ND
+UsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwxMzg5NjM2Njk0XX0=
+
 -->
