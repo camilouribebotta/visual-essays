@@ -248,7 +248,8 @@ Defines the content type to initially display for an active element when multipl
 <param data-primary="image">
 ```
 
-## Entities
+## Knowledge graphs
+### Entities
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
@@ -328,11 +329,11 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMDQ2NDkwMzMsMTk2MTI5NjA3MSw1Mj
-YzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcw
-NiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC
-0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3
-ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MT
-E2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEs
-MTM4OTYzNjY5NF19
+eyJoaXN0b3J5IjpbLTUwODcyNjU0NywxOTYxMjk2MDcxLDUyNj
+M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
+LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
+E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
+OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
+YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
+Mzg5NjM2Njk0XX0=
 -->
