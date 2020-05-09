@@ -223,7 +223,9 @@ Associates an image with a text element.  The directive provides the ability to 
 - __data-url__:  The URL to the default version of the image.
 - __data-thumbnail__:  The URL to a thumbnail sized version of the image.  If this is not provided the default version of the imaged will be scaled when a thumbnail is needed.
 - __data-hires__:  The URL to the best version of the image.  This version will be used in the high resolution image viewers and automatically converted to IIIF format (and cached) for zooming and panning.
-- __data-fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are `contain`, `cover` (default), `fill`, and `scale-down`.  The behavior of these values are defined in [on this W3C (https://www.w3schools.com/css/css3_object-fit.asp)
+- __data-fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
+
+  -  `co `cover` (default), `fill`, and `scale-down`.  
 
 ### data-video
 
@@ -324,7 +326,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTcxMjY0MTIzMywxOTYxMjk2MDcxLDUyNj
+eyJoaXN0b3J5IjpbMTQ0OTg1MTkwNiwxOTYxMjk2MDcxLDUyNj
 M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
 LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
 E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
