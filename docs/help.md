@@ -4,7 +4,7 @@
 - [Essay Markup](#essay-markup)
 - [Essay Authoring](#essay-authoring)
 - [Resources](#resources)
-  - [Linked Open Data](#linked-open-data)
+  - [Knowledge graphs](#knowledge-graphs)
     - [Wikidata Knowledge Graoh](#wikidata-knowledge-graph)
     - [JSTOR Knowledge Graph](#jstor-knowledge-graph)
     - [Supplementing Knowledge Graph Data](#supplementing-knowledge-graph-data)
@@ -252,6 +252,8 @@ Defines the content type to initially display for an active element when multipl
 
 ### Knowledge graphs
 
+#### Wikidata
+
 #### Entities
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
@@ -302,11 +304,11 @@ When the visualization pane is enabled supplemental information associated with 
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTIwOTE5Njc3LDE5NjEyOTYwNzEsNTI2Mz
-Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
-LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
-U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
-ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
-wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
-ODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbMTEwNDc3MDEwNiwxOTYxMjk2MDcxLDUyNj
+M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
+LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
+E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
+OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
+YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
+Mzg5NjM2Njk0XX0=
 -->
