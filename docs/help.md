@@ -14,7 +14,7 @@
   - [Custom Components](#custom-components)
   - [Custom Site Configuration](#custom-site-configuration)
 
-## Introduction
+## Introductions
 
 Visual essays are web pages created from annotated text files.  The text files are formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with sections of text, typically paragraphs but can also be as small as a single word or as large as the entire essay.  The visual essay tools add interactive visualizations to the rendered web page information contained in the tags.
@@ -318,11 +318,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczNDk2MTc3NCwtMTEyNzU5MjY0NCw4MT
-cwNzk2MTIsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIz
-OSw1NDk5NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMT
-g4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5
-MjI0MjYsLTE5Nzk4NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OC
-wtMTU0MTg3MTYyNSwtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEz
-ODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsOD
+E3MDc5NjEyLDE5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcy
+MzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLT
+E4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5
+OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNz
+gsLTE1NDE4NzE2MjUsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwx
+Mzg5NjM2Njk0XX0=
 -->
