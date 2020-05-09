@@ -305,11 +305,13 @@ When the visualization pane is enabled supplemental information associated with 
 
 ## Custom Sites
 
+A visual essay is a simply a te file that is rendered as an interactive web page.  The Markdown 
+
 ### Custom Components
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzk5MDAwMDY3LDE5NjEyOTYwNzEsNTI2Mz
+eyJoaXN0b3J5IjpbMzEzNTUwNTg4LDE5NjEyOTYwNzEsNTI2Mz
 Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
 LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
 U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
