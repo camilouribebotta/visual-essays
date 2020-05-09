@@ -248,8 +248,11 @@ Defines the content type to initially display for an active element when multipl
 <param data-primary="image">
 ```
 
-## Knowledge graphs
-### Entities
+## Resources
+
+### Knowledge graphs
+
+#### Entities
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
@@ -261,14 +264,14 @@ Other attributes available for entity declarations include:
 
 - `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
 
-## Maps
+### Maps
 
 Maps are added to the visualization pane using a `var` tag with a `data-map` attribute defined.  In declaring a map a `data-center` attribute must be provided indicating the map center point.  Optionally, a `data-zoom` attribute can be provided defining the initial zoom level for the interactive map.
 
 - `data-center` attribute values may be expressed as longitude/latitude coordinates (comma-separated float values) or using a QID for an entity than contains a position coordinate.
 - `data-zoom` attribute values are expressed as an integer or a floating point number (with tenths precision).  The higher the value the more detailed the map.
 
-## Map layers
+### Map layers
 
 Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers are currently supported.
 
@@ -329,7 +332,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTUwODcyNjU0NywxOTYxMjk2MDcxLDUyNj
+eyJoaXN0b3J5IjpbMjAxNzg3NTk2NCwxOTYxMjk2MDcxLDUyNj
 M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
 LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
 E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
