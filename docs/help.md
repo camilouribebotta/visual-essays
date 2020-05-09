@@ -214,14 +214,14 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ### data-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.  All URLs may be relative to the essay or absolute.
 
 #### data-image attributes
 
 - __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  
-- __data-url__:  
-- __data-thumbnail__:  
+- __data-url__:  The URL to the 
+- __data-thumbnail__:  The URL to a thumbnail sized version of the image.
 - __data-hires__:  
 - __data-fit__:
 
@@ -324,11 +324,11 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk5MDEzNzE0NCwxOTYxMjk2MDcxLDUyNj
-M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
-LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
-E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
-OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
-YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
-Mzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbMTkxNzM2MDEyLDE5NjEyOTYwNzEsNTI2Mz
+Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
+LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
+U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
+ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
+wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
+ODk2MzY2OTRdfQ==
 -->
