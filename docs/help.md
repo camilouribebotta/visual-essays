@@ -274,10 +274,7 @@ Using JSONLD ...
 
 ### Maps
 
-Maps are added to the visualization pane using a `data-map` directive.  The visual essay tools use the [leaflet](https://leafletjs.com/) javascript library for map rendering.  Leaflet is a widely-used open source code library for interactive maps.
-
-- `data-center` attribute values may be expressed as longitude/latitude coordinates (comma-separated float values) or using a QID for an entity than contains a position coordinate.
-- `data-zoom` attribute values are expressed as an integer or a floating point number (with tenths precision).  The higher the value the more detailed the map.
+Maps are added to the visualization pane using a `data-map` directive.  The visual essay tools use the [leaflet](https://leafletjs.com/) javascript library for map rendering.  Leaflet is a popular open source code library for generating interactive maps.
 
 ### Map layers
 
@@ -288,6 +285,8 @@ Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers ar
 MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
 
 #### GeoJSON feature layers
+
+Add a discussion of GeoJSON here.
 
 ## Essay Authoring
 
@@ -310,11 +309,11 @@ When the visualization pane is enabled supplemental information associated with 
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU2NjY1NzQ2NiwxOTYxMjk2MDcxLDUyNj
-M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
-LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
-E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
-OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
-YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
-Mzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbNzk5MDAwMDY3LDE5NjEyOTYwNzEsNTI2Mz
+Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
+LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
+U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
+ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
+wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
+ODk2MzY2OTRdfQ==
 -->
