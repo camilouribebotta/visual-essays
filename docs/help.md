@@ -305,13 +305,13 @@ When the visualization pane is enabled supplemental information associated with 
 
 ## Custom Sites
 
-A visual essay is a simply a plain text file that is rendered as an interactive web page.  The interactive features enabled to the web page are created and configured using HTML tags that are add
+A visual essay is a simply a plain text file that is rendered as an interactive web page.  The visual elements and interactive features are enabled through simple HTML tags that are added to the text.  These tags are described in the 
 
 ### Custom Components
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgwNDI4Njc1NSwxOTYxMjk2MDcxLDUyNj
+eyJoaXN0b3J5IjpbMTY1OTMwNjg1NSwxOTYxMjk2MDcxLDUyNj
 M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
 LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
 E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
