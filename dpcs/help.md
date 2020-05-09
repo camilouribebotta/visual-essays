@@ -14,7 +14,7 @@
   - [Custom Components](#custom-components)
   - [Custom Site Configuration](#custom-site-configuration)
 
-## Introductions
+## Introduction
 
 Visual essays are web pages created from annotated text files.  The text files are formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with sections of text, typically paragraphs but can also be as small as a single word or as large as the entire essay.  The visual essay tools add interactive visualizations to the rendered web page information contained in the tags.
@@ -189,7 +189,7 @@ The `data-map` directive indicates that a map should be added as a visualization
     - [`OpenTopoMap`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
     - [`Stamen_Watercolor`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
     - [`Esri_WorldPhysical`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
-- __data-center__:  This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
+- __data-center__:  This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are explicitly defined and in the second the Wikidata QID for Ann Arbor is provided and the coordinates are automatically retrieved from Wikidata. 
     ```html
     <param data-map data-center="42.2813, -83.7483">
     <param data-map data-center="Q485172">
@@ -251,11 +251,13 @@ Defines the content type to initially display for an active element when multipl
 
 #### Wikidata knowledge graph
 
+Wikidata (the knowledge base behind Wikipedia) is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  
+
 #### JSTOR knowledge graph
 
 #### Entities
 
-The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
+The data used by the widgets in the visualization pane are typically retrieved from Wikidata.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
 Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `data-qid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param data-entity data-qid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
 
