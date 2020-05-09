@@ -307,17 +307,17 @@ When the visualization pane is enabled supplemental information associated with 
 
 A visual essay is a simply a plain text file that is rendered as an interactive web page.  The visual elements and interactive features are enabled through simple HTML tags that are added to the text.  These tags are described in the [essay markup](#essay-markup) section of this document.
 
-Multiple essays may be combined to create a web site with site-wide headers,
+When Multiple essays may be combined to create a web site with site-wide headers, footers, and navigation.
 
 ### Custom Components
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ4NzU3MTUzNCwxOTYxMjk2MDcxLDUyNj
-M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
-LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
-E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
-OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
-YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
-Mzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbLTIwMzY3NzIyNzksMTk2MTI5NjA3MSw1Mj
+YzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcw
+NiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC
+0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4NTY5OCwtOTY3
+ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNSwtNjUwODI1MT
+E2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIxMjU2MzYyOTEs
+MTM4OTYzNjY5NF19
 -->
