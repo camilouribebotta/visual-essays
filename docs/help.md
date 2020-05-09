@@ -305,17 +305,17 @@ When the visualization pane is enabled supplemental information associated with 
 
 ## Custom Sites
 
-A visual essay is a simply a te file that is rendered as an interactive web page.  The Markdown 
+A visual essay is a simply a plain text file that is rendered as an interactive web page.  The interactive features enabled to the web page are created and configured using HTML tags that are add
 
 ### Custom Components
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzEzNTUwNTg4LDE5NjEyOTYwNzEsNTI2Mz
-Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
-LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
-U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
-ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
-wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
-ODk2MzY2OTRdfQ==
+eyJoaXN0b3J5IjpbLTgwNDI4Njc1NSwxOTYxMjk2MDcxLDUyNj
+M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
+LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
+E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
+OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
+YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
+Mzg5NjM2Njk0XX0=
 -->
