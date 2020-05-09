@@ -214,7 +214,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ### data-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.
 
 #### data-image attributes
 
@@ -222,7 +222,7 @@ Associates an image with a text element.  The directive provides the ability to 
 - __title__:  
 - __data-url__:  
 - __data-thumbnail__:  
-- __data-best__:  
+- __data-hires__:  
 - __data-fit__:
 
 ### data-video
@@ -324,7 +324,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgyMjY5ODg2NiwxOTYxMjk2MDcxLDUyNj
+eyJoaXN0b3J5IjpbMTk5MDEzNzE0NCwxOTYxMjk2MDcxLDUyNj
 M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
 LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
 E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
