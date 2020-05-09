@@ -281,7 +281,8 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 #### GeoJSON feature layers
 
-## Editing essays
+## Essay Authoring
+
 Since both the essay and annotations are plain text the essays can be created and maintained in any number of ways.  The only requirement is that the essay file be available on the internet.  One possible approach is to host the essay files in a [Github](https://github.com) repository.  Git is an open-source version control system that was started by Linus Torvalds—the same person who created the Linux operating system.  Github is an online service providing hosting of Git code repositories.  Since its inception Github has become wildly popular and is often used for much more than just version control on software projects.  Github offers free accounts and while its user interface may initially be a little intimidating to non-technical users it is actually a pretty simple to use service and a convenient way to manage text files.  When coupled with Github enabled tools much (or all) of the actual interaction with the Github service is handled through more user-friendly and familiar interfaces.  One such tool is [StackEdit](https://stackedit.io) which provides a browser-based Markdown editor with options for publishing files directly to Github.  [This page](/stackedit-setup) provides step-by-step instructions for setting up a StackEdit environment for publishing files to Github.
 
 The `visual essays` service creates an interactive web page merging text content with external data, including:
@@ -295,46 +296,17 @@ Initially, the rendered page only displays the formatted text content.  Interact
 
 When the visualization pane is enabled supplemental information associated with the corresponding text in the top portion of the page is available for viewing and in many cases interactive.  For example, if a location is mentioned in the text a map could be displayed showing the location of the place mentioned on an interactive map.  As another example, if a person is mentioned in the text more information (including images) can be displayed providing context and background on the person mentioned.
 
-### Entities
-
-The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 80 million entities (as of Feb 2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
-
-Connecting text to a Wikidata entity is accomplished by adding an HTML `var` tag to the text with an `id` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<var id=“Q62”></var>` is added to the text.  The `var` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
-
-When an entity is declared in a text using a `var` tag the software will use information in the Wikidata entity to find references in the text.  Wikidata entities include a label and optionally one or more aliases that are used to find the text references.  Additional aliases may be entered in the `var` tag to supplement those available in the Wikidata entity.  For example, if a document included the text “capital of the United States” the information available in the label and aliases properties in the Wikidata entity would be insufficient to connect that phrase to the entity.  In this case additional aliases can be provided with a `data-aliases` attribute in the `var` tag.  Multiple aliases are separated using the pipe (`|`) character.  For instance, `<var id=“Q61” data-aliases=“capital of the United States|the district”></var>`.
-
-Other attributes available for entity declarations include:
-
-- `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
-
-### Maps
-
-Maps are added to the visualization pane using a `var` tag with a `data-map` attribute defined.  In declaring a map a `data-center` attribute must be provided indicating the map center point.  Optionally, a `data-zoom` attribute can be provided defining the initial zoom level for the interactive map.
-
-- `data-center` attribute values may be expressed as longitude/latitude coordinates (comma-separated float values) or using a QID for an entity than contains a position coordinate.
-- `data-zoom` attribute values are expressed as an integer or a floating point number (with tenths precision).  The higher the value the more detailed the map.
-
-### Map layers
-
-Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers are currently supported.
-
-#### MapWarper tile layers
-
-MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is overlaying an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
-
-## Essay Authoring
-
 ## Custom Sites
 
 ### Custom Components
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY4MjA2ODk1MiwxOTYxMjk2MDcxLDUyNj
-M0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwxMjcyOTg4NzA2
-LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyODUxMDQ4MjMsLT
-E1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1Njk4LC05Njc4
-OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC02NTA4MjUxMT
-YsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEyNTYzNjI5MSwx
-Mzg5NjM2Njk0XX0=
+eyJoaXN0b3J5IjpbNTIwOTE5Njc3LDE5NjEyOTYwNzEsNTI2Mz
+Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
+LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
+U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
+ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2MjUsLTY1MDgyNTExNi
+wtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0yMTI1NjM2MjkxLDEz
+ODk2MzY2OTRdfQ==
 -->
