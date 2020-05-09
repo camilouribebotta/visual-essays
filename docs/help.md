@@ -23,6 +23,8 @@ Visual essays are especially well suited for story telling that uses maps, image
 
 The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
 
+### Displaying an Essay
+
 ## Essay markup
 
 The essays are written in plain text and are formatted using Markdown.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML for text formatting as Markdown provides a rich set of easier to use tags for this purpose.  The visual essay processing code takes advantage of the ability to extend the Markdown tags with arbitrary HTML.  The visual essay directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with some custom attributes.  These custom directives and attributes are described in detail in the following sections.
@@ -318,13 +320,15 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 ### Images
 
-#### 
+#### Customizing in-line display
+
+#### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjI4MjcxMTk2LDgxNzA3OTYxMiwxOTYxMj
-k2MDcxLDUyNjM0Nzc4MywtODAwOTE3MjM5LDU0OTk1MzQ4NSwx
-MjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0ODI2LDEyOD
-UxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNiwtMTk3OTg1
-Njk4LC05Njc4OTg5MTMsNzQ4NTUwMjc4LC0xNTQxODcxNjI1LC
-02NTA4MjUxMTYsLTEyMzE3ODE4NDUsMTM4OTYzNjY5NCwtMjEy
-NTYzNjI5MV19
+eyJoaXN0b3J5IjpbMTMyMzEyNDk4Nyw4MTcwNzk2MTIsMTk2MT
+I5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUs
+MTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMj
+g1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4
+NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNS
+wtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIx
+MjU2MzYyOTFdfQ==
 -->
