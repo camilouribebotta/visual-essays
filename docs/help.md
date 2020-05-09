@@ -23,7 +23,7 @@ Visual essays are especially well suited for story telling that uses maps, image
 
 The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
 
-### Displaying an Essay
+### Essay Rendering
 
 ## Essay markup
 
@@ -324,11 +324,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTMyMzEyNDk4Nyw4MTcwNzk2MTIsMTk2MT
-I5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5NTM0ODUs
-MTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxNDgyNiwxMj
-g1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYsLTE5Nzk4
-NTY5OCwtOTY3ODk4OTEzLDc0ODU1MDI3OCwtMTU0MTg3MTYyNS
-wtNjUwODI1MTE2LC0xMjMxNzgxODQ1LDEzODk2MzY2OTQsLTIx
-MjU2MzYyOTFdfQ==
+eyJoaXN0b3J5IjpbLTExMjc1OTI2NDQsODE3MDc5NjEyLDE5Nj
+EyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1
+LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMT
+I4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5
+ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2Mj
+UsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0y
+MTI1NjM2MjkxXX0=
 -->
