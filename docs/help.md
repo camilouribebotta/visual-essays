@@ -232,7 +232,7 @@ Associates an image with a text element.  The directive provides the ability to 
 
 ### data-video
 
-Associates a video with a text element.
+Associates a video with a text element.  Only the current version of the visual essay 
 
 #### data-video attributes
 
@@ -329,7 +329,7 @@ MapWarper is an open source tool and online service that generates map tiles fro
 
 ### Custom Site Configuration
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzg3MDU4ODg3LDE5NjEyOTYwNzEsNTI2Mz
+eyJoaXN0b3J5IjpbODU1NzQ5NjQ4LDE5NjEyOTYwNzEsNTI2Mz
 Q3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5ODg3MDYs
 LTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwNDgyMywtMT
 U4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgsLTk2Nzg5
