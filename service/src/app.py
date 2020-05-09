@@ -19,7 +19,8 @@ import traceback
 import getopt
 from urllib.parse import urlparse
 
-import markdown2
+import markdown as markdown_parser
+
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
@@ -136,7 +137,8 @@ def _is_empty(elem):
 def markdown_to_html5(markdown, acct=None, repo=None, site=None):
     logger.info(f'markdown_to_html5: acct={acct} repo={repo} site={site}')
     '''Transforms markdown generated HTML to semantic HTML'''
-    html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
+    # html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
+    html = markdown_parser.markdown(markdown['text'], output_format='html5', extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details'])
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
     convert_relative_links(soup, acct, repo, markdown['fname'], markdown['source'], site)

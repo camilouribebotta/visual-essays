@@ -20,12 +20,14 @@ idna==2.8
 isodate==0.6.0
 itsdangerous==1.1.0
 Jinja2==2.10.3
-markdown2==2.3.8
+#markdown2==2.3.8
+Markdown==3.2.2
 MarkupSafe==1.1.1
 protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 PyLD==1.0.5
+pymdown-extensions==7.1
 pyparsing==2.4.5
 python-slugify==4.0.0
 pytz==2019.3

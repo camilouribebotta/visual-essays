@@ -112,15 +112,21 @@
         <!-- footer -->
         <v-footer v-if="showFooter" v-cloak app color="#fff" elevation="6">
           <site-footer></site-footer>
+          <span style="float:right;cursor:pointer" @click="showMarkdownViewer = !showMarkdownViewer" title="Show markdown source">
+            <v-icon>mdi-code-tags</v-icon>
+          </span>
         </v-footer>
 
       </v-card>
+      <markdown-viewer :show="showMarkdownViewer" url="test" @click:outside="showMarkdownViewer = false"/>
     </v-app>
   </div>
 
   <script src="https://JSTOR-Labs.github.io/visual-essays/lib/visual-essays.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
 
   <script>
     String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
@@ -171,7 +177,8 @@
       vuetify: new Vuetify(),
       components: {
         'essayHeader': customComponents.essayHeader ? httpVueLoader(customComponents.essayHeader) : undefined,
-        'siteFooter': customComponents.siteFooter ? httpVueLoader(customComponents.siteFooter) : undefined
+        'siteFooter': customComponents.siteFooter ? httpVueLoader(customComponents.siteFooter) : undefined,
+        'markdownViewer': httpVueLoader(customComponents.markdownViewer || 'components/MarkdownViewer.vue')
       },
       data: () => ({
         drawer: false,
@@ -196,7 +203,8 @@
         appVersion: '0.3.0',
         libVersion: undefined,
         essayConfig: undefined,
-        progress: 1
+        progress: 1,
+        showMarkdownViewer: false
       }),
       computed: {
         banner() { return this.isEssay ? this.essayConfig.banner : this.siteConfig.banner ? `${this.siteConfig.banner}` : undefined },
