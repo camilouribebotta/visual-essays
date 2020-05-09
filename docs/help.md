@@ -51,7 +51,6 @@ Throughout this document the association of visual essay directives to text _**e
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.  For instance, consider the following document:
 
 ```md
-
 # Heading 1
 
 ## Subheading 1a
@@ -318,3 +317,12 @@ When hosted in a Github repository multiple essays can be combined to create a r
 #### Customizing in-line display
 
 #### Wrapping text around images
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTExMjc1OTI2NDQsODE3MDc5NjEyLDE5Nj
+EyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1
+LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMT
+I4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5
+ODU2OTgsLTk2Nzg5ODkxMyw3NDg1NTAyNzgsLTE1NDE4NzE2Mj
+UsLTY1MDgyNTExNiwtMTIzMTc4MTg0NSwxMzg5NjM2Njk0LC0y
+MTI1NjM2MjkxXX0=
+-->
