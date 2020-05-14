@@ -25,6 +25,7 @@ export default {
 
   },
   mounted() {
+    this.$store.dispatch('setProgress', 0)
     groupItems(this.allItems)
     this.$nextTick(() => this.init())
     if (window.location.hash) {
@@ -92,15 +93,11 @@ export default {
             //this.setActiveElements(this.paragraphs[para.id].prior)
 
             //console.log(this.paragraphs.size)
-            let idx = 0;
-            for (let i = 0; i < Object.keys(this.paragraphs).length; i++) {
-              if(Object.keys(this.paragraphs)[i] === newActiveElements[0]) {
-                idx = i;
-              }
-            }
-            this.$store.dispatch('setProgress', Math.round((idx/Object.keys(this.paragraphs).length)*100))
-
-
+            const contentParaIDs = Object.keys(this.paragraphs).filter(pid => pid.indexOf('section-') === 0)
+            const idx = contentParaIDs.indexOf(newActiveElements[0])
+            console.log('contentParaIDs', contentParaIDs)
+            console.log(`paragraphs=${contentParaIDs.length} idx=${idx}`)
+            this.$store.dispatch('setProgress', Math.round(((idx+1)/contentParaIDs.length)*100))
           }
         }
       }
@@ -194,10 +191,12 @@ export default {
 
 <style >
 
+  /*
   #essay {
     padding-top: 32px;
     padding-right: 32px;
   }
+  */
 
   .vtl #essay  {
     background-color: #dadada;
@@ -220,9 +219,8 @@ export default {
   .vtl #essay p {
     padding-right: 32px;
     border-left: none;
-
     font-size: 1.4em;
-    margin-bottom: 2.5em;
+    /* margin-bottom: 2.5em; */
     padding-left: 32px;
   }
 
@@ -233,7 +231,6 @@ export default {
   }
 
   .vtl #essay p.active-elem {
-
     border-left: none;
     width: calc(100% + 20px);
     padding-right: 52px
