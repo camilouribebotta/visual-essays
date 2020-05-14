@@ -88,7 +88,7 @@
       */
       this.header = document.getElementById('appbar')
       if (this.header) {
-        document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
+        //document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
         this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
       } else {
         this.$refs.viewer.$el.style.top = '0px'
