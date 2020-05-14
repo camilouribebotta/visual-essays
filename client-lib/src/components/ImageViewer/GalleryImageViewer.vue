@@ -76,7 +76,6 @@ export default {
   }
 
   .lingallery_caption {
-    font-weight: bold !important;
     font-size: 1.2em !important;
   }
 

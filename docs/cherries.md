@@ -5,7 +5,7 @@
        data-num-maps="5"
        data-num-specimens="15"
        data-num-images="9"
-       data-num-primary-sources="2"
+       data-num-primary-sources="3"
        data-author="JSTOR Labs team">
 
 <param data-entity title="cherry blossom" data-qid="Q871991" data-category="plant">
@@ -57,10 +57,10 @@ Cherry blossoms have formed an integral part of the identity of Washington, D. C
        data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg/155px-Washington_C_D.C._Tidal_Basin_cherry_trees.jpg">
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C.
-<param data-primary="image" data-mode="cards">
+<param data-primary="image" data-mode="gallery">
 <param data-image
        data-fit="cover"
-       data-title="Ornamental Cherry Tree In Full Bloom"
+       data-title="_Ornamental Cherry Tree_ In Full Bloom"
        data-url="https://upload.wikimedia.org/wikipedia/commons/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG"
        data-thumbnail="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Ornamental_Cherry_Tree_In_Full_Bloom.JPG/320px-Ornamental_Cherry_Tree_In_Full_Bloom.JPG">
 <param data-image 

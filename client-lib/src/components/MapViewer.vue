@@ -21,7 +21,8 @@ const baseLayers = {
 const defaults = {
   basemap: 'OpenStreetMap',
   center: [25, 0],
-  zoom: 2.5
+  zoom: 2.5,
+  popupOptions: { autoClose: false, closeButton: false, closeOnClick: false }
 }
 
 const iconMap = {
@@ -132,7 +133,7 @@ export default {
               if (label) {
                 // layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
                 feature.properties.label = label
-                layer.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
+                layer.bindPopup(self.makePopup(label), defaults.popupOptions )
                 numFeatureLabels += 1
               }
             }
@@ -187,7 +188,7 @@ export default {
               ? geojson.properties.label || geojson.properties.name || geojson.properties.title || geojson.properties['ne:NAME'] || undefined
               : undefined
           if (label) {
-            geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
+            geojson.bindPopup(self.makePopup(label), defaults.popupOptions)
             if (this.showLabels()) {
               geojson.openPopup()
             }
@@ -271,7 +272,7 @@ export default {
           this.$store.dispatch('setSelectedItemID', elemId)
         })
         if (location.title || location.label) {
-          marker.bindPopup(this.makePopup(location.title || location.label), { autoClose: false, closeButton: false, closeOnClick: false })
+          marker.bindPopup(this.makePopup(location.title || location.label), defaults.popupOptions)
         }
         markers.push(marker)
         const mll = marker.getLatLng()
@@ -468,6 +469,7 @@ export default {
     font-size: 12px;
     font-weight: 500;
     text-align: center;
+    display: inherit;
   }
 
   .leaflet-popup-content-wrapper img {

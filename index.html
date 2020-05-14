@@ -95,14 +95,14 @@
 
           <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-          <template v-if="isEssay">
-            <essay-header v-if="customComponents.essayHeader" :essay-config="essayConfig" :progress="progress"></essay-header>
+          <template v-if="customComponents.header">
+            <essay-header :site-config="siteConfig" :essay-config="essayConfig" :progress="progress"></essay-header>
           </template>
           <template v-else>
-            <div v-if="siteConfig.tagline" v-cloak class="hero-title" >
-              <span v-html="siteConfig.tagline"></span>
+            <div v-cloak class="hero-title" >
+              <span v-html="title"></span>
             </div>
-            <v-toolbar-title v-else v-cloak v-html="title"></v-toolbar-title>
+            <!-- <v-toolbar-title v-else v-cloak v-html="title"></v-toolbar-title> -->
           </template>
 
         </v-app-bar>
@@ -116,7 +116,7 @@
         </v-sheet>
 
         <!-- footer -->
-        <v-footer id="footer" v-if="showFooter" v-mutate="onFooterMutate" v-cloak app color="#fff" elevation="6">
+        <v-footer id="footer" v-if="customComponents.footer" v-mutate="onFooterMutate" v-cloak app color="#fff" elevation="6">
           <site-footer></site-footer>
         </v-footer>
 
@@ -181,8 +181,8 @@
         el: '#app',
         vuetify: new Vuetify(),
         components: {
-          'essayHeader': customComponents.essayHeader ? httpVueLoader(customComponents.essayHeader) : undefined,
-          'siteFooter': customComponents.siteFooter ? httpVueLoader(customComponents.siteFooter) : undefined,
+          'essayHeader': customComponents.header ? httpVueLoader(customComponents.header) : undefined,
+          'siteFooter': customComponents.footer ? httpVueLoader(customComponents.footer) : undefined,
           'markdownViewer': httpVueLoader(customComponents.markdownViewer || 'components/MarkdownViewer.vue')
         },
         data: () => ({
@@ -208,15 +208,15 @@
           essayCache: {},
           appVersion: '0.4.0',
           libVersion: undefined,
-          essayConfig: undefined,
+          essayConfig: {},
           progress: 1,
           current: undefined,
           markdownViewer: undefined,
           markdown: undefined
         }),
         computed: {
-          banner() { return this.isEssay ? this.essayConfig.banner : this.siteConfig.banner ? `${this.siteConfig.banner}` : undefined },
-          title() { return this.isEssay ? this.essayConfig.title : this.siteConfig.title || repo ? repo.titleize() : '' },
+          banner() { return this.essayConfig.banner || this.siteConfig.banner },
+          title() { return this.essayConfig.title | this.siteConfig.title || repo ? repo.titleize() : '' },
           essayTopMargin() { return this.bannerHeight },
           scrollThreshold() { return this.isEssay ? 400 : 350 },
           isEssay() { return this.essayConfig !== undefined },
