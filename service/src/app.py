@@ -260,7 +260,7 @@ def specimens(taxon_name):
         else:
             specimens['from_cache'] = True
         if content_type == 'text/html':
-            return (open(os.path.join(BASEDIR, 'src', 'viewer.html'), 'r').read().replace("'{{DATA}}'", json.dumps(specimens)), 200, cors_headers)
+            return (open(os.path.join(BASEDIR, 'src', 'json-viewer.html'), 'r').read().replace("'{{DATA}}'", json.dumps(specimens)), 200, cors_headers)
         else:
             return (specimens, 200, cors_headers)
 
@@ -309,6 +309,7 @@ def essay(acct=None, repo=None, file=None):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
+        raw = kwargs.pop('raw', 'false') in ('', 'true')
         site = urlparse(request.base_url).hostname
         src = None
         gdid = None
@@ -329,7 +330,7 @@ def essay(acct=None, repo=None, file=None):
             use_local = kwargs.pop('mode', ENV) == 'dev'
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-            logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} kwargs={kwargs}')
+            logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} raw={raw} kwargs={kwargs}')
             if use_local:
                 markdown = get_local_markdown(file)
                 baseurl = 'http://localhost:5000'
@@ -337,10 +338,21 @@ def essay(acct=None, repo=None, file=None):
                 markdown = get_gh_markdown(acct, repo, file)
                 baseurl = content_baseurl(acct, repo)
         if markdown:
-            essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, baseurl=baseurl, **kwargs)
-            return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
+            if raw:
+                return (markdown['text'], 200, cors_headers)
+            else:
+                essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, baseurl=baseurl, **kwargs)
+                return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return 'Not found', 404
+
+@app.route('/markdown-viewer/<acct>/<repo>/<file>', methods=['GET'])  
+@app.route('/markdown-viewer/<acct>/<repo>', methods=['GET'])
+@app.route('/markdown-viewer/<file>', methods=['GET'])  
+@app.route('/markdown-viewer', methods=['GET'])  
+def markdown_viewer(acct=None, repo=None, file=None):
+    logger.info(f'markdown-viewer')
+    return (open(os.path.join(BASEDIR, 'src', 'markdown-viewer.html'), 'r').read(), 200, cors_headers)
 
 @app.route('/config/<acct>/<repo>', methods=['GET'])
 @app.route('/config', methods=['GET'])

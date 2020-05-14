@@ -1,9 +1,7 @@
 <template>
-    <div ref="mapWrapper" class="row wrapper" style="width:100%; margin:0;">
-        <div ref="mapWrapperInner">
-            <div ref="map" id="lmap" class="lmap" style="margin:0;"></div>
-        </div>
-    </div>
+  <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
+       <div ref="map" id="lmap" class="lmap" :style="`width:${Math.min(viewport.width/2, maxWidth)}px; height:${Math.min(viewport.height, maxHeight)}px; margin:0;`"></div>
+  </div>
 </template>
 
 <script>
@@ -59,35 +57,31 @@ export default {
     entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
     locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
+    isSelected() { return this.selected === 'map' }
   },
   mounted() {
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
-    createBaseMap() {
-      this.positionMapContainer()
-      console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom}`)  
-      this.map = this.$L.map('lmap', {center: this.mapDef.center || defaults.center, zoom: this.mapDef.zoom || defaults.zoom, zoomSnap: 0.1})
-      this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
-      this.map.addLayer(this.mapLayers.baseLayer)
 
-      this.updateLayers()
-    },
-    positionMapContainer() {
-      if (this.$refs.map) {
-        const calculatedContainerHeight = this.viewport.height/2
-        // const mapHeight = calculatedContainerHeight < this.maxHeight ? calculatedContainerHeight : this.maxHeight
-        const mapHeight = this.maxHeight
-        const mapWidth = this.viewport.width < this.maxWidth ? this.viewport.width : this.maxWidth
-        const wrapperWidth = this.$refs.mapWrapper.clientWidth
-        // this.$refs.map.style.height = `${mapHeight - 52}px`
-        this.$refs.map.style.height = `${mapHeight}px`
-        this.$refs.map.style.width = `${mapWidth}px`
-        // console.log(`wrapperWidth=${wrapperWidth} calculatedContainerHeight=${calculatedContainerHeight} mapHeight=${mapHeight} mapWidth=${mapWidth}`)
-        // center the map
-        this.$refs.mapWrapperInner.style.paddingTop = 0
-        this.$refs.mapWrapperInner.style.paddingBottom = 0
-        this.$refs.mapWrapperInner.style.paddingLeft = `${(wrapperWidth - mapWidth)/2}px`
+    createBaseMap() {
+      const t = performance.now()
+      if (this.map) {
+        this.map.off()
+        this.map.remove()
+        this.map = undefined
+        this.addedLayers = new Set()
+      }
+      if (!this.map) {
+        console.log(this.mapDef)
+        this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
+        this.map = this.$L.map('lmap', {
+          preferCanvas: true,
+          center: this.mapDef.center || defaults.center, 
+          zoom: this.mapDef.zoom || defaults.zoom, zoomSnap: 0.1,
+          layers: [this.mapLayers.baseLayer]})
+        console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom} elapsed=${Math.round(performance.now() - t)}`)
+        this.updateLayers()
       }
     },
     makeMarker(latlng, props) {
@@ -132,14 +126,13 @@ export default {
         let geojson = L.geoJson(resp.data, {
           // Pop Up
           onEachFeature: function(feature, layer) {
-            //layer.bindPopup('layer', { autoClose: false, closeButton: false, closeOnClick: false })
             // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
             if (!def.title) {
-              const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || undefined : undefined
+              const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || feature.properties['ne:NAME'] || undefined : undefined
               if (label) {
                 // layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
                 feature.properties.label = label
-                layer.bindPopup(self.makePopup(label), { autoClose: true, closeButton: false, closeOnClick: true })
+                layer.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
                 numFeatureLabels += 1
               }
             }
@@ -191,82 +184,87 @@ export default {
           const label = def.title
             ? def.title
             : geojson.properties
-              ? geojson.properties.label || geojson.properties.name || geojson.properties.title || undefined
+              ? geojson.properties.label || geojson.properties.name || geojson.properties.title || geojson.properties['ne:NAME'] || undefined
               : undefined
           if (label) {
             geojson.bindPopup(self.makePopup(label), { autoClose: false, closeButton: false, closeOnClick: false })
-            // console.log(this.mapDef)
-            if (this.mapDef['hide-labels'] !== 'true') {
-              const t = performance.now()
+            if (this.showLabels()) {
               geojson.openPopup()
-              // console.log('open geojson popup', Math.round(performance.now() - t), label)
             }
           }
         }
 
         this.addedLayers.add(def.id)
-        if (this.mapDef['hide-labels'] !== 'true') {
-          const t = performance.now()
-          geojson.eachLayer(feature => {feature.openPopup()})
-          // console.log('open geojson feature popup', Math.round(performance.now() - t))
+        if (this.showLabels()) {
+          geojson.eachLayer(feature => feature.openPopup())
         }
-        // this.map.setView(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
-        // console.log('flyTo', this.mapDef.center || defaults.center)
         this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
 
         return geojson
       })
     },
     syncGeojsonLayers() {
+      let t = performance.now()
       const layers = []
-      let start = performance.now()
       Object.keys(this.mapLayers.geojson).forEach(cur => {
         if (this.addedLayers.has(cur) && !this.mapDef.layers.geojson.find(def => def.id === cur)) {
           this.addedLayers.delete(cur)
           this.map.removeLayer(this.mapLayers.geojson[cur].layer)
         }
       })
-      start = performance.now()
+
       this.mapDef.layers.geojson.forEach(def => {
         if (!this.addedLayers.has(def.id)) {
           if (this.mapLayers.geojson[def.id]) {
             this.addedLayers.add(def.id)
             const geojson = this.mapLayers.geojson[def.id].layer
             geojson.addTo(this.map)
-            if (this.mapDef['hide-labels'] !== 'true') {
-              const t = performance.now()
-              geojson.eachLayer(feature => {feature.openPopup()})                      
-              // console.log('open added geojson popup', Math.round(performance.now() - t))
+            if (this.showLabels()) {
+              geojson.openPopup()
+              geojson.eachLayer(feature => feature.openPopup())                      
             }
           } else {
             layers.push(this.loadGeojson(def))
-            // console.log(performance.now() - s1)
           }
         }
       })
-      //console.log('add geojson', performance.now() - start)
-      this.locations.filter(location => location.geojson && location['prefer-geojson'] && location['prefer-geojson'].toLowerCase() === 'true').forEach(location => {
+
+      this.locations.filter(location => this.useGeojson(location)).forEach(location => {
         if (!this.addedLayers.has(location.id)) {
           if (this.mapLayers.geojson[location.id]) {
             this.addedLayers.add(location.id)
             const geojson = this.mapLayers.geojson[location.id].layer
-            geojson.addTo(this.map)
-            if (this.mapDef['hide-labels'] !== 'true') {
-              const t = performance.now()
+            this.map.addLayer(geojson)
+            if (this.showLabels()) {
+              geojson.openPopup()
               geojson.eachLayer(feature => feature.openPopup())
-              // console.log('open added geojson location popup', Math.round(performance.now() - t)) 
             }
           } else {
             this.loadGeojson(location)
           }
         }
       })
-     return layers
+      console.log(`syncGeojsonLayers: elapsed=${Math.round(performance.now() - t)}`)
+      return layers
+    },
+    useGeojson(location) {
+      let useGeojson = false
+      if (location.geojson) {
+        let preferAttr = location['prefer-geojson'] || this.mapDef['prefer-geojson']
+        if (preferAttr !== undefined) {
+          preferAttr = preferAttr.toLowerCase()
+          useGeojson = preferAttr === '' || preferAttr === 'true'
+        }
+      }
+      return useGeojson
+    },
+    showLabels() {
+      return !(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')
     },
     getLocationMarkers() {
       const markers = []
       // this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
-      this.locations.filter(location => location.coords && !(location.geojson !== undefined && location['prefer-geojson'] && location['prefer-geojson'].toLowerCase() === 'true')).forEach((location) => {
+      this.locations.filter(location => location.coords && !this.useGeojson(location)).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
         marker.addEventListener('click', (e) => {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
@@ -377,13 +375,8 @@ export default {
         layer
       }
       layer.addTo(this.map)
-      // console.log(`open marker popup: hide-labels=${this.mapDef['hide-labels']} show=${this.mapDef['hide-labels'] !== 'true'}`)
-      if (this.mapDef['hide-labels'] !== 'true') {
-        markers.forEach(marker => {
-          var t = performance.now()
-          marker.openPopup()
-          // console.log('open marker popup', Math.round(performance.now() - t), marker._popup._content)
-        })
+      if (this.showLabels()) {
+        markers.forEach(marker => marker.openPopup())
       }
       this.mapLayers.markerGroups = currentMarkerGroups
     },
@@ -393,23 +386,16 @@ export default {
         this.syncMapwarperLayers()
         this.syncMarkerGroups()
         this.setControls()
-
       }
     }
   },
   watch: {
     selected: {
       handler: function (value, prior) {
-        // console.log('selected', this.selected)
-        //if (this.featuresById[this.selected]) {
-        //  this.featuresById[this.selected].openPopup()
-        //}
-      },
-      immediate: true
-    },
-    viewport: {
-      handler: function (value, prior) {
-        this.positionMapContainer()
+        const map = document.getElementById('map')
+        if (this.isSelected && map && map.style.display === 'none') {
+          map.style.display = 'block'
+        }
       },
       immediate: true
     },
@@ -420,22 +406,18 @@ export default {
       immediate: false
     },
     mapDef: {
-      handler: function (value, prior) {
-        if (this.$refs.map) {
-          if (this.items.length === 0) {
-              this.$refs.mapWrapper.style.display = 'none'
-          } else {
-            if (this.map) {
-              if (this.items.length > 0) {
-                const curMap = this.items[0]
-                // this.map.setView(curMap.center, curMap.zoom || 10)
-                // console.log('flyto', this.mapDef.center || defaults.center)
-                this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
-              }
+      handler: function (mapDef, prior) {
+        const lmap = document.getElementById('lmap')
+        if (lmap) {
+          if (mapDef) {
+            if (this.map && mapDef && !prior || mapDef.basemap === prior.basemap) {
+              this.map.flyTo(mapDef.center || defaults.center, mapDef.zoom || defaults.zoom)
             } else {
               this.createBaseMap()
             }
             this.$refs.mapWrapper.style.display = 'block'
+          } else {
+            this.$refs.mapWrapper.style.display = 'none'
           }
         }
       },
@@ -449,63 +431,61 @@ export default {
 
 <style>
 
+  .wrapper {
+      display: inherit;
+  }
 
-    .wrapper {
-        display: inherit;
-    }
+  .lmap {
+      z-index: 1;
+  }
 
-    .lmap {
-        z-index: 1;
-        width: 100%;
-    }
+  .leaflet-interactive {
+    /* fill-opacity: 1; */
+  }
 
-    .leaflet-interactive {
-      /* fill-opacity: 1; */
-    }
+  .leaflet-container {
+      background: #aad3df !important;
+  }
 
-    .leaflet-container {
-        background: #aad3df !important;
-    }
+  .leaflet-popup-content {
+      margin: 5px 8px !important;
+      line-height: 1 !important;
+  }
 
-    .leaflet-popup-content {
-        margin: 5px 8px !important;
-        line-height: 1 !important;
-    }
+  .leaflet-popup-content-wrapper {
+      border-radius: 4px !important;
+  }
 
-    .leaflet-popup-content-wrapper {
-        border-radius: 4px !important;
-    }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+      color: black !important;
+      box-shadow: 0 2px 4px rgb(0,0,0,0.5) !important;
+  }
 
-    .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-        color: black !important;
-        box-shadow: 0 2px 4px rgb(0,0,0,0.5) !important;
-    }
+  .leaflet-popup-content-wrapper h1 {
+    max-width: 120px;
+    line-height: 1.2;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
 
-    .leaflet-popup-content-wrapper h1 {
-        max-width: 120px;
-        line-height: 1.2;
-        margin-bottom: 0;
-        font-size: 12px;
-        font-weight: 500;
-        text-align: center;
-    }
-
-    .leaflet-popup-content-wrapper img {
-        /* object-fit:
-           fill = stretched to fit box
-           contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
-           cover = fills entire box, maintains asp dect ration, clipped to fit
-           none = content not resized
-           scale-down = same as none or contain, whichever is smaller
-        */
-        object-fit: contain;
-        width: 125px;
-        height: 120px;
-        /*
-        padding: 2px 10px 2px 0;
-        float: left;
-        */
-        vertical-align: top;
+  .leaflet-popup-content-wrapper img {
+      /* object-fit:
+          fill = stretched to fit box
+          contain = maintain its aspect ratio, scaled fit within the element’s box, letterboxed if needed
+          cover = fills entire box, maintains asp dect ration, clipped to fit
+          none = content not resized
+          scale-down = same as none or contain, whichever is smaller
+      */
+      object-fit: contain;
+      width: 125px;
+      height: 120px;
+      /*
+      padding: 2px 10px 2px 0;
+      float: left;
+      */
+      vertical-align: top;
     }
 
     .leaflet-bar a, .leaflet-bar a:hover {

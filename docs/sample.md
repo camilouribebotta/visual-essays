@@ -1,24 +1,97 @@
 <a href="https://visual-essays.app/sample"><img src="images/ve-button.png"/></a>
 
-<param data-essay title="Charles Dickens" data-banner="/images/Viking_Bay_Broadstairs.jpg" data-layout="vtl">
-<param data-entity title="Charles Dickens" data-qid="Q5686">
-<param data-entity title="The Pickwick Papers" data-qid="Q460583">
-<param data-entity title="Portsmouth" data-qid="Q72259" data-prefer-geojson="true">
+<param data-essay
+       title="Sample Essay"
+       data-banner="images/da_vinci_banner.jpg"
+       data-layout="vtl"
+       data-author="Ron">
 
-## Charles Dickens
+<param data-entity title="Ginevra de' Benci" data-qid="Q1267893">
+<param data-entity title="Milan, Italy" data-qid="Q490">
+<param data-entity title="Bologna, Italy" data-qid="Q1891">
+<param data-entity title="Rome, Italy" data-qid="Q220">
+<param data-entity title="Venice, Italy" data-qid="Venice">
+<!-- <param data-entity title="Vinci, Tuscany, Italy" data-qid="Q82884"> -->
 
-Charles John Huffam Dickens (7 February 1812 – 9 June 1870) was an English writer and social critic. He created some of the world's best-known fictional characters and is regarded by many as the greatest novelist of the Victorian era. His works enjoyed unprecedented popularity during his lifetime, and by the 20th century, critics and scholars had recognised him as a literary genius. His novels and short stories are still widely read today.
-<param data-image data-url="https://upload.wikimedia.org/wikipedia/commons/a/aa/Dickens_Gurney_head.jpg">
+# Visual Essays
 
-Born in Portsmouth, Dickens left school to work in a factory when his father was incarcerated in a debtors' prison. Despite his lack of formal education, he edited a weekly journal for 20 years, wrote 15 novels, five novellas, hundreds of short stories and non-fiction articles, lectured and performed readings extensively, was an indefatigable letter writer, and campaigned vigorously for children's rights, education, and other social reforms.
-<param data-map data-map basemap="Esri_WorldPhysical" data-center="Q72259" data-zoom="7">
+## Maps
 
-Dickens's literary success began with the 1836 serial publication of The Pickwick Papers. Within a few years he had become an international literary celebrity, famous for his humour, satire, and keen observation of character and society. His novels, most published in monthly or weekly instalments, pioneered the serial publication of narrative fiction, which became the dominant Victorian mode for novel publication. Cliffhanger endings in his serial publications kept readers in suspense.  The installment format allowed Dickens to evaluate his audience's reaction, and he often modified his plot and character development based on such feedback. For example, when his wife's chiropodist expressed distress at the way Miss Mowcher in David Copperfield seemed to reflect her disabilities, Dickens improved the character with positive features.  His plots were carefully constructed, and he often wove elements from topical events into his narratives.  Masses of the illiterate poor chipped in ha'pennies to have each new monthly episode read to them, opening up and inspiring a new class of readers.
-<param data-image data-url="images/HassamHIGHRES.jpg">
+### Map - Show locations as GeoJSON regions
 
-His 1843 novella A Christmas Carol remains especially popular and continues to inspire adaptations in every artistic genre. Oliver Twist and Great Expectations are also frequently adapted and, like many of his novels, evoke images of early Victorian London. His 1859 novel A Tale of Two Cities (set in London and Paris) is his best-known work of historical fiction. The most famous celebrity of his era, he undertook, in response to public demand, a series of public reading tours in the later part of his career.  Dickens has been praised by many of his fellow writers—from Leo Tolstoy to George Orwell, G. K. Chesterton, and Tom Wolfe—for his realism, comedy, prose style, unique characterisations, and social criticism. However, Oscar Wilde, Henry James, and Virginia Woolf complained of a lack of psychological depth, loose writing, and a vein of sentimentalism.
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map1" data-center="Q82884" data-zoom="7" data-prefer-geojson="true">
+<param data-map-layer data-type="geojson" data-url="https://data.whosonfirst.org/101/752/643/101752643.geojson" data-active="true">
 
-The term Dickensian is used to describe something that is reminiscent of Dickens and his writings, such as poor social conditions or comically repulsive characters.
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMzUwNDMwMjQwXX0=
--->
+### Simple markers
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map2" data-basemap="Esri_WorldPhysical" data-center="Q82884" data-zoom="7">
+
+### Map - Hide labels
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map3" data-center="Q82884" data-zoom="7" data-hide-labels>
+
+### Map - Flyto Rome
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map4" data-center="Q220" data-zoom="11" data-prefer-geojson="true">
+
+## Images
+
+### Images - Gallery with contain and cover fit
+
+Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param data-image 
+       data-fit="contain"
+       title="Ginevra de' Benci (contain)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+<param data-image 
+       data-fit="cover"
+       title="Ginevra de' Benci (cover)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+
+### Images - Cards view as default
+
+Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param data-primary="image" data-mode="cards">
+<param data-image 
+       data-fit="contain"
+       title="Ginevra de' Benci (contain)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+<param data-image 
+       data-fit="cover"
+       title="Ginevra de' Benci (cover)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+
+### Images - Paragraph with map and images
+
+Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param data-map id="map5" data-center="Q220" data-zoom="11" data-prefer-geojson="true">
+<param data-image 
+       data-fit="contain"
+       title="Ginevra de' Benci (contain)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+
+### Images - Paragraph with map and images - initial images
+
+Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param data-primary="image">
+<param data-map id="map6" data-center="Q220" data-zoom="11" data-prefer-geojson="true">
+<param data-image 
+       data-fit="contain"
+       title="Ginevra de' Benci (contain)"
+       data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">

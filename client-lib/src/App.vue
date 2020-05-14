@@ -1,48 +1,38 @@
 <template>
   <v-app id="visual-essay" :class="path">
 
-    <v-card
+    <v-card 
       v-if="showBanner && banner"
       tile class="overflow-hidden"
     >
+      
       <v-app-bar
         id="appbar"
-        app
-        dense
-        :height="bannerHeight"
+        app dark prominent
+        elevate-on-scroll shrink-on-scroll
         elevation="5"
-        elevate-on-scroll
-        dark
-        shrink-on-scroll
         :src="banner"
-
+        :height="bannerHeight"
+        scroll-target="#scrollableContent"
         :scroll-threshold="scrollThreshold"
       >
-        <v-toolbar-title v-if="this.$store.getters.layout==='vtl'">
 
-          <essay-summary></essay-summary>
-          <!--<v-progress-linear value="percentScrolled"></v-progress-linear>-->
-        </v-toolbar-title>
-        <v-toolbar-title v-else>Take an interactive and guided tour through the cultural history of plants</v-toolbar-title>
-
-
-        <v-spacer></v-spacer>
+        <essay-header v-if="essayConfig" :essay-config="essayConfig" :progress="progress"></essay-header>
 
       </v-app-bar>
-      <v-sheet
-        id="scrollableContent"
-        class="overflow-y-auto"
-      >
+
+      <v-sheet id="scrollableContent" ref="scrollableContent" class="overflow-y-auto">
         <v-container ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px;border:1px solid black;`">
           <component v-bind:is="layout"></component>
         </v-container>
-
       </v-sheet>
 
     </v-card>
+
     <v-container v-else ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px`">
       <component v-bind:is="layout"></component>
     </v-container>
+
     <entity-infobox-dialog/>
   </v-app>
 </template>
@@ -50,7 +40,7 @@
 <script>
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
-import EssaySummary from './components/EssaySummary'
+import EssayHeader from './components/EssayHeader'
 
 const breakpoint = 768
 
@@ -66,23 +56,44 @@ export default {
     'vertical': VerticalLayout,
     'vtl': VerticalLayout,
     'vtr': VerticalLayout,
-    EssaySummary
+    EssayHeader
   },
   data: () => ({
-    layout: undefined,
-    bannerHeight: 300,
-    scrollThreshold: 350,
+    layout: 'vtl',
+    bannerHeight: 400,
+    scrollThreshold: 400,
     extended: false,
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
-    banner() { return (this.$store.getters.items.filter(item => item.type === 'essay') || [{}])[0].banner },
+    essayConfig() { return this.$store.getters.essayConfig },
+    banner() { return this.essayConfig ? this.essayConfig.banner : undefined },
     showBanner() { return this.$store.getters.showBanner },
-    essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 }
+    essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 },
+    title() { return 'Title' },
+    progress() { return this.$store.getters.progress }
   },
   created() {
     this.$store.dispatch('setHeaderSize', 104)
+  },
+  mounted() {
+    document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
+  },
+  methods: {
+    throttle(callback, interval) {
+      let enableCall = true
+      return function(...args) {
+        if (!enableCall) return
+        enableCall = false
+        callback.apply(this, args)
+        setTimeout(() => enableCall = true, interval)
+      }
+    },
+    scrollContent(e) {
+      const wheelDelta = e.wheelDelta
+      this.$refs.scrollableContent.$el.scrollTo(0, this.$refs.scrollableContent.$el.scrollTop - wheelDelta)
+    }
   },
   watch: {
     viewportWidth: {
@@ -90,7 +101,6 @@ export default {
         console.log(`width=${width} layout=${this.$store.getters.layout}`)
         if (width > 0) {
           this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vtl' : 'hc')
-          // console.log(`App.watch.viewportWidth: breakpoint=${breakpoint} width=${width} layout=${this.layout}`)
         }     
       },
       immediate: true
@@ -119,6 +129,11 @@ export default {
     padding: 0 !important;
     margin: 0;
     max-width: none !important;
+  }
+
+  #author-name {
+    font-size: 1.2rem;
+    margin: 0;
   }
 
   pre {
@@ -156,6 +171,11 @@ export default {
     position: relative;
     top: 4px;
   }
+
+  .v-toolbar__image .v-image, .v-toolbar__content, #appbar{
+    min-height: 104px!important;
+  }
+
   #prog {
   height: 7px;
     margin-left: -36px;

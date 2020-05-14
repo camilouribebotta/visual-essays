@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     essayHTML: undefined,
+    essayConfig: undefined,
     layout: 'vtl',
     showBanner: true,
     headerSize: 96,
@@ -27,6 +28,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
+    setEssayConfig (state, config) { state.essayConfig = config },
     setLayout (state, layout) { state.layout = layout },
     setShowBanner (state, showBanner) { state.showBanner = showBanner},
     setHeaderSize (state, headerSize) { state.headerSize = headerSize},
@@ -62,6 +64,7 @@ export default new Vuex.Store({
   },
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
+    setEssayConfig: ({ commit }, config) => commit('setEssayConfig', config),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
     setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
     setHeaderSize: ({ commit }, headerSize) => commit('setHeaderSize', headerSize),
@@ -86,6 +89,7 @@ export default new Vuex.Store({
     contentStartPos: state => state.contentStartPos,
     triggerOffset: state => state.triggerOffset,
     essayHTML: state => state.essayHTML,
+    essayConfig: state => state.essayConfig,
     context: state => state.context,
     debug: state => state.debug,
     content: state => state.content,

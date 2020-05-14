@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+    [v-cloak] { display: none; }
+    pre {
+      overflow-x: auto;
+      white-space: pre-wrap;
+      white-space: -moz-pre-wrap;
+      white-space: -pre-wrap;
+      white-space: -o-pre-wrap;
+      word-wrap: break-word;
+    }
+    .hljs{display:block;overflow-x:auto;padding:0.5em;background:#FFF}
+    .hljs,.hljs-subst{color:#333}
+    .hljs-comment{color:#888888}
+    .hljs-keyword,.hljs-attribute,.hljs-selector-tag,.hljs-meta-keyword,.hljs-doctag,.hljs-name{font-weight:bold}
+    .hljs-type,.hljs-string,.hljs-number,.hljs-selector-id,.hljs-selector-class,.hljs-quote,.hljs-template-tag,.hljs-deletion{color:#880000}
+    .hljs-title,.hljs-section{color:#880000;font-weight:bold}
+    .hljs-regexp,.hljs-symbol,.hljs-variable,.hljs-template-variable,.hljs-link,.hljs-selector-attr,.hljs-selector-pseudo{color:#BC6060}
+    .hljs-literal{color:#78A960}
+    .hljs-built_in,.hljs-bullet,.hljs-code,.hljs-addition{color:#397300}
+    .hljs-meta{color:#1f7199}.hljs-meta-string{color:#4d99bf}
+    .hljs-emphasis{font-style:italic}
+    .hljs-strong{font-weight:bold}
+    .hljs-attr{color:blue}
+    .hljs-name{color:green}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <v-card class="markdown-viewer">
+      <v-card-title v-html="title"></v-card-title>
+      <div>
+        <pre v-highlightjs="markdown"><code class="markdown"></code></pre>
+      </div>
+    </v-card>      
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+  <script>
+    Vue.directive('highlightjs', {
+      deep: true,
+      bind: function(el, binding) {
+        let targets = el.querySelectorAll('code')
+        targets.forEach((target) => {
+          if (binding.value) {
+            target.textContent = binding.value
+          }
+          hljs.highlightBlock(target)
+        })
+      },
+      componentUpdated: function(el, binding) {
+        let targets = el.querySelectorAll('code')
+        targets.forEach((target) => {
+          if (binding.value) {
+            target.textContent = binding.value
+            hljs.highlightBlock(target)
+          }
+        })
+      }
+    })
+    let defaults = {
+      'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+      'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
+      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'},
+      'dickens.kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
+    }
+    console.log(window.location)
+    const hostname = window.location.hostname.toLowerCase()
+    const service = hostname === 'localhost' ? 'http://localhost:5000' : defaults[hostname] ? `https://${hostname}` : `https://visual-essays.app`
+    let acct, repo, file
+    const path = (window.location.pathname.slice(1)).split('/').slice(1).filter(elem => elem !== '')
+    if (path.length < 2) {
+      acct = defaults[hostname].acct
+      repo = defaults[hostname].repo
+      file = path.length === 1 && path[0] !== '' ? path[0] : undefined
+    } else {
+      acct = path[0]
+      repo = path[1]
+      file = path[2]
+    }
+    console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file}`)
+
+    window.app = new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+        markdown: undefined
+      }),
+      computed: {
+        title() { return `/${acct}/${repo}/${file ? file : ''}` }
+      },
+      mounted() {
+        url = file === 'help' && hostname !== 'localhost'
+          ? 'https://visual-essays.app/essay/help?raw'
+          : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '') + '?raw'
+        fetch(url).then(resp => resp.text()).then(markdown => this.markdown = markdown)
+      }
+    })
+
+  </script>
+</body>
+</html>

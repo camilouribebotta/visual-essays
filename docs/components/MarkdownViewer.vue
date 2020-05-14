@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="isOpen" max-width="80%" @click:outside="isOpen = false">
+    <v-dialog v-model="show" hide-overlay max-width="80%" @click:outside="$emit('close-viewer')">
       <v-card class="markdown-viewer">
         <v-card-title>
           Markdown source
@@ -13,7 +13,7 @@
           <v-btn
             color="primary"
             text
-            @click="isOpen = false"
+            @click="$emit('close-viewer')"
           >
             Close
           </v-btn>
@@ -52,34 +52,13 @@ Vue.directive('highlightjs', {
 module.exports = {
   name: 'markdown-viewer',
   props: {
-    url: String,
+    markdown: String,
     show: Boolean
   }, 
   data: () => ({
-    markdown: '## Heading 2',
     isOpen: false,
     height: 600
-  }),
-  created() {
-    console.log('MarkdownViewer', this.show, this.url)
-    this.isOpen = this.show
-    this.getMarkdown(this.url)
-  },
-  methods: {
-    getMarkdown(url) {
-      if (url && !this.markdown[url]) {
-        fetch(url).then(resp => this.markdown[url] = resp.text())
-      }
-    }
-  },
-  watch: {
-    show(show) {
-      this.isOpen = this.show
-      if (this.show && this.url && !this.markdown[this.url]) {
-        fetch(this.url).then(resp => this.markdown[this.url] = resp.text())
-      }
-    }
-  }
+  })
 }
 </script>
 

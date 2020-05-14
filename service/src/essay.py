@@ -181,9 +181,9 @@ class Essay(object):
             else:
                 continue
 
-            for k in sorted(attrs.keys()):
-                if not attrs[k]:
-                    del attrs[k]
+            #for k in sorted(attrs.keys()):
+            #    if not attrs[k]:
+            #        del attrs[k]
 
             if 'id' not in attrs:
                 attrs['id'] = f'{_type}-{sum([1 for item in ve_markup.values() if item["type"] == _type])+1}'
@@ -193,8 +193,8 @@ class Essay(object):
                 ns, qid = qid.split(':') if ':' in qid else ('wd', qid)
                 attrs['id'] = f'{ns}:{qid}'
                 attrs['qid'] = f'{ns}:{qid}'
-                if 'scope' not in attrs:
-                    attrs['scope'] = 'global'
+                #if 'scope' not in attrs:
+                #    attrs['scope'] = 'global'
                 if 'aliases' in attrs:
                     attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
 
@@ -215,7 +215,7 @@ class Essay(object):
                         del vem_elem.attrs[attr]
 
             elif  _type == 'image':
-                if 'region' in attrs:
+                if attrs.get('region'):
                     attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
                 for attr in ('url', 'thumbnail'):
                     if attr in attrs and not attrs[attr].startswith('http'):

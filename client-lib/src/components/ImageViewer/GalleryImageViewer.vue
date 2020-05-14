@@ -36,6 +36,7 @@ export default {
           id: image.id,
           src: image.url,
           thumbnail: image.thumbnail || image.url,
+          hires: image.hires || image.url,
           caption: image.title ? this.$marked(image.title) : '',
           fit: image.fit || 'cover' // 'cover', 'contain;, 'fill', 'scale-down', or null
         }
@@ -47,7 +48,8 @@ export default {
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     width() { return this.viewport.width/2 },
-    height() { return this.viewport.height - (this.items.length === 1 ? 100 : 172) }
+    footerHeight() { const footerElem = document.getElementById('footer'); return footerElem ? footerElem.clientHeight : 0 },
+    height() { return this.viewport.height - 175 - (this.items.length === 1 ? 0 :this.footerHeight) }
   },
   mounted() {
     document.querySelectorAll('figure')
@@ -57,7 +59,7 @@ export default {
             const selected = this.items.find(item => item.src === e.target.src)
             this.img = {
               caption: selected.caption,
-              src: selected.src,
+              src: selected.hires,
               width: e.target.naturalWidth,
               height: e.target.naturalHeight 
             }

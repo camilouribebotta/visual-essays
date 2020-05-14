@@ -12,8 +12,6 @@
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
         <i :class="groups[tab].icon" class="fal"></i>
-
-
       </v-tab>
 
       <v-tab-item
@@ -25,7 +23,7 @@
         <component
           v-bind:is="groups[tab].component"
           :items="groups[tab].items"
-          :selected="selected"
+          :selected="activeTab"
           :max-width="viewerWidth"
           :max-height="viewportHeight"
           :initial-mode="mode"
@@ -49,7 +47,6 @@
       tabs: [],
       activeTab: undefined,
       hoverElemId: undefined,
-      selected: undefined,
       viewerWidth: 0,
       header: undefined,
       position: 'relative',
@@ -69,6 +66,26 @@
       }
     },
     mounted() {
+      /*
+      new ResizeObserver(entries => {
+        const headerElem = 
+        entries.forEach(e => {
+          console.log('appbar', e.contentRect.height)
+          if (e.contentRect.height === this.headerSize && this.position === 'relative') {
+            this.$refs.viewer.$el.style.top = `${this.headerSize}px`
+            this.$refs.viewer.$el.style.position = 'fixed'
+            this.position = 'fixed'
+          } else if (this.position === 'fixed' && e.contentRect.height > this.headerSize) {
+            this.$refs.viewer.$el.style.top = '0px'
+            this.$refs.viewer.$el.style.position = 'relative'
+            this.position = 'relative'
+          }
+          if (e.contentRect.height !== this.$store.getters.headerOffset) {
+            this.$store.dispatch('setContentStartPos', e.contentRect.height)
+          }
+        })
+      }).observe(document.getElementById('appbar'))
+      */
       this.header = document.getElementById('appbar')
       if (this.header) {
         document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
@@ -209,9 +226,10 @@
           this.removeItemClickHandlers(prior)
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
-        if (active) {
+        if (active && this.paragraphs[active] ) {
           document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)
+          const tabsBarElem = 
           document.querySelector('.v-tabs-bar').style.top = `${this.paragraphs[active].top}px`
         }
       }

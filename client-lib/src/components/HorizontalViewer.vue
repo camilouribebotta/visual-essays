@@ -72,6 +72,7 @@
       }
     },
     mounted() {
+      console.log('HorizontalViewer')
       this.$store.dispatch('setTriggerOffset', 100)
       if (this.$store.getters.layout === 'ho') {
           this.visualizerIsOpen = true

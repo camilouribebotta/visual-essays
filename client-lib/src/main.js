@@ -66,7 +66,7 @@ function setViewport() {
     width: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
   }
   if (vm) {
-    vm.$store.dispatch('setViewport', viewport )
+    vm.$store.dispatch('setViewport', viewport)
   }
 }
 
@@ -150,18 +150,19 @@ function initApp() {
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
   const qargs = parseQueryString()
-  const config = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || config.layout || 'hc' ))
+  const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
-  vm.$store.dispatch('setContext', qargs.context || config.context)
-  vm.$store.dispatch('setDebug', (qargs.debug || config.debug || 'false') === 'true')
+  vm.$store.dispatch('setContext', qargs.context || essayConfig.context)
+  vm.$store.dispatch('setDebug', (qargs.debug || essayConfig.debug || 'false') === 'true')
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 
-  const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay')
   if (window.app) {
     window.app.essayConfig = essayConfig
     window.app.libVersion = VERSION
+  } else {
+    vm.$store.dispatch('setEssayConfig', essayConfig)
   }
 
   vm.$mount('#essay')

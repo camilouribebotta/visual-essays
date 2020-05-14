@@ -1,14 +1,13 @@
 <template>
   <v-toolbar-title v-cloak style="min-height: 104px;">
     <v-container class="summary">
+      
       <v-row style="height:100%;" no-gutters>
-
         <v-col cols="12" sm="9">
           <h3>{{title}}</h3>
           <p id="author-name">{{author}}</p>
         </v-col>
-
-        <v-col class="align-end" cols="12" sm="3" style="text-align: right;">
+        <v-col class="align-end" cols="12" sm="3" style="text-align: right">
           <br/>
           <b>This visual essay contains:</b> <br/>
           {{numLocations}} interactive maps &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i> <br/>
@@ -16,15 +15,16 @@
           {{numSpecimens}} plant specimens &nbsp;&nbsp;<i class="fal fa-file-image"></i> <br/>
           {{numPrimarySources}} primary source materials &nbsp;&nbsp;<i class="fal fa-book-alt"></i>
         </v-col>
-
       </v-row>
+
       <v-row><v-progress-linear v-model="progress" id="prog" height="7"></v-progress-linear></v-row>
     </v-container>
+
   </v-toolbar-title>
 </template>
 
 <script>
-  module.exports = {
+  export default {
     props: {
       essayConfig: Object,
       progress: Number
@@ -43,7 +43,6 @@
 
 <style>
   [v-cloak] { display: none; }
-
   header {
     font-size: 0.8rem !important;
   }
@@ -52,11 +51,7 @@
   }
   .summary h3 {
     font-size: 2.0rem !important;
-    margin: 32px 0 0 0 ! important;
+    margin: 24px 0 12px 0 ! important;
     padding-left: 0;
-  }
-  #author-name {
-    font-size: 1.0rem;
-    margin: 6px 0;
   }
 </style>
