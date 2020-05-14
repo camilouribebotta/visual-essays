@@ -100,7 +100,7 @@ export default {
       handler: function (width) {
         console.log(`width=${width} layout=${this.$store.getters.layout}`)
         if (width > 0) {
-          this.layout = this.$store.getters.layout || (width >= breakpoint ? 'vtl' : 'hc')
+          this.layout = width <= breakpoint ? 'hc' : this.$store.getters.layout || 'vtl'
         }     
       },
       immediate: true

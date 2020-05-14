@@ -120,7 +120,7 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
     elif source == 'gh':
         baseurl = content_baseurl(acct, repo)
     logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
-    for tag in ('img', 'var', 'span'):
+    for tag in ('img', 'var', 'span', 'param'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
