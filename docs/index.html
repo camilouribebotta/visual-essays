@@ -294,8 +294,8 @@
               this.html = html
               this.current = file
               this.$nextTick(() => {
-                if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile} loaded=${file} dataset=${document.getElementById('essay').dataset.name}`)
                 window._essay = document.getElementById('essay').dataset.name
+                if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile} loaded=${file} dataset=${document.getElementById('essay').dataset.name}`)
               })
             })
           },
@@ -311,14 +311,17 @@
           }
         },
         watch: {
-          isLoaded() {
+          isLoaded() {                
+            if (hostname === 'jstor-labs.github.io') alert(`isLoaded=${this.isLoaded}`)
             if (this.isLoaded) {
               this.isLoaded = false
               this.$nextTick(() => {
+                if (hostname === 'jstor-labs.github.io') alert('do scroll')
                 const scrollableContent = document.getElementById('scrollableContent')
                 if (scrollableContent) {
                   scrollableContent.scrollTo(0, 0)
                 }
+                if (hostname === 'jstor-labs.github.io') alert('done scroll')
                 // convert embedded essay links
                 const essayElem = document.getElementById('essay')
                 if (essayElem) {
