@@ -229,12 +229,14 @@
           showFooter() { return this.customComponents.siteFooter !== undefined }
         },
         mounted() {
+          if (hostname === 'jstor-labs.github.io') alert('mounted')
           new ResizeObserver(entries => {
             entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
           }).observe(document.getElementById('content'))
-
-          // document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
+          if (hostname === 'jstor-labs.github.io') alert('checkpoint 1')
+          document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
           window.onpopstate = (e) => { this.loadEssay(e.state.file, true) }
+          if (hostname === 'jstor-labs.github.io') alert('checkpoint 2')
           this.loadEssay(file)
           // Find and preload navigation pages
           this.nav.filter(navItem => !navItem.enabled)
