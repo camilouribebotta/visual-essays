@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="/favicon.ico" rel="icon" type="image/x-icon">
+  <link href="/images/favicon.ico" rel="icon" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -140,7 +140,7 @@
   }
 
   let defaults = {
-    'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+    // 'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
@@ -157,7 +157,7 @@
   if (path.length < 2) {
     if (hostname.indexOf('.github.io') >= 0) {
       acct = hostname.replace(/\.github\.io/, '')
-      repo = window.location.pathname.split('/')[1]
+      repo = pathname.split('/')[1]
     } else {
       acct = defaults[hostname].acct
       repo = defaults[hostname].repo
