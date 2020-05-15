@@ -140,7 +140,7 @@
   }
 
   let defaults = {
-    //'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
+    'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
@@ -150,7 +150,13 @@
 
   console.log(window.location)
   const hostname = window.location.hostname.toLowerCase()
-  const service = hostname === 'localhost' ? 'http://localhost:5000' : defaults[hostname] ? `https://${hostname}` : `https://visual-essays.app`
+  const service = hostname === 'localhost' 
+    ? 'http://localhost:5000'
+    : hostname === 'jstor-labs.github.io'
+      ?  `https://visual-essays.app`
+      : defaults[hostname]
+        ? `https://${hostname}`
+        : `https://visual-essays.app`
   let acct, repo, file
   const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
   console.log(path)
