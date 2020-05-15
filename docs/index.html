@@ -233,7 +233,7 @@
             entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
           }).observe(document.getElementById('content'))
 
-          document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
+          // document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
           window.onpopstate = (e) => { this.loadEssay(e.state.file, true) }
           this.loadEssay(file)
           // Find and preload navigation pages
@@ -278,7 +278,7 @@
           loadEssay(file, replace) {
             this.cachingFetch(file)
             .then(html => {
-              let browserPath = `${hostname === 'stor-labs.github.io' ? repo : ''} ${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
+              let browserPath = `${hostname === 'jstor-labs.github.io' ? repo : ''} ${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
               console.log(`browserPath=${browserPath}`)
               if (replace) {
                 history.replaceState({file: file}, '', browserPath)
