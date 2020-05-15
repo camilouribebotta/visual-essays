@@ -291,7 +291,6 @@
                 history.pushState({file: file}, '', browserPath)
               }
               this.html = html
-              if (debug) alert(this.html)
               this.current = file
               this.$nextTick(() => {
                 window._essay = document.getElementById('essay').dataset.name
@@ -345,7 +344,6 @@
                     }
                   })
                 }
-                if (debug) alert(`isLoaded=${this.isLoaded}`)
               })
             }
           }
