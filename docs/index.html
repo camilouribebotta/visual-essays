@@ -178,7 +178,7 @@
   try {
       isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
   } catch (err) {}
-
+  const debug = hostname === 'jstor-labs.github.io'
   console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isMobile=${isMobile}`)
 
   const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
@@ -285,17 +285,16 @@
             this.cachingFetch(file)
             .then(html => {
               let browserPath = `${hostname === 'jstor-labs.github.io' ? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
-              if (hostname === 'jstor-labs.github.io') alert(`isMobile=${browserPath} browserPath=${browserPath}`)
               if (replace) {
                 history.replaceState({file: file}, '', browserPath)
               } else {
                 history.pushState({file: file}, '', browserPath)
               }
               this.html = html
+              if (debug) alert(this.html)
               this.current = file
               this.$nextTick(() => {
                 window._essay = document.getElementById('essay').dataset.name
-                if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile} loaded=${file} dataset=${document.getElementById('essay').dataset.name}`)
               })
             })
           },
@@ -346,7 +345,7 @@
                     }
                   })
                 }
-                if (hostname === 'jstor-labs.github.io') alert(`isLoaded=${this.isLoaded}`)
+                if (debug) alert(`isLoaded=${this.isLoaded}`)
               })
             }
           }
