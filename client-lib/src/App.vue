@@ -41,8 +41,7 @@
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
 import EssayHeader from './components/EssayHeader'
-
-const breakpoint = 768
+import { isMobile, throttle } from './utils'
 
 export default {
   name: 'app',
@@ -78,19 +77,10 @@ export default {
     this.$store.dispatch('setHeaderSize', 104)
   },
   mounted() {
-    if (this.$store.getters.debug) alert(`App: layout=${this.$store.getters.layout}`)
-    document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
+    // if (this.$store.getters.debug) alert(`App: layout=${this.$store.getters.layout}`)
+    document.getElementById('appbar').addEventListener('wheel', throttle(this.scrollContent, 20))
   },
   methods: {
-    throttle(callback, interval) {
-      let enableCall = true
-      return function(...args) {
-        if (!enableCall) return
-        enableCall = false
-        callback.apply(this, args)
-        setTimeout(() => enableCall = true, interval)
-      }
-    },
     scrollContent(e) {
       const wheelDelta = e.wheelDelta
       this.$refs.scrollableContent.$el.scrollTo(0, this.$refs.scrollableContent.$el.scrollTop - wheelDelta)
@@ -99,10 +89,10 @@ export default {
   watch: {
     viewportWidth: {
       handler: function (width) {
-        console.log(`width=${width} layout=${this.$store.getters.layout}`)
         if (width > 0) {
-          this.layout = width <= breakpoint ? 'hc' : this.$store.getters.layout || 'vtl'
+          this.layout = isMobile() ? 'hc' : this.$store.getters.layout || 'vtl'
         }     
+        console.log(`width=${width} layout=${this.$store.getters.layout}`)
       },
       immediate: true
     }

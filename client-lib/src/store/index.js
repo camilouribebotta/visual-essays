@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     essayHTML: undefined,
     essayConfig: undefined,
+    isMobile: false,
     layout: 'vtl',
     showBanner: true,
     headerSize: 96,
@@ -29,6 +30,7 @@ export default new Vuex.Store({
   mutations: {
     setEssayHTML (state, html) { state.essayHTML = html },
     setEssayConfig (state, config) { state.essayConfig = config },
+    setIsMobile (state, ismobile) { state.ismobile = ismobile },
     setLayout (state, layout) { state.layout = layout },
     setShowBanner (state, showBanner) { state.showBanner = showBanner},
     setHeaderSize (state, headerSize) { state.headerSize = headerSize},
@@ -65,6 +67,7 @@ export default new Vuex.Store({
   actions: {
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setEssayConfig: ({ commit }, config) => commit('setEssayConfig', config),
+    setIsMobile: ({ commit }, isMobile) => commit('setIsMobile', isMobile),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
     setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
     setHeaderSize: ({ commit }, headerSize) => commit('setHeaderSize', headerSize),
@@ -84,6 +87,7 @@ export default new Vuex.Store({
   },
   getters: {
     layout: state => state.layout,
+    isMobile: state => state.isMobile,
     showBanner: state => state.showBanner,
     headerSize: state => state.headerSize,
     contentStartPos: state => state.contentStartPos,

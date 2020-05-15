@@ -144,3 +144,21 @@ export function eqSet(as, bs) {
   for (var a of as) if (!bs.has(a)) return false;
   return true;
 }
+
+export function isMobile() {
+  let isMobile = false
+  try {
+      isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
+  } catch (err) {}
+  return isMobile
+}
+
+export function throttle(callback, interval) {
+  let enableCall = true
+  return function(...args) {
+    if (!enableCall) return
+    enableCall = false
+    callback.apply(this, args)
+    setTimeout(() => enableCall = true, interval)
+  }
+}

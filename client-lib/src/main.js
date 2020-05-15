@@ -16,7 +16,7 @@ import 'leaflet-polylinedecorator'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
 import '../assets/styles/main.css'
-import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
+import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems, isMobile } from './utils'
 
 import '../assets/js/leaflet-fa-markers.js'
 import '../assets/js/fontawesome-pro.min.js'
@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.39'
+const VERSION = '0.5.40'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -50,11 +50,7 @@ const myMixin = {
   }
 }
 
-let isMobile = false
-try {
-    isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
-} catch (err) {}
-const hostname = window.location.hostname.toLowerCase()
+const _isMobile = isMobile()
 
 let vm
 
@@ -153,12 +149,14 @@ function initApp() {
 
   const qargs = parseQueryString()
   const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
+  vm.$store.dispatch('setLayout', _isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || essayConfig.context)
-  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '' || hostname === 'jstor-labs.github.io' || hostname === 'localhost')
+  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '')
+  vm.$store.dispatch('setIsMobile', _isMobile)
+
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
-  console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
+  console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} isMobile=${vm.$store.getters.isMobile} debug=${vm.$store.getters.debug}`)
 
   if (window.app) {
     window.app.essayConfig = essayConfig

@@ -176,7 +176,7 @@
   }
   let isMobile = false
   try {
-      isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
+    isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
   } catch (err) {}
   const debug = hostname === 'jstor-labs.github.io'
   console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isMobile=${isMobile}`)
@@ -234,6 +234,8 @@
           showFooter() { return this.customComponents.siteFooter !== undefined }
         },
         mounted() {
+          this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+          this.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
           if (!isMobile) {
             new ResizeObserver(entries => {
               entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })

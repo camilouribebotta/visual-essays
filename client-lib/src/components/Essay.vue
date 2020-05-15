@@ -19,10 +19,8 @@ export default {
     contentStartPos() { return this.$store.getters.contentStartPos },
     activeElements() { return this.$store.getters.activeElements },
     layout() { return this.$store.getters.layout },
-    triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height },
-  },
-  created() {
-
+    triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height }
+    // triggerHook() { return 0.6 }
   },
   mounted() {
     this.$store.dispatch('setProgress', 0)
@@ -34,13 +32,18 @@ export default {
   },
   methods: {
     init() {
+      // console.log('init')
       this.findContent()
       this.linkTaggedItems()
       // this.addFootnotesHover()
 
       // Setup ScrollMagic (https://scrollmagic.io/)
+      let first
       let prior
-      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
+      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id && elem.id.indexOf('section-') === 0).forEach((para) => {
+        if (!first) {
+          first = para.id
+        }
         para.title = elemIdPath(para.id).join(',')
         this.paragraphs[para.id] = {
           prior, 
@@ -53,10 +56,12 @@ export default {
           triggerHook: this.triggerHook,
         })
         .on('enter', (e) => {
+          // console.log(`enter=${para.id}`)
           this.setActiveElements(para.id)
         })
         .on('leave', (e) => {
           //if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
+            // console.log(`leave=${this.paragraphs[para.id].prior}`)
             this.setActiveElements(this.paragraphs[para.id].prior)
           //}
         })
@@ -66,7 +71,7 @@ export default {
         this.$scrollmagic.addScene(scene)
         this.scenes.push(scene)
       })
-      this.setActiveElements(Array.from(document.body.querySelectorAll('p')).find(elem => elem.id).id)
+      this.setActiveElements(first)
     },
     setActiveElements(elemId) {
       //console.log('SCENES ', this.scenes);
@@ -95,7 +100,6 @@ export default {
             //console.log(this.paragraphs.size)
             const contentParaIDs = Object.keys(this.paragraphs).filter(pid => pid.indexOf('section-') === 0)
             const idx = contentParaIDs.indexOf(newActiveElements[0])
-            console.log('contentParaIDs', contentParaIDs)
             console.log(`paragraphs=${contentParaIDs.length} idx=${idx}`)
             this.$store.dispatch('setProgress', Math.round(((idx+1)/contentParaIDs.length)*100))
           }
@@ -176,14 +180,19 @@ export default {
     }
   },
   watch: {
-    triggerHook() {
-      this.scenes.forEach(scene => {
-        scene.triggerHook(this.triggerHook)
-
-      })
+    triggerHook: {
+      handler: function () {
+        this.scenes.forEach(scene => {
+          scene.triggerHook(this.triggerHook)
+        })
+      },
+      immediate: true
     },
-    activeElements() {
-      console.log('activeElements', this.activeElements)
+    activeElements: {
+      handler: function () {
+        console.log('activeElements', this.activeElements)
+      },
+      immediate: true
     }
   }
 }

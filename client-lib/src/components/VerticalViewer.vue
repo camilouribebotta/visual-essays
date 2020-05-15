@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import { elemIdPath, itemsInElements } from '../utils'
+  import { elemIdPath, itemsInElements, throttle } from '../utils'
   const tabOrder = ['map', 'image', 'video']
 
   export default {
@@ -66,29 +66,9 @@
       }
     },
     mounted() {
-      /*
-      new ResizeObserver(entries => {
-        const headerElem = 
-        entries.forEach(e => {
-          console.log('appbar', e.contentRect.height)
-          if (e.contentRect.height === this.headerSize && this.position === 'relative') {
-            this.$refs.viewer.$el.style.top = `${this.headerSize}px`
-            this.$refs.viewer.$el.style.position = 'fixed'
-            this.position = 'fixed'
-          } else if (this.position === 'fixed' && e.contentRect.height > this.headerSize) {
-            this.$refs.viewer.$el.style.top = '0px'
-            this.$refs.viewer.$el.style.position = 'relative'
-            this.position = 'relative'
-          }
-          if (e.contentRect.height !== this.$store.getters.headerOffset) {
-            this.$store.dispatch('setContentStartPos', e.contentRect.height)
-          }
-        })
-      }).observe(document.getElementById('appbar'))
-      */
       this.header = document.getElementById('appbar')
       if (this.header) {
-        document.getElementById('scrollableContent').addEventListener('scroll', this.throttle(this.mouseMove, 10))
+        document.getElementById('scrollableContent').addEventListener('scroll', throttle(this.mouseMove, 500))
         this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
       } else {
         this.$refs.viewer.$el.style.top = '0px'
@@ -99,16 +79,6 @@
       this.$nextTick(() => this.init())
     },
     methods: {
-      throttle(callback, interval) {
-        let enableCall = true
-
-        return function(...args) {
-          if (!enableCall) return
-          enableCall = false
-          callback.apply(this, args)
-          setTimeout(() => enableCall = true, interval)
-        }
-      },
       mouseMove(e) {
         // console.log(this.header.clientHeight, this.headerSize)
         if (this.$refs.viewer) {
