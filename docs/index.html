@@ -235,7 +235,7 @@
         },
         mounted() {
           if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile}`)
-          if (isMobile) {
+          if (!isMobile) {
             new ResizeObserver(entries => {
               entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
             }).observe(document.getElementById('content'))
