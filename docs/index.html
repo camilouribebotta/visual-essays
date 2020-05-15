@@ -174,7 +174,8 @@
     repo = path[1]
     file = path[2]
   }
-  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file}`)
+  const isMobile= isMobile()
+  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isMobile=${isMobile}`)
 
   const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
   fetch(configUrl)
@@ -229,10 +230,12 @@
           showFooter() { return this.customComponents.siteFooter !== undefined }
         },
         mounted() {
-          if (hostname === 'jstor-labs.github.io') alert('mounted')
-          new ResizeObserver(entries => {
-            entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
-          }).observe(document.getElementById('content'))
+          if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile}`)
+          if (isMobile) {
+            new ResizeObserver(entries => {
+              entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
+            }).observe(document.getElementById('content'))
+          }
           if (hostname === 'jstor-labs.github.io') alert('checkpoint 1')
           document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
           window.onpopstate = (e) => { this.loadEssay(e.state.file, true) }
@@ -347,6 +350,14 @@
         }
       })
     })
+    function isMobile() {
+      try {
+        const isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
+          return isMobile
+      } catch (err) {
+        return false
+      }
+    }
     function parseUrl (href) {
       const match = href.match(/^(https?)\:\/\/(([^:\/?#]*)(?:\:([0-9]+))?)(\/[^?#]*)(\?[^#]*|)(#.*|)$/)
       return match && {
