@@ -174,7 +174,11 @@
     repo = path[1]
     file = path[2]
   }
-  const isMobile= isMobile()
+  let isMobile = false
+  try {
+      isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
+  } catch (err) {}
+
   console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isMobile=${isMobile}`)
 
   const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
@@ -350,14 +354,6 @@
         }
       })
     })
-    function isMobile() {
-      try {
-        const isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
-          return isMobile
-      } catch (err) {
-        return false
-      }
-    }
     function parseUrl (href) {
       const match = href.match(/^(https?)\:\/\/(([^:\/?#]*)(?:\:([0-9]+))?)(\/[^?#]*)(\?[^#]*|)(#.*|)$/)
       return match && {
