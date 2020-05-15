@@ -1,15 +1,16 @@
 <template>
   <div>
-    <v-card id="cards-image-viewer" :style="`height:${viewport.height}px`">
+    <v-card id="cards-image-viewer" :style="`height:${viewport.height}px; padding:${isHorizontal ? 0 : 8}px !important;`">
       <v-container fluid>
         <v-row dense>
           <v-col
             v-for="image in images"
             :key="image.id"
             :cols="image.cols || 6"
+            :style="`padding:${isHorizontal ? 0 : 8}px !important;`"
           >
             <v-card>
-              <div :id="image.id" :style="`width:100%; height:${(image.cols || 6) * 50}px`"/>
+              <div :id="image.id" :style="`width:100%; height:${isHorizontal ? viewport.height/2 : (image.cols || 6) * 50}px`"/>
               <!-- 
               <v-card-actions>
                 <v-spacer/>
@@ -45,7 +46,8 @@ export default {
   }),
   computed: {
     images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
-    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} }
+    viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
+    isHorizontal() { return this.$store.getters.layout[0] === 'h' },
   },
   mounted() {
     this.images.forEach((image) => {
@@ -90,7 +92,7 @@ export default {
   #cards-image-viewer {
     border-radius: 0;
     background-color: #f5f5f5;
-    padding: 8px 8px 8px 8px;
+    padding: 8px;
     overflow-y: scroll;
   }
 

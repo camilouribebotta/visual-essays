@@ -47,7 +47,8 @@ export default {
       return items
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
-    width() { return this.viewport.width/2 },
+    isHorizontal() { return this.$store.getters.layout[0] === 'h' },
+    width() { return Math.min(this.viewport.width, this.maxWidth) / (this.isHorizontal ? 1 : 2)},
     footerHeight() { const footerElem = document.getElementById('footer'); return footerElem ? footerElem.clientHeight : 0 },
     height() { return this.viewport.height - 175 - (this.items.length === 1 ? 0 :this.footerHeight) }
   },

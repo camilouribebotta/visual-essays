@@ -1,6 +1,6 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
-       <div ref="map" id="lmap" class="lmap" :style="`width:${Math.min(viewport.width/2, maxWidth)}px; height:${Math.min(viewport.height, maxHeight)}px; margin:0;`"></div>
+       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${Math.min(viewport.height, maxHeight)}px; margin:0;`"></div>
   </div>
 </template>
 
@@ -58,7 +58,9 @@ export default {
     entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
     locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
-    isSelected() { return this.selected === 'map' }
+    isHorizontal() { return this.$store.getters.layout[0] === 'h' },
+    isSelected() { return this.selected === 'map' },
+    width() { return Math.min(this.viewport.width, this.maxWidth)}
   },
   mounted() {
     this.$nextTick(() => { this.createBaseMap() })

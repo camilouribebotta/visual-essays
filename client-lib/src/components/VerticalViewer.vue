@@ -139,6 +139,15 @@
             }
           })
         })
+        console.log('paragraphs', this.paragraphs)
+        if (this.activeElement && this.paragraphs[this.activeElement]) {
+          document.getElementById(this.activeElement).classList.add('active-elem')
+          this.addItemClickHandlers(this.activeElement)
+          const tabsBarElem = document.querySelector('.v-tabs-bar')
+          if (tabsBarElem) {
+            tabsBarElem.style.top = `${this.paragraphs[this.activeElement].top}px`
+          }
+        }
         this.addSpacer()
       },
       addSpacer() {
@@ -196,11 +205,14 @@
           this.removeItemClickHandlers(prior)
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
-        if (active && this.paragraphs[active] ) {
+        console.log(`VerticalViewer.watch.activeElement: ${active && this.paragraphs[active]}`, active)
+        if (active && this.paragraphs[active]) {
           document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)
-          const tabsBarElem = 
-          document.querySelector('.v-tabs-bar').style.top = `${this.paragraphs[active].top}px`
+          const tabsBarElem = document.querySelector('.v-tabs-bar')
+          if (tabsBarElem) {
+            tabsBarElem.style.top = `${this.paragraphs[active].top}px`
+          }
         }
       }
     }
@@ -232,9 +244,8 @@
   .v-tab {
     color: black !important;
     padding:6px !important;
-
-     min-width: 30px;
-     max-width: 30px;
+    min-width: 30px;
+   max-width: 30px;
     font-size: 1.1em
    }
 

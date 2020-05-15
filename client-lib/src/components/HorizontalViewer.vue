@@ -133,6 +133,7 @@
               const paraId = e.target.tagName === 'P'
                 ? e.target.id
                 : e.target.parentElement.id
+              console.log('paragraph clicked', paraId)
               if (this.paragraphs[paraId]) {
                 let offset = 100
                 let scrollable = document.getElementById('scrollableContent')
@@ -141,8 +142,8 @@
                 } else {
                   scrollable = window
                 }
-                const scrollTo = this.paragraphs[paraId].top - offset
-                scrollable.scrollTo(0, scrollTo, )
+                // const scrollTo = this.paragraphs[paraId].top - offset
+                // scrollable.scrollTo(0, scrollTo, )
               }
             })
           }

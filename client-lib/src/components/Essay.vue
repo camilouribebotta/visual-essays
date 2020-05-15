@@ -20,7 +20,6 @@ export default {
     activeElements() { return this.$store.getters.activeElements },
     layout() { return this.$store.getters.layout },
     triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height }
-    // triggerHook() { return 0.6 }
   },
   mounted() {
     this.$store.dispatch('setProgress', 0)
@@ -212,13 +211,17 @@ export default {
     padding-right: 0;
   }
 
-  #essay h1, h2, h3, h4, h5, h6 {
+ #essay h1, #essay h2, #essay h3, #essay h4, #essay h5, #essay h6 {
+    padding-left: 6px;
+  }
+
+ .vtl #essay h1, .vtl #essay h2, .vtl #essay h3, .vtl #essay h4, .vtl #essay h5, .vtl #essay h6 {
     padding-left: 32px;
   }
 
   #essay p {
-    padding-left: 20px;
-    border-left: 12px solid white;
+    padding: 6px;
+    /* border-left: 12px solid white; */
     font-size: 1em;
     line-height: 1.8;
     z-index: 1;
@@ -234,7 +237,7 @@ export default {
   }
 
   #essay p.active-elem {
-    border-left: 40px solid #1D5BC2;
+    /* border-left: 40px solid #1D5BC2; */
     background-color: #ffffff;
     box-shadow:  4px 4px 4px 0 rgba(0,0,0,0.25)
   }
@@ -352,6 +355,7 @@ export default {
     border-color: #666666 transparent transparent transparent;
     position: absolute;
     right: -20px;
+    bottom: -20px;
   }
 
   section {
