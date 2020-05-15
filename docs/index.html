@@ -294,7 +294,7 @@
               this.html = html
               this.current = file
               this.$nextTick(() => {
-                if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile} loaded=${file}`)
+                if (hostname === 'jstor-labs.github.io') alert(`isMobile=${isMobile} loaded=${file} dataset=${document.getElementById('essay').dataset.name}`)
                 window._essay = document.getElementById('essay').dataset.name
               })
             })
