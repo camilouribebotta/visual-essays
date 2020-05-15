@@ -279,7 +279,7 @@
             this.cachingFetch(file)
             .then(html => {
               let browserPath = `${hostname === 'stor-labs.github.io' ? repo : ''} ${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
-              console.log(`browserpath=${browserpath}`)
+              console.log(`browserPath=${browserPath}`)
               if (replace) {
                 history.replaceState({file: file}, '', browserPath)
               } else {
