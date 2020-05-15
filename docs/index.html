@@ -157,7 +157,7 @@
   if (path.length < 2) {
     if (hostname.indexOf('.github.io') >= 0) {
       acct = hostname.replace(/\.github\.io/, '')
-      repo = pathname.split('/')[1]
+      repo = window.location.pathname.split('/')[1]
     } else {
       acct = defaults[hostname].acct
       repo = defaults[hostname].repo
