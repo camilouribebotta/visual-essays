@@ -33,7 +33,7 @@ import EntityViewer from './components/EntityViewer'
 import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.38'
+const VERSION = '0.5.39'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -156,7 +156,7 @@ function initApp() {
   vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || essayConfig.context)
-  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '' || hostname === 'jstor-labs.github.io')
+  vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '' || hostname === 'jstor-labs.github.io' || hostname === 'localhost')
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} debug=${vm.$store.getters.debug}`)
 

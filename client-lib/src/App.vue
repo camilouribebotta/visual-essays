@@ -78,7 +78,7 @@ export default {
     this.$store.dispatch('setHeaderSize', 104)
   },
   mounted() {
-    if (this.$store.getters.debug) alert('App')
+    if (this.$store.getters.debug) alert(`App: layout=${this.$store.getters.layout}`)
     document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
   },
   methods: {
