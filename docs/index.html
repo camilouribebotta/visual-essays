@@ -278,7 +278,7 @@
           loadEssay(file, replace) {
             this.cachingFetch(file)
             .then(html => {
-              let browserPath = `${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
+              let browserPath = `${hostname === 'stor-labs.github.io' ? repo : ''} ${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
               if (replace) {
                 history.replaceState({file: file}, '', browserPath)
               } else {
