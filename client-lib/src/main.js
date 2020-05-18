@@ -26,14 +26,15 @@ import 'leaflet.control.opacity'
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
-import MapViewer from './components/MapViewer'
-import ImageViewer from './components/ImageViewer'
-import VideoPlayer from './components/VideoPlayer'
-import EntityViewer from './components/EntityViewer'
-import EntityInfobox from './components/EntityInfobox'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
-const VERSION = '0.5.41'
+const components = {
+  horizontalViewer: {component: HorizontalViewer},
+  verticalViewer: {component: VerticalViewer},
+  entityInfoboxDialog: {component: EntityInfoboxDialog}
+}
+
+const VERSION = '0.6.0'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -44,7 +45,8 @@ const myMixin = {
     activeElement() { return store.getters.activeElement },
     activeElements() { return store.getters.activeElements },
     allItems() { return store.getters.items },
-    groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems)) },
+    components() { return store.getters.components },
+    groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems), this.components) },
     selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }
@@ -77,16 +79,18 @@ function resizeend() {
   }
 }
 
-const components = {
-  horizontalViewer: HorizontalViewer,
-  verticalViewer: VerticalViewer,
-  gmap: MapViewer,
-  entity: EntityViewer,
-  gvideo: VideoPlayer,
-  gimage: ImageViewer,
-  entityInfobox: EntityInfobox,
-  entityInfoboxDialog: EntityInfoboxDialog
+// Site components
+const getSiteConfig = async () => {
+  const response = await fetch('/config')
+  const siteConfig = await response.json()
+  if (siteConfig.components) {
+    for (let [name, component] of Object.entries(siteConfig.components)) {
+      components[name] = component
+      components[name].component = httpVueLoader(component.src)
+    }
+  }
 }
+getSiteConfig()
 
 const initialStateCopy = JSON.parse(JSON.stringify(store.state))
 
@@ -104,9 +108,10 @@ function initApp() {
     eval(scr.text)
   })
 
+  // Essay components
   window.data.filter(item => item.type === 'component').forEach(customComponent => {
-    // console.log('customComponent', customComponent)
-    components[customComponent.name] = httpVueLoader(customComponent.src)
+    components[customComponent.name] = customComponent
+    components[customComponent.name].component = httpVueLoader(customComponent.src)
   })
 
   Vue.config.productionTip = false
@@ -123,11 +128,12 @@ function initApp() {
   Vue.prototype.$L = L
   Vue.prototype.$marked = marked
 
-  Object.entries(components).forEach(component => {
-    component[1].mixins = [myMixin]
-    // console.log(component[1])
-    Vue.component(component[0], component[1])
-  })
+  for (let [name, component] of Object.entries(components)) {
+    console.log('mixin', name)
+    component.component.mixins = [myMixin]
+    Vue.component(name, component.component)
+    component.name = name
+  }
 
   vm = new Vue({
     template: '<App/>',
@@ -136,6 +142,9 @@ function initApp() {
     vuetify: new Vuetify()
   })
   console.log(`geoJsonCache cache_size=${Object.keys(vm.$store.getters.geoJsonCache).length}`)
+
+  vm.$store.dispatch('setComponents', components)
+  console.log('components from store', vm.$store.getters.components)
 
   vm.$store.dispatch('setEssayHTML', undefined)
 
@@ -168,6 +177,7 @@ function initApp() {
   vm.$mount('#essay')
   if (window.app) {
     window.app.isLoaded = true
+    window.vm = vm
   }
 
   setViewport()

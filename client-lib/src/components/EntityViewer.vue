@@ -1,10 +1,5 @@
 <template>
-  <v-window
-    ref="entities"
-    v-model="activeWindow"
-    class="entity-window"
-    showArrows
-  > 
+  <v-window v-model="activeWindow" class="entity-window" showArrows> 
     <v-window-item
       transition="fade-transition"
       reverse-transition="fade-transition"
@@ -12,7 +7,7 @@
       :key="item.qid"
       :value="item.qid"
     >
-      <entity-infobox class="entity-infobox" :qid="item.qid"/>
+      <entity-infobox class="entity-infobox" :qid="item.qid"></entity-infobox>
     </v-window-item>
   </v-window>
 </template>

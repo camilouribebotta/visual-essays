@@ -25,7 +25,7 @@
           :items="groups[tab].items"
           :selected="activeTab"
           :max-width="viewerWidth"
-          :max-height="viewportHeight"
+          :max-height="viewerHeight"
           :initial-mode="mode"
         />
       </v-tab-item>
@@ -37,7 +37,7 @@
 
 <script>
   import { elemIdPath, itemsInElements, throttle } from '../utils'
-  const tabOrder = ['map', 'image', 'video']
+  const tabOrder = ['map', 'image', 'video', 'entity', 'network']
 
   export default {
     name: 'Viewer',
@@ -49,39 +49,49 @@
       hoverElemId: undefined,
       viewerWidth: 0,
       header: undefined,
+      contentContainer: 0,
       position: 'relative',
     }),
     computed: {
       viewportHeight() { return this.$store.getters.height },
       viewportWidth() { return this.$store.getters.width },
       headerSize() { return this.$store.getters.headerSize },
+      headerHeight() { return this.$store.getters.headerHeight },
+      footerHeight() { return this.$store.getters.footerHeight },
+      viewerHeight() { return this.$store.getters.height - this.headerHeight - this.footerHeight},
       primary() {return this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary') },
       primaryTab() { return this.primary ? this.primary.primary : undefined },
       mode() { return this.primary ? this.primary.mode : undefined },
       style() {
         return {
           display: this.$refs.viewer ? 'block' : 'none',
-          width: `${this.viewerWidth}px`
+          width: `${this.viewerWidth}px`,
+          height: `${this.viewerHeight}px`
         }
       }
     },
     mounted() {
-      this.header = document.getElementById('appbar')
-      if (this.header) {
-        document.getElementById('scrollableContent').addEventListener('scroll', throttle(this.mouseMove, 500))
+      this.contentContainer = document.getElementById('scrollableContent')
+      this.header = document.getElementById('header')
+      // this.contentContainer.addEventListener('scroll', throttle(this.mouseMove, 10))
+      /*if (this.header && this.contentContainer) {
+        this.contentContainer.addEventListener('scroll', throttle(this.mouseMove, 10))
         this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
       } else {
         this.$refs.viewer.$el.style.top = '0px'
         this.$refs.viewer.$el.style.position = 'fixed'
         this.position = 'fixed'
-      }
+      }*/
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
       this.$nextTick(() => this.init())
     },
     methods: {
       mouseMove(e) {
-        // console.log(this.header.clientHeight, this.headerSize)
-        if (this.$refs.viewer) {
+        if (!this.header) {
+          this.header = document.getElementById('header')
+        }
+        if (this.header && this.$refs.viewer) {
+          // console.log(this.header.clientHeight, this.headerSize)
           if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
             this.$refs.viewer.$el.style.top = `${this.headerSize}px`
             this.$refs.viewer.$el.style.position = 'fixed'
@@ -178,6 +188,43 @@
       }
     },
     watch: {
+      headerHeight: {
+        handler: function () {
+          // console.log('verticalViewer.watch.headerHeight', this.headerHeight)
+          if (!this.header) {
+            this.header = document.getElementById('header')
+          }
+          if (this.header && this.$refs.viewer) {
+            // console.log(this.header.clientHeight, this.headerSize)
+            if (this.header.clientHeight === this.headerSize && this.position === 'relative') {
+              this.$refs.viewer.$el.style.top = `${this.headerSize}px`
+              this.$refs.viewer.$el.style.position = 'fixed'
+              this.position = 'fixed'
+              // console.log(`position=${this.position} ${this.header.offsetHeight}`)
+            } else if (this.position === 'fixed' && this.header.offsetHeight > this.headerSize) {
+              this.$refs.viewer.$el.style.top = '0px'
+              this.$refs.viewer.$el.style.position = 'relative'
+              this.position = 'relative'
+            }
+          }
+          //if (this.header.offsetHeight !== this.$store.getters.headerOffset) {
+          //  this.$store.dispatch('setContentStartPos', this.header.offsetHeight)
+          //}
+        },
+        immediate: true
+      },
+      footerHeight: {
+        handler: function () {
+          // console.log('verticalViewer.watch.footerHeight', this.footerHeight)
+        },
+        immediate: true
+      },
+      viewerHeight: {
+        handler: function () {
+          // console.log('verticalViewer.watch.viewerHeight', this.viewerHeight)
+        },
+        immediate: true
+      },
       groups() {
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
@@ -221,17 +268,12 @@
 
 <style>
 
-  #viewer {
-    background-color: #f5f5f5;
-    /* position: relative; */
-    height: 100vh;
-    box-shadow: none;
-    border-radius: 0;
-    position:relative;
-    top: 0px;
+  #essay.vertical {
+    background-color: #eaeaea;
+    padding: 12px 0;
   }
 
-  .v-tabs-bar {
+  #essay.vertical .v-tabs-bar {
     border-radius: 0px;
     position: absolute;
     top: 43px;
@@ -240,18 +282,34 @@
     height: unset;
     background-color :white !important;
   }
+  
+  #essay.vertical .v-tabs-bar .v-tabs-bar__content {
+    flex-direction: column;
+  }
+
+</style>
+
+<style scoped>
+
+  #viewer {
+    background-color: #f5f5f5;
+    height: 100vh;
+    box-shadow: none;
+    border-radius: 0;
+    position: relative;
+    top: 0px;
+  }
 
   .v-tab {
     color: black !important;
-    padding:6px !important;
+    padding: 6px !important;
     min-width: 30px;
-   max-width: 30px;
+    max-width: 30px;
     font-size: 1.1em
    }
 
   .v-slide-group__wrapper {
     border-radius: 0px;
-    /*box-shadow: 0 1px 5px rgba(0,0,0,0.65);*/
   }
 
   .v-tab--active {
@@ -259,8 +317,5 @@
     background-color: #1D5BC2 !important;
   }
 
-  .v-tabs-bar .v-tabs-bar__content {
-    flex-direction: column;
-  }
 </style>
 

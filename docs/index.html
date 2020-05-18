@@ -9,119 +9,27 @@
   <script src="https://unpkg.com/http-vue-loader"></script>
   <style>
     [v-cloak] { display: none; }
-
-    #essay>p>a {
-      font-size: 18px;
-      font-weight: 500;
-    }
-
-    #essay ul {
-      padding-left: 50px;
-    }
-
-    .hero-title {
-      font-family: 'Georgia', serif;
-      max-width: 80vw;
-      font-size: 40px;
-      position: absolute;
-      top: calc(50% - 44px);
-      margin-left: 20px;
-    }
-
-    .hero-title span {
-      padding: 8px;
-      background-color: black;
-      -webkit-box-decoration-break: clone;
-      box-decoration-break: clone;
-      margin-bottom: 0 !important;
-    }
-
-    .v-application--is-ltr .v-toolbar__content>.v-btn.v-btn--icon:first-child, .v-application--is-ltr .v-toolbar__extension>.v-btn.v-btn--icon:first-child {
-      margin-left: -21px;
-    }
-
-   .v-toolbar__image .v-image, .v-toolbar__content, #appbar{
-      min-height: 104px!important;
-      font-size: 0.85em !important;
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 0;
-      padding: 0 24px 8px;
-      width: 100%;
-      box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.1);
-      border-top: 1px solid #d4d4d4;
-      background-color: white
-    }
-
-    .lingallery, .openseadragon-container, #cards-image-viewer  {
-      /* padding-left: 30px!important */
-    }
+    #contentContainer { max-width: none !important; width: 100%; height: 100%; margin: 0; padding: 0;}
   </style>
 </head>
 <body>
   <div id="app">
     <v-app>
 
-      <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
-        <v-list dense v-cloak>
-          <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)" v-if="menuItem.enabled">
-            <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
-            <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item @click="drawer = false; showMarkdown()">
-            <v-list-item-action><v-icon>mdi-code-tags</v-icon></v-list-item-action>
-            <v-list-item-content><v-list-item-title>View page markdown</v-list-item-title></v-list-item-content>
-          </v-list-item>
-          <v-divider></v-divider>
-          <v-list-item><v-list-item-content style="font-size:0.8em;margin-top:36px;">App version:{{appVersion}}</v-list-item-content></v-list-item>        
-          <v-list-item><v-list-item-content style="font-size:0.8em;">Lib version: {{libVersion}}</v-list-item-content></v-list-item>        
-        </v-list>
-      </v-navigation-drawer>
+      <component v-bind:is="isPhone && siteComponents.siteMobileHeader ? 'siteMobileHeader' : 'siteHeader'"
+        :site-config="siteConfig" :essay-config="essayConfig" :nav="nav" :progress="progress" 
+        :app-version="appVersion" :lib-version="libVersion"
+        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @header-height="setHeaderHeight"></component>
 
-      <v-card tile class="overflow-hidden">
-        <v-app-bar
-          id="appbar"
-          app dark prominent
-          elevate-on-scroll shrink-on-scroll
-          elevation="6"
-          :src="banner"
-          :height="bannerHeight"
-          scroll-target="#scrollableContent"
-          :scroll-threshold="scrollThreshold"
-        >
+      <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height - (footerHeight || 0)}px;`">
+        <v-container id="contentContainer" :style="`margin-top: ${essayTopMargin}px;`">
+          <v-layout><v-flex><div id="content" v-html="html"></div></v-flex></v-layout>
+        </v-container>
+      </v-sheet>
 
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <component v-bind:is="isPhone && siteComponents.siteMobileFooter ? 'siteMobileFooter' : 'siteFooter'" 
+        :site-config="siteConfig" @footer-height="setFooterHeight"></component>
 
-          <template v-if="customComponents.header">
-            <essay-header :site-config="siteConfig" :essay-config="essayConfig" :progress="progress"></essay-header>
-          </template>
-          <template v-else>
-            <div v-cloak class="hero-title" >
-              <span v-html="title"></span>
-            </div>
-            <!-- <v-toolbar-title v-else v-cloak v-html="title"></v-toolbar-title> -->
-          </template>
-
-        </v-app-bar>
-
-        <v-sheet ref="scrollableContent" id="scrollableContent" class="overflow-y-auto" :style="`height:${height - footerHeight}px;`">
-          <v-container id="contentContainer" ref="contentContainer" :style="`!important; margin-top: ${essayTopMargin}px; height:100%;`">
-            <v-layout>
-              <v-flex><div id="content" ref="content" v-html="html"></div></v-flex>
-            </v-layout>
-          </v-container>
-        </v-sheet>
-
-        <!-- footer -->
-        <v-footer id="footer" v-if="customComponents.footer" v-mutate="onFooterMutate" v-cloak app color="#fff" elevation="6">
-          <site-footer></site-footer>
-        </v-footer>
-
-      </v-card>
-      <markdown-viewer :show="markdown !== undefined" :markdown="markdown" v-on:close-viewer="markdown = undefined"/>
     </v-app>
   </div>
 
@@ -130,14 +38,10 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.4/mobile-detect.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script>
 
   <script>
-  String.prototype.capitalize = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
-  String.prototype.titleize = function() {
-    var string_array = this.replace(/-/, ' ').split(' ')
-    string_array = string_array.map(function(str) { return str.capitalize() })
-    return string_array.join(' ')
-  }
 
   let defaults = {
     'jstor-labs.github.io': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
@@ -174,30 +78,31 @@
     repo = path[1]
     file = path[2]
   }
-  let isMobile = false
-  try {
-    isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
-  } catch (err) {}
-  const debug = hostname === 'jstor-labs.github.io'
-  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isMobile=${isMobile}`)
+
+  const md = new MobileDetect(window.navigator.userAgent)
+  let isPhone = md.phone() !== null
+  let isTouchDevice = md.phone() !== null || md.tablet()
+
+  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
 
   const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
   fetch(configUrl)
     .then(resp => {return resp.ok ? resp.json() : {}})
     .then(siteConfig => {
       console.log('siteConfig', siteConfig)
-      const customComponents = siteConfig ? siteConfig.customComponents || {} : {}
+      const siteComponents = siteConfig ? siteConfig.components || {} : {}
       
       window.app = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
         components: {
-          'essayHeader': customComponents.header ? httpVueLoader(customComponents.header) : undefined,
-          'siteFooter': customComponents.footer ? httpVueLoader(customComponents.footer) : undefined,
+          'siteHeader': siteComponents.siteHeader ? httpVueLoader(siteComponents.siteHeader.src) : undefined,
+          'siteMobileHeader': siteComponents.siteMobileHeader ? httpVueLoader(siteComponents.siteMobileHeader.src) : undefined,
+          'siteFooter': siteComponents.siteFooter ? httpVueLoader(siteComponents.siteFooter.src) : undefined,
+          'siteMobileFooter': siteComponents.siteMobileFooter ? httpVueLoader(siteComponents.siteMobileFooter.src) : undefined,
           'markdownViewer': httpVueLoader('https://JSTOR-Labs.github.io/visual-essays/components/MarkdownViewer.vue')
         },
         data: () => ({
-          drawer: false,
           nav: [
             { title: 'Home', icon: 'mdi-home', enabled: true },
             { file: 'about', title: 'About', icon: 'mdi-information', enabled: false },
@@ -207,70 +112,66 @@
           ],
           bannerHeight: 400,
           height: 0,
-          footerHeight: 0,
           width: 0,
+          headerHeight: undefined,
+          footerHeight: undefined,
           html: undefined,
-          rtime: undefined,
-          timeout: false,
           isLoaded: false,
-          delta: 200,
           siteConfig,
-          customComponents,
+          siteComponents,
+          essayConfig: {},
           essayCache: {},
+          progress: 0,
           appVersion: '0.4.0',
           libVersion: undefined,
-          essayConfig: {},
-          progress: 1,
           current: undefined,
           markdownViewer: undefined,
-          markdown: undefined
+          markdown: undefined,
+          isPhone
         }),
         computed: {
-          banner() { return this.essayConfig.banner || this.siteConfig.banner },
-          title() { return this.essayConfig.title | this.siteConfig.title || repo ? repo.titleize() : '' },
-          essayTopMargin() { return this.bannerHeight },
-          scrollThreshold() { return this.isEssay ? 400 : 350 },
-          isEssay() { return this.essayConfig !== undefined },
-          showFooter() { return this.customComponents.siteFooter !== undefined }
+          essayTopMargin() { return this.essayConfig.bannerHeight || this.siteConfig.bannerHeight || 400 }
         },
         mounted() {
           this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
           this.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-          if (!isMobile) {
+          if (!isTouchDevice) {
             new ResizeObserver(entries => {
               entries.forEach(e => { this.height = e.contentRect.height; this.width = e.contentRect.width })
             }).observe(document.getElementById('content'))
           }
-          document.getElementById('appbar').addEventListener('wheel', this.throttle(this.scrollContent, 20))
           window.onpopstate = (e) => { this.loadEssay(e.state.file, true) }
           this.loadEssay(file)
           // Find and preload navigation pages
           this.nav.filter(navItem => !navItem.enabled)
           .forEach(navItem => {
             this.cachingFetch(navItem.file)
-            .then(html => {
-              if (html) {
-                this.nav.map(item => item.enabled = item.enabled || item.file == navItem.file)
-              }
-            })
+            .then(html => { if (html) {this.nav.map(item => item.enabled = item.enabled || item.file == navItem.file)} })
           })
         },
+        updated() {
+          this.sync()
+        },
         methods: {
-          throttle(callback, interval) {
-            let enableCall = true
-            return function(...args) {
-              if (!enableCall) return
-              enableCall = false
-              callback.apply(this, args)
-              setTimeout(() => enableCall = true, interval)
+          sync() {
+            if (window.vm) {
+              if (this.headerHeight !== undefined && this.headerHeight !== window.vm.$store.getters.headerHeight) {
+                window.vm.$store.dispatch('setHeaderHeight', this.headerHeight)
+              }
+              if (this.footerHeight !== undefined && this.footerHeight !== window.vm.$store.getters.footerHeight) {
+                window.vm.$store.dispatch('setFooterHeight', this.footerHeight)
+              }
             }
           },
-          scrollContent(e) {
-            const wheelDelta = e.wheelDelta
-            this.$refs.scrollableContent.$el.scrollTo(0, this.$refs.scrollableContent.$el.scrollTop - wheelDelta)
+          setHeaderHeight(height) {
+            this.headerHeight = height
+            this.sync()
+          },
+          setFooterHeight(height) {
+            this.footerHeight = height
+            this.sync()
           },
           menuItemClicked(file) {
-            this.drawer = false
             this.loadEssay(file)
           },
           cachingFetch(file, raw) {
@@ -305,9 +206,6 @@
               : `${service}/markdown-viewer` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (this.current ? `/${this.current}` : '')
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1000,height=1200,scrollbars=yes,status=yes`)
-          },
-          onFooterMutate(mutations) {
-            mutations.forEach(m => this.footerHeight = m.target.clientHeight)
           }
         },
         watch: {
@@ -354,16 +252,7 @@
     })
     function parseUrl (href) {
       const match = href.match(/^(https?)\:\/\/(([^:\/?#]*)(?:\:([0-9]+))?)(\/[^?#]*)(\?[^#]*|)(#.*|)$/)
-      return match && {
-        protocol: match[1],
-        host: match[2],
-        hostname: match[3],
-        origin: `${match[1]}://${match[2]}`,
-        port: match[4],
-        pathname: match[5],
-        search: match[6],
-        hash: match[7]
-      }
+      return match && {protocol: match[1], host: match[2], hostname: match[3], origin: `${match[1]}://${match[2]}`, port: match[4], pathname: match[5], search: match[6], hash: match[7]}
     }
   </script>
 </body>

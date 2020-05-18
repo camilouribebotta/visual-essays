@@ -1,5 +1,5 @@
 <template>
-  <div ref="essay" id="essay" v-html="html"/>
+  <div ref="essay" id="essay" :class="layout[0] === 'v' ? 'vertical' : 'horizontal'" v-html="html"/>
 </template>
 
 <script>
@@ -23,7 +23,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setProgress', 0)
-    groupItems(this.allItems)
+    groupItems(this.allItems, this.$store.getters.components)
     this.$nextTick(() => this.init())
     if (window.location.hash) {
       this.scrollTo(window.location.hash.slice(1))
@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     init() {
-      // console.log('init')
       this.findContent()
       this.linkTaggedItems()
       // this.addFootnotesHover()
@@ -59,10 +58,8 @@ export default {
           this.setActiveElements(para.id)
         })
         .on('leave', (e) => {
-          //if (e.scrollDirection === 'REVERSE' || e.scrollDirection === 'PAUSED') {
-            // console.log(`leave=${this.paragraphs[para.id].prior}`)
-            this.setActiveElements(this.paragraphs[para.id].prior)
-          //}
+          // console.log(`leave=${this.paragraphs[para.id].prior}`)
+          this.setActiveElements(this.paragraphs[para.id].prior)
         })
         if (this.debug) {
           scene.addIndicators({indent: this.viewportWidth/2})
@@ -73,8 +70,6 @@ export default {
       this.setActiveElements(first)
     },
     setActiveElements(elemId) {
-      //console.log('SCENES ', this.scenes);
-      //console.log('PARAGRAPHS ', this.paragraphs)
       if (elemId) {
         const newActiveElements = elemIdPath(elemId)
         if (newActiveElements.length > 0 && !eqSet(new Set(this.activeElements), new Set(newActiveElements))) {
@@ -197,19 +192,8 @@ export default {
 }
 </script>
 
-<style >
+<style>
 
-  /*
-  #essay {
-    padding-top: 32px;
-    padding-right: 32px;
-  }
-  */
-
-  .vtl #essay  {
-    background-color: #dadada;
-    padding-right: 0;
-  }
 
  #essay h1, #essay h2, #essay h3, #essay h4, #essay h5, #essay h6 {
     padding-left: 6px;

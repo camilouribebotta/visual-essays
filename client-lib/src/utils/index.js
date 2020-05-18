@@ -99,23 +99,24 @@ export function itemsInElements(elemIds, items) {
   return selected
 }
 
-export function groupItems(items) {
+export function groupItems(items, components) {
+  console.log('groupItems', components)
   const exclude = ['essay']
   const groups = {}
   const maps = items.filter(item => item.type === 'map')
-  // let selectedMap = maps.length > 0 ? { ...maps[maps.length-1], ...{layers:{mapwarper:[], geojson:[]}} } : undefined
   let selectedMap = maps.length > 0 ? { ...maps[0], ...{layers: {mapwarper:[], geojson:[]}} } : undefined
   if (selectedMap) {
-    groups.map = {component: 'gmap', label: 'Map', icon: 'fa-map-marker-alt', items: [selectedMap]}
+    groups.map = { ...components.map, ...{ items: [selectedMap] } }
   }
   items
     .filter(item => !exclude.includes(item.type))
     .forEach(item => {
       if (item.type === 'entity') {
-        if (!groups[item.category]) { groups[item.category] = {component: 'entity', label: `${item.category}s`, items: []} }
+        if (!groups[item.category]) {
+          groups[item.category] = { ...components[item.category], ...{ items: [] } }
+        }
         groups[item.category].items.push(item)
       } else if (item.type === 'map-layer') {
-        // console.log('map-layer', item, selectedMap)
         if (selectedMap) {
           if (item['mapwarper-id']) {
             selectedMap.layers.mapwarper.push(item)
@@ -126,16 +127,18 @@ export function groupItems(items) {
       } else {
         const groupName = item.type
         if (!groups[groupName]) { 
-          groups[groupName] = {component: `g${item.type}`, label: `${item.type}s`, items: []}
           if (item.type === 'image') {
-            groups[groupName]['icon'] = 'fa-file-image'
+            groups[groupName] = { ...components['image'], ...{ items: [] } }
           } else if (item.type === 'video') {
-            groups[groupName]['icon'] = 'fa-video'
+            groups[groupName] = { ...components['video'], ...{ items: [] } }
+          } else {
+            groups[groupName] = { ...components[groupName], ...{ items: [] } }
           }
         }
         groups[groupName].items.push(item)
       }
     })
+  console.log(groups)
   return groups
 }
 

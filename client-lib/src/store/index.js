@@ -6,12 +6,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    components: {},
     essayHTML: undefined,
     essayConfig: undefined,
     isMobile: false,
     layout: 'vtl',
     showBanner: true,
     headerSize: 96,
+    headerHeight: 0,
+    footerHeight: 0,
     contentStartPos: 0,
     triggerOffset: 300,
     debug: false,
@@ -28,12 +31,20 @@ export default new Vuex.Store({
     geoJsonCache: {}
   },
   mutations: {
+    addComponent (state, payload) { 
+      const components = { ...state.components }
+      components[payload.name] = payload.component
+      state.components = components
+    },
+    setComponents (state, components) { state.components = components },
     setEssayHTML (state, html) { state.essayHTML = html },
     setEssayConfig (state, config) { state.essayConfig = config },
     setIsMobile (state, ismobile) { state.ismobile = ismobile },
     setLayout (state, layout) { state.layout = layout },
     setShowBanner (state, showBanner) { state.showBanner = showBanner},
     setHeaderSize (state, headerSize) { state.headerSize = headerSize},
+    setHeaderHeight (state, headerHeight) { state.headerHeight = headerHeight},
+    setFooterHeight (state, footerHeight) { state.footerHeight = footerHeight},
     setContentStartPos (state, pos) { state.contentStartPos = pos },
     setTriggerOffset (state, triggerOffset) { state.triggerOffset = triggerOffset },
     setContext (state, context) { state.context = context },
@@ -65,12 +76,16 @@ export default new Vuex.Store({
     addToGeoJsonCache (state, geoJson) { state.geoJsonCache = { ...state.geoJsonCache, ...geoJson} }
   },
   actions: {
+    addComponent: ({ commit }, payload) => commit('addComponent', payload),
+    setComponents: ({ commit }, components) => commit('setComponents', components),
     setEssayHTML: ({ commit }, html) => commit('setEssayHTML', html),
     setEssayConfig: ({ commit }, config) => commit('setEssayConfig', config),
     setIsMobile: ({ commit }, isMobile) => commit('setIsMobile', isMobile),
     setLayout: ({ commit }, layout) => commit('setLayout', layout),
     setShowBanner: ({ commit }, showBanner) => commit('setShowBanner', showBanner),
     setHeaderSize: ({ commit }, headerSize) => commit('setHeaderSize', headerSize),
+    setHeaderHeight: ({ commit }, headerHeight) => commit('setHeaderHeight', headerHeight),
+    setFooterHeight: ({ commit }, footerHeight) => commit('setFooterHeight', footerHeight),
     setContentStartPos: ({ commit }, pos) => commit('setContentStartPos', pos),
     setTriggerOffset: ({ commit }, triggerOffset) => commit('setTriggerOffset', triggerOffset),
     setContext: ({ commit }, context) => commit('setContext', context),
@@ -86,10 +101,13 @@ export default new Vuex.Store({
     addToGeoJsonCache: ({ commit }, geoJson) => commit('addToGeoJsonCache', geoJson)
   },
   getters: {
+    components: state => state.components,
     layout: state => state.layout,
     isMobile: state => state.isMobile,
     showBanner: state => state.showBanner,
     headerSize: state => state.headerSize,
+    headerHeight: state => state.headerHeight,
+    footerHeight: state => state.footerHeight,
     contentStartPos: state => state.contentStartPos,
     triggerOffset: state => state.triggerOffset,
     essayHTML: state => state.essayHTML,

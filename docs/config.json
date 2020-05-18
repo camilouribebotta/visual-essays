@@ -1,8 +1,20 @@
 {
     "title": "Visual Essays",
     "banner": "/images/header.jpg",
-    "customComponents": {
-        "header": "/components/Header.vue",
-        "footer": "/components/Footer.vue"
+    "bannerHeight": 400,
+    "components": {
+        "siteHeader": { "src": "/components/Header.vue" },
+        "siteMobileHeader": { "src": "/components/MobileHeader.vue" },
+        "siteFooter": { "src": "/components/Footer.vue" },
+        "siteMobileFooter": { "src": "/components/MobileFooter.vue" },
+        "network": { "src": "/components/Network.vue", "icon": "fa-chart-network", "label": "Network" },
+        "map": { "src": "/components/MapViewer.vue", "icon": "fa-map-marker-alt", "label": "Map" },
+        "image": { "src": "/components/ImageViewer/index.vue", "icon": "fa-file-image", "label": "Images" },
+        "galleryImageViewer": { "src": "/components/ImageViewer/GalleryImageViewer.vue" },
+        "cardsImageViewer": { "src": "/components/ImageViewer/CardsImageViewer.vue" },
+        "hiresImageViewer": { "src": "/components/ImageViewer/HiresImageViewer.vue" },
+        "video": { "src": "/components/VideoViewer.vue", "icon": "fa-video", "label": "Videos" },
+        "entityViewer": { "src": "/components/EntityViewer.vue", "icon": "fa-brackets-curly", "label": "Entities" },
+        "entityInfobox": { "src": "/components/EntityInfobox.vue" }
     }
 }

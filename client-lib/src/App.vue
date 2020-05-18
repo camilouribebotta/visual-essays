@@ -1,35 +1,16 @@
 <template>
   <v-app id="visual-essay" :class="path">
 
-    <v-card 
-      v-if="showBanner && banner"
-      tile class="overflow-hidden"
-    >
-      
-      <v-app-bar
-        id="appbar"
-        app dark prominent
-        elevate-on-scroll shrink-on-scroll
-        elevation="5"
-        :src="banner"
-        :height="bannerHeight"
-        scroll-target="#scrollableContent"
-        :scroll-threshold="scrollThreshold"
-      >
-
-        <essay-header v-if="essayConfig" :essay-config="essayConfig" :progress="progress"></essay-header>
-
-      </v-app-bar>
-
-      <v-sheet id="scrollableContent" ref="scrollableContent" class="overflow-y-auto">
-        <v-container ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px;border:1px solid black;`">
+    <template v-if="showBanner && essayConfig && essayConfig.banner">
+      <essay-header :essay-config="essayConfig" :progress="progress" @header-height="setHeaderHeight"></essay-header>
+      <v-sheet id="scrollableContent" class="overflow-y-auto">
+        <v-container :style="`margin-top:${essayTopMargin}px; height:${height}px;`">
           <component v-bind:is="layout"></component>
         </v-container>
       </v-sheet>
+    </template>
 
-    </v-card>
-
-    <v-container v-else ref="contentContainer" :style="`margin-top: ${essayTopMargin}px; height:${height}px`">
+    <v-container v-else :style="`margin-top:${essayTopMargin}px; height:${height}px`">
       <component v-bind:is="layout"></component>
     </v-container>
 
@@ -40,8 +21,7 @@
 <script>
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
-import EssayHeader from './components/EssayHeader'
-import { isMobile, throttle } from './utils'
+import { isMobile } from './utils'
 
 export default {
   name: 'app',
@@ -54,45 +34,61 @@ export default {
     'ho': HorizontalLayout,
     'vertical': VerticalLayout,
     'vtl': VerticalLayout,
-    'vtr': VerticalLayout,
-    EssayHeader
+    'vtr': VerticalLayout
   },
   data: () => ({
-    layout: 'vtl',
-    bannerHeight: 400,
-    scrollThreshold: 400,
-    extended: false,
+    layout: undefined,
+    bannerHeight: undefined
   }),
   computed: {
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
     essayConfig() { return this.$store.getters.essayConfig },
-    banner() { return this.essayConfig ? this.essayConfig.banner : undefined },
     showBanner() { return this.$store.getters.showBanner },
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 },
-    title() { return 'Title' },
-    progress() { return this.$store.getters.progress }
-  },
-  created() {
-    this.$store.dispatch('setHeaderSize', 104)
+    progress() { return this.$store.getters.progress },
+    headerHeight() { return this.$store.getters.headerHeight },
+    footerHeight() { return this.$store.getters.footerHeight }
   },
   mounted() {
-    // if (this.$store.getters.debug) alert(`App: layout=${this.$store.getters.layout}`)
-    document.getElementById('appbar').addEventListener('wheel', throttle(this.scrollContent, 20))
+    this.layout = this.$store.getters.layout | 'hc'
   },
   methods: {
-    scrollContent(e) {
-      const wheelDelta = e.wheelDelta
-      this.$refs.scrollableContent.$el.scrollTo(0, this.$refs.scrollableContent.$el.scrollTop - wheelDelta)
+    setHeaderHeight(headerHeight) {
+        this.$store.dispatch('setHeaderHeight', headerHeight)
+    },
+    setFooterHeight(footerHeight) {
+      this.$store.dispatch('setFooterHeight', footerHeight)
+    }
+  },
+  updated() {
+    if (!this.bannerHeight) {
+      const header = document.getElementById('header')
+      if (header) {
+        this.$store.dispatch('setHeaderSize', parseInt(header.style.minHeight.slice(0, header.style.minHeight.length - 2)))
+        this.bannerHeight = parseInt(header.style.height.slice(0, header.style.height.length - 2))
+      }
     }
   },
   watch: {
+    headerHeight: {
+      handler: function () {
+        // console.log(`App.watch.headerHeight=${this.headerHeight}`)
+      },
+      immediate: true
+    },
+    footerHeight: {
+      handler: function () {
+        // console.log(`App.watch.footerHeight=${this.footerHeight}`)
+      },
+      immediate: true
+    },
     viewportWidth: {
       handler: function (width) {
         if (width > 0) {
           this.layout = isMobile() ? 'hc' : this.$store.getters.layout || 'vtl'
         }     
-        console.log(`width=${width} layout=${this.$store.getters.layout}`)
+        // console.log(`width=${width} layout=${this.$store.getters.layout}`)
       },
       immediate: true
     }
@@ -100,7 +96,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+  [v-cloak] { display: none; }
 
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -109,6 +107,7 @@ export default {
     text-align: left;
     color: #2c3e50;
   }
+
   .v-application--wrap {
     min-height: 0 !important;
     background-color: #fff;
@@ -122,63 +121,9 @@ export default {
     max-width: none !important;
   }
 
-  #author-name {
-    font-size: 1.2rem;
-    margin: 0;
-  }
-
   pre {
     margin-left: 36px;
     margin-bottom: 12px;
-  }
-
-  .v-toolbar, .v-footer, .v-navigation-drawer {
-    z-index: 200 !important;
-  }
-
-  .v-toolbar__extension {
-    padding: 0 !important;
-    /* height: 100px !important; */
-    background: white;
-    color: black;
-  }
-
-  .v-toolbar__content {
-    position: relative;
-  }
-
-  .v-app-bar__nav-icon {
-    z-index: 20;
-    margin-left: -22px!important;
-    margin-top: 8px;
-  }
-
-  .v-toolbar__title {
-    background-color: rgba(0, 0, 0, .75);
-    width: 120%;
-    margin-left: -42px;
-    margin-right: -20px;
-    padding: 8px 36px!important;
-    position: relative;
-    top: 4px;
-  }
-
-  .v-toolbar__image .v-image, .v-toolbar__content, #appbar{
-    min-height: 104px!important;
-  }
-
-  #prog {
-  height: 7px;
-    margin-left: -36px;
-    width: calc(100% + 72px);
-    margin-right: -36px;
-    position: relative;
-    top: 3px;
-  }
-
-  .v-application .v-progress-linear__background.primary, .v-application .v-progress-linear__determinate.primary {
-    background-color: #71CB2B!important;
-    border-color: #71CB2B!important;
   }
 
 </style>

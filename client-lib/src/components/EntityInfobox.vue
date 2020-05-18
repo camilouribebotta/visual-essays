@@ -1,22 +1,20 @@
 <template>
   <div class="entity-infobox">
-    <div class="entity-image-holder" v-if="imageSrc" :style="{backgroundImage: 'url(' + imageSrc + ')'}">
-    </div>
-
-    <h3 class="entity-title" primary-title v-html="title"/>
+    <div class="entity-image-holder" v-if="imageSrc" :style="{backgroundImage: 'url(' + imageSrc + ')'}"></div>
+    <h3 class="entity-title" primary-title v-html="title"></h3>
     <div class="subtitle">{{ description }}</div>
-    <div class="entity-description" v-html="html"/>
+    <div class="entity-description" v-html="html"></div>
     <a :href="entity.wikipedia_page" target="_blank" >Source</a>
   </div>
 </template>
 
 <script>
-import { get_entity } from '../api'
 
 export default {
   name: 'entity-infobox',
   props: {
-    qid: { type: String, default: undefined }
+    qid: { type: String, default: undefined },
+    apiBaseURL: { type: String, default: 'https://us-central1-visual-essay.cloudfunctions.net' }
   },
   data: () => ({
     requested: new Set()
@@ -32,14 +30,17 @@ export default {
     context() { return this.$store.getters.context }
   },
   mounted() {
-    console.log(this.entity.wikipedia_page);
     this.getSummaryInfo()
   },
   methods: {
+    getEntity(qid, context) {
+      const url = `{this.apiBaseURL}/entity/${qid}` + context ? `?context={context}` : ''
+      return fetch(url).then(resp => resp.json())
+    },
     getSummaryInfo() {
       if (this.entity.qid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.qid)) {
         this.requested.add(this.entity.qid)
-        get_entity(this.entity.qid, this.context)
+        this.getEntity(this.entity.qid, this.context)
           .then((updated) => {
             if (!updated['summary info']) {
               updated['summary info'] = null
@@ -51,12 +52,6 @@ export default {
     }
   },
   watch: {
-    qid: {
-      handler: function (value, prior) {
-        console.log('EntityInfobox.watch.qid', value)
-      },
-      immediate: true
-    },
     entity() {
       this.getSummaryInfo()
     }
@@ -95,7 +90,5 @@ export default {
     margin-bottom: 16px;
     font-size: 16px;
   }
-
-
 
 </style>

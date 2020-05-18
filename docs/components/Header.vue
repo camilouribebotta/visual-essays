@@ -1,39 +1,89 @@
 <template>
-  <v-toolbar-title v-cloak style="min-height: 104px;">
-    <v-container class="summary">
-      <v-row style="height:100%;" no-gutters>
+  <v-card tile class="overflow-hidden">
+    
+    <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
+      <v-list dense v-cloak>
+        <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)" v-if="menuItem.enabled">
+          <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item @click="drawer = false; showMarkdown()">
+          <v-list-item-action><v-icon>mdi-code-tags</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>View page markdown</v-list-item-title></v-list-item-content>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item><v-list-item-content style="font-size:0.8em;margin-top:36px;">App version: {{appVersion}}</v-list-item-content></v-list-item>        
+        <v-list-item><v-list-item-content style="font-size:0.8em;">Lib version: {{libVersion}}</v-list-item-content></v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-        <v-col cols="12" sm="9">
-          <h3>{{title}}</h3>
-          <p id="author-name" v-html="author"></p>
-        </v-col>
+    <v-app-bar
+      id="header"
+      v-mutate.attr="onMutate"
+      app dark prominent
+      elevate-on-scroll shrink-on-scroll
+      elevation="6"
+      :src="banner"
+      :height="bannerHeight"
+      scroll-target="#scrollableContent"
+      :scroll-threshold="bannerHeight * 0.9"
+      style="min-height: 104px;"
+    >
 
-        <v-col class="align-end" cols="12" sm="3" style="text-align: right;">
-          <div v-if="hasStats">
-            <br/>
-            <b>This visual essay contains:</b> <br/>
-            <div v-if="numMaps">{{numMaps}} interactive maps &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i></div>
-            <div v-if="numImages">{{numImages}} images &nbsp;&nbsp;<i class="fal fa-map-marked-alt"></i></div>
-            <div v-if="numSpecimens">{{numSpecimens}} plant specimens &nbsp;&nbsp;<i class="fal fa-file-image"></i></div>
-            <div v-if="numPrimarySources">{{numPrimarySources}} primary source materials &nbsp;&nbsp;<i class="fal fa-book-alt"></i></div>
-          </div>
-        </v-col>
+      <v-app-bar-nav-icon large @click.stop="drawer = !drawer" style="padding:0; margin:6px 0 0 12px; z-index:100; background:rgba(0, 0, 0, .60);"></v-app-bar-nav-icon>
 
-      </v-row>
-      <v-row><v-progress-linear v-model="progress" id="prog" height="7"></v-progress-linear></v-row>
-    </v-container>
-  </v-toolbar-title>
+      <v-toolbar-title v-cloak>
+        
+        <v-container>
+          
+          <v-row style="margin-left:60px; height:100%;" no-gutters>
+
+            <v-col cols="12" sm="9">
+              <h3>{{title}}</h3>
+              <p class="author" v-html="author"></p>
+            </v-col>
+
+            <v-col class="align-end" cols="12" sm="3" style="margin-top:6px; text-align:right;">
+              <div v-if="hasStats" class="stats">
+                <b>This visual essay contains:</b> <br/>
+                <div v-if="numMaps">{{numMaps}} interactive maps &nbsp;&nbsp;<i class="fal fa-map-marker-alt"></i></div>
+                <div v-if="numImages">{{numImages}} images &nbsp;&nbsp;<i class="fal fa-map-marked-alt"></i></div>
+                <div v-if="numSpecimens">{{numSpecimens}} plant specimens &nbsp;&nbsp;<i class="fal fa-file-image"></i></div>
+                <div v-if="numPrimarySources">{{numPrimarySources}} primary source materials &nbsp;&nbsp;<i class="fal fa-book-alt"></i></div>
+              </div>
+            </v-col>
+
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12" style="padding:3px; margin:0;">
+            <v-progress-linear v-model="progress" height="7" color="#70CB2B"></v-progress-linear>
+            </v-col>
+          </v-row>
+
+        </v-container>
+      </v-toolbar-title>
+    </v-app-bar>
+  </v-card>
 </template>
 
 <script>
   module.exports = {
     props: {
-      essayConfig: Object,
-      siteConfig: Object,
-      progress: Number
+      essayConfig: { type: Object, default: function(){ return {}} },
+      siteConfig: { type: Object, default: function(){ return {}} },
+      progress: { type: Number, default: 0 },
+      nav: { type: Array, default: function(){ return []} },
+      appVersion: { type: String },
+      libVersion: { type: String }
     },    
-    data: () => ({}),
+    data: () => ({
+      drawer: false,
+      lastHeight: undefined 
+    }),
     computed: {
+      banner() { return this.essayConfig.banner || this.siteConfig.banner },
+      bannerHeight() { return this.essayConfig.bannerHeight || this.siteConfig.bannerHeight || 400 },
       title() { return  this.essayConfig.title || this.siteConfig.title },
       author() { return this.essayConfig.author || '&nbsp;' },
       numMaps() { return this.essayConfig['num-maps'] },
@@ -41,26 +91,92 @@
       numSpecimens() { return this.essayConfig['num-specimens']},
       numPrimarySources() { return this.essayConfig['num-primary-sources'] },
       hasStats() { return this.numMaps !== undefined || this.numImages !== undefined || this.numSpecimens !== undefined || this.numPrimarySources !== undefined }
+    },
+    mounted() {
+      document.getElementById('header').addEventListener('wheel', this.throttle(this.scrollContent, 40))
+      console.log('Header', this)
+    },
+    methods: {
+      onMutate(mutations) {
+        const mutation = mutations[mutations.length - 1]
+        if (mutation.target && mutation.target.clientHeight !== this.lastHeight) {
+          this.$emit('header-height', mutation.target.clientHeight)
+          this.lastHeight = mutation.target.clientHeight
+        }
+      },
+      menuItemClicked(file) {
+        this.drawer = false
+        this.$emit('menu-item-clicked', file)
+      },
+      showMarkdown() {
+        this.$emit('show-markdown')
+      },
+      throttle(callback, interval) {
+        let enableCall = true
+        return function(...args) {
+          if (!enableCall) return
+          enableCall = false
+          callback.apply(this, args)
+          setTimeout(() => enableCall = true, interval)
+        }
+      },
+      scrollContent(e) {
+        const wheelDelta = e.wheelDelta
+        const scrollableContent = document.getElementById('scrollableContent')
+        if (scrollableContent) {
+          scrollableContent.scrollTo(0, scrollableContent.scrollTop - wheelDelta)
+        }
+      }
     }
   }
 </script>
 
-<style>
+<style scoped>
+
   [v-cloak] { display: none; }
 
-  header {
-    font-size: 0.8rem !important;
+  #header {
+    z-index: 200;
   }
-  .summary {
-    line-height: 1.1rem;
+
+  .v-toolbar__content {
+    padding: 0;
   }
-  .summary h3 {
-    font-size: 2.0rem !important;
-    margin: 32px 0 0 0 ! important;
-    padding-left: 0;
+
+  .v-toolbar__title {
+    width: 100%;
+    color: white;
+    background-color: rgba(0, 0, 0, .75);
+    padding: 0 !important;
+    position: absolute;
+    top: calc(100% - 104px);
+    min-height: 104px;
   }
-  #author-name {
-    font-size: 1.0rem;
-    margin: 6px 0;
+
+  .v-toolbar__title h3 {
+    font-size: 2.0rem;
+    margin: 12px 0 6px 12px;
   }
+
+  .v-toolbar__title .container {
+    padding: 0;
+    max-width: none;
+  }
+
+  .stats {
+    font-size: 1.0rem !important;
+    line-height: 1.2rem !important;
+    margin-right: 20px !important;
+
+  }
+
+  .v-toolbar__image .v-image, .v-toolbar__content, #header {
+    min-height: 104px!important;
+  }
+
+  .author {
+    font-size: 1.25rem;
+    margin: 6px 12px;
+  }
+
 </style>

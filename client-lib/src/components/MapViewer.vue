@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 const baseLayers = {
   'OpenStreetMap': ['https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -60,13 +59,12 @@ export default {
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
     isSelected() { return this.selected === 'map' },
-    width() { return Math.min(this.viewport.width, this.maxWidth)}
+    width() { return Math.min(this.viewport.width, this.maxWidth)},
   },
   mounted() {
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
-
     createBaseMap() {
       const t = performance.now()
       if (this.map) {
@@ -116,17 +114,17 @@ export default {
       // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
-        cacheObj[def.id] = axios.get(def.url || def.geojson)
+        cacheObj[def.id] = fetch(def.url || def.geojson)
         this.$store.dispatch('addToGeoJsonCache', cacheObj)
       }
       return this.$store.getters.geoJsonCache[def.id]
     },
     loadGeojson(def) {
-      this.cachedGeojson(def)
-      .then(resp => {
+      this.cachedGeojson(def).then(resp => resp.json())
+      .then(data => {
         const self = this
         let numFeatureLabels = 0
-        let geojson = L.geoJson(resp.data, {
+        let geojson = L.geoJson(data, {
           // Pop Up
           onEachFeature: function(feature, layer) {
             // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
@@ -407,6 +405,12 @@ export default {
         this.updateLayers()
       },
       immediate: false
+    },
+    viewport: {
+      handler: function (vp) {
+        console.log(`MapViewer.watch.viewport: height=${vp.height} width=${vp.width}`)
+      },
+      immediate: true
     },
     mapDef: {
       handler: function (mapDef, prior) {

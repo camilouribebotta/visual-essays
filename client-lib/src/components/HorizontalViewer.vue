@@ -297,6 +297,15 @@
   }
 </script>
 
+<style>
+
+  #essay.horizontal {
+    background-color: white;
+    padding: 0 32px;
+  }
+
+</style>
+
 <style scoped>
 
   .v-tabs-bar {

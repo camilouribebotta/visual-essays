@@ -372,6 +372,7 @@ def config(acct=None, repo=None):
         if use_local:
             baseurl = 'http://localhost:5000'     
             config_path = f'{DOCS_ROOT}/docs/config.json'
+            logger.info(f'{config_path} {os.path.exists(config_path)}')
             if os.path.exists(config_path):
                 _config = json.load(open(config_path, 'r'))
         else:
@@ -380,13 +381,14 @@ def config(acct=None, repo=None):
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
+            logger.info(_config)
             for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
                     _config[attr] = f'{baseurl}/{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
-            for comp in _config.get('customComponents', {}):
-                comp_url = _config['customComponents'][comp]
+            for comp in _config.get('components', {}):
+                comp_url = _config['components'][comp]['src']
                 if not comp_url.startswith('http'):
-                    _config['customComponents'][comp] = f'{baseurl}/{comp_url[1:] if comp_url[0] == "/" else comp_url}'
+                    _config['components'][comp]['src'] = f'{baseurl}/{comp_url[1:] if comp_url[0] == "/" else comp_url}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404
@@ -416,9 +418,12 @@ def site(acct=None, repo=None, file=None):
 def images(fname):
     return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'images'), fname, as_attachment=False)
 
-@app.route('/components/<fname>', methods=['GET'])  
-def components(fname):
-    return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'components'), fname, as_attachment=False)
+@app.route('/components/<fname>', methods=['GET'])
+@app.route('/components/<subdir>/<fname>', methods=['GET'])  
+def components(fname, subdir=None):
+    path = f'{DOCS_ROOT}/docs/components' if subdir is None else f'{DOCS_ROOT}/docs/components/{subdir}'
+    logger.info(f'components: subdir={subdir} fname={fname} path={path} exists={os.path.exists(path)}')
+    return send_from_directory(path, fname, as_attachment=False)
 
 def usage():
     print('%s [hl:d]' % sys.argv[0])

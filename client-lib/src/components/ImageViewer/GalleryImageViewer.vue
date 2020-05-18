@@ -50,7 +50,8 @@ export default {
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
     width() { return Math.min(this.viewport.width, this.maxWidth) / (this.isHorizontal ? 1 : 2)},
     footerHeight() { const footerElem = document.getElementById('footer'); return footerElem ? footerElem.clientHeight : 0 },
-    height() { return this.viewport.height - 175 - (this.items.length === 1 ? 0 :this.footerHeight) }
+    // height() { return this.viewport.height - 175 - (this.items.length === 1 ? 0 :this.footerHeight) }
+    height() { return this.$store.getters.height - this.$store.getters.headerHeight - this.$store.getters.footerHeight - (this.items.length === 1 ? 0 : 66)},
   },
   mounted() {
     document.querySelectorAll('figure')
@@ -67,6 +68,14 @@ export default {
           }
         })
       })
+  },
+  watch: {
+    height: {
+      handler: function () {
+        console.log('GalleryViewer.watch.height', this.height)
+      },
+      immediate: true
+    }
   }
 }
 </script>
