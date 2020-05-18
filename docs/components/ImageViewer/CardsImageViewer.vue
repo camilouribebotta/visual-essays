@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card id="cards-image-viewer" :style="`height:${viewport.height}px; padding:${isHorizontal ? 0 : 8}px !important;`">
-      <v-container fluid>
+      <v-container fluid style="margin-top:34px;">
         <v-row dense>
           <v-col
             v-for="image in images"

@@ -15,6 +15,30 @@
 
 # Visual Essays
 
+## Maps
+
+### Map - Show locations as GeoJSON regions
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map1" data-center="Q82884" data-zoom="7" data-prefer-geojson="true">
+<param data-map-layer data-type="geojson" data-url="https://data.whosonfirst.org/101/752/643/101752643.geojson" data-active="true">
+<param data-network>
+
+### Simple markers
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map2" data-basemap="Esri_WorldPhysical" data-center="Q82884" data-zoom="7">
+
+### Map - Hide labels
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map3" data-center="Q82884" data-zoom="7" data-hide-labels>
+
+### Map - Flyto Rome
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param data-map id="map4" data-center="Q220" data-zoom="11" data-prefer-geojson="true">
+
 ## Images
 
 ### Images - Gallery with contain and cover fit
@@ -71,28 +95,4 @@ Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-centur
        title="Ginevra de' Benci (contain)"
        data-url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
        data-thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
-       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
-       
-## Maps
-
-### Map - Show locations as GeoJSON regions
-
-Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
-<param data-map id="map1" data-center="Q82884" data-zoom="7" data-prefer-geojson="true">
-<param data-map-layer data-type="geojson" data-url="https://data.whosonfirst.org/101/752/643/101752643.geojson" data-active="true">
-<param data-network>
-
-### Simple markers
-
-Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
-<param data-map id="map2" data-basemap="Esri_WorldPhysical" data-center="Q82884" data-zoom="7">
-
-### Map - Hide labels
-
-Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
-<param data-map id="map3" data-center="Q82884" data-zoom="7" data-hide-labels>
-
-### Map - Flyto Rome
-
-Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
-<param data-map id="map4" data-center="Q220" data-zoom="11" data-prefer-geojson="true">
+       data-hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">]

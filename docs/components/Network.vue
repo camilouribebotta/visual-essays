@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    Network <test/>
+    Network
   </v-container>
 </template>
 

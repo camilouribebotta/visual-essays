@@ -34,7 +34,7 @@ const components = {
   entityInfoboxDialog: {component: EntityInfoboxDialog}
 }
 
-const VERSION = '0.6.0'
+const VERSION = '0.6.1'
 
 console.log(`visual-essays js lib ${VERSION}`)
 

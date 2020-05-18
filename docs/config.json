@@ -14,7 +14,7 @@
         "cardsImageViewer": { "src": "/components/ImageViewer/CardsImageViewer.vue" },
         "hiresImageViewer": { "src": "/components/ImageViewer/HiresImageViewer.vue" },
         "video": { "src": "/components/VideoViewer.vue", "icon": "fa-video", "label": "Videos" },
-        "entityViewer": { "src": "/components/EntityViewer.vue", "icon": "fa-brackets-curly", "label": "Entities" },
+        "entity": { "src": "/components/EntityViewer.vue", "icon": "fa-brackets-curly", "label": "Entities" },
         "entityInfobox": { "src": "/components/EntityInfobox.vue" }
     }
 }

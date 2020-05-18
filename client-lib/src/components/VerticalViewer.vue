@@ -10,6 +10,7 @@
     >
       <v-tab
         v-for="tab in tabs" :key="`tab-${tab}`"
+        @click.stop=""
         :href="`#${tab}`">
         <i :class="groups[tab].icon" class="fal"></i>
       </v-tab>
@@ -188,6 +189,9 @@
       }
     },
     watch: {
+      activeTab() {
+        console.log(`activeElement=${this.activeElement} activeTab=${this.activeTab}`)
+      },
       headerHeight: {
         handler: function () {
           // console.log('verticalViewer.watch.headerHeight', this.headerHeight)
@@ -226,10 +230,11 @@
         immediate: true
       },
       groups() {
+        console.log(this.groups)
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
-        this.activeTab = this.primaryTab || availableGroups[0] 
+        this.activeTab = this.activeTab || this.primaryTab || availableGroups[0] 
       },
       viewportHeight: {
         handler: function (value, prior) {
@@ -253,6 +258,7 @@
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
         console.log(`VerticalViewer.watch.activeElement: ${active && this.paragraphs[active]}`, active)
+        this.activeTab = undefined
         if (active && this.paragraphs[active]) {
           document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)
@@ -285,6 +291,10 @@
   
   #essay.vertical .v-tabs-bar .v-tabs-bar__content {
     flex-direction: column;
+  }
+
+  #essay.vertical .v-tabs-slider-wrapper {
+    width: 0 !important;
   }
 
 </style>

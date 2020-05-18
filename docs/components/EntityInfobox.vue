@@ -14,7 +14,7 @@ module.exports = {
   name: 'entity-infobox',
   props: {
     qid: { type: String, default: undefined },
-    apiBaseURL: { type: String, default: 'https://us-central1-visual-essay.cloudfunctions.net' },
+    apiBaseURL: { type: String, default: 'https://visual-essays.app' },
     imageFit: { type: String, default: 'contain' }
     /* imageFit:
        fill = stretched to fit box

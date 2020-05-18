@@ -1,5 +1,5 @@
 <template>
-  <v-window v-model="activeWindow" class="entity-window" showArrows> 
+  <v-window v-model="activeWindow" class="entity-window" show-arrows> 
     <v-window-item
       transition="fade-transition"
       reverse-transition="fade-transition"
@@ -26,8 +26,9 @@
     watch: {
       selected: {
         handler: function () {
+          console.log('EntityViewer.selected', this.selected)
           if (this.items.find(item => item.id === this.selected)) {
-            this.activeWindow = this.selected
+            // this.activeWindow = this.selected
           }        
         },
         immediate: true

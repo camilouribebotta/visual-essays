@@ -10,8 +10,8 @@
         :hide-details="true"
         color="primary"
       >
-        <v-radio label="Gallery" value="galleryImageViewer"></v-radio>
-        <v-radio label="Compare" value="cardsImageViewer"></v-radio>
+        <v-radio label="Gallery" value="gallery"></v-radio>
+        <v-radio label="Compare" value="cards"></v-radio>
       </v-radio-group>
     </div>
     <component v-bind:is="mode === 'gallery' ? 'galleryImageViewer' : 'cardsImageViewer' "/>
