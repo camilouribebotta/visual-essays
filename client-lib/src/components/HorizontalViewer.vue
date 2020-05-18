@@ -5,12 +5,13 @@
       v-model="activeTab"
       center-active
       show-arrows
+      right
     >
 
       <v-tab 
         v-for="tab in tabs" :key="`tab-${tab}`"
         :href="`#${tab}`">
-        {{groups[tab].label || tab}}
+        <i :class="groups[tab].icon" class="fal" style="font-size:2.0rem;"></i>
       </v-tab>
 
       <v-tab-item
@@ -30,13 +31,9 @@
 
     </v-tabs>
 
-    <v-icon
-      size="30"
-      style="background:white;color:#aaa;position:absolute;top:0;left:0;cursor:pointer;padding:3px 0 0 3px;z-index:1000;"
-      @click="closeViewer"
-    >
-      mdi-close
-    </v-icon>
+    <span @click="closeViewer" style="position:absolute; top:6px; left:9px; cursor:pointer; z-index:2000;">
+      <i class="fal fa-times" style="font-size:2.2rem; color:#1D5BC2; background:white; padding:3px 0 0 3px;"></i>
+    </span>
   </v-card>
 </template>
 
@@ -186,6 +183,7 @@
         }
       },
       closeViewer() {
+        console.log('close')
         this.visualizerIsOpen = false
       },
       activatorClickHandler(e) {
@@ -301,7 +299,6 @@
 
   #essay.horizontal {
     background-color: white;
-    padding: 0 32px;
   }
 
 </style>

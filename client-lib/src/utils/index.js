@@ -148,14 +148,6 @@ export function eqSet(as, bs) {
   return true;
 }
 
-export function isMobile() {
-  let isMobile = false
-  try {
-      isMobile = (/iphone|ipod|android|blackberry|fennec/i).test(navigator.userAgent.toLowerCase()) || (window.innerWidth < 640 && window.innerHeight < 750)
-  } catch (err) {}
-  return isMobile
-}
-
 export function throttle(callback, interval) {
   let enableCall = true
   return function(...args) {

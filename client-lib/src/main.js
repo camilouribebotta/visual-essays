@@ -16,7 +16,7 @@ import 'leaflet-polylinedecorator'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
 import '../assets/styles/main.css'
-import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems, isMobile } from './utils'
+import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems } from './utils'
 
 import '../assets/js/leaflet-fa-markers.js'
 import '../assets/js/fontawesome-pro.min.js'
@@ -28,13 +28,15 @@ import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
+import MobileDetect from 'mobile-detect'
+
 const components = {
   horizontalViewer: {component: HorizontalViewer},
   verticalViewer: {component: VerticalViewer},
   entityInfoboxDialog: {component: EntityInfoboxDialog}
 }
 
-const VERSION = '0.6.1'
+const VERSION = '0.6.2'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -52,7 +54,9 @@ const myMixin = {
   }
 }
 
-const _isMobile = isMobile()
+const md = new MobileDetect(window.navigator.userAgent)
+const isMobile = md.phone() !== null
+const isTouchDevice = md.phone() !== null || md.tablet() !== null
 
 let vm
 
@@ -158,11 +162,12 @@ function initApp() {
 
   const qargs = parseQueryString()
   const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay') || {}
-  vm.$store.dispatch('setLayout', _isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
+  vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || essayConfig.context)
   vm.$store.dispatch('setDebug', qargs.debug === 'true' || qargs.debug === '')
-  vm.$store.dispatch('setIsMobile', _isMobile)
+  vm.$store.dispatch('setIsMobile', isMobile)
+  vm.$store.dispatch('setIsTouchDevice', isTouchDevice)
 
   // vm.$store.dispatch('setTrigger', window.triggerPosition || vm.$store.getters.trigger)
   console.log(`layout=${vm.$store.getters.layout} showBanner=${vm.$store.getters.showBanner} context=${vm.$store.getters.context} isMobile=${vm.$store.getters.isMobile} debug=${vm.$store.getters.debug}`)

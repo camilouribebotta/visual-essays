@@ -21,7 +21,6 @@
 <script>
 import HorizontalLayout from './layouts/HorizontalLayout'
 import VerticalLayout from './layouts/VerticalLayout'
-import { isMobile } from './utils'
 
 export default {
   name: 'app',
@@ -41,6 +40,7 @@ export default {
     bannerHeight: undefined
   }),
   computed: {
+    isMobile() { return this.$store.getters.isMobile },
     viewportWidth() { return this.$store.getters.width },
     height() { return this.$store.getters.height },
     essayConfig() { return this.$store.getters.essayConfig },
@@ -86,7 +86,7 @@ export default {
     viewportWidth: {
       handler: function (width) {
         if (width > 0) {
-          this.layout = isMobile() ? 'hc' : this.$store.getters.layout || 'vtl'
+          this.layout = this.isMobile ? 'hc' : this.$store.getters.layout || 'vtl'
         }     
         // console.log(`width=${width} layout=${this.$store.getters.layout}`)
       },
