@@ -3,9 +3,9 @@
     "banner": "/images/header.jpg",
     "bannerHeight": 400,
     "components": [
-        {"name": "siteHeader", "selectors": [], "src": "/components/Header.vue"},
-        {"name": "siteMobileHeader", "selectors": [], "src": "/components/MobileHeader.vue"},
-        {"name": "siteFooter", "selectors": [], "src": "/components/Footer.vue"},
-        {"name": "siteMobileFooter", "selectors": [], "src": "/components/MobileFooter.vue"}
+        {"name": "siteHeader", "src": "/components/Header.vue"},
+        {"name": "siteMobileHeader", "src": "/components/MobileHeader.vue"},
+        {"name": "siteFooter", "src": "/components/Footer.vue"},
+        {"name": "siteMobileFooter", "src": "/components/MobileFooter.vue"}
     ]
 }

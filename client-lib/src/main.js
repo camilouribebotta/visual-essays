@@ -38,7 +38,7 @@ const components = {
   verticalViewer: { name: 'verticalViewer', component: VerticalViewer },
   entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
   map: { name: 'map', src: `${componentsBaseURL}/components/MapViewer.vue`, 'icon': 'fa-map-marker-alt', 'label': 'Map' },
-  image: { name: 'image', src: `${componentsBaseURL}/ImageViewer/index.vue`, 'icon': 'fa-file-image', 'label': 'Images' },
+  image: { name: 'image', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, 'icon': 'fa-file-image', 'label': 'Images' },
   galleryImageViewer: { name: 'galleryImageViewer', src: `${componentsBaseURL}/components/ImageViewer/GalleryImageViewer.vue` },
   cardsImageViewer: { name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
   hiresImageViewer: { name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
@@ -49,7 +49,7 @@ const components = {
   'plant-specimen': { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, 'icon': 'fa-seedling', 'label': 'Plant Specimens' }
 }
 
-const VERSION = '0.6.5'
+const VERSION = '0.6.6'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
