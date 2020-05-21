@@ -122,7 +122,7 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
     logger.debug(f'convert_relative_image_links: source={source} baseurl={baseurl}')
     for tag in ('img', 'var', 'span', 'param'):
         for elem in soup.find_all(tag):
-            for attr in ('data-banner', 'src', 'url'):
+            for attr in ('banner', 'data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
 

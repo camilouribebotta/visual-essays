@@ -33,10 +33,24 @@ import MobileDetect from 'mobile-detect'
 const components = {
   horizontalViewer: { name: 'horizontalViewer', component: HorizontalViewer },
   verticalViewer: { name: 'verticalViewer', component: VerticalViewer },
-  entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog }
+  entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
+  siteHeader: { name: 'siteHeader', src: 'https://jstor-labs.github.io/visual-essays/components/Header.vue' },
+  siteMobileHeader: { name: 'siteMobileHeader', src: 'https://jstor-labs.github.io/visual-essays/components/MobileHeader.vue' },
+  siteFooter: { name: 'siteFooter', src: 'https://jstor-labs.github.io/visual-essays/components/Footer.vue' },
+  siteMobileFooter: { name: 'siteMobileFooter', src: 'https://jstor-labs.github.io/visual-essays/components/MobileFooter.vue' },
+  map: { name: 'map', src: 'https://jstor-labs.github.io/visual-essays/components/MapViewer.vue', 'icon': 'fa-map-marker-alt', 'label': 'Map' },
+  image: { name: 'image', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/index.vue', 'icon': 'fa-file-image', 'label': 'Images' },
+  galleryImageViewer: { name: 'galleryImageViewer', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/GalleryImageViewer.vue' },
+  cardsImageViewer: { name: 'cardsImageViewer', src: 'https:/jstor-labs.github.io/visual-essays/components/ImageViewer/CardsImageViewer.vue' },
+  hiresImageViewer: { name: 'hiresImageViewer', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/HiresImageViewer.vue' },
+  video: { name: 'video', src: 'https://jstor-labs.github.io/visual-essays/components/VideoViewer.vue', 'icon': 'fa-video', 'label': 'Videos' },
+  entity: { name: 'entity', src: 'https://jstor-labs.github.io/visual-essays/components/EntityViewer.vue', 'icon': 'fa-brackets-curly', 'label': 'Entities' },
+  entityInfobox: { name: 'entityInfobox', src: 'https://jstor-labs.github.io/visual-essays/components/EntityInfobox.vue' },
+  network: { name: 'network', src: 'https://jstor-labs.github.io/visual-essays/components/Network.vue', 'icon': 'fa-chart-network', 'label': 'Networks' },
+  plantSpecimen: { name: 'plantSpecimen', src: 'https://jstor-labs.github.io/visual-essays/components/PlantSpecimenViewer.vue', 'icon': 'fa-seedling', 'label': 'Plant Specimens' }
 }
 
-const VERSION = '0.6.3'
+const VERSION = '0.6.4'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
