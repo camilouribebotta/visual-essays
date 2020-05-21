@@ -94,7 +94,6 @@
     },
     mounted() {
       document.getElementById('header').addEventListener('wheel', this.throttle(this.scrollContent, 40))
-      console.log('Header', this)
     },
     methods: {
       onMutate(mutations) {

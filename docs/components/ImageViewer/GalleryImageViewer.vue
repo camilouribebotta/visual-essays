@@ -25,7 +25,7 @@ module.exports = {
     img: {}
   }),
   computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
+    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') },
     items() {
       const items = this.images.map(image => { 
         const mapped = {
@@ -61,7 +61,6 @@ module.exports = {
               width: e.target.naturalWidth,
               height: e.target.naturalHeight 
             }
-            console.log(this.img)
           }
         })
       })

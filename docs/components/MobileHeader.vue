@@ -75,7 +75,6 @@
     },
     mounted() {
       document.getElementById('header').addEventListener('wheel', this.throttle(this.scrollContent, 40))
-      console.log('MobileHeader', this)
     },
     methods: {
       onMutate(mutations) {

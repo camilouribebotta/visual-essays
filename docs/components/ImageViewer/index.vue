@@ -29,7 +29,7 @@ module.exports = {
     mode: 'gallery',
   }),
   computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') }
+    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') }
   },
   methods: {
     click() {

@@ -1,6 +1,6 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
-       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${Math.min(viewport.height, maxHeight)}px; margin:0;`"></div>
+       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${Math.min(viewport.height, height)}px; margin:0;`"></div>
   </div>
 </template>
 
@@ -31,10 +31,10 @@ const iconMap = {
 module.exports = {
   name: 'MapViewer',
   props: {
-    items: { type: Array, default: () => ([]) },
-    selected: { type: String },
-    maxWidth: { type: Number, default: 800 },
-    maxHeight: { type: Number, default: 800 }
+    items: Array,
+    selected: String,
+    width: Number,
+    height: Number
   },
   data: () => ({
     map: null,
@@ -54,15 +54,14 @@ module.exports = {
     mapDef() { return this.items[0] },
     activeElements() { return this.$store.getters.activeElements },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
-    entities() { return this.itemsInActiveElements.filter(item => item.type === 'entity') },
+    entities() { return this.itemsInActiveElements.filter(item => item.tag === 'entity') },
     locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
     isSelected() { return this.selected === 'map' },
-    width() { return Math.min(this.viewport.width, this.maxWidth)},
+    // width() { return Math.min(this.viewport.width, this.viewerWidth)},
   },
   mounted() {
-    console.log('Http MapViewer')
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
@@ -208,14 +207,14 @@ module.exports = {
     syncGeojsonLayers() {
       let t = performance.now()
       const layers = []
-      Object.keys(this.mapLayers.geojson).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.geojson.find(def => def.id === cur)) {
+      Object.keys(this.mapLayers).filter(layer => layer.url).forEach(cur => {
+        if (this.addedLayers.has(cur) && !this.mapDef.layers.find(def => def.id === cur)) {
           this.addedLayers.delete(cur)
           this.map.removeLayer(this.mapLayers.geojson[cur].layer)
         }
       })
 
-      this.mapDef.layers.geojson.forEach(def => {
+      this.mapDef.layers.filter(layer => layer.url).forEach(def => {
         if (!this.addedLayers.has(def.id)) {
           if (this.mapLayers.geojson[def.id]) {
             this.addedLayers.add(def.id)
@@ -283,13 +282,13 @@ module.exports = {
       return markers
     },
     syncMapwarperLayers() {
-      Object.keys(this.mapLayers.mapwarper).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.mapwarper.find(def => def.id === cur)) {
+      Object.keys(this.mapLayers).filter(layer => layer['mapwarper-id']).forEach(cur => {
+        if (this.addedLayers.has(cur) && !this.mapDef.layers.find(def => def.id === cur)) {
           this.addedLayers.delete(cur)
           this.map.removeLayer(this.mapLayers.mapwarper[cur].layer)
         }
       })
-      this.mapDef.layers.mapwarper.forEach(def => {
+      this.mapDef.layers.filter(layer => layer['mapwarper-id']).forEach(def => {
         if (!this.addedLayers.has(def.id)) {
           let layer
           if (this.mapLayers.mapwarper[def.id]) {
@@ -316,18 +315,15 @@ module.exports = {
       }
       const allLayers = {}
       const fadeableLayers = {}
-      Object.entries(this.mapDef.layers).forEach(mapLayer => {
-        const layerType = mapLayer[0]
-        const layerValues = mapLayer[1]
-        layerValues.forEach(layerDef => {
-          const layer = this.mapLayers[layerType][layerDef.id]
-          if (layer) {
-            allLayers[layer.name] = layer.layer
-            if (layerType === 'mapwarper') {
-              fadeableLayers[layer.name] = layer.layer
-            }
+      this.mapDef.layers.forEach(layerDef => {
+        const layerType = layerDef.url ? 'geojson' : 'mapwarper'
+        const layer = this.mapLayers[layerType][layerDef.id]
+        if (layer) {
+          allLayers[layer.name] = layer.layer
+          if (layerType === 'mapwarper') {
+            fadeableLayers[layer.name] = layer.layer
           }
-        })
+        }
       })
       /*
       for (const layerId in this.mapLayers.markerGroups) {
@@ -407,14 +403,9 @@ module.exports = {
       },
       immediate: false
     },
-    viewport: {
-      handler: function (vp) {
-        console.log(`MapViewer.watch.viewport: height=${vp.height} width=${vp.width}`)
-      },
-      immediate: true
-    },
     mapDef: {
       handler: function (mapDef, prior) {
+        console.log('mapDef', this.mapDev)
         const lmap = document.getElementById('lmap')
         if (lmap) {
           if (mapDef) {

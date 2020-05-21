@@ -16,14 +16,12 @@
       height: undefined
     }),
     mounted() {
-      console.log('SiteFooter')
       this.height = this.$refs.footer.clientHeight
       this.$emit('footer-height', this.height)
     },
     methods: {
       onMutate(mutations) {
         const mutation = mutations[mutations.length - 1]
-        console.log('footer', mutation)
         if (mutation.target && mutation.target.clientHeight !== this.height) {
           this.height = mutation.target.clientHeight
           this.$emit('footer-height', this.height)

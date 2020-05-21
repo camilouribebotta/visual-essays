@@ -69,7 +69,6 @@
       }
     },
     mounted() {
-      console.log('HorizontalViewer')
       this.$store.dispatch('setTriggerOffset', 100)
       if (this.$store.getters.layout === 'ho') {
           this.visualizerIsOpen = true
@@ -130,7 +129,6 @@
               const paraId = e.target.tagName === 'P'
                 ? e.target.id
                 : e.target.parentElement.id
-              console.log('paragraph clicked', paraId)
               if (this.paragraphs[paraId]) {
                 let offset = 100
                 let scrollable = document.getElementById('scrollableContent')
@@ -183,7 +181,6 @@
         }
       },
       closeViewer() {
-        console.log('close')
         this.visualizerIsOpen = false
       },
       activatorClickHandler(e) {
@@ -220,10 +217,10 @@
       },
       itemClickHandler(e) {
         e.stopPropagation()
-        const elemId = e.target.attributes['data-itemid'].value
+        const elemId = e.target.attributes['data-eid'].value
         this.$store.dispatch('setSelectedItemID', elemId)
         /*
-        const selectedItemId = e.toElement.attributes['data-itemid'].value 
+        const selectedItemId = e.toElement.attributes['data-eid'].value 
         let found = false
         for (let groupId in this.groups) {
           const item = this.groups[groupId].items.find(item => item.id === selectedItemId)

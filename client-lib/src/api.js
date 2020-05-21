@@ -9,8 +9,8 @@ export const api = axios.create({
   baseURL
 })
 
-export function get_entity(qid, context) {
-  let url = `/entity/${qid}`
+export function get_entity(eid, context) {
+  let url = `/entity/${eid}`
   if (context) {
     url += `?context=${context}`
   }

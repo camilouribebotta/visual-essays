@@ -4,10 +4,10 @@
       transition="fade-transition"
       reverse-transition="fade-transition"
       v-for="item in items" 
-      :key="item.qid"
-      :value="item.qid"
+      :key="item.eid"
+      :value="item.eid"
     >
-      <entity-infobox class="entity-infobox" :qid="item.qid"></entity-infobox>
+      <entity-infobox class="entity-infobox" :eid="item.eid"></entity-infobox>
     </v-window-item>
   </v-window>
 </template>
@@ -22,18 +22,7 @@
     },
     data: () => ({
       activeWindow: undefined
-    }),
-    watch: {
-      selected: {
-        handler: function () {
-          console.log('EntityViewer.selected', this.selected)
-          if (this.items.find(item => item.id === this.selected)) {
-            // this.activeWindow = this.selected
-          }        
-        },
-        immediate: true
-      }
-    }
+    })
   }
 
 </script>

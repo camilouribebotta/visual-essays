@@ -4,7 +4,7 @@
       <v-icon>mdi-close</v-icon>
     </v-btn>
     <v-card class="infobox">
-      <entity-infobox :qid="selectedItemID"></entity-infobox>
+      <entity-infobox :eid="selectedItemID"></entity-infobox>
     </v-card>
   </v-dialog>
 </template>
@@ -25,8 +25,8 @@ export default {
     }
   },
   watch: {
-    selectedItemID(qid) {
-      this.isOpen = qid !== null
+    selectedItemID(eid) {
+      this.isOpen = eid !== null
     }
   }
 }

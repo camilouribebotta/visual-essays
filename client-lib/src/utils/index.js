@@ -80,14 +80,14 @@ export function itemsInElements(elemIds, items) {
         selected.push(item)
         selectedItemIds.add(item.id)
       }
-      if (['map', 'map-layer', 'geojson', 'location', 'image', 'video'].includes(item.type) && 
+      if (['map', 'map-layer', 'geojson', 'location', 'image', 'video'].includes(item.tag) && 
            item.tagged_in.has(eid) && 
            !selectedItemIds.has(item.id)) {
         selected.push(item)
         selectedItemIds.add(item.id)
       }
       /*
-      if ((item.type === 'video') && 
+      if ((item.tag === 'video') && 
            item.tagged_in.has(eid) && 
            !selectedItemIds.has(item.id)) {
         selected.push(item)
@@ -100,45 +100,29 @@ export function itemsInElements(elemIds, items) {
 }
 
 export function groupItems(items, components) {
-  console.log('groupItems', components)
   const exclude = ['essay']
   const groups = {}
-  const maps = items.filter(item => item.type === 'map')
-  let selectedMap = maps.length > 0 ? { ...maps[0], ...{layers: {mapwarper:[], geojson:[]}} } : undefined
+  const maps = items.filter(item => item.tag === 'map')
+  
+  let selectedMap = maps.length > 0 ? { ...maps[0], ...{ layers: [] } } : undefined
   if (selectedMap) {
     groups.map = { ...components.map, ...{ items: [selectedMap] } }
   }
+  
   items
-    .filter(item => !exclude.includes(item.type))
+    .filter(item => !exclude.includes(item.tag))
     .forEach(item => {
-      if (item.type === 'entity') {
-        if (!groups[item.category]) {
-          groups[item.category] = { ...components[item.category], ...{ items: [] } }
-        }
-        groups[item.category].items.push(item)
-      } else if (item.type === 'map-layer') {
+      if (item.tag === 'map-layer') {
         if (selectedMap) {
-          if (item['mapwarper-id']) {
-            selectedMap.layers.mapwarper.push(item)
-          } else if (item.url) {
-            selectedMap.layers.geojson.push(item)
-          }
+          selectedMap.layers.push(item)
         }
-      } else {
-        const groupName = item.type
-        if (!groups[groupName]) { 
-          if (item.type === 'image') {
-            groups[groupName] = { ...components['image'], ...{ items: [] } }
-          } else if (item.type === 'video') {
-            groups[groupName] = { ...components['video'], ...{ items: [] } }
-          } else {
-            groups[groupName] = { ...components[groupName], ...{ items: [] } }
-          }
+      } else if (components[item.tag]) {
+        if (!groups[item.tag]) {
+          groups[item.tag] = { ...components[item.tag], ...{ items: [] } }
         }
-        groups[groupName].items.push(item)
+        groups[item.tag].items.push(item)
       }
     })
-  console.log(groups)
   return groups
 }
 

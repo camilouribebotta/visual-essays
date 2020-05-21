@@ -31,28 +31,29 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 import MobileDetect from 'mobile-detect'
 
 const components = {
-  horizontalViewer: {component: HorizontalViewer},
-  verticalViewer: {component: VerticalViewer},
-  entityInfoboxDialog: {component: EntityInfoboxDialog}
+  horizontalViewer: { name: 'horizontalViewer', component: HorizontalViewer },
+  verticalViewer: { name: 'verticalViewer', component: VerticalViewer },
+  entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog }
 }
 
-const VERSION = '0.6.2'
+const VERSION = '0.6.3'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
 Vue.component('lingallery', Lingallery)
 
-const myMixin = {
+Vue.mixin({
   computed: {
     activeElement() { return store.getters.activeElement },
     activeElements() { return store.getters.activeElements },
     allItems() { return store.getters.items },
+    itemsInActiveElements() { return store.getters.itemsInActiveElements },
     components() { return store.getters.components },
     groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems), this.components) },
     selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }
-}
+})
 
 const md = new MobileDetect(window.navigator.userAgent)
 const isMobile = md.phone() !== null
@@ -88,10 +89,10 @@ const getSiteConfig = async () => {
   const response = await fetch('/config')
   const siteConfig = await response.json()
   if (siteConfig.components) {
-    for (let [name, component] of Object.entries(siteConfig.components)) {
-      components[name] = component
-      components[name].component = httpVueLoader(component.src)
-    }
+    siteConfig.components.forEach(cfg => {
+      cfg.component = httpVueLoader(cfg.src)
+      components[cfg.name] = cfg
+    })
   }
 }
 getSiteConfig()
@@ -103,7 +104,7 @@ function resetState () {
 }
 
 function initApp() {
-  console.log('visual-essays.init', window.app)
+  console.log('visual-essays.init')
 
   resetState()
 
@@ -113,9 +114,9 @@ function initApp() {
   })
 
   // Essay components
-  window.data.filter(item => item.type === 'component').forEach(customComponent => {
+  window.data.filter(item => item.tag === 'component').forEach(customComponent => {
+    customComponent.component = httpVueLoader(customComponent.src)
     components[customComponent.name] = customComponent
-    components[customComponent.name].component = httpVueLoader(customComponent.src)
   })
 
   Vue.config.productionTip = false
@@ -133,8 +134,6 @@ function initApp() {
   Vue.prototype.$marked = marked
 
   for (let [name, component] of Object.entries(components)) {
-    console.log('mixin', name)
-    component.component.mixins = [myMixin]
     Vue.component(name, component.component)
     component.name = name
   }
@@ -148,20 +147,20 @@ function initApp() {
   console.log(`geoJsonCache cache_size=${Object.keys(vm.$store.getters.geoJsonCache).length}`)
 
   vm.$store.dispatch('setComponents', components)
-  console.log('components from store', vm.$store.getters.components)
+  console.log('components', vm.$store.getters.components)
 
   vm.$store.dispatch('setEssayHTML', undefined)
 
   vm.$store.dispatch('setContent', [])
   vm.$store.dispatch('setItems', [])
 
-  vm.$store.dispatch('setItems', prepItems(window.data.filter(item => item.type !== 'component')))
+  vm.$store.dispatch('setItems', prepItems(window.data.filter(item => item.tag !== 'component')))
   vm.$store.getters.items.forEach(item => console.log(`${item.id} ${item.label || item.title}`, item))
 
   vm.$store.dispatch('setEssayHTML', document.getElementById('essay').innerHTML)
 
   const qargs = parseQueryString()
-  const essayConfig = vm.$store.getters.items.find(item => item.type === 'essay') || {}
+  const essayConfig = vm.$store.getters.items.find(item => item.tag === 'config') || {}
   vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || essayConfig.context)

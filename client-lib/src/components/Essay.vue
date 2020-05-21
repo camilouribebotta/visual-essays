@@ -100,7 +100,6 @@ export default {
             //console.log(this.paragraphs.size)
             const contentParaIDs = Object.keys(this.paragraphs).filter(pid => pid.indexOf('section-') === 0)
             const idx = contentParaIDs.indexOf(newActiveElements[0])
-            console.log(`paragraphs=${contentParaIDs.length} idx=${idx}`)
             this.$store.dispatch('setProgress', Math.round(((idx+1)/contentParaIDs.length)*100))
           }
         }
@@ -149,7 +148,7 @@ export default {
       const items = []
       this.$store.getters.items.forEach((item) => {
         if (item.found_in.has(elemId) || item.tagged_in.has(elemId) ||
-            (item.type !== 'entity' && item.tagged_in.has('essay'))) {
+            (item.tag !== 'entity' && item.tagged_in.has('essay'))) {
           items.push(item)
         }
       })
@@ -173,30 +172,18 @@ export default {
     linkTaggedItems() {
       document.querySelectorAll('.tagged').forEach((item) => {
         item.addEventListener('click', (e) => {
-          const elemId = e.target.attributes['data-itemid'].value
+          const elemId = e.target.attributes['data-eid'].value
           this.$store.dispatch('setSelectedItemID', elemId)
         })
       })
     }
   },
   watch: {
-    isMobile: {
-      handler: function () {
-        console.log(`isMobile=${this.isMobile}`)
-      },
-      immediate: true
-    },
     triggerHook: {
       handler: function () {
         this.scenes.forEach(scene => {
           scene.triggerHook(this.triggerHook)
         })
-      },
-      immediate: true
-    },
-    activeElements: {
-      handler: function () {
-        console.log('activeElements', this.activeElements)
       },
       immediate: true
     }

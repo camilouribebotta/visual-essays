@@ -59,40 +59,40 @@ def content_baseurl(acct, repo):
 
 def get_markdown(url):
     resp = requests.get(url)
-    logger.info(f'{url} {resp.status_code}')
+    logger.debug(f'{url} {resp.status_code}')
     if resp.status_code == 200:
         return {'source': 'url', 'fname': url.split('/')[-1].replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
 def get_gh_markdown(acct, repo, file=None):
     baseurl = content_baseurl(acct, repo)
-    logger.info(f'get_gh_markdown: acct={acct} repo={repo} baseurl={baseurl}')
+    logger.debug(f'get_gh_markdown: acct={acct} repo={repo} baseurl={baseurl}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
         url = f'{baseurl}/{file}'
         resp = requests.get(url)
-        logger.info(f'{url} {resp.status_code}')
+        logger.debug(f'{url} {resp.status_code}')
         if resp.status_code == 200:
             return {'source': 'gh', 'fname': file.replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
     resp = requests.get(url)
-    logger.info(f'{url} {resp.status_code}')
+    logger.debug(f'{url} {resp.status_code}')
     if resp.status_code == 200:
         return {'source': 'gdid', 'fname': gdid, 'text': resp.content.decode('utf-8')}
 
 def get_local_markdown(file=None):
-    logger.info(f'get_local_markdown: file={file}')
+    logger.debug(f'get_local_markdown: file={file}')
     files = ['index.md', 'home.md', 'README.md'] if file is None else [file if file.endswith('.md') else f'{file}.md']
     for file in files:
         path = f'{DOCS_ROOT}/docs/{file}'
-        logger.info(f'path={path}')
+        logger.debug(f'path={path}')
         if os.path.exists(path):
             with open(path, 'r') as fp:
                 return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
 
 def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, site=None):
-    logger.info(f'convert_relative_links: acct={acct} repo={repo} site={site}')
+    logger.debug(f'convert_relative_links: acct={acct} repo={repo} site={site}')
     if site == 'localhost':
         baseurl = 'http://localhost:5000/essay'
         if acct:
@@ -119,13 +119,12 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
         baseurl = 'http://localhost:5000'
     elif source == 'gh':
         baseurl = content_baseurl(acct, repo)
-    logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
+    logger.debug(f'convert_relative_image_links: source={source} baseurl={baseurl}')
     for tag in ('img', 'var', 'span', 'param'):
         for elem in soup.find_all(tag):
             for attr in ('data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
-                    logger.info(elem.attrs[attr])
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -135,7 +134,7 @@ def _is_empty(elem):
     return len(elem_contents) == 0
 
 def markdown_to_html5(markdown, acct=None, repo=None, site=None):
-    logger.info(f'markdown_to_html5: acct={acct} repo={repo} site={site}')
+    logger.debug(f'markdown_to_html5: acct={acct} repo={repo} site={site}')
     '''Transforms markdown generated HTML to semantic HTML'''
     # html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
     html = markdown_parser.markdown(markdown['text'], output_format='html5', extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details'])
@@ -229,15 +228,15 @@ def _set_logging_level(args):
         elif level == 'info':
             logger.setLevel(logging.INFO)
 
-@app.route('/entity/<qid>', methods=['GET'])  
-def entity(qid):
+@app.route('/entity/<eid>', methods=['GET'])  
+def entity(eid):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
-    logger.info(f'entity: qid={qid} kwargs={kwargs}')
+    logger.info(f'entity: eid={eid} kwargs={kwargs}')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        entity = KnowledgeGraph(cache=cache, **kwargs).entity(qid, **kwargs)
+        entity = KnowledgeGraph(cache=cache, **kwargs).entity(eid, **kwargs)
         return (entity, 200, cors_headers)
 
 @app.route('/specimens/<taxon_name>', methods=['GET'])  
@@ -279,7 +278,6 @@ def fingerprints():
                 ns, qid = qid.split(':') if ':' in qid else ('wd', qid)
                 qids.add(f'{ns.strip()}:{qid.strip()}')
         fingerprints = get_fingerprints(qids, kwargs.get('language', 'en'))
-        logger.info(fingerprints)
         return (fingerprints, 200, cors_headers)
 
 @app.route('/local/<file>', methods=['GET'])  
@@ -351,7 +349,6 @@ def essay(acct=None, repo=None, file=None):
 @app.route('/markdown-viewer/<file>', methods=['GET'])  
 @app.route('/markdown-viewer', methods=['GET'])  
 def markdown_viewer(acct=None, repo=None, file=None):
-    logger.info(f'markdown-viewer')
     return (open(os.path.join(BASEDIR, 'src', 'markdown-viewer.html'), 'r').read(), 200, cors_headers)
 
 @app.route('/config/<acct>/<repo>', methods=['GET'])
@@ -372,23 +369,19 @@ def config(acct=None, repo=None):
         if use_local:
             baseurl = 'http://localhost:5000'     
             config_path = f'{DOCS_ROOT}/docs/config.json'
-            logger.info(f'{config_path} {os.path.exists(config_path)}')
             if os.path.exists(config_path):
                 _config = json.load(open(config_path, 'r'))
         else:
             baseurl =f'https://{acct}.github.io/{repo}'
-            logger.info(f'{baseurl}/config.json')
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            logger.info(_config)
             for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
                     _config[attr] = f'{baseurl}/{_config[attr][1:] if _config[attr][0] == "/" else _config[attr]}'
-            for comp in _config.get('components', {}):
-                comp_url = _config['components'][comp]['src']
-                if not comp_url.startswith('http'):
-                    _config['components'][comp]['src'] = f'{baseurl}/{comp_url[1:] if comp_url[0] == "/" else comp_url}'
+            for comp in _config.get('components', []):
+                if not comp['src'].startswith('http'):
+                    comp['src'] = f'{baseurl}/{comp["src"][1:] if comp["src"][0] == "/" else comp["src"]}'
             return (_config, 200, cors_headers)
         else:
             return 'Not found', 404

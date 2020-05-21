@@ -13,7 +13,7 @@
 module.exports = {
   name: 'entity-infobox',
   props: {
-    qid: { type: String, default: undefined },
+    eid: { type: String, default: undefined },
     apiBaseURL: { type: String, default: 'https://visual-essays.app' },
     imageFit: { type: String, default: 'contain' }
     /* imageFit:
@@ -28,7 +28,7 @@ module.exports = {
     requested: new Set()
   }),
   computed: {
-    entity () { return this.$store.getters.items.find(entity => entity.qid && entity.qid === this.qid) || {} },
+    entity () { return this.$store.getters.items.find(entity => entity.eid && entity.eid === this.eid) || {} },
     entityInfo () { return this.entity['summary info'] },
     title () { return this.entityInfo && this.entityInfo.displaytitle || this.entity.label || this.entity.title },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
@@ -41,19 +41,19 @@ module.exports = {
     this.getSummaryInfo()
   },
   methods: {
-    getEntity(qid, context) {
-      const url = `${this.apiBaseURL}/entity/${qid}` + (context ? `?context=${context}` : '')
+    getEntity(eid, context) {
+      const url = `${this.apiBaseURL}/entity/${eid}` + (context ? `?context=${context}` : '')
       return fetch(url).then(resp => resp.json())
     },
     getSummaryInfo() {
-      if (this.entity.qid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.qid)) {
-        this.requested.add(this.entity.qid)
-        this.getEntity(this.entity.qid, this.context)
+      if (this.entity.eid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.eid)) {
+        this.requested.add(this.entity.eid)
+        this.getEntity(this.entity.eid, this.context)
           .then((updated) => {
             if (!updated['summary info']) {
               updated['summary info'] = null
             }
-            updated.id = this.entity.qid
+            updated.id = this.entity.eid
             this.$store.dispatch('updateItem', updated)
           })
       }

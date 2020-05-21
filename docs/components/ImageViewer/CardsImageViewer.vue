@@ -40,7 +40,7 @@ module.exports = {
     img: {}
   }),
   computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.type === 'image') },
+    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
   },
@@ -50,7 +50,6 @@ module.exports = {
       // const url = `https://lwljoqf02g.execute-api.us-east-1.amazonaws.com/prod/generate?url=${image.url}`
       const url = `https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=${image.url}`
       let dziURL = fetch(url).then(resp => resp.json()).then((resp) => {
-        console.log(resp)
         let viewer = OpenSeadragon({
           id: image.id,
           tileSources: {

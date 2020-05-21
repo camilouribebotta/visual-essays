@@ -25,8 +25,8 @@
           v-bind:is="groups[tab].component"
           :items="groups[tab].items"
           :selected="activeTab"
-          :max-width="viewerWidth"
-          :max-height="viewerHeight"
+          :width="viewerWidth"
+          :height="viewerHeight"
           :initial-mode="mode"
         />
       </v-tab-item>
@@ -38,7 +38,7 @@
 
 <script>
   import { elemIdPath, itemsInElements, throttle } from '../utils'
-  const tabOrder = ['map', 'image', 'video', 'entity', 'network']
+  const tabOrder = ['map', 'image', 'video']
 
   export default {
     name: 'Viewer',
@@ -60,7 +60,7 @@
       headerHeight() { return this.$store.getters.headerHeight },
       footerHeight() { return this.$store.getters.footerHeight },
       viewerHeight() { return this.$store.getters.height - this.headerHeight - this.footerHeight},
-      primary() {return this.$store.getters.itemsInActiveElements.find(item => item.type === 'primary') },
+      primary() {return this.$store.getters.itemsInActiveElements.find(item => item.tag === 'primary') },
       primaryTab() { return this.primary ? this.primary.primary : undefined },
       mode() { return this.primary ? this.primary.mode : undefined },
       style() {
@@ -131,7 +131,6 @@
               const paraId = e.target.tagName === 'P'
                 ? e.target.id
                 : e.target.parentElement.id
-              console.log(`paragraph clicked: ${paraId}`)
               if (this.paragraphs[paraId]) {
                 document.getElementById(paraId).scrollIntoView({block:'center'})
               }
@@ -150,7 +149,6 @@
             }
           })
         })
-        console.log('paragraphs', this.paragraphs)
         if (this.activeElement && this.paragraphs[this.activeElement]) {
           document.getElementById(this.activeElement).classList.add('active-elem')
           this.addItemClickHandlers(this.activeElement)
@@ -184,14 +182,11 @@
       },
       itemClickHandler(e) {
         e.stopPropagation()
-        const elemId = e.target.attributes['data-itemid'].value
+        const elemId = e.target.attributes['data-eid'].value
         this.$store.dispatch('setSelectedItemID', elemId)
       }
     },
     watch: {
-      activeTab() {
-        console.log(`activeElement=${this.activeElement} activeTab=${this.activeTab}`)
-      },
       headerHeight: {
         handler: function () {
           // console.log('verticalViewer.watch.headerHeight', this.headerHeight)
@@ -217,24 +212,18 @@
         },
         immediate: true
       },
-      footerHeight: {
-        handler: function () {
-          // console.log('verticalViewer.watch.footerHeight', this.footerHeight)
-        },
-        immediate: true
-      },
-      viewerHeight: {
-        handler: function () {
-          // console.log('verticalViewer.watch.viewerHeight', this.viewerHeight)
-        },
-        immediate: true
-      },
       groups() {
-        console.log(this.groups)
+        console.log(this.activeElement, this.groups)
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
+        Object.keys(this.groups).forEach(group => {
+          if (availableGroups.indexOf(group) === -1 && this.groups[group].icon) {
+            availableGroups.push(group)
+          }
+        })
         this.tabs = availableGroups
-        this.activeTab = this.activeTab || this.primaryTab || availableGroups[0] 
+        this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
+        console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
       },
       viewportHeight: {
         handler: function (value, prior) {
@@ -257,8 +246,7 @@
           this.removeItemClickHandlers(prior)
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
-        console.log(`VerticalViewer.watch.activeElement: ${active && this.paragraphs[active]}`, active)
-        this.activeTab = undefined
+        // this.activeTab = undefined
         if (active && this.paragraphs[active]) {
           document.getElementById(active).classList.add('active-elem')
           this.addItemClickHandlers(active)

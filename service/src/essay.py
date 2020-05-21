@@ -33,8 +33,6 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-CUSTOM_MARKUP = {'config', 'component', 'image-viewer', 'image', 'essay', 'entity', 'map', 'geojson', 'map-layer', 'network', 'video', 'primary', 'specimens'}
-
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
     if child_images:
@@ -54,10 +52,10 @@ class Essay(object):
         for comment in self._soup(text=lambda text: isinstance(text, Comment)):
             comment.extract()
         self.markup = self._find_ve_markup()
-        logger.info(f'{round(now()-st,3)}: phase 1')
+        # logger.info(f'{round(now()-st,3)}: phase 1')
         st = now()
         self._update_entities_from_knowledgegraph(refresh=False)
-        logger.info(f'{round(now()-st,3)}: phase 2')
+        # logger.info(f'{round(now()-st,3)}: phase 2')
         st = now()        
         self._find_and_tag_items()
         self.add_entity_classes()
@@ -65,7 +63,7 @@ class Essay(object):
         self._remove_empty_paragraphs()
         self._add_heading_ids()
         self._add_data()
-        logger.info(f'{round(now()-st,3)}: phase 3')
+        # logger.info(f'{round(now()-st,3)}: phase 3')
 
     def _remove_empty_paragraphs(self):
         for link in self._soup.findAll(lambda tag: tag.name in ('a',)):
@@ -125,13 +123,13 @@ class Essay(object):
         #    img.attrs['src'] = f'{self.site}{img.attrs["src"]}'
 
     def _update_entities_from_knowledgegraph(self, refresh=False):
-        qids = [item['qid'] for item in self.markup.values() if 'qid' in item]
-        if qids:
-            cache_key = hashlib.sha256(str(sorted(qids)).encode('utf-8')).hexdigest()
+        by_qid = dict([(item['eid'], item) for item in self.markup.values() if 'eid' in item and is_qid(item['eid'])])
+        if by_qid:
+            cache_key = hashlib.sha256(str(sorted(by_qid.keys())).encode('utf-8')).hexdigest()
             kg_entities = self.cache.get(cache_key) if not refresh else None
             from_cache = kg_entities is not None
             if kg_entities is None:
-                kg_entities = self._get_entity_data(qids)['@graph']
+                kg_entities = self._get_entity_data(by_qid.keys())['@graph']
                 self.cache[cache_key] = kg_entities
             # logger.info(json.dumps(kg_entities, indent=2))
             for entity in kg_entities:
@@ -140,8 +138,8 @@ class Essay(object):
                     wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
                     entity['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
             for kg_props in kg_entities:
-                if kg_props['id'] in self.markup:
-                    me = self.markup[kg_props['id']]
+                if kg_props['id'] in by_qid:
+                    me = by_qid[kg_props['id']]
                     me['fromCache'] = from_cache
                     for k, v in kg_props.items():
                         if k in ('aliases',) and not isinstance(v, list):
@@ -156,16 +154,19 @@ class Essay(object):
                         elif k == 'category':
                             if 'category' in me:
                                 v = me['category']
-                        if k in ('aliases',) and k in self.markup[kg_props['id']]:
+                        if k in ('aliases',) and k in by_qid[kg_props['id']]:
                             # merge values
-                            v = sorted(set(self.markup[kg_props['id']][k] + v))
+                            v = sorted(set(by_qid[kg_props['id']][k] + v))
                         me[k] = v
-                    # logger.info(json.dumps(self.markup[kg_props['id']], indent=2))
+                    # logger.info(json.dumps(by_qid[kg_props['id']], indent=2))
 
     def add_entity_classes(self):
         for entity in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag, {'class': 'entity'})]:
-            if 'category' in self.markup.get(entity.attrs.get('data-itemid'), {}):
-                entity.attrs['class'] = sorted(set([cls for cls in entity.attrs['class'] if cls != 'entity'] + [self.markup[entity.attrs['data-itemid']]['category']]))
+            if 'category' in self.markup.get(entity.attrs.get('data-eid'), {}):
+                entity.attrs['class'] = sorted(set([cls for cls in entity.attrs['class'] if cls != 'entity'] + [self.markup[entity.attrs['data-eid']]['category']]))
+
+    LEGACY_MARKUP = {'essay': 'config', 'component': 'component', 'image': 'image', 'entity': 'entity', 'map': 'map', 'map-layer': 'map-layer', 'video': 'video', 'primary': 'primary'}
+    LEGACY_KEYS = set(LEGACY_MARKUP.keys())
 
     def _find_ve_markup(self):
         ve_markup = {}
@@ -173,32 +174,40 @@ class Essay(object):
         # custom markup is defined in a var or span elements.  Custom properties are defined with element data-* attribute
         for vem_elem in [vem_elem for vem_tag in ('var', 'span', 'param') for vem_elem in self._soup.find_all(vem_tag)]:
             attrs = dict([k.replace('data-',''),v] for k,v in vem_elem.attrs.items() if k not in ['class']) if vem_elem.attrs else {}
-            matches = CUSTOM_MARKUP.intersection(set(attrs.keys()))
-            if len(matches) == 1:
-                _type = matches.pop()
-            elif ('id' in attrs and is_qid(attrs['id'])) or ('qid' in attrs and is_qid(attrs['qid'])):
-                _type = 'entity'
+            tags = [k[3:] for k in attrs if k[:3] == 've-']
+            tag = tags[0] if len(tags) == 1 else None
+            if tag is None:
+                matches = self.LEGACY_KEYS.intersection(set(attrs.keys()))
+                if matches:
+                    tag = self.LEGACY_MARKUP[matches.pop()]
+                elif 'id' in attrs and is_qid(attrs['id']):
+                    attrs['eid'] = attrs.pop('id')
+                    tag = 'entity'
+                else:
+                    continue
             else:
-                continue
+                del attrs[f've-{tag}']
 
-            #for k in sorted(attrs.keys()):
-            #    if not attrs[k]:
-            #        del attrs[k]
+            attrs['tag'] = tag
+            for attr in attrs:
+                if attrs[attr] == '':
+                    attrs[attr] = 'true'
 
             if 'id' not in attrs:
-                attrs['id'] = f'{_type}-{sum([1 for item in ve_markup.values() if item["type"] == _type])+1}'
+                attrs['id'] = f'{tag}-{sum([1 for item in ve_markup.values() if item["tag"] == tag])+1}'
+            if 'aliases' in attrs:
+                attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
+            if 'qid' in attrs:
+                attrs['eid'] = attrs.pop('qid')
+            if 'eid' in attrs and ':' not in attrs['eid']:
+                attrs['eid'] = f'wd:{attrs["eid"]}'
 
-            if _type == 'entity':
-                qid = attrs.pop('qid', attrs.pop('id', None))
-                ns, qid = qid.split(':') if ':' in qid else ('wd', qid)
-                attrs['id'] = f'{ns}:{qid}'
-                attrs['qid'] = f'{ns}:{qid}'
+            if tag == 'entity':
+                pass
                 #if 'scope' not in attrs:
                 #    attrs['scope'] = 'global'
-                if 'aliases' in attrs:
-                    attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
 
-            elif  _type == 'map':
+            elif  tag == 'map':
                 if 'center' in attrs:
                     if is_qid(attrs['center']):
                         attrs['center'] = self._qid_coords(attrs['center'])
@@ -207,25 +216,23 @@ class Essay(object):
                 if 'zoom' in attrs:
                     attrs['zoom'] = round(float(attrs['zoom']), 1)
 
-            elif  _type == 'map-layer':
-                if 'aliases' in attrs:
-                    attrs['aliases'] = attrs['aliases'].split('|')
-                for attr in [f'data-{attr_suffix}' for attr_suffix in ('active', 'geojson', 'url')]:
-                    if attr in vem_elem.attrs:
-                        del vem_elem.attrs[attr]
+            elif  tag == 'map-layer':
+                for layer_type in ('geojson', 'mapwarper'):
+                    if layer_type in attrs:
+                        attrs['type'] = layer_type
+                        del attrs[layer_type]
 
-            elif  _type == 'image':
-                if attrs.get('region'):
-                    attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
-                for attr in ('url', 'thumbnail'):
-                    if attr in attrs and not attrs[attr].startswith('http'):
-                        attrs[attr] = f'{self.baseurl}/{attrs[attr][1:] if attrs[attr][0] == "/" else attrs[attr]}'
+            elif  tag == 'image':
+                try:
+                    if attrs.get('region'):
+                        attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
+                    for attr in ('url', 'thumbnail', 'hires'):
+                        if attr in attrs and not attrs[attr].startswith('http'):
+                            attrs[attr] = f'{self.baseurl}/{attrs[attr][1:] if attrs[attr][0] == "/" else attrs[attr]}'
+                except:
+                    del attrs['region']
 
-            if attrs['id'] in ve_markup:
-                attrs = ve_markup[attrs['id']]
-            else:
-                attrs['type'] = _type
-                attrs['tagged_in'] = []
+            attrs['tagged_in'] = []
 
             # add id of enclosing element to entities 'tagged_in' attribute
             if vem_elem.parent.name == 'p': # enclosing element is a paragraph
@@ -235,11 +242,11 @@ class Essay(object):
                     enclosing_element_id = self._enclosing_section_id(vem_elem, self._soup.html.body.article.attrs['id'])
                 if enclosing_element_id not in attrs['tagged_in'] and attrs.get('scope') != 'element':
                     attrs['tagged_in'].append(enclosing_element_id)
-                if _type in ('entity', 'geojson') and vem_elem.text:
-                    vem_elem.attrs['data-itemid'] = attrs['id']
+                if tag in ('entity',) and vem_elem.text:
+                    vem_elem.attrs['data-eid'] = attrs['eid']
                     vem_elem.attrs['class'] = [_type, 'tagged']
-                    if _type == 'geojson':
-                        attrs['scope'] = 'element'
+                    #if _type == 'geojson':
+                    #    attrs['scope'] = 'element'
                 else:
                     vem_elem.decompose()
             # logger.info(f'{attrs["id"]} {attrs["tagged_in"]}')
@@ -284,7 +291,7 @@ class Essay(object):
             return True
 
         to_match = {}
-        for item in [item for item in self.markup.values() if item['type'] in ('entity', 'map-layer')]:
+        for item in [item for item in self.markup.values() if item['tag'] in ('entity', 'map-layer')]:
             if 'label' in item:
                 to_match[tm_regex(item['label'])] = {'str': item['label'], 'item': item}
             if item.get('aliases'):
@@ -351,7 +358,7 @@ class Essay(object):
                         seg.attrs['class'] = ['entity', 'inferred']
                         if 'category' in item:
                             seg.attrs['class'].append(item['category'])
-                        seg.attrs['data-itemid'] = item['id']
+                        seg.attrs['data-eid'] = item['eid']
                         if 'found_in' not in item:
                             item['found_in'] = []
                         if context[0] not in item['found_in']:
@@ -416,16 +423,6 @@ class Essay(object):
                     _jsonld = {'@context': _context, '@graph': [_jsonld]}
                 return _jsonld
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
-
-    def _get_geojson(self, url):
-        logger.info(f'_get_geojson url={url}')
-        cache_key = hashlib.sha256(url.encode('utf-8')).hexdigest()
-        geojson = self.cache.get(cache_key)
-        if not geojson:
-            geojson = json.loads(requests.get(url).text)
-            if geojson:
-                self.cache[cache_key] = geojson
-        return geojson
 
     @property
     def json(self):

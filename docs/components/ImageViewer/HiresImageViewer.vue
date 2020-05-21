@@ -33,11 +33,9 @@ module.exports = {
   },
   methods: {
     loadImage() {
-      console.log(`src=${this.img.src} width=${this.img.width} height=${this.img.height}`)
       // const url = `https://lwljoqf02g.execute-api.us-east-1.amazonaws.com/prod/generate?url=${encodeURIComponent(this.img.src)}`
       const url = `https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=${this.img.src}`
       let dziURL = fetch(url).then(resp => resp.json()).then((resp) => {
-        console.log('loadImage', document.getElementById('img'))
         let viewer = OpenSeadragon({
           id: 'img',
           tileSources: {
