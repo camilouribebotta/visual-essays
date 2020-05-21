@@ -2,5 +2,10 @@
     "title": "Visual Essays",
     "banner": "/images/header.jpg",
     "bannerHeight": 400,
-    "components": []
+    "components": [
+        {"name": "siteHeader", "selectors": [], "src": "/components/Header.vue"},
+        {"name": "siteMobileHeader", "selectors": [], "src": "/components/MobileHeader.vue"},
+        {"name": "siteFooter", "selectors": [], "src": "/components/Footer.vue"},
+        {"name": "siteMobileFooter", "selectors": [], "src": "/components/MobileFooter.vue"}
+    ]
 }

@@ -30,27 +30,26 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
+console.log(window.location.hostname)
+const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
+
 const components = {
   horizontalViewer: { name: 'horizontalViewer', component: HorizontalViewer },
   verticalViewer: { name: 'verticalViewer', component: VerticalViewer },
   entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
-  siteHeader: { name: 'siteHeader', src: 'https://jstor-labs.github.io/visual-essays/components/Header.vue' },
-  siteMobileHeader: { name: 'siteMobileHeader', src: 'https://jstor-labs.github.io/visual-essays/components/MobileHeader.vue' },
-  siteFooter: { name: 'siteFooter', src: 'https://jstor-labs.github.io/visual-essays/components/Footer.vue' },
-  siteMobileFooter: { name: 'siteMobileFooter', src: 'https://jstor-labs.github.io/visual-essays/components/MobileFooter.vue' },
-  map: { name: 'map', src: 'https://jstor-labs.github.io/visual-essays/components/MapViewer.vue', 'icon': 'fa-map-marker-alt', 'label': 'Map' },
-  image: { name: 'image', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/index.vue', 'icon': 'fa-file-image', 'label': 'Images' },
-  galleryImageViewer: { name: 'galleryImageViewer', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/GalleryImageViewer.vue' },
-  cardsImageViewer: { name: 'cardsImageViewer', src: 'https:/jstor-labs.github.io/visual-essays/components/ImageViewer/CardsImageViewer.vue' },
-  hiresImageViewer: { name: 'hiresImageViewer', src: 'https://jstor-labs.github.io/visual-essays/components/ImageViewer/HiresImageViewer.vue' },
-  video: { name: 'video', src: 'https://jstor-labs.github.io/visual-essays/components/VideoViewer.vue', 'icon': 'fa-video', 'label': 'Videos' },
-  entity: { name: 'entity', src: 'https://jstor-labs.github.io/visual-essays/components/EntityViewer.vue', 'icon': 'fa-brackets-curly', 'label': 'Entities' },
-  entityInfobox: { name: 'entityInfobox', src: 'https://jstor-labs.github.io/visual-essays/components/EntityInfobox.vue' },
-  network: { name: 'network', src: 'https://jstor-labs.github.io/visual-essays/components/Network.vue', 'icon': 'fa-chart-network', 'label': 'Networks' },
-  plantSpecimen: { name: 'plantSpecimen', src: 'https://jstor-labs.github.io/visual-essays/components/PlantSpecimenViewer.vue', 'icon': 'fa-seedling', 'label': 'Plant Specimens' }
+  map: { name: 'map', src: `${componentsBaseURL}/components/MapViewer.vue`, 'icon': 'fa-map-marker-alt', 'label': 'Map' },
+  image: { name: 'image', src: `${componentsBaseURL}/ImageViewer/index.vue`, 'icon': 'fa-file-image', 'label': 'Images' },
+  galleryImageViewer: { name: 'galleryImageViewer', src: `${componentsBaseURL}/components/ImageViewer/GalleryImageViewer.vue` },
+  cardsImageViewer: { name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
+  hiresImageViewer: { name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
+  video: { name: 'video', src: `${componentsBaseURL}/components/VideoViewer.vue`, 'icon': 'fa-video', 'label': 'Videos' },
+  entity: { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, 'icon': 'fa-brackets-curly', 'label': 'Entities' },
+  entityInfobox: { name: 'entityInfobox', src: `${componentsBaseURL}/components/EntityInfobox.vue` },
+  network: { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, 'icon': 'fa-chart-network', 'label': 'Networks' },
+  'plant-specimen': { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, 'icon': 'fa-seedling', 'label': 'Plant Specimens' }
 }
 
-const VERSION = '0.6.4'
+const VERSION = '0.6.5'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -103,10 +102,7 @@ const getSiteConfig = async () => {
   const response = await fetch('/config')
   const siteConfig = await response.json()
   if (siteConfig.components) {
-    siteConfig.components.forEach(cfg => {
-      cfg.component = httpVueLoader(cfg.src)
-      components[cfg.name] = cfg
-    })
+    siteConfig.components.forEach(cfg => components[cfg.name] = cfg)
   }
 }
 getSiteConfig()
@@ -129,7 +125,6 @@ function initApp() {
 
   // Essay components
   window.data.filter(item => item.tag === 'component').forEach(customComponent => {
-    customComponent.component = httpVueLoader(customComponent.src)
     components[customComponent.name] = customComponent
   })
 
@@ -148,8 +143,13 @@ function initApp() {
   Vue.prototype.$marked = marked
 
   for (let [name, component] of Object.entries(components)) {
+    if (!component.component) {
+      component.component = httpVueLoader(component.src)
+    }
     Vue.component(name, component.component)
-    component.name = name
+    if (!component.name) {
+      component.name = name
+    }
   }
 
   vm = new Vue({
