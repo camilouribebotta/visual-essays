@@ -31,7 +31,7 @@
       style="min-height: 104px;"
     >
 
-      <v-app-bar-nav-icon large @click.stop="drawer = !drawer" style="padding:0; margin:6px 0 0 12px; z-index:100; background:rgba(0, 0, 0, .60);"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon large @click.stop="drawer = !drawer" style="padding:0; margin:6px 0 0 12px; z-index:100; background:rgba(0, 0, 0, .30);"></v-app-bar-nav-icon>
 
       <v-toolbar-title v-cloak>
         
@@ -145,7 +145,7 @@
   .v-toolbar__title {
     width: 100%;
     color: white;
-    background-color: rgba(0, 0, 0, .75);
+    background-color: rgba(0, 0, 0, .6);
     padding: 0 !important;
     position: absolute;
     top: calc(100% - 104px);

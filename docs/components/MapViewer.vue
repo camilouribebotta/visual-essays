@@ -62,6 +62,7 @@ module.exports = {
     // width() { return Math.min(this.viewport.width, this.viewerWidth)},
   },
   mounted() {
+    // console.log(`MapViewer.mounted: height=${this.height} width=${this.width}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
@@ -74,7 +75,6 @@ module.exports = {
         this.addedLayers = new Set()
       }
       if (!this.map) {
-        console.log(this.mapDef)
         this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
         this.map = this.$L.map('lmap', {
           preferCanvas: true,
@@ -405,7 +405,7 @@ module.exports = {
     },
     mapDef: {
       handler: function (mapDef, prior) {
-        console.log('mapDef', this.mapDev)
+        console.log('mapDef', this.mapDef)
         const lmap = document.getElementById('lmap')
         if (lmap) {
           if (mapDef) {

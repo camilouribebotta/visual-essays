@@ -99,28 +99,30 @@ export function itemsInElements(elemIds, items) {
   return selected
 }
 
-export function groupItems(items, components) {
+export function groupItems(items, componentSelectors) {
   const exclude = ['essay']
   const groups = {}
-  const maps = items.filter(item => item.tag === 'map')
-  
-  let selectedMap = maps.length > 0 ? { ...maps[0], ...{ layers: [] } } : undefined
-  if (selectedMap) {
-    groups.map = { ...components.map, ...{ items: [selectedMap] } }
+  if (componentSelectors && componentSelectors.tag && componentSelectors.tag.map) {
+    const maps = items.filter(item => item.tag === 'map')  
+    let selectedMap = maps.length > 0 ? { ...maps[0], ...{ layers: [] } } : undefined
+    if (selectedMap) {
+      groups.mapViewer = { ...componentSelectors.tag.map[0], ...{ items: [selectedMap] } }
+      items.filter(item => item.tag === 'map-layer').forEach(layer => selectedMap.layers.push(layer))
+    }
   }
   
   items
     .filter(item => !exclude.includes(item.tag))
     .forEach(item => {
-      if (item.tag === 'map-layer') {
-        if (selectedMap) {
-          selectedMap.layers.push(item)
+      for (let [field, values] of Object.entries(componentSelectors)) {
+        if (item[field] && values[item[field]]) {
+          values[item[field]].forEach(component => {
+            if (!groups[component.name]) {
+              groups[component.name] = { ...component, ...{ items: [] } }
+            }
+            groups[component.name].items.push(item)
+          })
         }
-      } else if (components[item.tag]) {
-        if (!groups[item.tag]) {
-          groups[item.tag] = { ...components[item.tag], ...{ items: [] } }
-        }
-        groups[item.tag].items.push(item)
       }
     })
   return groups

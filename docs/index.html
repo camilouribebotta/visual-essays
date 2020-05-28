@@ -100,8 +100,8 @@
         components: {
           'siteHeader': httpVueLoader(siteComponents.siteHeader && siteComponents.siteHeader.src || 'https://jstor-labs.github.io/visual-essays/components/Header.vue'),
           'siteMobileHeader': httpVueLoader(siteComponents.siteMobileHeader && siteComponents.siteMobileHeader.src || 'https://jstor-labs.github.io/visual-essays/components/MobileHeader.vue'),
-          'siteFooter': httpVueLoader(siteComponents.siteFooter && siteComponents.siteFooter.src || 'https://jstor-labs.github.io/visual-essays/components/Footer.vue'),
-          'siteMobileFooter': httpVueLoader(siteComponents.siteMobileFooter && siteComponents.siteMobileFooter.src || 'https://jstor-labs.github.io/visual-essays/components/MobileFooter.vue'),
+          'siteFooter': siteComponents.siteFooter ? httpVueLoader(siteComponents.siteFooter.src) : undefined,
+          'siteMobileFooter': siteComponents.siteMobileFooter ? httpVueLoader(siteComponents.siteMobileFooter.src) : undefined,
           'markdownViewer': httpVueLoader('https://JSTOR-Labs.github.io/visual-essays/components/MarkdownViewer.vue')
         },
         data: () => ({
@@ -132,7 +132,7 @@
           isPhone
         }),
         computed: {
-          essayTopMargin() { return this.essayConfig.bannerHeight || this.siteConfig.bannerHeight || 400 }
+          essayTopMargin() { return this.isPhone ? 200 : this.essayConfig.bannerHeight || this.siteConfig.bannerHeight || 400 }
         },
         mounted() {
           this.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)

@@ -1,0 +1,54 @@
+{
+"@context": "../context.json",
+"@graph": [
+    {
+        "label": [
+            {
+                "@language": "en",
+                "@value": "Prunus occidentalis"
+            }
+        ],
+        "description": [
+            {
+                "@language": "en",
+                "@value": "species of plant"
+            }
+        ],
+        "EPPO Code": "PRNOC",
+        "Encyclopedia of Life ID": "11164930",
+        "GRIN URL": {
+            "id": "https://npgsweb.ars-grin.gov/gringlobal/taxonomydetail.aspx?id=30056"
+        },
+        "Global Biodiversity Information Facility ID": "3020745",
+        "IPNI plant ID": "1084070-2",
+        "ITIS TSN": "504624",
+        "NCBI taxonomy ID": "1170641",
+        "PlantList-ID": "rjp-5911",
+        "Plants of the World online ID": "urn:lsid:ipni.org:names:1084070-2",
+        "TAXREF ID": "630493",
+        "Tropicos ID": "50202790",
+        "USDA PLANTS ID": "PROC",
+        "id": "wd:Q12844029",
+        "instance of": {
+            "id": "wd:Q16521"
+        },
+        "parent taxon": {
+            "id": "wd:Q190545"
+        },
+
+        "subject has role": {
+            "id": "wd:Q810198"
+        },
+        "taxon name": "Prunus occidentalis",
+        "taxon rank": {
+            "id": "wd:Q7432"
+        },
+        "type": "wikibase:Item",
+        "wdt:P1843": {
+            "@language": "en",
+            "@value": "western cherry laurel"
+        },
+        "wdt:P6366": "2778517191"
+    }
+]
+}

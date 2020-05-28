@@ -1,0 +1,58 @@
+{
+    "wd":  "http://www.wikidata.org/entity/",
+    "wds": "http://www.wikidata.org/entity/statement/",
+    "wdv": "http://www.wikidata.org/value/",
+    "wdt": "http://www.wikidata.org/prop/direct/",
+    "p":   "http://www.wikidata.org/prop/",
+    "ps":  "http://www.wikidata.org/prop/statement/",
+    "pq":  "http://www.wikidata.org/prop/qualifier/",
+
+    "jstor":  "http://kg.jstor.org/entity/",
+    "jwdt": "http://kg.jstor.org/prop/direct/",
+    "jwds": "http://kg.jstor.org/entity/statement/",
+    "jwdv": "http://kg.jstor.org/value/",
+    "jp":   "http://kg.jstor.org/prop/",
+    "jps":  "http://kg.jstor.org/prop/statement/",
+    "jpq":  "http://kg.jstor.org/prop/qualifier/",
+    "jpr":  "http://kg.jstor.org/prop/reference/",
+    
+    "rdfs":     "http://www.w3.org/2000/01/rdf-schema#",
+    "prov":     "http://www.w3.org/ns/prov#",
+    "wikibase": "http://wikiba.se/ontology#",
+    "bd":       "http://www.bigdata.com/rdf#",
+    "schema":   "http://schema.org/",
+    "skos":     "http://www.w3.org/2004/02/skos/core#",
+
+    "id": "@id",
+    "type": "@type",
+
+    "label": "rdfs:label",
+    "description": "schema:description",
+    "aliases": "skos:altLabel",
+
+    "instance of": {
+        "@id": "wdt:P31"
+    },
+    "taxon name": "wdt:P225",
+    "taxon rank": "wdt:P105",
+    "parent taxon": "wdt:P171",
+    "PlantList-ID": "wdt:P1070",
+    "IPNI plant ID": "wdt:P961",
+    "Tropicos ID": "wdt:P960",
+    "Global Biodiversity Information Facility ID": "wdt:P846",
+    "USDA PLANTS ID": "wdt:P1772",
+    "GRIN URL": "wdt:P1421",
+    "Microsoft Academic ID": "wdt:P6366",
+    "NCBI taxonomy ID": "wdt:P685",
+    "ITIS TSN": "wdt:P815",
+    "EPPO Code": "wdt:P3031",
+    "TAXREF ID": "wdt:P3186",
+    "subject has role": "wdt:P2868",
+    "Plants of the World online ID": "wdt:P5037",
+    "Encyclopedia of Life ID": "wdt:P830",
+    "taxon author": "wdt:P405",
+    "taxon common name": "wdt:P1843",
+    "year of taxon name publication": "wdt:P574",
+    "retrieved": "wdt:P813",
+    "of": "wdt:P642"
+}

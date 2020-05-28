@@ -60,13 +60,13 @@ class KnowledgeGraph(object):
             self.prop_mappings[ns] = dict([(p['id'], p) for p in self._properties(ns)])
             self.formatter_urls[ns] = dict([(p['id'], p) for p in self._formatter_urls(ns)])
 
-    def entity(self, qid, language=None, context=None, **kwargs):
+    def entity(self, qid, language=None, context=None, raw=False, **kwargs):
         language = language if language else self.language
         ns, qid = qid.split(':') if ':' in qid else (self.ns, qid)
         refresh = kwargs.pop('refresh', 'false').lower() in ('', 'true')
 
         cache_key = f'{ns}:{qid}-{language}-{context}'
-        entity = self.cache.get(cache_key) if not refresh else None
+        entity = self.cache.get(cache_key) if not refresh and not raw else None
         if entity:
             entity['fromCache'] = True
             return entity
@@ -97,11 +97,13 @@ class KnowledgeGraph(object):
                     by_qid[futures[future]] = future.result()
         
         entity = self._merge(by_qid.get(primary), by_qid.get(secondary))
-        self._add_summary_text(entity, context, **kwargs)
+
+        if not raw:
+            self._add_summary_text(entity, context, **kwargs)
         
-        entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity), language))
+            entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity), language))
         
-        self.cache[cache_key] = entity
+            self.cache[cache_key] = entity
         entity['fromCache'] = False
 
         return entity
@@ -458,17 +460,18 @@ class KnowledgeGraph(object):
 
 
 def usage():
-    print('%s [hl:e:] qid' % sys.argv[0])
-    print('   -h --help          Print help message')
-    print('   -l --loglevel      Logging level (default=warning)')
-    print('   -e --language      Language (default="en")')
+    print('%s [hl:e:r] qid' % sys.argv[0])
+    print('   -h --help       Print help message')
+    print('   -l --loglevel   Logging level (default=warning)')
+    print('   -e --language   Language (default="en")')
+    print('   -r --raw        Return raw jsonld')
 
 if __name__ == '__main__':
     logger.setLevel(logging.WARNING)
     kwargs = {}
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:], 'hl:e:', ['help', 'loglevel', 'language'])
+            sys.argv[1:], 'hl:e:r', ['help', 'loglevel', 'language', 'raw'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err))  # will print something like "option -a not recognized"
@@ -484,6 +487,8 @@ if __name__ == '__main__':
             elif loglevel in ('debug',): logger.setLevel(logging.DEBUG)
         elif o in ('-e', '--language'):
             kwargs['language'] = a
+        elif o in ('-r', '--raw'):
+            kwargs['raw'] = True
         elif o in ('-h', '--help'):
             usage()
             sys.exit()

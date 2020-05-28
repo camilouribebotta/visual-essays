@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     components: {},
+    componentSelectors: {},
     essayHTML: undefined,
     essayConfig: undefined,
     isMobile: false,
@@ -37,7 +38,29 @@ export default new Vuex.Store({
       components[payload.name] = payload.component
       state.components = components
     },
-    setComponents (state, components) { state.components = components },
+    setComponents (state, components) {
+      const componentSelectors = {}
+      Object.values(components).forEach(component => {
+        if (component.selectors) {
+          component.selectors.forEach(selector => {
+            const split = selector.split(':')
+            if (split.length === 2) {
+              const field = split[0]
+              const value = split[1]
+              if (!componentSelectors[field]) {
+                componentSelectors[field] = {}
+              }
+              if (!componentSelectors[field][value]) {
+                componentSelectors[field][value] = []
+              }
+              componentSelectors[field][value].push(component)
+            }
+          })
+        }
+      })
+      state.components = components
+      state.componentSelectors = componentSelectors
+    },
     setEssayHTML (state, html) { state.essayHTML = html },
     setEssayConfig (state, config) { state.essayConfig = config },
     setIsMobile (state, isMobile) { state.isMobile = isMobile },
@@ -105,6 +128,7 @@ export default new Vuex.Store({
   },
   getters: {
     components: state => state.components,
+    componentSelectors: state => state.componentSelectors,
     layout: state => state.layout,
     isMobile: state => state.isMobile,
     isTouchDevice: state => state.isTouchDevice,

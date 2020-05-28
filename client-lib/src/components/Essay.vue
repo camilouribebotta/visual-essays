@@ -29,7 +29,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('setProgress', 0)
-    groupItems(this.allItems, this.$store.getters.components)
+    groupItems(this.allItems, this.$store.getters.componentSelectors)
     this.$nextTick(() => this.init())
     if (window.location.hash) {
       this.scrollTo(window.location.hash.slice(1))

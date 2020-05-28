@@ -4,7 +4,7 @@
       <v-container fluid style="margin-top:34px;">
         <v-row dense>
           <v-col
-            v-for="image in images"
+            v-for="image in items"
             :key="image.id"
             :cols="image.cols || 6"
             :style="`padding:${isHorizontal ? 0 : 8}px !important;`"
@@ -19,8 +19,7 @@
                 <v-btn icon><v-icon>mdi-share-variant</v-icon></v-btn>
               </v-card-actions>
               -->
-              <v-card-title v-text="image.title">
-              </v-card-title>
+              <v-card-title v-text="image.title"></v-card-title>
             </v-card>
           </v-col>
         </v-row>
@@ -35,17 +34,21 @@
 
 module.exports = {
   name: 'CardsImageViewer',
+  props: {
+    items: Array,
+    width: Number,
+    height: Number
+  },
   data: () => ({
     currentId: undefined,
     img: {}
   }),
   computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
   },
   mounted() {
-    this.images.forEach((image) => {
+    this.items.forEach((image) => {
       // const url = image.url
       // const url = `https://lwljoqf02g.execute-api.us-east-1.amazonaws.com/prod/generate?url=${image.url}`
       const url = `https://deepzoomapi-atjcn6za6q-uc.a.run.app/generate?url=${image.url}`

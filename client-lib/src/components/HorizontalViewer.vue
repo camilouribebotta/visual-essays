@@ -24,8 +24,8 @@
           v-bind:is="groups[tab].component" 
           :items="groups[tab].items" 
           :selected="selected"
-          :max-width="viewerWidth"
-          :max-height="viewportHeight/2"
+          :width="viewerWidth"
+          :height="viewerHeight"
         />
       </v-tab-item>
 
@@ -57,13 +57,16 @@
     }),
     computed: {
       viewportHeight() { return this.$store.getters.height },
+      headerHeight() { return this.$store.getters.headerHeight },
+      footerHeight() { return this.$store.getters.footerHeight },
+      viewerHeight() { return this.viewportHeight/2 - this.footerHeight - 48 },
       viewportWidth() { return this.$store.getters.width },
       style() {
         return {
           display: this.$refs.viewer && this.visualizerIsOpen ? 'block' : 'none',
           position: 'fixed',
           top: `${this.viewportHeight/2}px`,
-          height: `${this.viewportHeight/2}px`,
+          height: `${this.viewerHeight}px`,
           width: `${this.viewerWidth}px`
         }
       }
@@ -237,19 +240,23 @@
       }
     },
     watch: {
+      /*
+      footerHeight: {
+        handler: function () {
+          console.log(`viewportHeight=${this.viewportHeight} viewerHeight=${this.viewerHeight} footerHeight=${this.footerHeight} top=${this.viewportHeight/2}`)
+        },
+        immediate: true
+      },
+      */
       groups() {
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
         this.tabs = availableGroups
-        if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
+        if (this.primaryTab) {
+          this.activeTab = this.primaryTab
+        } else if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
           this.activeTab = availableGroups.length > 0 ? availableGroups[0] : undefined
         }
-      },
-      groups() {
-        const availableGroups = []
-        tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
-        this.tabs = availableGroups
-        this.activeTab = this.primaryTab || availableGroups[0] 
       },
       viewportHeight() {
         if (this.spacer) {

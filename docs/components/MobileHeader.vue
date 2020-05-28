@@ -69,7 +69,7 @@
     }),
     computed: {
       banner() { return this.essayConfig.banner || this.siteConfig.banner },
-      bannerHeight() { return this.essayConfig.bannerHeight || this.siteConfig.bannerHeight || 400 },
+      bannerHeight() { return 200 },
       title() { return  this.essayConfig.title || this.siteConfig.title },
       author() { return this.essayConfig.author || '&nbsp;' }
     },

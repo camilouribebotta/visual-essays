@@ -1,0 +1,71 @@
+{
+    "wd":  "http://www.wikidata.org/entity/",
+    "wds": "http://www.wikidata.org/entity/statement/",
+    "wdv": "http://www.wikidata.org/value/",
+    "wdt": "http://www.wikidata.org/prop/direct/",
+    "p":   "http://www.wikidata.org/prop/",
+    "ps":  "http://www.wikidata.org/prop/statement/",
+    "pq":  "http://www.wikidata.org/prop/qualifier/",
+
+    "jstor":  "http://kg.jstor.org/entity/",
+    "jwdt": "http://kg.jstor.org/prop/direct/",
+    "jwds": "http://kg.jstor.org/entity/statement/",
+    "jwdv": "http://kg.jstor.org/value/",
+    "jp":   "http://kg.jstor.org/prop/",
+    "jps":  "http://kg.jstor.org/prop/statement/",
+    "jpq":  "http://kg.jstor.org/prop/qualifier/",
+    "jpr":  "http://kg.jstor.org/prop/reference/",
+    
+    "rdfs":     "http://www.w3.org/2000/01/rdf-schema#",
+    "prov":     "http://www.w3.org/ns/prov#",
+    "wikibase": "http://wikiba.se/ontology-beta#",
+    "bd":       "http://www.bigdata.com/rdf#",
+    "schema":   "http://schema.org/",
+    "skos":     "http://www.w3.org/2004/02/skos/core#",
+
+    "label": {
+        "@id": "rdfs:label",
+        "@language": "en"
+    },
+    "description": {
+        "@id": "schema:description",
+        "@language": "en"
+    },
+    "aliases": {
+        "@id": "skos:altLabel",
+        "@language": "en",
+        "@container": "@set"
+    },
+
+    "available at": {
+        "@id": "jwdt:P1666",
+        "@type": "@id"
+    },
+    "collector name string": "jwdt:P1662",
+    "size": "jpq:P1669",
+    "images": {
+        "@id": "jp:P1467",
+        "@type": "@id",
+        "@container": "@set"
+    },
+    "url":  {
+        "@id": "jps:P1467",
+        "@type": "@id"
+    },
+    "instance of": {
+        "@id": "jwdt:P17",
+        "@type": "@id"
+    },
+    "JSTOR plants ID": "jwdt:P1106",
+    "location collected": {
+        "@id": "jwdt:P1665",
+        "@type": "@id"
+    },
+    "specimen of": {
+        "@id": "jwdt:P1660",
+        "@type": "@id"
+    },
+    "specimen type": "jwdt:P1661",
+    "taxon name": "jwdt:P501",
+    "taxon rank": "jwdt:P1661"
+}

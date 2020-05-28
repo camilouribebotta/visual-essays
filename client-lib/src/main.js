@@ -33,23 +33,27 @@ import MobileDetect from 'mobile-detect'
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
 
-const components = {
-  horizontalViewer: { name: 'horizontalViewer', component: HorizontalViewer },
-  verticalViewer: { name: 'verticalViewer', component: VerticalViewer },
-  entityInfoboxDialog: { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
-  map: { name: 'map', src: `${componentsBaseURL}/components/MapViewer.vue`, 'icon': 'fa-map-marker-alt', 'label': 'Map' },
-  image: { name: 'image', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, 'icon': 'fa-file-image', 'label': 'Images' },
-  galleryImageViewer: { name: 'galleryImageViewer', src: `${componentsBaseURL}/components/ImageViewer/GalleryImageViewer.vue` },
-  cardsImageViewer: { name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
-  hiresImageViewer: { name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
-  video: { name: 'video', src: `${componentsBaseURL}/components/VideoViewer.vue`, 'icon': 'fa-video', 'label': 'Videos' },
-  entity: { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, 'icon': 'fa-brackets-curly', 'label': 'Entities' },
-  entityInfobox: { name: 'entityInfobox', src: `${componentsBaseURL}/components/EntityInfobox.vue` },
-  network: { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, 'icon': 'fa-chart-network', 'label': 'Networks' },
-  'plant-specimen': { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, 'icon': 'fa-seedling', 'label': 'Plant Specimens' }
-}
+const defaultComponents = [
+  { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
+  { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
+  { name: 'videoViewer', src: `${componentsBaseURL}/components/VideoViewer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
+  { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
+  // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
+  { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
+  { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, selectors: ['tag:plant-specimen'], 'icon': 'fa-seedling', 'label': 'Plant Specimens' },
+  { name: 'horizontalViewer', component: HorizontalViewer },
+  { name: 'verticalViewer', component: VerticalViewer },
+  { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
+  { name: 'galleryImageViewer', src: `${componentsBaseURL}/components/ImageViewer/GalleryImageViewer.vue` },
+  { name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
+  { name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
+  { name: 'entityInfobox', src: `${componentsBaseURL}/components/EntityInfobox.vue` }
+]
 
-const VERSION = '0.6.6'
+const components = {}
+defaultComponents.forEach(component => components[component.name] = component)
+
+const VERSION = '0.6.8'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -62,7 +66,7 @@ Vue.mixin({
     allItems() { return store.getters.items },
     itemsInActiveElements() { return store.getters.itemsInActiveElements },
     components() { return store.getters.components },
-    groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems), this.components) },
+    groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems), store.getters.componentSelectors) },
     selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }

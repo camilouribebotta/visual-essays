@@ -38,7 +38,7 @@
 
 <script>
   import { elemIdPath, itemsInElements, throttle } from '../utils'
-  const tabOrder = ['map', 'image', 'video']
+  const tabOrder = ['mapViewer', 'imageViewer', 'videoViewer']
 
   export default {
     name: 'Viewer',
@@ -223,7 +223,7 @@
         })
         this.tabs = availableGroups
         this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
-        console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
+        // console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
       },
       viewportHeight: {
         handler: function (value, prior) {

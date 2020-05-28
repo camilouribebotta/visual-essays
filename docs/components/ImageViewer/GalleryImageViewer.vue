@@ -4,9 +4,9 @@
     <lingallery
       :iid.sync="currentId"
       :width="width"
-      :height="height"
+      :height="height - (images.length === 1 ? 0 : 66)"
       :default-fit="defaultFit"
-      :items="items"
+      :items="images"
       :show-thumbnails="images.length > 1"
       disable-image-click
       background-color="red"
@@ -19,51 +19,66 @@
 
 module.exports = {
   name: 'GalleryImageViewer',
+  props: {
+    items: Array,
+    width: Number,
+    height: Number,
+    defaultFit: {type: String, default: 'cover'}
+  },
   data: () => ({
     currentId: undefined,
-    defaultFit: 'cover',
     img: {}
   }),
   computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') },
-    items() {
-      const items = this.images.map(image => { 
+    // images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') },
+    images() {
+      const images = this.items.map(item => { 
         const mapped = {
-          id: image.id,
-          src: image.url,
-          thumbnail: image.thumbnail || image.url,
-          hires: image.hires || image.url,
-          caption: image.title ? this.$marked(image.title) : '',
-          fit: image.fit || 'cover' // 'cover', 'contain;, 'fill', 'scale-down', or null
+          id: item.id,
+          src: item.url,
+          thumbnail: item.thumbnail || item.url,
+          hires: item.hires || item.url,
+          caption: item.title ? this.$marked(item.title) : '',
+          fit: item.fit || this.defaultFit // 'cover', 'contain;, 'fill', 'scale-down', or null
         }
         return mapped
       })
-      this.currentId = items[0].id
-      this.defaultFit = items[0].fit || 'cover'
-      return items
+      this.currentId = images[0].id
+      // this.defaultFit = images[0].fit || 'cover'
+      return images
     },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
-    width() { return Math.min(this.viewport.width, this.maxWidth) / (this.isHorizontal ? 1 : 2)},
+    // width() { return Math.min(this.viewport.width, this.maxWidth) / (this.isHorizontal ? 1 : 2)},
     footerHeight() { const footerElem = document.getElementById('footer'); return footerElem ? footerElem.clientHeight : 0 },
     // height() { return this.viewport.height - 175 - (this.items.length === 1 ? 0 :this.footerHeight) }
-    height() { return this.$store.getters.height - this.$store.getters.headerHeight - this.$store.getters.footerHeight - (this.items.length === 1 ? 0 : 66)},
+    // height() { return this.$store.getters.height - this.$store.getters.headerHeight - this.$store.getters.footerHeight - (this.items.length === 1 ? 0 : 66)},
   },
   mounted() {
     document.querySelectorAll('figure')
       .forEach(fig => {
         fig.addEventListener('click', (e) => {
           if (e.target.tagName === 'IMG') {
-            const selected = this.items.find(item => item.src === e.target.src)
+            const selected = this.items.find(item => item.url === e.target.src)
             this.img = {
-              caption: selected.caption,
-              src: selected.hires,
+              caption: selected.caption || selected.title || selected.description,
+              src: selected.hires || selected.url ,
               width: e.target.naturalWidth,
               height: e.target.naturalHeight 
             }
           }
         })
       })
+  },
+  watch: {
+    /*
+    height: {
+      handler: function () {
+        console.log(`height=${this.height} width=${this.width}`)
+      },
+      immediate: true
+    },
+    */
   }
 }
 </script>

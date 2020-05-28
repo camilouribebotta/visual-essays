@@ -2,7 +2,7 @@
   <div id="image-viewer" >
     <div id="image-viewer-controls" @click="click()">
       <v-radio-group
-        v-if="images.length > 1"
+        v-if="items.length > 1"
         id="image-viewer-mode-control"
         :value="mode"
         row
@@ -14,7 +14,10 @@
         <v-radio label="Compare" value="cards"></v-radio>
       </v-radio-group>
     </div>
-    <component v-bind:is="mode === 'gallery' ? 'galleryImageViewer' : 'cardsImageViewer' "/>
+    <component 
+      v-bind:is="mode === 'gallery' ? 'galleryImageViewer' : 'cardsImageViewer'"
+      :width="width" :height="height" :items="items" :default-fit="defaultFit"
+    ></component>
   </div>
 </template>
 
@@ -23,14 +26,15 @@
 module.exports = {
   name: 'ImageViewer',
   props: {
-    initialMode: { type: String, default: 'gallery' }
+    items: Array,
+    width: Number,
+    height: Number,
+    initialMode: { type: String, default: 'gallery' },
+    defaultFit: {type: String, default: 'cover'}
   },
   data: () => ({
     mode: 'gallery',
   }),
-  computed: {
-    images() { return this.$store.getters.itemsInActiveElements.filter(item => item.tag === 'image') }
-  },
   methods: {
     click() {
       this.mode = this.mode === 'cards' ? 'gallery' : 'cards'

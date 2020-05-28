@@ -69,7 +69,6 @@ module.exports = {
   },
   watch: {
     img() {
-          
       if (this.img) {
         this.isOpen = true
         this.loadImage()
