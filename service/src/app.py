@@ -137,7 +137,15 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
     logger.debug(f'markdown_to_html5: acct={acct} repo={repo} site={site}')
     '''Transforms markdown generated HTML to semantic HTML'''
     # html = markdown2.markdown(markdown['text'], extras=['footnotes', 'fenced-code-blocks'])
-    html = markdown_parser.markdown(markdown['text'], output_format='html5', extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details'])
+    html = markdown_parser.markdown(
+        markdown['text'],
+        output_format='html5', 
+        extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details'],
+        extension_configs = {
+            'footnotes': {
+                'SEPARATOR': '-'
+            }
+        })
 
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
     convert_relative_links(soup, acct, repo, markdown['fname'], markdown['source'], site)
@@ -253,7 +261,7 @@ def specimens(taxon_name):
         refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
         specimens = cache.get(taxon_name) if not refresh else None
         if specimens is None:
-            specimens = get_specimens(taxon_name)
+            specimens = get_specimens(taxon_name, **kwargs)
             if specimens['specimens']:
                 cache[taxon_name] = specimens
         else:
@@ -419,15 +427,16 @@ def components(fname, subdir=None):
     return send_from_directory(path, fname, as_attachment=False)
 
 def usage():
-    print('%s [hl:d]' % sys.argv[0])
+    print('%s [hl:dr:]' % sys.argv[0])
     print('   -h --help         Print help message')
     print('   -l --loglevel     Logging level (default=warning)')
     print('   -d --dev          Use local Visual Essay JS Lib')
+    print('   -r --docs-root    Documents root directory when running in dev mode')
 
 if __name__ == '__main__':
     kwargs = {}
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hl:d', ['help', 'loglevel', 'dev'])
+        opts, args = getopt.getopt(sys.argv[1:], 'hl:dr:', ['help', 'loglevel', 'dev', 'docs-root'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
@@ -444,11 +453,13 @@ if __name__ == '__main__':
         elif o in ('-d', '--dev'):
             VE_JS_LIB = 'http://localhost:8080/lib/visual-essays.js'
             ENV = 'dev'
+        elif o in ('-r', '--docs-root'):
+            DOCS_ROOT = a
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
         else:
             assert False, 'unhandled option'
 
-    logger.info(f'ENV={ENV} VE_JS_LIB={VE_JS_LIB}')
+    logger.info(f'ENV={ENV} VE_JS_LIB={VE_JS_LIB} DOCS_ROOT={DOCS_ROOT}')
     app.run(debug=True, host='0.0.0.0')

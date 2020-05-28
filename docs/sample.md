@@ -19,7 +19,7 @@
 ### Prunus occidentalis
 
 Prunus occidentalis is a plant in the family Rosaceae of the order Rosales. The plant can be found in the Caribbean, Central America and northern South America. It is native to Puerto Rico. Its Spanish common names include almendrón. Its English common name is the western cherry laurel. The plant is common in the Toro Negro State Forest. Family of Liechtenstein. 
-<param ve-plant-specimen eid="Q12844029">
+<param ve-plant-specimen eid="Q12844029" max="2" reverse="true">
 <param ve-plant-specimen eid="Q165321">
 
 ### Images - Gallery with contain and cover fit

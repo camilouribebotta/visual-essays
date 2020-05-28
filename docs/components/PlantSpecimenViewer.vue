@@ -50,7 +50,8 @@
     },
     methods: {
       getSpecimenMetadata(item) {
-        fetch(`https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}`)
+        const args = Object.keys(item).filter(arg => ['max', 'reverse'].includes(arg)).map(arg => `${arg}=${item[arg]}`)
+        fetch(`https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : ''))
           .then(resp => resp.json())
           .then(specimensMetadata => {
             specimensMetadata.caption = item.label

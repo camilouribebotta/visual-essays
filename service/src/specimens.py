@@ -161,7 +161,27 @@ sparql_template = '''
     }
 '''
 
-def get_specimens(taxon_name):
+def sort_specimens(specimens, **kwargs):
+    def sort_by_date(_specimens):
+        _specimens.sort(key=lambda x: str(x.get('collectionDate', '')), reverse=kwargs.get('reverse') == 'true')
+        return _specimens
+    types = 'holotype', 'isotype', 'lectotype'
+    by_type = {}
+    for specimen in specimens:
+        specimen_type = specimen.get('specimenType', '').lower()
+        if specimen_type not in by_type:
+            by_type[specimen_type] = []
+        by_type[specimen_type].append(specimen)
+    sorted_specimens = []
+    for specimen_type in types:
+        if specimen_type in by_type:
+            sorted_specimens += sort_by_date(by_type[specimen_type])
+    for specimen_type in by_type:
+        if specimen_type not in types:
+            sorted_specimens += sort_by_date(by_type[specimen_type])
+    return sorted_specimens
+
+def get_specimens(taxon_name, **kwargs):
     logger.info(f'get_specimens: taxon_name={taxon_name}')
     sparql = sparql_template.replace('<TAXON NAME>', taxon_name)
     data = {'taxonName': taxon_name, 'specimens': []}
@@ -207,6 +227,10 @@ def get_specimens(taxon_name):
                     wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
                     specimen['locationCollected']['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
                 specimen['images'] = [{'url': img['id'], 'type': img['imgSize']} for img in specimen['images']]
+            data['specimens'] = sort_specimens(data['specimens'], **kwargs)
+            if 'max' in kwargs:
+                data['specimens'] = data['specimens'][:int(kwargs['max'])]
+            break
     return data
 
 def usage():
