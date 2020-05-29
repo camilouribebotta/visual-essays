@@ -358,7 +358,8 @@ class Essay(object):
                         seg.attrs['class'] = ['entity', 'inferred']
                         if 'category' in item:
                             seg.attrs['class'].append(item['category'])
-                        seg.attrs['data-eid'] = item['eid']
+                        if 'eid' in item:
+                            seg.attrs['data-eid'] = item['eid']
                         if 'found_in' not in item:
                             item['found_in'] = []
                         if context[0] not in item['found_in']:

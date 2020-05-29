@@ -36,7 +36,7 @@ const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https
 const defaultComponents = [
   { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
-  { name: 'videoViewer', src: `${componentsBaseURL}/components/VideoViewer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
+  { name: 'videoPlayer', src: `${componentsBaseURL}/components/videoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
   { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
   { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
@@ -53,7 +53,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.6.9'
+const VERSION = '0.6.10'
 
 console.log(`visual-essays js lib ${VERSION}`)
 

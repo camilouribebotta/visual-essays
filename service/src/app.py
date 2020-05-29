@@ -422,9 +422,12 @@ def images(fname):
 @app.route('/components/<fname>', methods=['GET'])
 @app.route('/components/<subdir>/<fname>', methods=['GET'])  
 def components(fname, subdir=None):
-    path = f'{DOCS_ROOT}/docs/components' if subdir is None else f'{DOCS_ROOT}/docs/components/{subdir}'
-    logger.info(f'components: subdir={subdir} fname={fname} path={path} exists={os.path.exists(path)}')
-    return send_from_directory(path, fname, as_attachment=False)
+    for root in (DOCS_ROOT, os.path.dirname(BASEDIR)):
+        components_path = f'{root}/docs/components' if subdir is None else f'{root}/docs/components/{subdir}'
+        path = os.path.join(components_path, fname)
+        logger.info(f'components: subdir={subdir} fname={fname} components_path={components_path} path={path} exists={os.path.exists(path)}')
+        if os.path.exists(path):
+            return send_from_directory(components_path, fname, as_attachment=False)
 
 def usage():
     print('%s [hl:dr:]' % sys.argv[0])
