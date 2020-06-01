@@ -16,6 +16,14 @@
 
 ## Maps
 
+### Map - Show locations as GeoJSON regions
+
+Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
+<param ve-map center="Q82884" zoom="7" prefer-geojson>
+<param ve-map-layer geojson active url="https://data.whosonfirst.org/101/752/643/101752643.geojson" aliases="florence">
+<param ve-map-layer geojson active url="geojson/test.json">
+<param ve-network>
+
 ### Simple markers
 
 Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
@@ -25,14 +33,6 @@ Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, 
 
 Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
 <param ve-map center="Q82884" zoom="7" hide-labels>
-
-### Map - Show locations as GeoJSON regions
-
-Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
-<param ve-map center="Q82884" zoom="7" prefer-geojson>
-<param ve-map-layer geojson active url="https://data.whosonfirst.org/101/752/643/101752643.geojson" aliases="florence">
-<param ve-map-layer geojson active url="geojson/test.json" title="Test">
-<param ve-network>
 
 ### Map - Show locations as GeoJSON regions with no labels
 

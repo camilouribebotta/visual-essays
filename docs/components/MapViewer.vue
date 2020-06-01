@@ -96,22 +96,10 @@ module.exports = {
           markerStrokeWidth: props['stroke-width'] || 0,
           iconColor: props['marker-symbol-color'] || '#FFF',
           iconXOffset: props['marker-symbol-xoffset'] || 0,
-          iconYOffset: props['marker-symbol-yoffset'] || 0
-        })
+          iconYOffset: props['marker-symbol-yoffset'] || 0,
+        }),
+        id: props.eid
       })
-    },
-    showLabels() {
-      return this.map && this.map.hasLayer(this.layers['Labels'])
-    },
-    makePopup(label) {
-      let popup = `<h1>${label}</h1>`
-      /*
-      if (props.images) {
-        popup += `<img src="${props.images[0]}">`
-        popup = `<div style="width: 125px !important; height:135px !important;">${popup}</div>`
-      }
-      */
-      return popup
     },
     setHoverItemID(itemID) {
       this.$emit('hover-id', itemID)
@@ -162,10 +150,13 @@ module.exports = {
                 self.addPopup(layerId, label, layer.getBounds().getCenter())
                 self.addEventHandlers(layer, layerId)
                 self.active.add(layerId)
+                /*
                 const _layers = { ...self.layers, ...{ Labels: self.$L.layerGroup(Object.values(self.popups).filter(popup => self.active.has(layerId))) } }
                 if (!(self.mapDef['hide-labels'] === '' || self.mapDef['hide-labels'] === 'true')) {
                   _layers.Labels.addTo(self.map)
                 }
+                this.layers = _layers
+                */
               }
             }
             if (feature.properties.decorators) {
@@ -224,7 +215,10 @@ module.exports = {
         geojson.options.label = geojsonLabel
         geojson.options.type = 'geojson'
 
-        const _layers = { ...this.layers, ...{ Labels: this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id))) } }
+        const _layers = { 
+          ...this.layers, 
+          ...{ Labels: this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id))) } 
+        }
         if (!(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')) {
           _layers.Labels.addTo(this.map)
         }
@@ -253,17 +247,9 @@ module.exports = {
       const markers = []
       this.locations.filter(location => location.coords && !this.useGeojson(location)).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
-        /*
-        marker.addEventListener('click', (e) => {
-          const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
-          console.log('marker clicked', elemId)
-          this.$store.dispatch('setSelectedItemID', elemId)
-        })
-        */
         const markerLabel = location.title || location.label
         this.addPopup(location.eid, markerLabel, marker.getLatLng(), -45)
         this.addEventHandlers(marker, location.eid)
-        this.active.add(location.eid)
         markers.push(marker)
         const mll = marker.getLatLng()
         this.featuresById[location.id] = marker
@@ -275,16 +261,16 @@ module.exports = {
     syncLayers() {
       const currentLayerIds = new Set(this.mapDef.layers.map(def => def.id))
       const _layers = {}
-      this.active = new Set()
+      const _active = new Set()
 
       this.map.eachLayer(layer => {
         if (layer !== this.baseLayer) {
           if (layer.options.id) {
             if (currentLayerIds.has(layer.options.id)) {
               _layers[layer.options.label] = layer
-              this.active.add(layer.options.id)
+              _active.add(layer.options.id)
             } else {
-              console.log('remove', layer.options.label)
+              console.log('remove', layer.options.id)
               this.map.removeLayer(layer)
             }
           }
@@ -297,7 +283,7 @@ module.exports = {
         if (!_layers[layerLabel]) {
           console.log('add', layerDef.id, layerLabel)
           if (layerDef.type === 'geojson') {
-            this.active.add(layerDef.id)
+            _active.add(layerDef.id)
             this.loadGeojson(layerDef)
           } else if (layerDef.type === 'mapwarper') {
             layer = this.$L.tileLayer(`https://mapwarper.net/maps/tile/${layerDef['mapwarper-id']}/{z}/{x}/{y}.png`)
@@ -313,7 +299,7 @@ module.exports = {
       })
 
       this.locations.filter(location => this.useGeojson(location)).forEach(location => {
-        this.active.add(location.eid)
+        _active.add(location.eid)
         this.loadGeojson(location, true)
       })
 
@@ -322,15 +308,17 @@ module.exports = {
         const layer = this.$L.layerGroup(markers)
         layer.options.id = 'markers'
         layer.options.label = 'Locations'
-        layer.options.tyoe = 'markers'
+        layer.options.type = 'markers'
         layer.addTo(this.map)
-        _layers[layer.options.label] = layer
+        _layers.Locations = layer
+        markers.forEach(marker => _active.add(marker.options.id))
       }
-      _layers['Labels'] = this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id)))
+      _layers.Labels = this.$L.layerGroup(Object.values(this.popups).filter(popup => _active.has(popup.options.id)))
       if (!(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')) {
-        _layers['Labels'].addTo(this.map)
+       _layers.Labels.addTo(this.map)
       }
       this.layers = _layers
+      this.active = _active
     },
     updateLayers() {
       if (this.map) {
@@ -341,7 +329,7 @@ module.exports = {
   watch: {
     hoverItemID: {
       handler: function (itemID, prior) {
-        console.log(`hoverItemID: value=${itemID} prior=${prior}`)
+        // console.log(`hoverItemID: value=${itemID} prior=${prior}`)
         if (itemID) {
           let popup = document.querySelector(`h1[data-eid="${itemID}"]`)
           if (popup) {
@@ -381,7 +369,7 @@ module.exports = {
     layers: {
       handler: function (value, prior) {
         if (this.map) {
-          console.log('layers', this.layers)
+          // console.log('layers', this.layers)
           if (Object.keys(this.layers).length > 0) {
             if (this.layersControl) {
               this.map.removeControl(this.layersControl)
