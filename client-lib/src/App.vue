@@ -5,13 +5,31 @@
       <essay-header :essay-config="essayConfig" :progress="progress" @header-height="setHeaderHeight"></essay-header>
       <v-sheet id="scrollableContent" class="overflow-y-auto">
         <v-container :style="`margin-top:${essayTopMargin}px; height:${height}px;`">
-          <component v-bind:is="layout"></component>
+          <v-row v-if="layout === 'vtl'" no-gutters>
+            <v-col class="essay-pane vtl"><essay></essay></v-col>
+            <v-col class="map-pane vtl"><vertical-viewer></vertical-viewer></v-col>
+          </v-row>
+          <v-row v-else no-gutters>
+            <v-col>
+              <essay/>
+              <horizontal-viewer/>
+            </v-col>
+          </v-row>
         </v-container>
       </v-sheet>
     </template>
 
     <v-container v-else :style="`margin-top:${essayTopMargin}px; height:${height}px`">
-      <component v-bind:is="layout"></component>
+      <v-row v-if="layout === 'vtl'" no-gutters>
+        <v-col class="essay-pane vtl"><essay/></v-col>
+        <v-col class="map-pane vtl"><vertical-viewer/></v-col>
+      </v-row>
+      <v-row v-else no-gutters>
+        <v-col>
+          <essay/>
+          <horizontal-viewer/>
+        </v-col>
+      </v-row>
     </v-container>
 
     <entity-infobox-dialog/>
@@ -19,24 +37,14 @@
 </template>
 
 <script>
-import HorizontalLayout from './layouts/HorizontalLayout'
-import VerticalLayout from './layouts/VerticalLayout'
 
 export default {
   name: 'app',
   props: {
     path: { type: String }
   },
-  components: {
-    'horizontal': HorizontalLayout,
-    'hc': HorizontalLayout,
-    'ho': HorizontalLayout,
-    'vertical': VerticalLayout,
-    'vtl': VerticalLayout,
-    'vtr': VerticalLayout
-  },
   data: () => ({
-    layout: undefined,
+    layout: 'vtl',
     bannerHeight: undefined
   }),
   computed: {
@@ -46,12 +54,10 @@ export default {
     essayConfig() { return this.$store.getters.essayConfig },
     showBanner() { return this.$store.getters.showBanner },
     essayTopMargin() { return this.showBanner ? this.bannerHeight: 0 },
-    progress() { return this.$store.getters.progress },
-    headerHeight() { return this.$store.getters.headerHeight },
-    footerHeight() { return this.$store.getters.footerHeight }
+    progress() { return this.$store.getters.progress }
   },
   mounted() {
-    this.layout = this.$store.getters.layout | 'hc'
+    this.layout = this.$store.getters.layout | this.layout
   },
   methods: {
     setHeaderHeight(headerHeight) {
@@ -71,24 +77,11 @@ export default {
     }
   },
   watch: {
-    headerHeight: {
-      handler: function () {
-        // console.log(`App.watch.headerHeight=${this.headerHeight}`)
-      },
-      immediate: true
-    },
-    footerHeight: {
-      handler: function () {
-        // console.log(`App.watch.footerHeight=${this.footerHeight}`)
-      },
-      immediate: true
-    },
     viewportWidth: {
       handler: function (width) {
         if (width > 0) {
           this.layout = this.isMobile ? 'hc' : this.$store.getters.layout || 'vtl'
         }     
-        // console.log(`width=${width} layout=${this.$store.getters.layout}`)
       },
       immediate: true
     }
@@ -126,4 +119,12 @@ export default {
     margin-bottom: 12px;
   }
 
+  .map-pane {
+    z-index: 10;
+  }
+
+  .essay-pane.vtl  {
+    z-index: 100;
+    box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.16);
+  }
 </style>

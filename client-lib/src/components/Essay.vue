@@ -20,6 +20,7 @@ export default {
     activeElements() { return this.$store.getters.activeElements },
     layout() { return this.$store.getters.layout },
     isMobile() { return this.$store.getters.isMobile },
+    hoverItemID() { return this.$store.getters.hoverItemID },
     triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height },
     style() {
       return {
@@ -179,6 +180,18 @@ export default {
     }
   },
   watch: {
+    hoverItemID: {
+      handler: function (itemID, prior) {
+        console.log(`Essay.hoverItemID: value=${itemID} prior=${prior}`)
+        if (itemID) {
+          document.querySelectorAll(`.active-elem [data-eid="${itemID}"]`).forEach(elem => elem.classList.add('entity-highlight'))
+        }
+        if (prior) {
+          document.querySelectorAll(`.active-elem [data-eid="${prior}"]`).forEach(elem => elem.classList.remove('entity-highlight'))
+        }
+      },
+      immediate: true
+    },
     triggerHook: {
       handler: function () {
         this.scenes.forEach(scene => {
@@ -258,6 +271,7 @@ export default {
     z-index: 10;
   }
 
+  .entity-highlight,
   .tagged.location:hover,
   p.active-elem .inferred.location:hover,
   .tagged.building:hover,
@@ -276,7 +290,7 @@ export default {
   p.active-elem .inferred.entity:hover,
   .tagged.event:hover,
   p.active-elem .inferred.event:hover {
-    background: #EBECBB;
+    background: #EBECBB !important;
   }
 
   /*

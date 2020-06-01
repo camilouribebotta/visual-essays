@@ -34,19 +34,20 @@ module.exports = {
     items: Array,
     selected: String,
     width: Number,
-    height: Number
+    height: Number,
+    hoverItemID: String,
+    selectedItemID: String
   },
   data: () => ({
     map: null,
-    geojson: {},
-    mapLayers: {
-      baseLayer: null,
-      mapwarper: {},
-      markerGroups: {},
-      geojson: {}
-    },
-    addedLayers: new Set(),
-    controls: {},
+    // geojson: {},
+    baseLayer: undefined,
+    layers: {},
+    layersControl: undefined,
+    opacityControl: undefined,
+    popups: {},
+    active: new Set(),
+
     featuresById: {},
     markersByLatLng: {}
   }),
@@ -58,7 +59,7 @@ module.exports = {
     locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
-    isSelected() { return this.selected === 'map' },
+    isSelected() { return this.selected === 'map' }
     // width() { return Math.min(this.viewport.width, this.viewerWidth)},
   },
   mounted() {
@@ -72,15 +73,14 @@ module.exports = {
         this.map.off()
         this.map.remove()
         this.map = undefined
-        this.addedLayers = new Set()
       }
       if (!this.map) {
-        this.mapLayers.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
+        this.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
         this.map = this.$L.map('lmap', {
           preferCanvas: true,
           center: this.mapDef.center || defaults.center, 
           zoom: this.mapDef.zoom || defaults.zoom, zoomSnap: 0.1,
-          layers: [this.mapLayers.baseLayer]})
+          layers: [this.baseLayer]})
         console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom} elapsed=${Math.round(performance.now() - t)}`)
         this.updateLayers()
       }
@@ -100,6 +100,9 @@ module.exports = {
         })
       })
     },
+    showLabels() {
+      return this.map && this.map.hasLayer(this.layers['Labels'])
+    },
     makePopup(label) {
       let popup = `<h1>${label}</h1>`
       /*
@@ -110,8 +113,14 @@ module.exports = {
       */
       return popup
     },
+    setHoverItemID(itemID) {
+      this.$emit('hover-id', itemID)
+    },
+    setSelectedItemID(itemID) {
+      this.$emit('selected-id', itemID)
+    },
     cachedGeojson(def) {
-      // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
+      console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
         cacheObj[def.id] = fetch(def.url || def.geojson).then(resp => resp.json())
@@ -119,22 +128,44 @@ module.exports = {
       }
       return this.$store.getters.geoJsonCache[def.id]
     },
-    loadGeojson(def) {
+    addEventHandlers(elem, itemId) {
+      elem.on('click', () => { this.setSelectedItemID(itemId) })
+      elem.on('mouseover', () => { this.setHoverItemID(itemId) })
+      elem.on('mouseout', () => { this.setHoverItemID() })
+    },
+    addPopup(id, label, latLng, offset) {
+      if (!this.popups[id]) {
+        const popup = L.popup({ ...defaults.popupOptions, ...{ offset: L.point(0, offset || 0)}})
+        popup.setLatLng(latLng)
+        popup.setContent(`<h1 data-eid="${id}">${label}</h1>`)
+        popup.options.id = id
+        this.popups[id] = popup
+      }
+    },
+    loadGeojson(def, addToMap) {
       this.cachedGeojson(def)
       .then(data => {
         const self = this
+        let layerNum = 0
         let numFeatureLabels = 0
         let geojson = L.geoJson(data, {
           // Pop Up
           onEachFeature: function(feature, layer) {
-            // layer.addEventListener('click', (e) => console.log('geojson.layer clicked'))
+            const layerId = layer.feature.properties.id || layerNum === 0 ? def.id : `${def.id}-${layerNum}`
+            layer.feature.properties.id = layerId
+            self.addEventHandlers(layer, layer.feature.properties.id)
             if (!def.title) {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || feature.properties['ne:NAME'] || undefined : undefined
               if (label) {
-                // layer.addEventListener('click', (e) => console.log('geojson.feature clicked', feature))
-                feature.properties.label = label
-                layer.bindPopup(self.makePopup(label), defaults.popupOptions )
                 numFeatureLabels += 1
+                feature.properties.label = label
+                self.addPopup(layerId, label, layer.getBounds().getCenter())
+                self.addEventHandlers(layer, layerId)
+                self.active.add(layerId)
+                const _layers = { ...self.layers, ...{ Labels: self.$L.layerGroup(Object.values(self.popups).filter(popup => self.active.has(layerId))) } }
+                if (!(self.mapDef['hide-labels'] === '' || self.mapDef['hide-labels'] === 'true')) {
+                  _layers.Labels.addTo(self.map)
+                }
               }
             }
             if (feature.properties.decorators) {
@@ -157,6 +188,7 @@ module.exports = {
                 const decorator = self.$L.polylineDecorator(polyline, {patterns}).addTo(self.map)
               })
             }
+            layerNum += 1
           },
           // Style
           style: function(feature) {
@@ -171,83 +203,40 @@ module.exports = {
           pointToLayer: function(feature, latlng) {
             return self.makeMarker(latlng, feature.properties)
           }
-        }).addTo(this.map)
+        })
 
-        this.geojson[def.id] = geojson
-        this.mapLayers.geojson[def.id] = {
-          id: def.id,
-          name: def.title,
-          active: (def.active || 'false') === 'true',
-          layer: geojson
+        const geojsonLabel = def.title
+          ? def.title
+          : data.properties
+            ? data.properties.label || data.properties.name || data.properties.title || data.properties['ne:NAME'] || data.properties['ne:name'] || undefined
+            : undefined
+
+        if (addToMap || def.active) {
+          geojson.addTo(this.map)
         }
-       
+
         if (numFeatureLabels === 0) {
-          const label = def.title
-            ? def.title
-            : geojson.properties
-              ? geojson.properties.label || geojson.properties.name || geojson.properties.title || geojson.properties['ne:NAME'] || undefined
-              : undefined
-          if (label) {
-            geojson.bindPopup(self.makePopup(label), defaults.popupOptions)
-            if (this.showLabels()) {
-              geojson.openPopup()
-            }
-          }
+          this.addPopup(def.id, geojsonLabel, geojson.getBounds().getCenter())
+          this.addEventHandlers(geojson, def.id)
         }
 
-        this.addedLayers.add(def.id)
-        if (this.showLabels()) {
-          geojson.eachLayer(feature => feature.openPopup())
+        geojson.options.id = def.id
+        geojson.options.label = geojsonLabel
+        geojson.options.type = 'geojson'
+
+        const _layers = { ...this.layers, ...{ Labels: this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id))) } }
+        if (!(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')) {
+          _layers.Labels.addTo(this.map)
         }
+        _layers[geojsonLabel] = geojson
+        this.layers = _layers
+
         this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
 
         return geojson
       })
     },
-    syncGeojsonLayers() {
-      let t = performance.now()
-      const layers = []
-      Object.keys(this.mapLayers).filter(layer => layer.url).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.find(def => def.id === cur)) {
-          this.addedLayers.delete(cur)
-          this.map.removeLayer(this.mapLayers.geojson[cur].layer)
-        }
-      })
 
-      this.mapDef.layers.filter(layer => layer.url).forEach(def => {
-        if (!this.addedLayers.has(def.id)) {
-          if (this.mapLayers.geojson[def.id]) {
-            this.addedLayers.add(def.id)
-            const geojson = this.mapLayers.geojson[def.id].layer
-            geojson.addTo(this.map)
-            if (this.showLabels()) {
-              geojson.openPopup()
-              geojson.eachLayer(feature => feature.openPopup())                      
-            }
-          } else {
-            layers.push(this.loadGeojson(def))
-          }
-        }
-      })
-
-      this.locations.filter(location => this.useGeojson(location)).forEach(location => {
-        if (!this.addedLayers.has(location.id)) {
-          if (this.mapLayers.geojson[location.id]) {
-            this.addedLayers.add(location.id)
-            const geojson = this.mapLayers.geojson[location.id].layer
-            this.map.addLayer(geojson)
-            if (this.showLabels()) {
-              geojson.openPopup()
-              geojson.eachLayer(feature => feature.openPopup())
-            }
-          } else {
-            this.loadGeojson(location)
-          }
-        }
-      })
-      console.log(`syncGeojsonLayers: elapsed=${Math.round(performance.now() - t)}`)
-      return layers
-    },
     useGeojson(location) {
       let useGeojson = false
       if (location.geojson) {
@@ -259,21 +248,22 @@ module.exports = {
       }
       return useGeojson
     },
-    showLabels() {
-      return !(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')
-    },
+
     getLocationMarkers() {
       const markers = []
-      // this.locations.filter(location => location.coords && !location.geojson).forEach((location) => {
       this.locations.filter(location => location.coords && !this.useGeojson(location)).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
+        /*
         marker.addEventListener('click', (e) => {
           const elemId = this.markersByLatLng[`${e.latlng.lat},${e.latlng.lng}`]
+          console.log('marker clicked', elemId)
           this.$store.dispatch('setSelectedItemID', elemId)
         })
-        if (location.title || location.label) {
-          marker.bindPopup(this.makePopup(location.title || location.label), defaults.popupOptions)
-        }
+        */
+        const markerLabel = location.title || location.label
+        this.addPopup(location.eid, markerLabel, marker.getLatLng(), -45)
+        this.addEventHandlers(marker, location.eid)
+        this.active.add(location.eid)
         markers.push(marker)
         const mll = marker.getLatLng()
         this.featuresById[location.id] = marker
@@ -281,113 +271,143 @@ module.exports = {
       })
       return markers
     },
-    syncMapwarperLayers() {
-      Object.keys(this.mapLayers).filter(layer => layer['mapwarper-id']).forEach(cur => {
-        if (this.addedLayers.has(cur) && !this.mapDef.layers.find(def => def.id === cur)) {
-          this.addedLayers.delete(cur)
-          this.map.removeLayer(this.mapLayers.mapwarper[cur].layer)
-        }
-      })
-      this.mapDef.layers.filter(layer => layer['mapwarper-id']).forEach(def => {
-        if (!this.addedLayers.has(def.id)) {
-          let layer
-          if (this.mapLayers.mapwarper[def.id]) {
-            this.addedLayers.add(def.id)
-            layer = this.mapLayers.mapwarper[def.id].layer
-          } else {
-            layer = this.$L.tileLayer(`https://mapwarper.net/maps/tile/${def['mapwarper-id']}/{z}/{x}/{y}.png`)
-            this.mapLayers.mapwarper[def.id] = {
-              id: def.id,
-              name: def.title,
-              active: (def.active || 'false') === 'true',
-              layer
+
+    syncLayers() {
+      const currentLayerIds = new Set(this.mapDef.layers.map(def => def.id))
+      const _layers = {}
+      this.active = new Set()
+
+      this.map.eachLayer(layer => {
+        if (layer !== this.baseLayer) {
+          if (layer.options.id) {
+            if (currentLayerIds.has(layer.options.id)) {
+              _layers[layer.options.label] = layer
+              this.active.add(layer.options.id)
+            } else {
+              console.log('remove', layer.options.label)
+              this.map.removeLayer(layer)
             }
           }
-          if (this.mapLayers.mapwarper[def.id].active) {
-            layer.addTo(this.map)
-          }
         }
       })
-    },
-    setControls() {
-      const baseLayers = {
-        base: this.mapLayers.baseLayer
-      }
-      const allLayers = {}
-      const fadeableLayers = {}
-      this.mapDef.layers.forEach(layerDef => {
-        const layerType = layerDef.url ? 'geojson' : 'mapwarper'
-        const layer = this.mapLayers[layerType][layerDef.id]
-        if (layer) {
-          allLayers[layer.name] = layer.layer
-          if (layerType === 'mapwarper') {
-            fadeableLayers[layer.name] = layer.layer
-          }
-        }
-      })
-      /*
-      for (const layerId in this.mapLayers.markerGroups) {
-        const layer = this.mapLayers.markerGroups[layerId]
-        allLayers[layer.name] = this.mapLayers.markerGroups[layerId].layer
-      }
-      */
 
-      if (this.controls.layers) {
-        this.map.removeControl(this.controls.layers)
-      }
-      if (Object.keys(allLayers).length > 0) {
-        this.controls.layers =
-          this.$L.control.layers(
-            {}, // baseLayers,
-            allLayers, 
-            { collapsed: true } //options
-          ).addTo(this.map)
-      }
-      // opacity control
-      if (this.controls.opacity) {
-        this.map.removeControl(this.controls.opacity)
-      }
-      if (Object.keys(fadeableLayers).length > 0) {
-        this.controls.opacity =
-            this.$L.control.opacity(
-                fadeableLayers,
-                {
-                  // label: 'Layers Opacity',
-                  collapsed: true
-                }
-            ).addTo(this.map)
-      }
-    },
-    syncMarkerGroups() {
-      for (const groupName in this.mapLayers.markerGroups) {
-        const markerGroup = this.mapLayers.markerGroups[groupName]
-        this.map.removeLayer(markerGroup.layer)
-      }
-      const currentMarkerGroups = {}
-      
+      this.mapDef.layers.forEach(layerDef => {
+        let layer
+        const layerLabel = layerDef.title || layerDef.id
+        if (!_layers[layerLabel]) {
+          console.log('add', layerDef.id, layerLabel)
+          if (layerDef.type === 'geojson') {
+            this.active.add(layerDef.id)
+            this.loadGeojson(layerDef)
+          } else if (layerDef.type === 'mapwarper') {
+            layer = this.$L.tileLayer(`https://mapwarper.net/maps/tile/${layerDef['mapwarper-id']}/{z}/{x}/{y}.png`)
+            layer.options.id = layerDef.id
+            layer.options.label = layerLabel
+            layer.options.type = 'mapwarper'
+            _layers[layerLabel] = layer
+            if (layerDef.active) {
+              layer.addTo(this.map)
+            }
+          }
+        }
+      })
+
+      this.locations.filter(location => this.useGeojson(location)).forEach(location => {
+        this.active.add(location.eid)
+        this.loadGeojson(location, true)
+      })
+
       const markers = [...this.getLocationMarkers()]
-      const layer = this.$L.layerGroup(markers)
-      currentMarkerGroups['locations'] = {
-        name: 'Locations',
-        active: true,
-        layer
+      if (markers.length > 0) {
+        const layer = this.$L.layerGroup(markers)
+        layer.options.id = 'markers'
+        layer.options.label = 'Locations'
+        layer.options.tyoe = 'markers'
+        layer.addTo(this.map)
+        _layers[layer.options.label] = layer
       }
-      layer.addTo(this.map)
-      if (this.showLabels()) {
-        markers.forEach(marker => marker.openPopup())
+      _layers['Labels'] = this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id)))
+      if (!(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')) {
+        _layers['Labels'].addTo(this.map)
       }
-      this.mapLayers.markerGroups = currentMarkerGroups
+      this.layers = _layers
     },
     updateLayers() {
       if (this.map) {
-        this.syncGeojsonLayers()
-        this.syncMapwarperLayers()
-        this.syncMarkerGroups()
-        this.setControls()
+        this.syncLayers()
       }
     }
   },
   watch: {
+    hoverItemID: {
+      handler: function (itemID, prior) {
+        console.log(`hoverItemID: value=${itemID} prior=${prior}`)
+        if (itemID) {
+          let popup = document.querySelector(`h1[data-eid="${itemID}"]`)
+          if (popup) {
+            if (this.mapDef['hide-labels'] !== 'true') {
+              popup = popup.parentElement.parentElement.parentElement
+              popup.childNodes[0].classList.add('popup-invert')
+              popup.childNodes[1].childNodes[0].classList.add('popup-invert')
+            }
+          } else {
+            if (this.popups[itemID]) {
+              this.popups[itemID].openOn(this.map)
+            }
+          }
+        }
+        if (prior) {
+          let popup = document.querySelector(`h1[data-eid="${prior}"]`)
+          if (popup) {
+            popup = popup.parentElement.parentElement.parentElement
+            popup.childNodes[0].classList.remove('popup-invert')
+            popup.childNodes[1].childNodes[0].classList.remove('popup-invert')
+          }
+          if (this.popups[prior] && this.mapDef['hide-labels'] === 'true') {
+            this.map.closePopup(this.popups[prior])
+          }
+        }
+        
+      },
+      immediate: true
+    },
+    selectedItemID: {
+      handler: function (itemID, prior) {
+        const layer = Object.values(this.layers).find(layer => layer.options.id === (itemID || prior))
+        console.log(`MapViewer.selectedItemID: value=${itemID} prior=${prior}`)
+      },
+      immediate: true
+    },
+    layers: {
+      handler: function (value, prior) {
+        if (this.map) {
+          console.log('layers', this.layers)
+          if (Object.keys(this.layers).length > 0) {
+            if (this.layersControl) {
+              this.map.removeControl(this.layersControl)
+            }
+            this.layersControl = this.$L.control.layers(
+                {}, // baseLayers,
+                this.layers, 
+                { collapsed: true } //options
+              ).addTo(this.map)
+          }
+          if (this.opacityControl) {
+            this.map.removeControl(this.opacityControl)
+          }
+          const fadeableLayers = {}
+          for (let [label, layer] of Object.entries(this.layers)) {
+            if (layer.options.type === 'mapwarper') {
+              fadeableLayers[label] = layer 
+            }
+          }
+          if (fadeableLayers) {
+            this.opacityControl = this.$L.control.opacity(fadeableLayers, { collapsed: true }).addTo(this.map)
+          }
+        }
+      },
+      immediate: true
+    },
     selected: {
       handler: function (value, prior) {
         const map = document.getElementById('map')
@@ -396,6 +416,12 @@ module.exports = {
         }
       },
       immediate: true
+    },
+    height: {
+      handler: function () {
+        this.map.invalidateSize()
+      },
+      immediate: false
     },
     activeElements: {
       handler: function () {
@@ -429,6 +455,13 @@ module.exports = {
 </script>
 
 <style>
+
+  .popup-invert {
+    background-color: #444 !important;
+  }
+  .popup-invert h1 {
+    color: white !important;
+  }
 
   .wrapper {
       display: inherit;

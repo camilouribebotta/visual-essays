@@ -17,7 +17,7 @@ export default {
     isOpen: false
   }),
   computed: {
-    selectedItemId () { return this.$store.getters.selectedItemId },
+    selectedItemID () { return this.$store.getters.selectedItemID }
   },
   methods: {
     clearSelectedItemID() {

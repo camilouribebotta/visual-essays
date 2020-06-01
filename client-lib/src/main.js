@@ -26,6 +26,7 @@ import 'leaflet.control.opacity'
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
+import Essay from './components/Essay'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
@@ -41,6 +42,7 @@ const defaultComponents = [
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
   { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
   { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, selectors: ['tag:plant-specimen'], 'icon': 'fa-seedling', 'label': 'Plant Specimens' },
+  { name: 'essay', component: Essay },
   { name: 'horizontalViewer', component: HorizontalViewer },
   { name: 'verticalViewer', component: VerticalViewer },
   { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
@@ -53,7 +55,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.6.10'
+const VERSION = '0.6.11'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -67,7 +69,7 @@ Vue.mixin({
     itemsInActiveElements() { return store.getters.itemsInActiveElements },
     components() { return store.getters.components },
     groups() { return groupItems(itemsInElements(elemIdPath(this.activeElement), this.allItems), store.getters.componentSelectors) },
-    selectedItemID () { return store.getters.selectedItemID }
+    // selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   }
 })

@@ -25,6 +25,7 @@ export default new Vuex.Store({
     items: [],
     activeElements: [],
     itemsInActiveElements: [],
+    hoverItemID: null,
     selectedItemID: null,
     height: 0,
     width: 0,
@@ -80,6 +81,7 @@ export default new Vuex.Store({
       state.activeElements = elems
       state.itemsInActiveElements = itemsInElements(state.activeElements, state.items)
     },
+    setHoverItemID (state, id) { state.hoverItemID = id },
     setSelectedItemID (state, id) { state.selectedItemID = id },
     updateItem (state, item) {
       state.items = [ 
@@ -119,6 +121,7 @@ export default new Vuex.Store({
     setContent: ({ commit }, content) => commit('setContent', content),
     setItems: ({ commit }, items) => commit('setItems', items),
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
+    setHoverItemID: ({ commit }, id) => commit('setHoverItemID', id),
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
@@ -147,6 +150,7 @@ export default new Vuex.Store({
     activeElements: state => state.activeElements,
     activeElement: (state) => state.activeElements.length > 0 ? state.activeElements[0] : undefined,
     itemsInActiveElements: state => state.itemsInActiveElements,
+    hoverItemID: state => state.hoverItemID,
     selectedItemID: state => state.selectedItemID,
     height: state => state.height,
     width: state => state.width,

@@ -28,6 +28,10 @@
           :width="viewerWidth"
           :height="viewerHeight"
           :initial-mode="mode"
+          :hoverItemID="hoverItemID"
+          :selectedItemID="selectedItemID"
+          @hover-id="setHoverItemID"
+          @selected-id="setSelectedItemID"
         />
       </v-tab-item>
 
@@ -51,7 +55,7 @@
       viewerWidth: 0,
       header: undefined,
       contentContainer: 0,
-      position: 'relative',
+      position: 'relative'
     }),
     computed: {
       viewportHeight() { return this.$store.getters.height },
@@ -60,9 +64,11 @@
       headerHeight() { return this.$store.getters.headerHeight },
       footerHeight() { return this.$store.getters.footerHeight },
       viewerHeight() { return this.$store.getters.height - this.headerHeight - this.footerHeight},
-      primary() {return this.$store.getters.itemsInActiveElements.find(item => item.tag === 'primary') },
-      primaryTab() { return this.primary ? this.primary.primary : undefined },
+      primary() {return this.$store.getters.itemsInActiveElements.find(item => item.primary === 'true' || item.tag === 'primary') },
+      primaryTab() { return this.primary ? `${this.primary.tag}Viewer` : undefined },
       mode() { return this.primary ? this.primary.mode : undefined },
+      hoverItemID() { return this.$store.getters.hoverItemID },
+      selectedItemID() { return this.$store.getters.selectedItemID },
       style() {
         return {
           display: this.$refs.viewer ? 'block' : 'none',
@@ -72,6 +78,7 @@
       }
     },
     mounted() {
+      console.log('VerticalViewer.mounted')
       this.contentContainer = document.getElementById('scrollableContent')
       this.header = document.getElementById('header')
       // this.contentContainer.addEventListener('scroll', throttle(this.mouseMove, 10))
@@ -87,6 +94,12 @@
       this.$nextTick(() => this.init())
     },
     methods: {
+      setHoverItemID(itemID) {
+        this.$store.dispatch('setHoverItemID', itemID)
+      },
+      setSelectedItemID(itemID) {
+        this.$store.dispatch('setSelectedItemID', itemID)
+      },
       mouseMove(e) {
         if (!this.header) {
           this.header = document.getElementById('header')
@@ -170,6 +183,8 @@
       addItemClickHandlers(elemId) {
         document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
           entity.addEventListener('click', this.itemClickHandler)
+          entity.addEventListener('mouseover', (e) => { this.setHoverItemID(e.target.attributes['data-eid'].value) })
+          entity.addEventListener('mouseout', (e) => { this.setHoverItemID() })
         })
       },
       removeItemClickHandlers(elemId) {
@@ -223,7 +238,20 @@
         })
         this.tabs = availableGroups
         this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
-        // console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
+        console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
+      },
+      primary: {
+        handler: function (value, prior) {
+          console.log('primary', this.primary)
+        },
+        immediate: true
+      },
+      primaryTab: {
+        handler: function (value, prior) {
+          console.log(`primaryTab=${this.primaryTab}`)
+          this.activeTab = this.primaryTab
+        },
+        immediate: true
       },
       viewportHeight: {
         handler: function (value, prior) {

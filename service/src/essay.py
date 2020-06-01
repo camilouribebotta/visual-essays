@@ -183,6 +183,8 @@ class Essay(object):
                 elif 'id' in attrs and is_qid(attrs['id']):
                     attrs['eid'] = attrs.pop('id')
                     tag = 'entity'
+                elif 'eid' in attrs and is_qid(attrs['eid']):
+                    tag = 'entity'
                 else:
                     continue
             else:
@@ -358,8 +360,8 @@ class Essay(object):
                         seg.attrs['class'] = ['entity', 'inferred']
                         if 'category' in item:
                             seg.attrs['class'].append(item['category'])
-                        if 'eid' in item:
-                            seg.attrs['data-eid'] = item['eid']
+                        # if 'eid' in item:
+                        seg.attrs['data-eid'] = item.get('eid', item.get('id'))
                         if 'found_in' not in item:
                             item['found_in'] = []
                         if context[0] not in item['found_in']:

@@ -419,6 +419,11 @@ def site(acct=None, repo=None, file=None):
 def images(fname):
     return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'images'), fname, as_attachment=False)
 
+
+@app.route('/geojson/<fname>', methods=['GET'])  
+def geojson(fname):
+    return send_from_directory(os.path.join(DOCS_ROOT, 'docs', 'geojson'), fname, as_attachment=False)
+
 @app.route('/components/<fname>', methods=['GET'])
 @app.route('/components/<subdir>/<fname>', methods=['GET'])  
 def components(fname, subdir=None):
