@@ -184,11 +184,11 @@ module.exports = {
           // Style
           style: function(feature) {
             return {
-                color: feature.properties['stroke'] || '#FB683F',
-                weight: feature.properties['stroke-width'] || 4,
-                opacity: feature.properties['stroke-opacity'] || 1,                  
-                fillColor: feature.properties['fill'] || '#32C125',
-                fillOpacity: feature.properties['fill-opacity'] || 0.5,
+                color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
+                weight: def['stroke-width'] || feature.properties['stroke-width'] || 4,
+                opacity: def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1,                  
+                fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
+                fillOpacity: def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5,
             }
           },
           pointToLayer: function(feature, latlng) {
