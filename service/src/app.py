@@ -92,7 +92,7 @@ def get_local_markdown(file=None):
                 return {'source': 'local', 'fname': file.replace('.md', ''), 'text': fp.read()}
 
 def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, site=None):
-    logger.debug(f'convert_relative_links: acct={acct} repo={repo} site={site}')
+    logger.info(f'convert_relative_links: acct={acct} repo={repo} site={site}')
     if site == 'localhost':
         baseurl = 'http://localhost:5000/essay'
         if acct:
@@ -112,19 +112,21 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
                     if elem.attrs[attr].startswith('#'):
                         elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
-                        # logger.info(elem.attrs[attr])
+                        logger.info(elem.attrs[attr])
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
     
     if source == 'local':
         baseurl = 'http://localhost:5000'
-    elif source == 'gh':
+    else:
         baseurl = content_baseurl(acct, repo)
-    logger.debug(f'convert_relative_image_links: source={source} baseurl={baseurl}')
+    logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
     for tag in ('img', 'var', 'span', 'param'):
         for elem in soup.find_all(tag):
             for attr in ('banner', 'data-banner', 'src', 'url'):
                 if attr in elem.attrs and elem.attrs[attr] and not elem.attrs[attr].startswith('http'):
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
+                    if repo == 'plant-humanities':
+                        elem.attrs[attr] = elem.attrs[attr].replace('/content/geojson', '/geojson')
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -317,6 +319,8 @@ def essay(acct=None, repo=None, file=None):
     else:
         raw = kwargs.pop('raw', 'false') in ('', 'true')
         site = urlparse(request.base_url).hostname
+        acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
+        repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
         src = None
         gdid = None
         for arg in ('src', 'gd', 'gdid', 'gdrive'):
@@ -337,13 +341,13 @@ def essay(acct=None, repo=None, file=None):
             use_local = kwargs.pop('mode', ENV) == 'dev'
             acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
             repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-            logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} raw={raw} kwargs={kwargs}')
             if use_local:
                 markdown = get_local_markdown(file)
                 baseurl = 'http://localhost:5000'
             else:
                 markdown = get_gh_markdown(acct, repo, file)
                 baseurl = content_baseurl(acct, repo)
+        logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} raw={raw} kwargs={kwargs}')
         if markdown:
             if raw:
                 return (markdown['text'], 200, cors_headers)
