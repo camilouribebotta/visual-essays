@@ -58,7 +58,7 @@ export default {
   },
   mounted() {
     this.layout = this.$store.getters.layout | this.layout
-    console.log('App.mounted', showBanner, essayConfig)
+    console.log('App.mounted', this.showBanner, this.essayConfig)
   },
   methods: {
     setHeaderHeight(headerHeight) {
