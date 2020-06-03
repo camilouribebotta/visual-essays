@@ -1,7 +1,7 @@
 <template>
   <v-card tile class="overflow-hidden">
     
-    <v-navigation-drawer app v-model="drawer" style="z-index:201 !important;">
+    <v-navigation-drawer app v-if="nav.length > 0" v-model="drawer" style="z-index:201 !important;">
       <v-list dense v-cloak>
         <v-list-item v-for="(menuItem, i) in nav" :key="i" @click="menuItemClicked(menuItem.file)" v-if="menuItem.enabled">
           <v-list-item-action><v-icon>{{menuItem.icon}}</v-icon></v-list-item-action>

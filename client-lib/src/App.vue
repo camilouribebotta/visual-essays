@@ -2,7 +2,7 @@
   <v-app id="visual-essay" :class="path">
 
     <template v-if="showBanner && essayConfig && essayConfig.banner">
-      <essay-header :essay-config="essayConfig" :progress="progress" @header-height="setHeaderHeight"></essay-header>
+      <site-header :essay-config="essayConfig" :progress="progress" @header-height="setHeaderHeight"></site-header>
       <v-sheet id="scrollableContent" class="overflow-y-auto">
         <v-container :style="`margin-top:${essayTopMargin}px; height:${height}px;`">
           <v-row v-if="layout === 'vtl'" no-gutters>
