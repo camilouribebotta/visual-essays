@@ -92,8 +92,12 @@
       numPrimarySources() { return this.essayConfig['num-primary-sources'] },
       hasStats() { return this.numMaps !== undefined || this.numImages !== undefined || this.numSpecimens !== undefined || this.numPrimarySources !== undefined }
     },
+    created() {
+      console.log('Header.created')
+    },
     mounted() {
       document.getElementById('header').addEventListener('wheel', this.throttle(this.scrollContent, 40))
+      console.log('Header.mounted')
     },
     methods: {
       onMutate(mutations) {
