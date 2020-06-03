@@ -328,6 +328,7 @@ def essay(acct=None, repo=None, file=None):
                     src = val
                 else:
                     gdid = val
+        baseurl = None
         if src:
             markdown = get_markdown(src)
         elif gdid:

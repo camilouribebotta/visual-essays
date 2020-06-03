@@ -147,7 +147,10 @@ module.exports = {
               if (label) {
                 numFeatureLabels += 1
                 feature.properties.label = label
-                self.addPopup(layerId, label, layer.getBounds().getCenter())
+                const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'LineString'
+                  ? layer.getBounds().getCenter()
+                  : layer.getLatLng()
+                self.addPopup(layerId, label, latLng)
                 self.addEventHandlers(layer, layerId)
                 self.active.add(layerId)
                 /*
@@ -185,7 +188,7 @@ module.exports = {
           style: function(feature) {
             return {
                 color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
-                weight: def['stroke-width'] || feature.properties['stroke-width'] || 4,
+                weight: def['stroke-width'] || feature.properties['stroke-width'] || feature.geometry.type === 'Polygon' ? 0 : 4,
                 opacity: def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1,                  
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
                 fillOpacity: def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5,
