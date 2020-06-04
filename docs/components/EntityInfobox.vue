@@ -14,7 +14,6 @@ module.exports = {
   name: 'entity-infobox',
   props: {
     eid: { type: String, default: undefined },
-    apiBaseURL: { type: String, default: 'https://visual-essays.app' },
     imageFit: { type: String, default: 'contain' }
     /* imageFit:
        fill = stretched to fit box
@@ -35,7 +34,8 @@ module.exports = {
     thumbnail () { return this.entityInfo && this.entityInfo.thumbnail ? this.entityInfo.thumbnail.source : null },
     imageSrc () { return this.thumbnail ?  this.thumbnail : this.entity.images ? this.entity.images[0] : null },
     html () { return this.entityInfo ?  this.entityInfo.extract_html : null },
-    context() { return this.$store.getters.context }
+    context() { return this.$store.getters.context },
+    apiBaseURL() { return window.location.origin }
   },
   mounted() {
     this.getSummaryInfo()

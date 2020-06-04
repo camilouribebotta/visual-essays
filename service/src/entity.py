@@ -13,7 +13,6 @@ import getopt
 import sys
 import traceback
 from urllib.parse import quote
-import concurrent.futures
 from collections import OrderedDict
 
 import requests
@@ -23,9 +22,10 @@ from bs4 import BeautifulSoup
 
 from fingerprints import get_fingerprints
 
-GRAPHS = {
-    'jstor': {
-        'prefix': '<http://kg.jstor.org/entity/>',
+GRAPHS = [
+    {
+        'ns': 'jstor',
+        'prefix': 'http://kg.jstor.org/entity/',
         'baseurl': 'https://kg.jstor.org/entity',
         'sparql_endpoint': 'https://kg-query.jstor.org/proxy/wdqs/bigdata/namespace/wdq/sparql',
         'api_endpoint': 'https://kg.jstor.org/w/api.php',
@@ -33,8 +33,9 @@ GRAPHS = {
             'entity': 'Q13'
         }
     },
-    'wd': {
-        'prefix': '<http://www.wikidata.org/entity/>',
+    {
+        'ns': 'wd',
+        'prefix': 'http://www.wikidata.org/entity/',
         'baseurl': 'https://www.wikidata.org/entity',
         'sparql_endpoint': 'https://query.wikidata.org/sparql',
         'api_endpoint': 'https://www.wikidata.org/w/api.php',
@@ -42,88 +43,100 @@ GRAPHS = {
             'entity': 'Q35120'
         }
     }
-}
+]
+PREFIXES = dict([(g['ns'],g['prefix']) for g in GRAPHS])
+NAMESPACES = set([g['ns'] for g in GRAPHS])
 default_ns = 'wd'
-default_language = 'en'
 default_entity_type = 'entity'
+
+def as_uri(s):
+    global default_ns
+    if s.startswith('http'):
+        return s
+    prefix, entity_id = s.split(':') if ':' in s else (default_ns, s)
+    return f'{PREFIXES[prefix]}{entity_id}'
 
 class KnowledgeGraph(object):
 
     def __init__(self, **kwargs):
         self.cache = kwargs.get('cache', {})
-        self.ns = kwargs.get('ns', default_ns)
-        self.language = kwargs.get('language', default_language)
         self.entity_type = kwargs.get('entity_type', default_entity_type)
         self.prop_mappings = {}
         self.formatter_urls = {}
-        for ns in GRAPHS:
-            self.prop_mappings[ns] = dict([(p['id'], p) for p in self._properties(ns)])
-            self.formatter_urls[ns] = dict([(p['id'], p) for p in self._formatter_urls(ns)])
+        for g in GRAPHS:
+            self.prop_mappings[g['ns']] = dict([(p['id'], p) for p in self._properties(g)])
+            self.formatter_urls[g['ns']] = dict([(p['id'], p) for p in self._formatter_urls(g)])
 
-    def entity(self, qid, language=None, context=None, raw=False, **kwargs):
-        language = language if language else self.language
-        ns, qid = qid.split(':') if ':' in qid else (self.ns, qid)
-        refresh = kwargs.pop('refresh', 'false').lower() in ('', 'true')
+    def entity(self, uri, project=None, raw=False, **kwargs):
+        refresh = str(kwargs.pop('refresh', 'false')).lower() in ('', 'true')
 
-        cache_key = f'{ns}:{qid}-{language}-{context}'
+        cache_key = f'{uri}-{project}'
         entity = self.cache.get(cache_key) if not refresh and not raw else None
         if entity:
             entity['fromCache'] = True
             return entity
  
-        if ns == 'jstor':
-            primary = f'{ns}:{qid}'
-            wd_qid = self._wd_qid(qid)
-            secondary = f'wd:{wd_qid}' if wd_qid else None
-        else: # ns = 'wd'
-            jstor_qid = self._jstor_qid(qid)
-            if jstor_qid:
-                primary = f'jstor:{jstor_qid}'
-                secondary = f'{ns}:{qid}'
-            else:
-                primary = f'{ns}:{qid}'
-                secondary = None
-        
-        logger.info(f'entity: primary={primary} secondary={secondary} language={language} context={context}')
+        secondary = None
+        if uri.startswith('http://kg.jstor.org/'):
+            primary = self._entity_from_wikibase(uri)
+            primary['id'] = f'jstor:{primary["id"]}'
+            if primary and 'Wikidata entity ID' in primary.get('claims', {}):
+                secondary = self._entity_from_wikibase(primary['claims'].pop('Wikidata entity ID')[0]['value']['url'])
+        elif uri.startswith('http://www.wikidata.org/'):
+            primary = self._entity_from_wikibase(uri)
+            primary['id'] = f'wd:{primary["id"]}'
+        else:
+            uri = uri if uri.endswith('.json') else f'{uri}.json'
+            primary = self._entity_from_url(uri)
+            wd_id = None
+            statements = []
+            for stmt in primary.get('statements', []):
+                if stmt['claim']['property'] == 'Wikidata entity ID':
+                    wd_id = stmt['claim']['value']
+                else:
+                    statements.append(stmt)
+            if wd_id:
+                primary['statements'] = stmt
+                secondary = self._entity_from_wikibase(f'http://www.wikidata.org/entity/{wd_id}')
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            by_qid = {}
-            futures = {}
-            for qid in [_qid for _qid in (secondary, primary) if _qid]:
-                futures[executor.submit(self._entity, qid, language)] = qid
-
-            for future in concurrent.futures.as_completed(futures):
-                if future.result():
-                    by_qid[futures[future]] = future.result()
-        
-        entity = self._merge(by_qid.get(primary), by_qid.get(secondary))
+        if secondary: # merge primary and secondary
+            entity = {'id': primary['id']}
+            for fld in ('labels', 'descriptions', 'aliases', 'claims'):
+                entity[fld] = {**secondary.get(fld,{}), **primary.get(fld,{})}
+        else:
+            entity = primary
 
         if not raw:
-            self._add_summary_text(entity, context, **kwargs)
+            self._add_summary_text(entity, project, **kwargs)
         
-            entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity), language))
+            entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity)))
         
             self.cache[cache_key] = entity
+
         entity['fromCache'] = False
 
         return entity
 
-    def _entity(self, qid, language='en', entity_type='entity'):
+    def _entity_from_url(self, uri):
+        entity = requests.get(uri).json()
+        if 'id' not in entity:
+            entity['id'] = uri.replace('https', 'http').replace('.json', '').replace('.jsonld', '')
+        return entity
+
+    def _entity_from_wikibase(self, uri, language='en', entity_type='entity'):
         '''Gets entity data directly from wikibase API (rather than a SPARQL query) and
         returns a simplified representation of data with property IDs converted to labels enabling
         property merging with other graphs using a compatible data model'''
-        ns, qid = qid.split(':') if ':' in qid else (self.ns, qid)
-        entity_url = f'{GRAPHS[ns]["api_endpoint"]}?format=json&action=wbgetentities&ids={qid}'
+        g = [g for g in GRAPHS if uri.startswith(g['prefix'])][0]
+        qid = uri.split('/')[-1]
+        ns = g['ns']
+        entity_url = f'{g["api_endpoint"]}?format=json&action=wbgetentities&ids={qid}'
         resp = requests.get(entity_url).json()
         raw_entity = resp.get('entities', {}).get(qid)
         entity = OrderedDict()
-        entity['label'] = raw_entity['labels'].get(language,{}).get('value','')
-        entity['language'] = language
-        entity['id'] = f'{ns}:{qid}'
-        if 'descriptions' in raw_entity and language in raw_entity['descriptions']:
-            entity['description'] = raw_entity['descriptions'][language]['value']
-        if 'aliases' in raw_entity and language in raw_entity['aliases']:
-            entity['aliases'] = [alias['value'] for alias in raw_entity['aliases'][language]]
+        for fld in ('id', 'labels', 'descriptions', 'aliases'):
+            if fld in raw_entity:
+                entity[fld] = raw_entity[fld]
         if 'claims' in raw_entity:
             entity['claims'] = self._claims(raw_entity['claims'], ns)
         return entity
@@ -188,9 +201,9 @@ class KnowledgeGraph(object):
                 logger.warning(f'Unrecognized datatype {datatype} with value {value}')
                 return value
 
-    def _properties(self, ns='wd'):
+    def _properties(self, g):
         '''Get property mappings for graph to map property entity IDs to labels'''
-        cached_props_path = f'mappings/{ns}-props.json'
+        cached_props_path = f'mappings/{g["ns"]}-props.json'
         if os.path.exists(cached_props_path):
             with open (cached_props_path, 'r') as fp:
                 props = json.load(fp)
@@ -203,7 +216,7 @@ class KnowledgeGraph(object):
                 }
                 ORDER BY ASC(xsd:integer(STRAFTER(STR(?property), 'P')))'''
             sparql_results = requests.post(
-                GRAPHS[ns]['sparql_endpoint'],
+                g['sparql_endpoint'],
                 headers={
                     'Accept': 'application/sparql-results+json',
                     'Content-type': 'application/x-www-form-urlencoded',
@@ -223,15 +236,15 @@ class KnowledgeGraph(object):
                 json.dump(props, fp)
             return props
 
-    def _formatter_urls(self, ns='wd'):
+    def _formatter_urls(self, g):
         '''Get all formatter URLs for graph for converting external entity IDs to full URL'''
-        cached_path = f'mappings/{ns}-formatter-urls.json'
+        cached_path = f'mappings/{g["ns"]}-formatter-urls.json'
         if os.path.exists(cached_path):
             with open (cached_path, 'r') as fp:
                 formatter_urls = json.load(fp)
                 return formatter_urls
         else:
-            for prop, value in self.prop_mappings[ns].items():
+            for prop, value in self.prop_mappings[g['ns']].items():
                 if value['label'] == 'formatter URL':
                     break
             sparql = '''
@@ -241,7 +254,7 @@ class KnowledgeGraph(object):
                     FILTER(LANG(?label) = 'en')
                 }''' % (prop)
             sparql_results = requests.post(
-                GRAPHS[ns]['sparql_endpoint'],
+                g['sparql_endpoint'],
                 headers={
                     'Accept': 'application/sparql-results+json',
                     'Content-type': 'application/x-www-form-urlencoded',
@@ -259,167 +272,73 @@ class KnowledgeGraph(object):
                 json.dump(formatter_urls, fp)
             return formatter_urls
 
-
-    def _wd_qid(self, jstorqid):
-        '''Gets Wikidata QID corresponding to provided QID from JSTOR graph'''
-        sparql = '''
-        PREFIX jp: <http://kg.jstor.org/prop/>
-        PREFIX jpr: <http://kg.jstor.org/prop/reference/>
-        SELECT ?item WHERE {
-            {
-                wd:%s wdt:P4 ?item .
-            } UNION {
-                wd:%s wdt:P3 ?wdEntity .
-                BIND(URI(CONCAT('http://www.wikidata.org/entity/', ?wdEntity)) AS ?item)
-            } UNION {
-                wd:%s jp:P4 [ prov:wasDerivedFrom [ jpr:P3 ?item ] ] .
-            }
-        }''' % (jstorqid, jstorqid, jstorqid)
-        resp = requests.post(
-            GRAPHS['jstor']['sparql_endpoint'],
-            headers={
-                'Accept': 'application/sparql-results+json;charset=UTF-8',
-                'Content-type': 'application/x-www-form-urlencoded',
-                'User-agent': 'JSTOR Labs python client'},
-            data='query=%s' % quote(sparql)
-        ).json()
-        for b in resp['results']['bindings']:
-            if b['item']['type'] == 'uri':
-                last_path_elem = b['item']['value'].split('/')[-1]
-                if last_path_elem[0] == 'Q' and last_path_elem[1:].isdigit():
-                    return last_path_elem
-
-    def _jstor_qid(self, wdqid):
-        '''Gets JSTOR QID corresponding to provided Wikidata QID'''
-        sparql = '''
-            PREFIX jp: <http://kg.jstor.org/prop/>
-            PREFIX jpr: <http://kg.jstor.org/prop/reference/>
-            SELECT ?item WHERE {
-                {
-                    VALUES ?value {
-                        <https://www.wikidata.org/wiki/%s>
-                        <https://www.wikidata.org/entity/%s> 
-                    } .
-                    ?item wdt:P4 ?value .
-                } UNION {
-                    ?item wdt:P3 '%s' .
-                } UNION {
-                    ?item jp:P4 [ prov:wasDerivedFrom [ jpr:P3 '%s' ] ] .
-                }
-            }''' % (wdqid, wdqid, wdqid, wdqid)
-        resp = requests.post(
-            GRAPHS['jstor']['sparql_endpoint'],
-            headers={
-                'Accept': 'application/sparql-results+json;charset=UTF-8',
-                'Content-type': 'application/x-www-form-urlencoded',
-                'User-agent': 'JSTOR Labs python client'},
-            data='query=%s' % quote(sparql)
-        ).json()
-        for b in resp['results']['bindings']:
-            if b['item']['type'] == 'uri':
-                last_path_elem = b['item']['value'].split('/')[-1]
-                if last_path_elem[0] == 'Q' and last_path_elem[1:].isdigit():
-                    return last_path_elem
-
-    def _merge(self, primary, secondary=None):
-        '''Merges entity claims from 2 graphs'''
-        logger.debug(f'_merge: primary={primary["id"] if primary else None} secondary={secondary["id"] if secondary else None}')
-        def _norm(v):
-            return set([json.dumps(d, sort_keys=True) for d in v]) if isinstance(v, list) else json.dumps(v, sort_keys=True)
-
-        for entity in (primary, secondary):
-            if entity and 'image URL' in entity['claims']:
-                entity['claims']['image'] = entity['claims'].get('image', []) + entity['claims'].pop('image URL')
-
-        merged = primary
-        merged['id'] = [merged['id']]
-        if secondary and 'claims' in secondary:
-            merged['id'].append(secondary['id'])
-            if not 'claims' in merged:
-                merged['claims'] = secondary['claims']
-            else:
-                for k, v in secondary['claims'].items():
-                    if k in merged['claims']:
-                        mv = _norm(merged['claims'][k])
-                        for sv in v:
-                            if not _norm(sv) in mv:
-                                merged['claims'][k].append(sv)
-                    else:
-                        merged['claims'][k] = v
-        return merged
-
     def _add_summary_text(self, entity, context=None, **kwargs):
         '''Finds and adds summary data for entity.  For Wikidata entities the summary data is obtained
         from the Wikipedia article linked to the entity in the graph, if any.  For entities in the JSTOR
         graph the summary data (if any) is referenced by the "described at URL" property'''
         logger.info(f'_add_summary_text: entity={entity["id"]} context={context}')
-        summary_urls = {}
-        for _id in entity['id']:
-            if _id.startswith('jstor:') and 'described at URL' in entity['claims']:
-                for stmt in entity['claims']['described at URL']:
-                    # Ignore summary data associated with a specific project unless the
-                    #  property code is proided as a method argument
-                    logger.info(stmt['value'])
-                    if not self._is_entity_id(stmt['value'].split('/')[-1], False):
-                        if context:
-                            if context in stmt.get('qualifiers',{}).get('project code',[]):
-                                summary_urls['jstor'] = stmt['value']
-                        else:
-                            if 'project code' not in stmt.get('qualifiers', {}):
-                                summary_urls['jstor'] = stmt['value']
-            elif _id.startswith('wd:'):
-                sparql = '''
-                    SELECT ?mwPage {
-                        ?mwPage schema:about %s .
-                        ?mwPage schema:isPartOf <https://en.wikipedia.org/> .
-                    }''' % (_id)
-                resp = requests.post(
-                    GRAPHS['wd']['sparql_endpoint'],
-                    headers={
-                        'Accept': 'application/sparql-results+json;charset=UTF-8',
-                        'Content-type': 'application/x-www-form-urlencoded',
-                        'User-agent': 'JSTOR Labs python client'},
-                    data='query=%s' % quote(sparql)
-                )
-                if resp.status_code == 200:
-                    resp = resp.json()
-                    if resp['results']['bindings']:
-                        summary_urls['wd'] = resp['results']['bindings'][0]['mwPage']['value']
-                else:
-                    logger.info(f'_add_summary_text: resp_code={resp.status_code} msg={resp.text}')
+        summary_url = None
+        if entity['id'].startswith('jstor:') and 'described at URL' in entity['claims']:
+            for stmt in entity['claims']['described at URL']:
+                # Ignore summary data associated with a specific project unless the
+                #  property code is proided as a method argument
+                if not self._is_entity_id(stmt['value'].split('/')[-1], False):
+                    if context:
+                        if context in stmt.get('qualifiers',{}).get('project code',[]):
+                            summary_url = stmt['value']
+                    else:
+                        if 'project code' not in stmt.get('qualifiers', {}):
+                            summary_url = stmt['value']
+        elif entity['id'].startswith('wd:'):
+            g = [g for g in GRAPHS if g['ns'] == 'wd'][0]
+            sparql = '''
+                SELECT ?mwPage {
+                    ?mwPage schema:about %s .
+                    ?mwPage schema:isPartOf <https://en.wikipedia.org/> .
+                }''' % (entity['id'])
+            resp = requests.post(
+                g['sparql_endpoint'],
+                headers={
+                    'Accept': 'application/sparql-results+json;charset=UTF-8',
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'User-agent': 'JSTOR Labs python client'},
+                data='query=%s' % quote(sparql)
+            )
+            if resp.status_code == 200:
+                resp = resp.json()
+                if resp['results']['bindings']:
+                    summary_url = resp['results']['bindings'][0]['mwPage']['value']
+            else:
+                logger.info(f'_add_summary_text: resp_code={resp.status_code} msg={resp.text}')
 
-        if summary_urls:
+        if summary_url:
             entity['summary info'] = {}
-            for ns in ('wd', 'jstor'):
-                if ns not in summary_urls:
-                    continue
-                url = summary_urls[ns]
-                page = url.replace('/w/', '/wiki/').split('/wiki/')[-1]
-                if ns == 'wd':
-                    # Summary data from Wikipedia comes back nicely formatted.  We just add it to the entity
-                    entity['summary info'] = requests.get(
-                        f'https://en.wikipedia.org/api/rest_v1/page/summary/{page}',
-                        headers={'User-agent': 'JSTOR Labs python client'},
-                    ).json()
-                elif ns == 'jstor':
-                    # We need to create formatted summary data from the wikitext in the referenced mediawiki page
-                    #  Any data extracted is used to update the Wikidata/Wikipedia summary data, if found.  Currently
-                    #  this just includes the extract text in raw and HTML
-                    resp = requests.get(f'https://kg.jstor.org/w/api.php?action=parse&format=json&page={page}').json()
-                    html = BeautifulSoup(resp['parse']['text']['*'], 'html5lib')
-                    extract = html.find('p')
-                    if extract:
-                        entity['summary info'].update({
-                            'extract_html': str(extract).replace('\n',''),
-                            'extract': extract.text.strip()
-                        })
+            page = summary_url.replace('/w/', '/wiki/').split('/wiki/')[-1]
+            if 'wikipedia.org/wiki/' in summary_url:
+                # Summary data from Wikipedia comes back nicely formatted.  We just add it to the entity
+                entity['summary info'] = requests.get(
+                    f'https://en.wikipedia.org/api/rest_v1/page/summary/{page}',
+                    headers={'User-agent': 'JSTOR Labs python client'},
+                ).json()
+            elif 'kg.jstor.org/wiki' in summary_url:
+                # We need to create formatted summary data from the wikitext in the referenced mediawiki page
+                #  Any data extracted is used to update the Wikidata/Wikipedia summary data, if found.  Currently
+                #  this just includes the extract text in raw and HTML
+                resp = requests.get(f'https://kg.jstor.org/w/api.php?action=parse&format=json&page={page}').json()
+                html = BeautifulSoup(resp['parse']['text']['*'], 'html5lib')
+                extract = html.find('p')
+                if extract:
+                    entity['summary info'].update({
+                        'extract_html': str(extract).replace('\n',''),
+                        'extract': extract.text.strip()
+                    })
 
     def _is_entity_id(self, s, ns_required=True):
         if not s or not isinstance(s, str): return False
         eid = s.split(':')
         if len(eid) == 1 and ns_required:
             return False
-        if len(eid) == 2 and eid[0] not in GRAPHS:
+        if len(eid) == 2 and eid[0] not in NAMESPACES:
             return False
         if len(eid) > 2:
             return False
@@ -451,7 +370,8 @@ class KnowledgeGraph(object):
                 if d in fingerprints:
                     ns, qid = d.split(':')
                     label = fingerprints[d]['label']
-                    url = f'{GRAPHS[ns]["baseurl"]}/{qid}'
+                    g = [g for g in GRAPHS if g['ns'] == ns][0]
+                    url = f'{g["baseurl"]}/{qid}'
                     d = {'id': d, 'value': label, 'url': url}
             return d
         elif isinstance(d, list):
@@ -460,18 +380,19 @@ class KnowledgeGraph(object):
 
 
 def usage():
-    print('%s [hl:e:r] qid' % sys.argv[0])
+    print('%s [hl:jrp:] qid' % sys.argv[0])
     print('   -h --help       Print help message')
     print('   -l --loglevel   Logging level (default=warning)')
-    print('   -e --language   Language (default="en")')
-    print('   -r --raw        Return raw jsonld')
+    print('   -j --raw        Return raw jsonld')
+    print('   -r --refresh    Refresh cache')
+    print('   -p --project    Entity context')
 
 if __name__ == '__main__':
     logger.setLevel(logging.WARNING)
     kwargs = {}
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:], 'hl:e:r', ['help', 'loglevel', 'language', 'raw'])
+            sys.argv[1:], 'hl:jrp:', ['help', 'loglevel', 'raw', 'refresh', 'project'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err))  # will print something like "option -a not recognized"
@@ -485,10 +406,12 @@ if __name__ == '__main__':
             elif loglevel in ('warn','warning'): logger.setLevel(logging.INFO)
             elif loglevel in ('info',): logger.setLevel(logging.INFO)
             elif loglevel in ('debug',): logger.setLevel(logging.DEBUG)
-        elif o in ('-e', '--language'):
-            kwargs['language'] = a
-        elif o in ('-r', '--raw'):
+        elif o in ('-j', '--raw'):
             kwargs['raw'] = True
+        elif o in ('-r', '--refresh'):
+            kwargs['refresh'] = True
+        elif o in ('-p', '--project'):
+            kwargs['project'] = a
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
@@ -498,7 +421,8 @@ if __name__ == '__main__':
     kg = KnowledgeGraph(**kwargs)
 
     if args:
-        print(json.dumps(kg.entity(args[0], **kwargs)))
+        kwargs['uri'] = as_uri(args[0])
+        print(json.dumps(kg.entity(**kwargs)))
     else:
         usage()
         sys.exit()

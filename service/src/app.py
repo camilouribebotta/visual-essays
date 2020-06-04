@@ -32,7 +32,7 @@ from flask import Flask, request, send_from_directory
 app = Flask(__name__)
 
 from essay import Essay
-from entity import KnowledgeGraph
+from entity import KnowledgeGraph, as_uri
 from fingerprints import get_fingerprints
 from specimens import get_specimens
 
@@ -112,7 +112,6 @@ def convert_relative_links(soup, acct=None, repo=None, fname=None, source=None, 
                 if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
                     if elem.attrs[attr].startswith('#'):
                         elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
-                        logger.info(elem.attrs[attr])
                     elem.attrs[attr] = f'{baseurl}/{elem.attrs[attr][1:] if elem.attrs[attr][0] == "/" else elem.attrs[attr]}'
     
     if source == 'local':
@@ -239,14 +238,17 @@ def _set_logging_level(args):
             logger.setLevel(logging.INFO)
 
 @app.route('/entity/<eid>', methods=['GET'])  
-def entity(eid):
+@app.route('/entity', methods=['GET'])  
+def entity(eid=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
     logger.info(f'entity: eid={eid} kwargs={kwargs}')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        entity = KnowledgeGraph(cache=cache, **kwargs).entity(eid, **kwargs)
+        if eid:
+            kwargs['uri'] = as_uri(eid)
+        entity = KnowledgeGraph(cache=cache, **kwargs).entity(**kwargs)
         return (entity, 200, cors_headers)
 
 @app.route('/specimens/<taxon_name>', methods=['GET'])  
