@@ -1,0 +1,22 @@
+{
+"statements": [
+    {
+        "claim": {
+            "property": "Wikidata entity ID",
+            "value": "Q507517"
+        }
+    },
+    {
+        "claim": {
+            "property": "described at URL",
+            "value": "https://kg.jstor.org/wiki/Kent:Rochester"
+        },
+        "qualifiers": [
+            {
+                "property": "project code",
+                "value": "kent-maps"
+            }
+        ]
+    }
+]
+}
