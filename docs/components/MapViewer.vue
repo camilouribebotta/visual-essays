@@ -188,7 +188,7 @@ module.exports = {
           style: function(feature) {
             return {
                 color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
-                weight: def['stroke-width'] || feature.properties['stroke-width'] || feature.geometry.type === 'Polygon' ? 0 : 4,
+                weight: def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' ? 0 : 4),
                 opacity: def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1,                  
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
                 fillOpacity: def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5,
