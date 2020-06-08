@@ -41,14 +41,29 @@ module.exports = {
     this.getSummaryInfo()
   },
   methods: {
-    getEntity(eid, context) {
-      const url = `${this.apiBaseURL}/entity/${eid}` + (context ? `?context=${context}` : '')
+    toQueryString(args) {
+      const parts = []
+      Object.keys(args).forEach((key) => {
+        parts.push(`${key}=${encodeURIComponent(args[key])}`)
+      })
+      return parts.join('&')
+    },
+    getEntity() {
+      let url = `${this.apiBaseURL}/entity/${encodeURIComponent(this.eid)}`
+      const args = {}
+      if (this.context) args.context = this.context
+      if (this.entity.article) args.article = this.entity.article
+      if (Object.keys(args).length > 0) {
+        url += `?${this.toQueryString(args)}`
+      }
+      console.log(`getEntity=${url}`)
       return fetch(url).then(resp => resp.json())
     },
     getSummaryInfo() {
+      console.log('getSummaryInfo', this.eid, this.eidURI, this.entity)
       if (this.entity.eid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.eid)) {
         this.requested.add(this.entity.eid)
-        this.getEntity(this.entity.eid, this.context)
+        this.getEntity(this.eidURI || this.eid, this.context)
           .then((updated) => {
             if (!updated['summary info']) {
               updated['summary info'] = null

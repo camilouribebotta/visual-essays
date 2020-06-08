@@ -75,6 +75,7 @@ export function itemsInElements(elemIds, items) {
     const eid = elemIds[i]
     items.forEach((item) => {
       if (i === 0 &&
+          (item.found_in !== undefined && item.tagged_in !== undefined) &&
           (item.found_in.has(eid) || item.tagged_in.has(eid)) &&
           !selectedItemIds.has(item.id)) {
         selected.push(item)

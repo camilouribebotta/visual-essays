@@ -18,6 +18,7 @@ from collections import OrderedDict
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
+import markdown as markdown_parser
 from bs4 import BeautifulSoup
 
 from fingerprints import get_fingerprints
@@ -49,16 +50,23 @@ NAMESPACES = set([g['ns'] for g in GRAPHS])
 default_ns = 'wd'
 default_entity_type = 'entity'
 
-def as_uri(s):
+def as_uri(s, acct=None, repo=None):
     global default_ns
+    uri = None
     if s.startswith('http'):
-        return s
-    prefix, entity_id = s.split(':') if ':' in s else (default_ns, s)
-    return f'{PREFIXES[prefix]}{entity_id}'
+        uri = s
+    else:
+        prefix, entity_id = s.split(':') if ':' in s else (default_ns, s)
+        logger.info(f'{prefix}:{entity_id}')
+    uri = f'{PREFIXES[prefix]}{entity_id}' if prefix in PREFIXES else f'http://{acct}.github.io/{repo}/entity/{s}'
+    logger.info(uri)
+    return uri
 
 class KnowledgeGraph(object):
 
     def __init__(self, **kwargs):
+        self.acct = kwargs.get('acct')
+        self.repo = kwargs.get('repo')
         self.cache = kwargs.get('cache', {})
         self.entity_type = kwargs.get('entity_type', default_entity_type)
         self.prop_mappings = {}
@@ -66,8 +74,10 @@ class KnowledgeGraph(object):
         for g in GRAPHS:
             self.prop_mappings[g['ns']] = dict([(p['id'], p) for p in self._properties(g)])
             self.formatter_urls[g['ns']] = dict([(p['id'], p) for p in self._formatter_urls(g)])
+        logger.info(f'KnowledgeGraph: acct={self.acct} repo={self.repo}')
 
-    def entity(self, uri, project=None, raw=False, **kwargs):
+    def entity(self, uri, project=None, raw=False, article=None, **kwargs):
+        logger.info(f'entity={uri} project={project} raw={raw} article={article}')
         refresh = str(kwargs.pop('refresh', 'false')).lower() in ('', 'true')
 
         cache_key = f'{uri}-{project}'
@@ -107,7 +117,7 @@ class KnowledgeGraph(object):
             entity = primary
 
         if not raw:
-            self._add_summary_text(entity, project, **kwargs)
+            self._add_summary_text(entity, project, article, **kwargs)
         
             entity = self._add_id_labels(entity, get_fingerprints(self._find_ids(entity)))
         
@@ -118,10 +128,15 @@ class KnowledgeGraph(object):
         return entity
 
     def _entity_from_url(self, uri):
-        entity = requests.get(uri).json()
-        if 'id' not in entity:
-            entity['id'] = uri.replace('https', 'http').replace('.json', '').replace('.jsonld', '')
-        return entity
+        for suffix in ('', '.json', 'jsonld'):
+            try:
+                entity = requests.get(f'{uri}{suffix}').json()
+                if 'id' not in entity:
+                    entity['id'] = uri.replace('https', 'http').replace('.json', '').replace('.jsonld', '')
+                return entity
+            except:
+                pass
+        return {}
 
     def _entity_from_wikibase(self, uri, language='en', entity_type='entity'):
         '''Gets entity data directly from wikibase API (rather than a SPARQL query) and
@@ -272,47 +287,49 @@ class KnowledgeGraph(object):
                 json.dump(formatter_urls, fp)
             return formatter_urls
 
-    def _add_summary_text(self, entity, context=None, **kwargs):
+    def _add_summary_text(self, entity, project=None, article=None, **kwargs):
         '''Finds and adds summary data for entity.  For Wikidata entities the summary data is obtained
         from the Wikipedia article linked to the entity in the graph, if any.  For entities in the JSTOR
         graph the summary data (if any) is referenced by the "described at URL" property'''
-        logger.info(f'_add_summary_text: entity={entity["id"]} context={context}')
+        logger.info(f'_add_summary_text: id={entity.get("id")} project={project} article={article}')
         summary_url = None
-        if entity['id'].startswith('jstor:') and 'described at URL' in entity['claims']:
-            for stmt in entity['claims']['described at URL']:
-                # Ignore summary data associated with a specific project unless the
-                #  property code is proided as a method argument
-                if not self._is_entity_id(stmt['value'].split('/')[-1], False):
-                    if context:
-                        if context in stmt.get('qualifiers',{}).get('project code',[]):
-                            summary_url = stmt['value']
-                    else:
-                        if 'project code' not in stmt.get('qualifiers', {}):
-                            summary_url = stmt['value']
-        elif entity['id'].startswith('wd:'):
-            g = [g for g in GRAPHS if g['ns'] == 'wd'][0]
-            sparql = '''
-                SELECT ?mwPage {
-                    ?mwPage schema:about %s .
-                    ?mwPage schema:isPartOf <https://en.wikipedia.org/> .
-                }''' % (entity['id'])
-            resp = requests.post(
-                g['sparql_endpoint'],
-                headers={
-                    'Accept': 'application/sparql-results+json;charset=UTF-8',
-                    'Content-type': 'application/x-www-form-urlencoded',
-                    'User-agent': 'JSTOR Labs python client'},
-                data='query=%s' % quote(sparql)
-            )
-            if resp.status_code == 200:
-                resp = resp.json()
-                if resp['results']['bindings']:
-                    summary_url = resp['results']['bindings'][0]['mwPage']['value']
-            else:
-                logger.info(f'_add_summary_text: resp_code={resp.status_code} msg={resp.text}')
+        if article:
+            summary_url = f'https://{self.acct}.github.io/{self.repo}/articles/{article}.md'
+        elif entity.get('id'):
+            if 'described at URL' in entity['claims']:
+                for stmt in entity['claims']['described at URL']:
+                    # Ignore summary data associated with a specific project unless the
+                    #  property code is proided as a method argument
+                    if not self._is_entity_id(stmt['value'].split('/')[-1], False):
+                        if project:
+                            if project in stmt.get('qualifiers',{}).get('project code',[]):
+                                summary_url = stmt['value']
+                        else:
+                            if 'project code' not in stmt.get('qualifiers', {}):
+                                summary_url = stmt['value']
+            elif entity['id'].startswith('wd:'):
+                g = [g for g in GRAPHS if g['ns'] == 'wd'][0]
+                sparql = '''
+                    SELECT ?mwPage {
+                        ?mwPage schema:about %s .
+                        ?mwPage schema:isPartOf <https://en.wikipedia.org/> .
+                    }''' % (entity['id'])
+                resp = requests.post(
+                    g['sparql_endpoint'],
+                    headers={
+                        'Accept': 'application/sparql-results+json;charset=UTF-8',
+                        'Content-type': 'application/x-www-form-urlencoded',
+                        'User-agent': 'JSTOR Labs python client'},
+                    data='query=%s' % quote(sparql)
+                )
+                if resp.status_code == 200:
+                    resp = resp.json()
+                    if resp['results']['bindings']:
+                        summary_url = resp['results']['bindings'][0]['mwPage']['value']
+                else:
+                    logger.info(f'_add_summary_text: resp_code={resp.status_code} msg={resp.text}')
 
         if summary_url:
-            entity['summary info'] = {}
             page = summary_url.replace('/w/', '/wiki/').split('/wiki/')[-1]
             if 'wikipedia.org/wiki/' in summary_url:
                 # Summary data from Wikipedia comes back nicely formatted.  We just add it to the entity
@@ -328,10 +345,20 @@ class KnowledgeGraph(object):
                 html = BeautifulSoup(resp['parse']['text']['*'], 'html5lib')
                 extract = html.find('p')
                 if extract:
-                    entity['summary info'].update({
+                    entity['summary info'] = {
                         'extract_html': str(extract).replace('\n',''),
                         'extract': extract.text.strip()
-                    })
+                    }
+            else:
+                logger.info(summary_url)
+                md = requests.get(summary_url).content.decode('utf-8')
+                html = markdown_parser.markdown(md, output_format='html5')
+                soup = BeautifulSoup(html, 'html5lib')
+                first_para = soup.find('p')
+                entity['summary info'] = {
+                        'extract_html': '\n'.join(first_para.contents),
+                        'extract': first_para.text.strip()
+                    }
 
     def _is_entity_id(self, s, ns_required=True):
         if not s or not isinstance(s, str): return False

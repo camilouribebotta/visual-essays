@@ -12,6 +12,8 @@ import marked from 'marked'
 import 'leaflet'
 import 'leaflet-polylinedecorator'
 
+import mirador from '../assets/js/mirador.min.js'
+
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
@@ -37,6 +39,7 @@ const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https
 const defaultComponents = [
   { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
+  // { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/MiradorImageViewer.vue`, selectors: ['tag:image'], 'icon': 'fa-images', 'label': 'Images' },
   { name: 'videoPlayer', src: `${componentsBaseURL}/components/videoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
   // { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
@@ -55,7 +58,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.6.18'
+const VERSION = '0.7.0'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -157,6 +160,8 @@ function initApp() {
       component.name = name
     }
   }
+
+  Vue.prototype.$mirador = mirador
 
   vm = new Vue({
     template: '<App/>',

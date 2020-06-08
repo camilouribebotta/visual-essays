@@ -62,6 +62,10 @@ class Essay(object):
         self. _update_image_links()
         self._remove_empty_paragraphs()
         self._add_heading_ids()
+        # TODO: Optimize this to perform manifest requests in parallel
+        for item in self.markup.values():
+            if item['tag'] == 'image':
+                self._get_manifest(item)
         self._add_data()
         # logger.info(f'{round(now()-st,3)}: phase 3')
 
@@ -123,13 +127,13 @@ class Essay(object):
         #    img.attrs['src'] = f'{self.site}{img.attrs["src"]}'
 
     def _update_entities_from_knowledgegraph(self, refresh=False):
-        by_qid = dict([(item['eid'], item) for item in self.markup.values() if 'eid' in item and is_qid(item['eid'])])
-        if by_qid:
-            cache_key = hashlib.sha256(str(sorted(by_qid.keys())).encode('utf-8')).hexdigest()
+        by_eid = dict([(item['eid'], item) for item in self.markup.values() if 'eid' in item and is_qid(item['eid'])])
+        if by_eid:
+            cache_key = hashlib.sha256(str(sorted(by_eid.keys())).encode('utf-8')).hexdigest()
             kg_entities = self.cache.get(cache_key) if not refresh else None
             from_cache = kg_entities is not None
             if kg_entities is None:
-                kg_entities = self._get_entity_data(by_qid.keys())['@graph']
+                kg_entities = self._get_entity_data([eid for eid in by_eid.keys() if eid.split(':')[0] in ('wd', 'jstor')])['@graph']
                 self.cache[cache_key] = kg_entities
             # logger.info(json.dumps(kg_entities, indent=2))
             for entity in kg_entities:
@@ -138,8 +142,8 @@ class Essay(object):
                     wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
                     entity['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
             for kg_props in kg_entities:
-                if kg_props['id'] in by_qid:
-                    me = by_qid[kg_props['id']]
+                if kg_props['id'] in by_eid:
+                    me = by_eid[kg_props['id']]
                     me['fromCache'] = from_cache
                     for k, v in kg_props.items():
                         if k in ('aliases',) and not isinstance(v, list):
@@ -154,11 +158,11 @@ class Essay(object):
                         elif k == 'category':
                             if 'category' in me:
                                 v = me['category']
-                        if k in ('aliases',) and k in by_qid[kg_props['id']]:
+                        if k in ('aliases',) and k in by_eid[kg_props['id']]:
                             # merge values
-                            v = sorted(set(by_qid[kg_props['id']][k] + v))
+                            v = sorted(set(by_eid[kg_props['id']][k] + v))
                         me[k] = v
-                    # logger.info(json.dumps(by_qid[kg_props['id']], indent=2))
+                    # logger.info(json.dumps(by_eid[kg_props['id']], indent=2))
 
     def add_entity_classes(self):
         for entity in [vem_elem for vem_tag in ('var', 'span') for vem_elem in self._soup.find_all(vem_tag, {'class': 'entity'})]:
@@ -426,6 +430,32 @@ class Essay(object):
                     _jsonld = {'@context': _context, '@graph': [_jsonld]}
                 return _jsonld
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
+
+    def _get_manifest(self, item):
+        defaults = {
+            'canvas': { 'height': 3000, 'width': 3000 },
+            'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
+        }
+        manifest = {
+          'label': item.get('title', ''), 
+          'description': item.get('description', ''), 
+          'sequences': [{
+            'canvases': [{**defaults['canvas'], **{
+                'label': item.get('title', ''),
+                'images': [{**defaults['image'], **{
+                    'url': item.get('hires', item.get('url'))
+                }}]
+            }}]
+          }]
+        }
+        resp = requests.post(
+            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+            headers={'Content-type': 'application/json'},
+            json=manifest
+        )
+        manifest = resp.json()
+        if '@id' in manifest:
+            item['manifestId'] = manifest['@id']
 
     @property
     def json(self):

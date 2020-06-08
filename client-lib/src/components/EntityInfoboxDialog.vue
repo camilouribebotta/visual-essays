@@ -4,7 +4,7 @@
       <v-icon>mdi-close</v-icon>
     </v-btn>
     <v-card class="infobox">
-      <entity-infobox :eid="selectedItemID"></entity-infobox>
+      <entity-infobox :eid="eid"></entity-infobox>
     </v-card>
   </v-dialog>
 </template>
@@ -17,7 +17,9 @@ export default {
     isOpen: false
   }),
   computed: {
-    selectedItemID () { return this.$store.getters.selectedItemID }
+    selectedItemID () { return this.$store.getters.selectedItemID },
+    selectedItem () { return this.$store.getters.items.find(entity => entity.id === this.selectedItemID) || {} },
+    eid() { console.log(this.selectedItemID, this.selectedItem); return this.selectedItem.eid }
   },
   methods: {
     clearSelectedItemID() {

@@ -41,6 +41,8 @@ cache = Cache()
 
 VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays.min.js'
 ENV = 'prod'
+DEFAULT_ACCT = None
+DEFAULT_REPO = None
 
 KNOWN_SITES = {
     'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
@@ -237,11 +239,16 @@ def _set_logging_level(args):
         elif level == 'info':
             logger.setLevel(logging.INFO)
 
-@app.route('/entity/<eid>', methods=['GET'])  
+@app.route('/entity/<path:eid>', methods=['GET'])  
 @app.route('/entity', methods=['GET'])  
 def entity(eid=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
+    site = urlparse(request.base_url).hostname
+    kwargs['acct'] = DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
+    kwargs['repo'] = DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
+    kwargs['refresh'] = kwargs['refresh'] == 'true' if 'refresh' in kwargs else kwargs.pop('mode', ENV) == 'dev'
+
     logger.info(f'entity: eid={eid} kwargs={kwargs}')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
@@ -442,16 +449,19 @@ def components(fname, subdir=None):
             return send_from_directory(components_path, fname, as_attachment=False)
 
 def usage():
-    print('%s [hl:dr:]' % sys.argv[0])
+    print('%s [hl:dr:a:p:]' % sys.argv[0])
     print('   -h --help         Print help message')
     print('   -l --loglevel     Logging level (default=warning)')
     print('   -d --dev          Use local Visual Essay JS Lib')
     print('   -r --docs-root    Documents root directory when running in dev mode')
+    print('   -a --acct         Default acct')
+    print('   -p --repo         Default repository')
+
 
 if __name__ == '__main__':
     kwargs = {}
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hl:dr:', ['help', 'loglevel', 'dev', 'docs-root'])
+        opts, args = getopt.getopt(sys.argv[1:], 'hl:dr:a:p:', ['help', 'loglevel', 'dev', 'docs-root', 'acct', 'repo'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
@@ -470,6 +480,10 @@ if __name__ == '__main__':
             ENV = 'dev'
         elif o in ('-r', '--docs-root'):
             DOCS_ROOT = a
+        elif o in ('-a', '--acct'):
+            DEFAULT_ACCT = a
+        elif o in ('-p', '--repo'):
+            DEFAULT_REPO = a
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
