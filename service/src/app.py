@@ -247,8 +247,8 @@ def entity(eid=None):
     site = urlparse(request.base_url).hostname
     kwargs['acct'] = DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
     kwargs['repo'] = DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
-    kwargs['refresh'] = kwargs['refresh'] == 'true' if 'refresh' in kwargs else kwargs.pop('mode', ENV) == 'dev'
-
+    # kwargs['refresh'] = kwargs['refresh'] == 'true' if 'refresh' in kwargs else kwargs.pop('mode', ENV) == 'dev'
+    kwargs['refresh'] = True
     logger.info(f'entity: eid={eid} kwargs={kwargs}')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)

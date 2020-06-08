@@ -4,7 +4,7 @@
     <h3 class="entity-title" primary-title v-html="title"></h3>
     <div class="subtitle">{{ description }}</div>
     <div class="entity-description" v-html="html"></div>
-    <a :href="entity.wikipedia_page" target="_blank" >Source</a>
+    <a :href="entity.wikipedia_page" target="_blank" style="margin-top:12px;">Source</a>
   </div>
 </template>
 
@@ -27,7 +27,7 @@ module.exports = {
     requested: new Set()
   }),
   computed: {
-    entity () { return this.$store.getters.items.find(entity => entity.eid && entity.eid === this.eid) || {} },
+    entity () { return this.$store.getters.items.find(entity => this.eid === entity.eid || this.eid === entity.id) || {} },
     entityInfo () { return this.entity['summary info'] },
     title () { return this.entityInfo && this.entityInfo.displaytitle || this.entity.label || this.entity.title },
     description () { return this.entityInfo ? this.entityInfo.description : this.entity.description },
@@ -60,15 +60,15 @@ module.exports = {
       return fetch(url).then(resp => resp.json())
     },
     getSummaryInfo() {
-      console.log('getSummaryInfo', this.eid, this.eidURI, this.entity)
-      if (this.entity.eid && this.entity['summary info'] === undefined && !this.requested.has(this.entity.eid)) {
-        this.requested.add(this.entity.eid)
-        this.getEntity(this.eidURI || this.eid, this.context)
+      console.log('getSummaryInfo', this.eid, this.entity)
+      if (this.entity['summary info'] === undefined && !this.requested.has(this.entity.id)) {
+        this.requested.add(this.entity.id)
+        this.getEntity()
           .then((updated) => {
             if (!updated['summary info']) {
               updated['summary info'] = null
             }
-            updated.id = this.entity.eid
+            updated.id = this.eid
             this.$store.dispatch('updateItem', updated)
           })
       }
@@ -101,13 +101,13 @@ module.exports = {
   }
 
   .entity-title {
-    padding: 0;
+    padding: 0 6px;;
     margin-bottom: 8px;
   }
 
   .entity-image-holder {
     width: 100%;
-    height: 250px;
+    height: 300px;
     background-color: #7F828B;
     background-size: cover;
     background-position: center;
@@ -118,6 +118,11 @@ module.exports = {
     line-height: 1em;
     margin-bottom: 16px;
     font-size: 16px;
+    padding: 0 6px;;
+  }
+
+  .entity-description {
+    padding: 0 6px;;
   }
 
 </style>

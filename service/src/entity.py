@@ -57,8 +57,11 @@ def as_uri(s, acct=None, repo=None):
         uri = s
     else:
         prefix, entity_id = s.split(':') if ':' in s else (default_ns, s)
-        logger.info(f'{prefix}:{entity_id}')
-    uri = f'{PREFIXES[prefix]}{entity_id}' if prefix in PREFIXES else f'http://{acct}.github.io/{repo}/entity/{s}'
+        if prefix in PREFIXES and _is_entity_id(entity_id):
+            logger.info(f'{prefix}:{entity_id}')
+            uri = f'{PREFIXES[prefix]}{entity_id}'
+        else:
+            uri = f'http://{acct}.github.io/{repo}/entity/{s}'
     logger.info(uri)
     return uri
 
@@ -300,7 +303,7 @@ class KnowledgeGraph(object):
                 for stmt in entity['claims']['described at URL']:
                     # Ignore summary data associated with a specific project unless the
                     #  property code is proided as a method argument
-                    if not self._is_entity_id(stmt['value'].split('/')[-1], False):
+                    if not _is_entity_id(stmt['value'].split('/')[-1], False):
                         if project:
                             if project in stmt.get('qualifiers',{}).get('project code',[]):
                                 summary_url = stmt['value']
@@ -360,17 +363,6 @@ class KnowledgeGraph(object):
                         'extract': first_para.text.strip()
                     }
 
-    def _is_entity_id(self, s, ns_required=True):
-        if not s or not isinstance(s, str): return False
-        eid = s.split(':')
-        if len(eid) == 1 and ns_required:
-            return False
-        if len(eid) == 2 and eid[0] not in NAMESPACES:
-            return False
-        if len(eid) > 2:
-            return False
-        return len(eid[-1]) > 1 and eid[-1][0] in ('Q', 'P') and eid[-1][1:].isdecimal()
-
     def _find_ids(self, entity):
         ids = set()
         self._find_ids_recursive(entity, ids)
@@ -380,7 +372,7 @@ class KnowledgeGraph(object):
         if not isinstance(d, (dict, list, str)):
             return ids
         if isinstance(d, str):
-            if self._is_entity_id(d):
+            if _is_entity_id(d):
                 ids.add(d)
         elif isinstance(d, list):
             for v in d:
@@ -393,7 +385,7 @@ class KnowledgeGraph(object):
         if not isinstance(d, (dict, list, str)):
             return d
         if isinstance(d, str):
-            if self._is_entity_id(d):
+            if _is_entity_id(d):
                 if d in fingerprints:
                     ns, qid = d.split(':')
                     label = fingerprints[d]['label']
@@ -405,6 +397,17 @@ class KnowledgeGraph(object):
             return [v for v in (self._add_id_labels(v, fingerprints) for v in d) if v]
         return {k: v for k, v in ((k, self._add_id_labels(v, fingerprints)) for k, v in d.items()) if v}
 
+
+def _is_entity_id(s, ns_required=True):
+    if not s or not isinstance(s, str): return False
+    eid = s.split(':')
+    if len(eid) == 1 and ns_required:
+        return False
+    if len(eid) == 2 and eid[0] not in NAMESPACES:
+        return False
+    if len(eid) > 2:
+        return False
+    return len(eid[-1]) > 1 and eid[-1][0] in ('Q', 'P') and eid[-1][1:].isdecimal()
 
 def usage():
     print('%s [hl:jrp:] qid' % sys.argv[0])

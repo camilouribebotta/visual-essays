@@ -58,7 +58,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.0'
+const VERSION = '0.7.1'
 
 console.log(`visual-essays js lib ${VERSION}`)
 

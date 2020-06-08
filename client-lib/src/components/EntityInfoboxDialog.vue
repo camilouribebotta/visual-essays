@@ -19,7 +19,7 @@ export default {
   computed: {
     selectedItemID () { return this.$store.getters.selectedItemID },
     selectedItem () { return this.$store.getters.items.find(entity => entity.id === this.selectedItemID) || {} },
-    eid() { console.log(this.selectedItemID, this.selectedItem); return this.selectedItem.eid }
+    eid() { console.log(this.selectedItemID, this.selectedItem); return this.selectedItem.eid || this.selectedItemID }
   },
   methods: {
     clearSelectedItemID() {

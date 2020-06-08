@@ -189,6 +189,8 @@ class Essay(object):
                     tag = 'entity'
                 elif 'eid' in attrs and is_qid(attrs['eid']):
                     tag = 'entity'
+                elif vem_elem.name in ('param', 'var'):
+                    tag = 'entity'
                 else:
                     continue
             else:
