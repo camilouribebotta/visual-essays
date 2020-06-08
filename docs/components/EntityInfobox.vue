@@ -4,7 +4,7 @@
     <h3 class="entity-title" primary-title v-html="title"></h3>
     <div class="subtitle">{{ description }}</div>
     <div class="entity-description" v-html="html"></div>
-    <a :href="entity.wikipedia_page" target="_blank" style="margin-top:12px;">Source</a>
+    <a :href="entity.wikipedia_page" target="_blank">Source</a>
   </div>
 </template>
 
@@ -122,7 +122,7 @@ module.exports = {
   }
 
   .entity-description {
-    padding: 0 6px;;
+    padding: 0 6px 12px 6px;
   }
 
 </style>

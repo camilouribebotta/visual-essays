@@ -357,11 +357,9 @@ class KnowledgeGraph(object):
                 md = requests.get(summary_url).content.decode('utf-8')
                 html = markdown_parser.markdown(md, output_format='html5')
                 soup = BeautifulSoup(html, 'html5lib')
-                first_para = soup.find('p')
-                entity['summary info'] = {
-                        'extract_html': '\n'.join(first_para.contents),
-                        'extract': first_para.text.strip()
-                    }
+                paragraphs = ['\n'.join(p.contents) for p in soup.find_all('p')]
+                logger.info('\f'.join(paragraphs))
+                entity['summary info'] = {'extract_html': '<br><br>'.join(paragraphs)}
 
     def _find_ids(self, entity):
         ids = set()

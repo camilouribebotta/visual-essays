@@ -174,7 +174,7 @@ module.exports = {
                     polygon: false,
                     pathOptions: {
                       stroke: true,
-                      width: feature.properties['stroke-width'] || 4,
+                      width: parseFloat(feature.properties['stroke-width']) || 4,
                       color: feature.properties.stroke || '#FB683F'
                     }
                   })
@@ -186,13 +186,14 @@ module.exports = {
           },
           // Style
           style: function(feature) {
-            return {
+            const style = {
                 color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
-                weight: def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' ? 0 : 4),
-                opacity: def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1,                  
+                weight: parseFloat(def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' ? 0 : 4)),
+                opacity: parseFloat(def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1),                  
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
-                fillOpacity: def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5,
+                fillOpacity: parseFloat(def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5),
             }
+            return style
           },
           pointToLayer: function(feature, latlng) {
             return self.makeMarker(latlng, feature.properties)
@@ -235,15 +236,7 @@ module.exports = {
     },
 
     useGeojson(location) {
-      let useGeojson = false
-      if (location.geojson) {
-        let preferAttr = location['prefer-geojson'] || this.mapDef['prefer-geojson']
-        if (preferAttr !== undefined) {
-          preferAttr = preferAttr.toLowerCase()
-          useGeojson = preferAttr === '' || preferAttr === 'true'
-        }
-      }
-      return useGeojson
+      return location.geojson && (!location.coords || location['prefer-geojson'] === 'true')
     },
 
     getLocationMarkers() {
@@ -302,7 +295,7 @@ module.exports = {
       })
 
       this.locations.filter(location => this.useGeojson(location)).forEach(location => {
-        _active.add(location.eid)
+        _active.add(location.id)
         this.loadGeojson(location, true)
       })
 

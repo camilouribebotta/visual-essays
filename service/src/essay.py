@@ -211,6 +211,8 @@ class Essay(object):
                 attrs['eid'] = f'wd:{attrs["eid"]}'
 
             if tag == 'entity':
+                if 'coords' in attrs or 'geojson' in attrs:
+                    attrs['category'] = 'location'
                 pass
                 #if 'scope' not in attrs:
                 #    attrs['scope'] = 'global'

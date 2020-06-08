@@ -206,16 +206,12 @@ export default {
 
 <style>
 
- #essay h1, #essay h2, #essay h3, #essay h4, #essay h5, #essay h6 {
-    padding-left: 6px;
-  }
-
  #essay.vertical h1, .vtl #essay h2, .vtl #essay h3, .vtl #essay h4, .vtl #essay h5, .vtl #essay h6 {
     padding-left: 32px;
   }
 
   #essay.vertical p {
-    padding: 6px;
+    padding: 6px 6px 0 6px;
     /* border-left: 12px solid white; */
     font-size: 1em;
     line-height: 1.8;
@@ -351,7 +347,7 @@ export default {
     border-color: #666666 transparent transparent transparent;
     position: absolute;
     right: -20px;
-    bottom: -20px;
+    /* bottom: -20px; */
   }
 
   section {
