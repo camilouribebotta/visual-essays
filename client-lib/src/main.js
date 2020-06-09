@@ -12,7 +12,7 @@ import marked from 'marked'
 import 'leaflet'
 import 'leaflet-polylinedecorator'
 
-import mirador from '../assets/js/mirador.min.js'
+// import mirador from '../assets/js/mirador.min.js'
 
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
@@ -58,7 +58,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.2'
+const VERSION = '0.7.3'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -161,7 +161,7 @@ function initApp() {
     }
   }
 
-  Vue.prototype.$mirador = mirador
+  Vue.prototype.$mirador = Mirador
 
   vm = new Vue({
     template: '<App/>',

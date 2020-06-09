@@ -87,14 +87,6 @@ export function itemsInElements(elemIds, items) {
         selected.push(item)
         selectedItemIds.add(item.id)
       }
-      /*
-      if ((item.tag === 'video') && 
-           item.tagged_in.has(eid) && 
-           !selectedItemIds.has(item.id)) {
-        selected.push(item)
-        selectedItemIds.add(item.id)
-      } 
-      */
     })
   }
   return selected

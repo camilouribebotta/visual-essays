@@ -1,6 +1,6 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
-       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${Math.min(viewport.height, height)}px; margin:0;`"></div>
+       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${viewport.height}px; margin:0;`"></div>
   </div>
 </template>
 
@@ -403,9 +403,13 @@ module.exports = {
     },
     height: {
       handler: function () {
-        this.map.invalidateSize()
+        const lmap = document.getElementById('lmap')
+        if (lmap) {
+          lmap.style.height = `${this.height}px`
+          console.log(`height=${this.height} viewport.height=${this.viewport.height} lmap=${lmap.style.height}`)
+        }
       },
-      immediate: false
+      immediate: true
     },
     activeElements: {
       handler: function () {
