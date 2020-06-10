@@ -63,7 +63,7 @@ module.exports = {
     // width() { return Math.min(this.viewport.width, this.viewerWidth)},
   },
   mounted() {
-    // console.log(`MapViewer.mounted: height=${this.height} width=${this.width}`)
+    console.log(`MapViewer.mounted: height=${this.height} width=${this.width}`)
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
@@ -123,6 +123,7 @@ module.exports = {
     },
     addPopup(id, label, latLng, offset) {
       if (!this.popups[id]) {
+        // console.log(`addPopup: id=${id} label=${label} lagLng=${latLng} offset=${offset}`)
         const popup = L.popup({ ...defaults.popupOptions, ...{ offset: L.point(0, offset || 0)}})
         popup.setLatLng(latLng)
         popup.setContent(`<h1 data-eid="${id}">${label}</h1>`)
@@ -139,8 +140,12 @@ module.exports = {
         let geojson = L.geoJson(data, {
           // Pop Up
           onEachFeature: function(feature, layer) {
-            const layerId = layer.feature.properties.id || layerNum === 0 ? def.id : `${def.id}-${layerNum}`
-            layer.feature.properties.id = layerId
+            layer.options.id = def.id
+            feature.properties.layerid = def.id
+            if (!feature.properties.id) {
+              feature.properties.id = layerNum === 0 ? def.id : `${def.id}-${layerNum}`
+            }
+            console.log(`feature: id=${feature.properties.id} layerid=${feature.properties.layerid}`)
             self.addEventHandlers(layer, layer.feature.properties.id)
             if (!def.title) {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || feature.properties['ne:NAME'] || undefined : undefined
@@ -150,9 +155,9 @@ module.exports = {
                 const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'LineString'
                   ? layer.getBounds().getCenter()
                   : layer.getLatLng()
-                self.addPopup(layerId, label, latLng)
-                self.addEventHandlers(layer, layerId)
-                self.active.add(layerId)
+                self.addPopup(feature.properties.id, label, latLng, feature.geometry.type === 'Point' ? -45 : 0)
+                self.addEventHandlers(layer, layer.feature.properties.id)
+                self.active.add(feature.properties.id)
                 /*
                 const _layers = { ...self.layers, ...{ Labels: self.$L.layerGroup(Object.values(self.popups).filter(popup => self.active.has(layerId))) } }
                 if (!(self.mapDef['hide-labels'] === '' || self.mapDef['hide-labels'] === 'true')) {
@@ -186,6 +191,11 @@ module.exports = {
           },
           // Style
           style: function(feature) {
+            for (let [prop, value] of Object.entries(feature.properties)) {
+              if (value === 'null') {
+                feature.properties[prop] = null
+              }
+            }
             const style = {
                 color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
                 weight: parseFloat(def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' ? 0 : 4)),
@@ -206,8 +216,18 @@ module.exports = {
             ? data.properties.label || data.properties.name || data.properties.title || data.properties['ne:NAME'] || data.properties['ne:name'] || undefined
             : undefined
 
+        geojson.options.id = def.id
+
         if (addToMap || def.active) {
-          geojson.addTo(this.map)
+          const currentLayers = new Set()
+          this.map.eachLayer(layer => {if (layer.options.id) currentLayers.add(layer.options.id)})
+          console.log('currentLayers', currentLayers)
+          console.log('geojson', geojson.options.id)
+          this.map.eachLayer(layer => console.log('layer', layer.options.id))
+          //if (!currentLayers.has(geojson.options.id)) {
+            console.log('adding geojson.layer', geojson.options.id)
+            geojson.addTo(this.map)
+          //}
         }
 
         if (numFeatureLabels === 0) {
@@ -255,6 +275,7 @@ module.exports = {
     },
 
     syncLayers() {
+      console.log('syncLayers')
       const currentLayerIds = new Set(this.mapDef.layers.map(def => def.id))
       const _layers = {}
       const _active = new Set()
@@ -309,11 +330,13 @@ module.exports = {
         _layers.Locations = layer
         markers.forEach(marker => _active.add(marker.options.id))
       }
+      
       _layers.Labels = this.$L.layerGroup(Object.values(this.popups).filter(popup => _active.has(popup.options.id)))
       if (!(this.mapDef['hide-labels'] === '' || this.mapDef['hide-labels'] === 'true')) {
        _layers.Labels.addTo(this.map)
       }
       this.layers = _layers
+
       this.active = _active
     },
     updateLayers() {

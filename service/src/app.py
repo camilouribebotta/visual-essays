@@ -223,6 +223,7 @@ def add_vue_app(html, js_lib):
         soup.html.head.append(style)
 
     for url in [
+            'https://unpkg.com/mirador@beta/dist/mirador.min.js',
             js_lib
         ]:
         lib = soup.new_tag('script')
@@ -322,14 +323,14 @@ def essay_local(file=None):
 def essay(acct=None, repo=None, file=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
-
+    logger.info('essay')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
         raw = kwargs.pop('raw', 'false') in ('', 'true')
         site = urlparse(request.base_url).hostname
-        acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
-        repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
+        acct = acct if acct else DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
+        repo = repo if repo else DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
         src = None
         gdid = None
         for arg in ('src', 'gd', 'gdid', 'gdrive'):
@@ -348,8 +349,6 @@ def essay(acct=None, repo=None, file=None):
             markdown = get_gd_markdown(gdid)
         else:
             use_local = kwargs.pop('mode', ENV) == 'dev'
-            acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
-            repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
             if use_local:
                 markdown = get_local_markdown(file)
                 baseurl = 'http://localhost:5000'
