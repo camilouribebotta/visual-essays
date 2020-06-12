@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <script src="https://unpkg.com/http-vue-loader"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <div class="text-center">
+        <v-btn color="red lighten-2" @click="open">Open dialog</v-btn>
+      </div>
+      <mirador-dialog-viewer :is-open="isOpen" @close="close" :windows="windows"/>
+    </v-app>
+  </div>
+
+  <script src="https://unpkg.com/mirador@beta/dist/mirador.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <script>
+
+    Vue.component('miradorDialogViewer', httpVueLoader('http:localhost:5000/components/MiradorDialog.vue'))
+    Vue.component('miradorImageViewer', httpVueLoader('http:localhost:5000/components/ImageViewer/MiradorImageViewer.vue'))
+
+    Vue.prototype.$mirador = Mirador
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: () => ({
+        isOpen: false,
+        windows: [
+          { manifestId: 'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/4d3c553efc21c7d705e1a0e9e15a4f30ccdcf9f5295615ec236d61d5/manifest' },
+          { manifestId: 'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/2413f491797dcfab9ba273b3914661b3c6d9769fee66531ba3d13ada/manifest' }
+        ]
+      }),
+      methods: {
+        open() {
+          this.isOpen = true 
+        },
+        close() {
+          this.isOpen = false
+        }
+      }
+    })
+  
+  </script>
+</body>
+</html>

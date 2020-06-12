@@ -256,7 +256,7 @@ module.exports = {
     },
 
     useGeojson(location) {
-      return location.geojson && (!location.coords || location['prefer-geojson'] === 'true')
+      return location.geojson && (!location.coords || location['prefer-geojson'] === 'true' || this.mapDef['prefer-geojson'] === 'true')
     },
 
     getLocationMarkers() {

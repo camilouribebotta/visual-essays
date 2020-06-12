@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <script src="https://unpkg.com/http-vue-loader"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app>    
+      <div class="text-center">
+        <v-dialog
+        v-model="isOpen"
+        :height="height"
+        :width="width"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+            Open dialog
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="headline grey lighten-2" primary-title>
+            Title
+          </v-card-title>
+
+          <v-card-text>
+            <div id="mirador" :style="containerStyle"></div>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="isOpen = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      </div>
+      </v-app>
+    </v-app>
+  </div>
+
+  <script src="https://unpkg.com/mirador@beta/dist/mirador.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <script>
+
+    const windows = [
+      { manifestId: 'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/4d3c553efc21c7d705e1a0e9e15a4f30ccdcf9f5295615ec236d61d5/manifest' },
+      { manifestId: 'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/2413f491797dcfab9ba273b3914661b3c6d9769fee66531ba3d13ada/manifest' }
+    ]
+    
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      components: {
+        miradorViewer: httpVueLoader('http:localhost:5000/components/MiradorDialog.vue')
+      },
+      data: () => ({
+        isOpen: false
+      }),
+      computed: {
+        height() { return Math.max(document.documentElement.clientHeight, window.innerHeight * 0.8 || 0) },
+        width() { return Math.max(document.documentElement.clientWidth, window.innerWidth * 0.8 || 0) },
+        containerStyle() { return { position: 'relative', width: `${this.width - 80}px`, height: `${this.height - 320}px` } },
+      },
+      mounted() {},
+      methods: {
+        load() {
+          Mirador.viewer({
+            id: 'mirador',
+            windows,
+            workspace: {
+              type: 'mosaic'
+            },
+            workspaceControlPanel: {
+              enabled: false
+            },
+            window: {
+              allowClose: false, // Configure if windows can be closed or not
+              allowFullscreen: true, // Configure to show a "fullscreen" button in the WindowTopBar
+              allowMaximize: true, // Configure if windows can be maximized or not
+              allowTopMenuButton: true, // Configure if window view and thumbnail display menu are visible or not
+              allowWindowSideBar: true, // Configure if side bar menu is visible or not
+              authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
+              defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
+              defaultSidebarPanelHeight: 201,  // Configure default sidebar height in pixels
+              defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
+              defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
+              hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
+              showLocalePicker: false, // Configure locale picker for multi-lingual metadata
+              sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
+              panels: { // Configure which panels are visible in WindowSideBarButtons
+                info: true,
+                attribution: true,
+                canvas: true,
+                annotations: true,
+                search: true,
+              },
+              views: [
+                { key: 'single', behaviors: ['individuals'] },
+                { key: 'book', behaviors: ['paged'] },
+                { key: 'scroll', behaviors: ['continuous'] },
+                { key: 'gallery' },
+              ]
+            }
+          })
+        }
+      },
+      watch: {
+        isOpen: {
+          handler: function () {
+            if (this.isOpen) {
+              this.$nextTick(() => this.load())
+            }
+          },
+          immediate: true
+        }
+      }
+    })
+  
+  </script>
+</body>
+</html>

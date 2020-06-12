@@ -31,8 +31,9 @@
         </v-col>
       </v-row>
     </v-container>
+    
+    <image-viewer-modal/>
 
-    <entity-infobox-dialog/>
   </v-app>
 </template>
 

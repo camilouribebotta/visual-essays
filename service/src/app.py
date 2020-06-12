@@ -27,7 +27,7 @@ from bs4.element import Tag
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, redirect
 
 app = Flask(__name__)
 
@@ -48,7 +48,8 @@ KNOWN_SITES = {
     'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
     'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
     'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities'},
-    'dickens.kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'}
+    'dickens.kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'},
+    'kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'}
 }
 
 cors_headers = {
@@ -246,6 +247,7 @@ def entity(eid=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
     site = urlparse(request.base_url).hostname
+    logger.info(f'DEFAULT_ACCT={DEFAULT_ACCT} DEFAULT_REPO={DEFAULT_REPO}')
     kwargs['acct'] = DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
     kwargs['repo'] = DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
     # kwargs['refresh'] = kwargs['refresh'] == 'true' if 'refresh' in kwargs else kwargs.pop('mode', ENV) == 'dev'
@@ -255,7 +257,7 @@ def entity(eid=None):
         return ('', 204, cors_headers)
     else:
         if eid:
-            kwargs['uri'] = as_uri(eid)
+            kwargs['uri'] = as_uri(eid, **kwargs)
         entity = KnowledgeGraph(cache=cache, **kwargs).entity(**kwargs)
         return (entity, 200, cors_headers)
 
@@ -415,6 +417,9 @@ def site(acct=None, repo=None, file=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
     site = urlparse(request.base_url).hostname
+    if site == 'kent-maps.online':
+        return redirect(f'https://dickens.kent-maps.online{request.path}', code=302)
+
     acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
     repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
     logger.info(f'site: site={site} acct={acct} repo={repo} kwargs={kwargs}')
@@ -440,12 +445,15 @@ def geojson(fname):
 @app.route('/components/<fname>', methods=['GET'])
 @app.route('/components/<subdir>/<fname>', methods=['GET'])  
 def components(fname, subdir=None):
-    for root in (DOCS_ROOT, os.path.dirname(BASEDIR)):
-        components_path = f'{root}/docs/components' if subdir is None else f'{root}/docs/components/{subdir}'
-        path = os.path.join(components_path, fname)
-        logger.info(f'components: subdir={subdir} fname={fname} components_path={components_path} path={path} exists={os.path.exists(path)}')
-        if os.path.exists(path):
-            return send_from_directory(components_path, fname, as_attachment=False)
+    if request.method == 'OPTIONS':
+        return ('', 204, cors_headers)
+    else:
+        for root in (DOCS_ROOT, os.path.dirname(BASEDIR)):
+            components_path = f'{root}/docs/components' if subdir is None else f'{root}/docs/components/{subdir}'
+            path = os.path.join(components_path, fname)
+            logger.info(f'components: subdir={subdir} fname={fname} components_path={components_path} path={path} exists={os.path.exists(path)}')
+            if os.path.exists(path):
+                return (send_from_directory(components_path, fname, as_attachment=False), 200, cors_headers)
 
 def usage():
     print('%s [hl:dr:a:p:]' % sys.argv[0])

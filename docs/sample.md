@@ -19,12 +19,18 @@
 ### Images - Gallery with contain and cover fit
 
 Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
-<param ve-image mirador
+<param ve-image
        fit="cover"
        title="Ginevra de' Benci (cover)"
        url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
        thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
        hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+<param ve-image
+       title="Holotype of Prunus serrulata Lindley f. shibayama E. H. Wilson [family ROSACEAE]"
+       fit="cover"
+       url="https://plants.jstor.org/fsi/img/size3/alukaplant/a/phase_01/a0000/a00032200.jpg"
+       thumbnail="https://plants.jstor.org/fsi/img/size1/alukaplant/a/phase_01/a0000/a00032200.jpg"
+       hires="https://plants.jstor.org/seqapp/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&rft_id=/jp2/fpx/16/gpi-a-typspe-01-42/a0000/a00032200.jp2">
 
 ## Maps
 

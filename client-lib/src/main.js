@@ -8,7 +8,8 @@ import store from './store'
 import 'vuetify/dist/vuetify.min.css'
 import Lingallery from '../assets/js/lingallery.umd.min.js'
 import marked from 'marked'
-
+import VModal from 'vue-js-modal'
+ 
 import 'leaflet'
 import 'leaflet-polylinedecorator'
 
@@ -39,7 +40,9 @@ const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https
 const defaultComponents = [
   { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
-  // { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/MiradorImageViewer.vue`, selectors: ['tag:image'], 'icon': 'fa-images', 'label': 'Images' },
+  { name: 'defaultImageViewer', src: `${componentsBaseURL}/components/ImageViewer/DefaultImageViewer.vue` },
+  { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/ImageViewer/MiradorImageViewer.vue` },
+  { name: 'imageViewerModal', src: `${componentsBaseURL}/components/ImageViewer/ImageViewerModal.vue` },
   { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
   // { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
@@ -49,16 +52,15 @@ const defaultComponents = [
   { name: 'horizontalViewer', component: HorizontalViewer },
   { name: 'verticalViewer', component: VerticalViewer },
   { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
-  { name: 'galleryImageViewer', src: `${componentsBaseURL}/components/ImageViewer/GalleryImageViewer.vue` },
-  { name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
-  { name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
+  //{ name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
+  //{ name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
   { name: 'entityInfobox', src: `${componentsBaseURL}/components/EntityInfobox.vue` }
 ]
 
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.4'
+const VERSION = '0.7.5'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -147,6 +149,8 @@ function initApp() {
     loglevel: 2,
     refreshInterval: 100
   })
+  Vue.use(VModal)
+
   Vue.use(VueYoutube)
   Vue.prototype.$L = L
   Vue.prototype.$marked = marked

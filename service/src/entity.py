@@ -50,14 +50,15 @@ NAMESPACES = set([g['ns'] for g in GRAPHS])
 default_ns = 'wd'
 default_entity_type = 'entity'
 
-def as_uri(s, acct=None, repo=None):
+def as_uri(s, acct=None, repo=None, **kwargs):
     global default_ns
     uri = None
     if s.startswith('http'):
         uri = s
     else:
         prefix, entity_id = s.split(':') if ':' in s else (default_ns, s)
-        if prefix in PREFIXES and _is_entity_id(entity_id):
+        logger.info(f'as_uri: prefix={prefix} entity_id={entity_id} {_is_entity_id(entity_id, False)}')
+        if prefix in PREFIXES and _is_entity_id(entity_id, False):
             logger.info(f'{prefix}:{entity_id}')
             uri = f'{PREFIXES[prefix]}{entity_id}'
         else:
