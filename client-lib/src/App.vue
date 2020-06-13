@@ -32,6 +32,7 @@
       </v-row>
     </v-container>
     
+    <entity-infobox-dialog/>
     <image-viewer-modal/>
 
   </v-app>

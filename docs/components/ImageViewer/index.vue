@@ -1,5 +1,6 @@
 <template>
   <div id="image-viewer" >
+    <!--
     <div id="image-viewer-controls" @click="click()">
       <v-radio-group
         id="image-viewer-mode-control"
@@ -13,6 +14,7 @@
         <v-radio label="Mirador" value="mirador"></v-radio>
       </v-radio-group>
     </div>
+    -->
     <component 
       v-bind:is="mode === 'default' ? 'defaultImageViewer' : 'miradorImageViewer'"
       :width="width" :height="height" :items="items" :default-fit="defaultFit"

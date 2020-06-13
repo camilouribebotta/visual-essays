@@ -30,8 +30,8 @@ module.exports = {
         enabled: false
       },
       window: {
-        allowClose: false, // Configure if windows can be closed or not
-        allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
+        allowClose: true, // Configure if windows can be closed or not
+        allowFullscreen: true, // Configure to show a "fullscreen" button in the WindowTopBar
         allowMaximize: true, // Configure if windows can be maximized or not
         allowTopMenuButton: false, // Configure if window view and thumbnail display menu are visible or not
         allowWindowSideBar: true, // Configure if side bar menu is visible or not

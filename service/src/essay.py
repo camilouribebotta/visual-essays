@@ -29,6 +29,8 @@ from slugify import slugify
 from rdflib import ConjunctiveGraph as Graph
 from pyld import jsonld
 
+import concurrent.futures
+
 SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
@@ -62,10 +64,7 @@ class Essay(object):
         self. _update_image_links()
         self._remove_empty_paragraphs()
         self._add_heading_ids()
-        # TODO: Optimize this to perform manifest requests in parallel
-        for item in self.markup.values():
-            if item['tag'] == 'image':
-                self._get_manifest(item)
+        self._get_manifests()
         self._add_data()
         # logger.info(f'{round(now()-st,3)}: phase 3')
 
@@ -460,6 +459,27 @@ class Essay(object):
         manifest = resp.json()
         if '@id' in manifest:
             item['manifestId'] = manifest['@id']
+        return item
+
+    _manifests_cache = {}
+    def _get_manifests(self):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            futures = {}
+            for item in self.markup.values():
+                if item['tag'] == 'image':
+                    image_url = item.get('hires', item.get('url'))
+                    if image_url in self._manifests_cache:
+                        item['manifestId'] = self._manifests_cache[image_url]
+                        continue
+
+                    futures[executor.submit(self._get_manifest, item)] = item['id'] = image_url
+
+            for future in concurrent.futures.as_completed(futures):
+                image_url = futures[future]
+                item = future.result()
+                if 'manifestId' in item:
+                    self._manifests_cache[image_url] = item['manifestId']
+                # logger.info(f'id={item["id"]} manifest={item.get("manifestId")}')
 
     @property
     def json(self):
