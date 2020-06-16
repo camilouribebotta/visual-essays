@@ -144,13 +144,12 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
     html = markdown_parser.markdown(
         markdown['text'],
         output_format='html5', 
-        extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details'],
+        extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details', 'attr_list'],
         extension_configs = {
             'footnotes': {
                 'SEPARATOR': '-'
             }
         })
-
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
     convert_relative_links(soup, acct, repo, markdown['fname'], markdown['source'], site)
 
@@ -178,6 +177,7 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
                 # logger.info(f'section: level={level} id={section_id} title="{title}')
                 tag = html5.new_tag('section', id=section_id)
                 head = html5.new_tag(f'h{level}')
+                head.attrs = elem.attrs
                 head.string = title if title else ''
                 tag.append(head)
                 section = {
@@ -207,7 +207,7 @@ def markdown_to_html5(markdown, acct=None, repo=None, site=None):
         parent = sections[section['parent']]['tag'] if section['parent'] else article
         parent.append(section['tag'])
 
-    # return html5.prettify()
+    # print(html5.prettify())
     return str(html5)
 
 def add_vue_app(html, js_lib):
@@ -430,7 +430,7 @@ def site(acct=None, repo=None, file=None):
         with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
             html = fp.read()
             if site == 'localhost':
-                html = re.sub(r'"https://JSTOR-Labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
+                html = re.sub(r'"https://jstor-labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
             return html, 200
 
 @app.route('/images/<fname>', methods=['GET'])  

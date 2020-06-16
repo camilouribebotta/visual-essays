@@ -46,7 +46,7 @@ const defaultComponents = [
   { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
   // { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
-  { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
+  // { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
   { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, selectors: ['tag:plant-specimen'], 'icon': 'fa-seedling', 'label': 'Plant Specimens' },
   { name: 'essay', component: Essay },
   { name: 'horizontalViewer', component: HorizontalViewer },
@@ -60,7 +60,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.6'
+const VERSION = '0.7.7'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -108,12 +108,19 @@ function resizeend() {
   }
 }
 
+const customScripts = new Set()
+
 // Site components
 const getSiteConfig = async () => {
   const response = await fetch('/config')
   const siteConfig = await response.json()
   if (siteConfig.components) {
-    siteConfig.components.forEach(cfg => components[cfg.name] = cfg)
+    siteConfig.components.forEach(cfg => {
+      if (cfg.dependencies) {
+        cfg.dependencies.forEach(scriptURL => customScripts.add(scriptURL))
+      }
+      components[cfg.name] = cfg
+    })
   }
 }
 getSiteConfig()
@@ -136,7 +143,15 @@ function initApp() {
 
   // Essay components
   window.data.filter(item => item.tag === 'component').forEach(customComponent => {
+    customComponent.name = customComponent.name || customComponent.label
     components[customComponent.name] = customComponent
+    if (customComponent.dependencies) {
+      customComponent.dependencies = customComponent.dependencies.split('|')
+      customComponent.dependencies.forEach(scriptURL => customScripts.add(scriptURL))
+    }
+    if (customComponent.selectors) {
+      customComponent.selectors = customComponent.selectors.split('|')
+    }
   })
 
   Vue.config.productionTip = false
@@ -212,6 +227,12 @@ function initApp() {
     window.app.isLoaded = true
     window.vm = vm
   }
+
+  customScripts.forEach(src => {
+    const scriptElem = document.createElement('SCRIPT')
+    scriptElem.setAttribute('src', src)      
+    document.body.appendChild(scriptElem)  
+  })
 
   setViewport()
   window.addEventListener('resize', () => {

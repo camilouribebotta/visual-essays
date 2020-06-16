@@ -6,6 +6,14 @@
        layout="vtl"
        author="Ron">
 
+<param ve-component 
+       name="network"
+       src="components/Network.vue"
+       selectors="tag:network"
+       icon="fa-chart-network"
+       label="Networks"
+       dependencies="https://d3js.org/d3.v4.min.js">
+
 <param ve-entity title="Ginevra de' Benci" eid="Q1267893">
 <param ve-entity title="Milan, Italy" eid="Q490">
 <param ve-entity title="Bologna, Italy" eid="Q1891">
@@ -14,7 +22,7 @@
 <param ve-entity title="Vinci, Tuscany, Italy" eid="Q82884">
 <param ve-entity title="Leonardo da Vinci" eid="Q762">
 
-## Images
+## Images ## {: #link1 }
 
 ### Images - Gallery with contain and cover fit
 
@@ -31,6 +39,7 @@ Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-centur
        url="https://plants.jstor.org/fsi/img/size3/alukaplant/a/phase_01/a0000/a00032200.jpg"
        thumbnail="https://plants.jstor.org/fsi/img/size1/alukaplant/a/phase_01/a0000/a00032200.jpg"
        hires="https://plants.jstor.org/seqapp/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&rft_id=/jp2/fpx/16/gpi-a-typspe-01-42/a0000/a00032200.jp2">
+<param ve-plant-hierarchy eid="Q624242">
 
 ## Maps
 
@@ -38,6 +47,7 @@ Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-centur
 
 Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, in Vinci, in the region of Florence, Italy, Leonardo was educated in the studio of the renowned Italian painter Andrea del Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan, and he later worked in Rome, Bologna and Venice. He spent his last three years in France, where he died in 1519.
 <param ve-map basemap="Esri_WorldPhysical" center="Q82884" zoom="7">
+{: #link2 }
 
 ### Hide labels
 
@@ -50,7 +60,6 @@ Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, 
 <param ve-map center="Q82884" zoom="7" prefer-geojson>
 <param ve-map-layer geojson active url="https://data.whosonfirst.org/101/752/643/101752643.geojson" aliases="florence">
 <param ve-map-layer geojson active url="geojson/test.json">
-<param ve-network>
 
 ### Map - Show locations as GeoJSON regions with no labels
 

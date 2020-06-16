@@ -503,10 +503,13 @@ class Essay(object):
     def __str__(self):
         return self.html
 
-def is_qid(s, ns_required=True):
+def is_qid(s, ns_required=False):
     if not s or not isinstance(s, str): return False
-    eid = s.split(':')
-    return len(eid[-1]) > 1 and eid[-1][0] == 'Q' and eid[-1][1:].isdecimal()
+    split = s.split(':')
+    if ns_required and len(split) == 1:
+        return False
+    eid = split[-1]
+    return len(eid) > 1 and eid[0] == 'Q' and eid[1:].isdecimal()
 
 def usage():
     print(f'{sys.argv[0]} [hl:s:e:f:] title')
