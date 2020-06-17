@@ -65,7 +65,8 @@
     },    
     data: () => ({
       drawer: false,
-      lastHeight: undefined 
+      lastHeight: undefined,
+      lastTouchY: undefined
     }),
     computed: {
       banner() { return this.essayConfig.banner || this.siteConfig.banner },
@@ -74,7 +75,14 @@
       author() { return this.essayConfig.author || '&nbsp;' }
     },
     mounted() {
-      document.getElementById('header').addEventListener('wheel', this.throttle(this.scrollContent, 40))
+      console.log('MobileHeader', 'ontouchstart' in window)
+      const header = document.getElementById('header')
+      if ('ontouchstart' in window) {
+        header.addEventListener('touchstart', (e) => { this.lastTouchY = e.touches[0].screenY })
+        header.addEventListener('touchmove', (e) => { this.scrollContent(e) })
+      } else {
+        header.addEventListener('wheel', this.throttle(this.scrollContent, 40))
+      }
     },
     methods: {
       onMutate(mutations) {
@@ -101,10 +109,12 @@
         }
       },
       scrollContent(e) {
-        const wheelDelta = e.wheelDelta
+        const delta = e.touches
+          ? e.touches[0].screenY - this.lastTouchY
+          : e.wheelDelta
         const scrollableContent = document.getElementById('scrollableContent')
         if (scrollableContent) {
-          scrollableContent.scrollTo(0, scrollableContent.scrollTop - wheelDelta)
+          scrollableContent.scrollTo(0, scrollableContent.scrollTop - delta)
         }
       }
     }

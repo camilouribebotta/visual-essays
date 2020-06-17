@@ -59,7 +59,7 @@
       viewportHeight() { return this.$store.getters.height },
       headerHeight() { return this.$store.getters.headerHeight },
       footerHeight() { return this.$store.getters.footerHeight },
-      viewerHeight() { return this.viewportHeight/2 - this.footerHeight - 48 },
+      viewerHeight() { return this.viewportHeight/2 - 48 },
       viewportWidth() { return this.$store.getters.width },
       style() {
         return {
@@ -249,14 +249,17 @@
       },
       */
       groups() {
+        console.log(this.activeElement, this.groups)
         const availableGroups = []
         tabOrder.forEach(group => { if (this.groups[group]) availableGroups.push(group) })
+        Object.keys(this.groups).forEach(group => {
+          if (availableGroups.indexOf(group) === -1 && this.groups[group].icon) {
+            availableGroups.push(group)
+          }
+        })
         this.tabs = availableGroups
-        if (this.primaryTab) {
-          this.activeTab = this.primaryTab
-        } else if (!this.activeTab || availableGroups.indexOf(this.activeTab) < 0) {
-          this.activeTab = availableGroups.length > 0 ? availableGroups[0] : undefined
-        }
+        this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
+        console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
       },
       viewportHeight() {
         if (this.spacer) {

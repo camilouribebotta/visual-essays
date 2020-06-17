@@ -19,7 +19,8 @@
       <component v-bind:is="isPhone && siteComponents.siteMobileHeader ? 'siteMobileHeader' : 'siteHeader'"
         :site-config="siteConfig" :essay-config="essayConfig" :nav="nav" :progress="progress" 
         :app-version="appVersion" :lib-version="libVersion"
-        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @header-height="setHeaderHeight"></component>
+        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @header-height="setHeaderHeight">
+      </component>
 
       <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height - (footerHeight || 0)}px;`">
         <v-container id="contentContainer" :style="`margin-top: ${essayTopMargin}px;`">
@@ -27,8 +28,9 @@
         </v-container>
       </v-sheet>
 
-      <component v-bind:is="isPhone && siteComponents.siteMobileFooter ? 'siteMobileFooter' : 'siteFooter'" 
-        :site-config="siteConfig" @footer-height="setFooterHeight"></component>
+      <component v-if="!isPhone" v-bind:is="siteFooter" 
+        :site-config="siteConfig" @footer-height="setFooterHeight">
+      </component>
 
     </v-app>
   </div>
@@ -40,7 +42,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.4.4/mobile-detect.min.js"></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/openseadragon@2.4/build/openseadragon/openseadragon.min.js"></script> -->
 
   <script>
 
@@ -125,7 +126,7 @@
           essayConfig: {},
           essayCache: {},
           progress: 0,
-          appVersion: '0.5.0',
+          appVersion: '0.5.1',
           libVersion: undefined,
           current: undefined,
           markdownViewer: undefined,

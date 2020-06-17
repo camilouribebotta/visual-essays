@@ -45,7 +45,7 @@ export default {
       // Setup ScrollMagic (https://scrollmagic.io/)
       let first
       let prior
-      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id && elem.id.indexOf('section-') === 0).forEach((para) => {
+      Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
         if (!first) {
           first = para.id
         }

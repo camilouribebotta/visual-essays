@@ -14,6 +14,13 @@
        label="Networks"
        dependencies="https://d3js.org/d3.v4.min.js">
 
+<param ve-component 
+       name="people"
+       src="components/EntityViewer.vue"
+       selectors="category:person"
+       icon="fa-user"
+       label="People">
+
 <param ve-entity title="Ginevra de' Benci" eid="Q1267893">
 <param ve-entity title="Milan, Italy" eid="Q490">
 <param ve-entity title="Bologna, Italy" eid="Q1891">
