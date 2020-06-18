@@ -65,7 +65,7 @@
       footerHeight() { return this.$store.getters.footerHeight },
       viewerHeight() { return this.$store.getters.height - this.headerHeight - this.footerHeight},
       primary() {return this.$store.getters.itemsInActiveElements.find(item => item.primary === 'true' || item.tag === 'primary') },
-      primaryTab() { return this.primary ? `${this.primary.tag}Viewer` : undefined },
+      primaryTab() { return this.primary ? `${this.primary.tag}` : undefined },
       mode() { return this.primary ? this.primary.mode : undefined },
       hoverItemID() { return this.$store.getters.hoverItemID },
       selectedItemID() { return this.$store.getters.selectedItemID },

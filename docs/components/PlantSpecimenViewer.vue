@@ -25,7 +25,7 @@
                 :items="specimens.specimens"
                 :width="width"
                 :height="height - 46"
-                initial-mode="gallery"
+                initial-mode="default"
                 default-fit="cover">
               </image-viewer>
             </v-card-text>
@@ -37,6 +37,12 @@
 </template>
 
 <script>
+  const defaults = {
+    canvas: { height: 3000, width: 3000 },
+    image: { region: 'full', size: 'full', rotation: '0' },
+    iiifServer: 'https://tripleeyeeff-atjcn6za6q-uc.a.run.app'
+  }
+
   module.exports = {
     name: 'plant-specimens',
     props: { items: Array, width: Number, height: Number },
@@ -48,28 +54,64 @@
       outerContainerStyle() { return { width: `${this.width}px`, height: `${this.height}px`, padding: 0 } },
       innerContainerStyle() { return { height: `${this.height - 48}px`, padding: 0, overflowY: 'auto !important' } },
     },
-    methods: {
-      getSpecimenMetadata(item) {
-        const args = Object.keys(item).filter(arg => ['max', 'reverse'].includes(arg)).map(arg => `${arg}=${item[arg]}`)
-        fetch(`https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : ''))
-          .then(resp => resp.json())
-          .then(specimensMetadata => {
-            specimensMetadata.caption = item.label
-            specimensMetadata.specimens.forEach(specimen => {
-              const defaultImage = specimen.images.find(img => img.type === 'default')
-              specimen.url = defaultImage.url
-              specimen.title = specimen.description
-            })
-            this.specimensByTaxon = [...this.specimensByTaxon, specimensMetadata]
-          })
-      }
+    mounted() {
+      this.items.forEach(item => this.getSpecimenMetadata(item))
     },
-    watch: {
-      items: {
-        handler: function () {
-          this.items.forEach(item => this.getSpecimenMetadata(item))
-        },
-        immediate: true
+    methods: {
+      async specimensDataForItem(item) {
+        if (item.specimensData) {
+          this.specimensByTaxon = [...this.specimensByTaxon, item.specimensData]
+        } else {
+          const args = Object.keys(item).filter(arg => ['max', 'reverse'].includes(arg)).map(arg => `${arg}=${item[arg]}`)
+          const url = `https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : '')
+          console.log('getSpecimenMetadata', item)
+          item.specimensData = fetch(url)
+            .then(resp => { console.log(resp); return resp.json()})
+            .then(specimensData => {
+              item.specimensData = specimensData;
+              item.specimensData.caption = item.label
+              item.specimensData.specimens.forEach(specimen => {
+                const defaultImage = specimen.images.find(img => img.type === 'default')
+                const hiresImage = specimen.images.find(img => img.type === 'best')
+                specimen.url = defaultImage.url
+                specimen.hires = hiresImage.url
+                specimen.title = specimen.description
+                if (!specimen.manifestId) {
+                  specimen.manifestId = this.getManifest(specimen)
+                  //this.$store.dispatch('updateItem', item)
+                }
+              })
+              this.specimensByTaxon = [...this.specimensByTaxon, item.specimensData]
+              this.$store.dispatch('updateItem', item)
+              console.log('md', item.specimensData)
+            })
+        }
+        return item.specimensData
+      },
+      getSpecimenMetadata(item) {
+        this.specimensDataForItem(item)
+      },
+      getManifest(specimen) {
+        const manifest = {
+          label: specimen.caption, 
+          description: specimen.description, 
+          sequences: [{
+            canvases: [{
+              ...defaults.canvas, ...{ 
+              label: specimen.caption, 
+              images: [{ 
+                ...defaults.image, ...{ 
+                url: specimen.hires || specimen.url } 
+              }]} 
+            }]
+          }]
+        }
+        console.log('getManifest', specimen)
+        return fetch(`${defaults.iiifServer}/presentation/create`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(manifest)
+        }).then(resp => resp.json())
       }
     }
   }

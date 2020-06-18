@@ -272,7 +272,8 @@ def specimens(taxon_name):
         return ('', 204, cors_headers)
     else:
         taxon_name = taxon_name.replace('_', ' ')
-        refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
+        # refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
+        refresh = True
         specimens = cache.get(taxon_name) if not refresh else None
         if specimens is None:
             specimens = get_specimens(taxon_name, **kwargs)

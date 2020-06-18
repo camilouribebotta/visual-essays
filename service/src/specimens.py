@@ -182,7 +182,7 @@ def sort_specimens(specimens, **kwargs):
     return sorted_specimens
 
 def get_specimens(taxon_name, **kwargs):
-    logger.info(f'get_specimens: taxon_name={taxon_name}')
+    logger.info(f'get_specimens: taxon_name={taxon_name} max={kwargs.get("max")}')
     sparql = sparql_template.replace('<TAXON NAME>', taxon_name)
     data = {'taxonName': taxon_name, 'specimens': []}
     for _ in range(2):

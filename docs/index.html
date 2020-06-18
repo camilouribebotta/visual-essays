@@ -28,7 +28,7 @@
         </v-container>
       </v-sheet>
 
-      <component v-if="!isPhone" v-bind:is="siteFooter" 
+      <component v-if="!isPhone" v-bind:is="'siteFooter'" 
         :site-config="siteConfig" @footer-height="setFooterHeight">
       </component>
 
@@ -126,7 +126,7 @@
           essayConfig: {},
           essayCache: {},
           progress: 0,
-          appVersion: '0.5.1',
+          appVersion: '0.5.2',
           libVersion: undefined,
           current: undefined,
           markdownViewer: undefined,

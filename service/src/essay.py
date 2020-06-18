@@ -168,7 +168,7 @@ class Essay(object):
             if 'category' in self.markup.get(entity.attrs.get('data-eid'), {}):
                 entity.attrs['class'] = sorted(set([cls for cls in entity.attrs['class'] if cls != 'entity'] + [self.markup[entity.attrs['data-eid']]['category']]))
 
-    LEGACY_MARKUP = {'essay': 'config', 'component': 'component', 'image': 'image', 'entity': 'entity', 'map': 'map', 'map-layer': 'map-layer', 'video': 'video', 'primary': 'primary'}
+    LEGACY_MARKUP = {'essay': 'config', 'component': 'component', 'image': 'image', 'entity': 'entity', 'map': 'map', 'map-layer': 'map-layer', 'video': 'video'}
     LEGACY_KEYS = set(LEGACY_MARKUP.keys())
 
     def _find_ve_markup(self):
