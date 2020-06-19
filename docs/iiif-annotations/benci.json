@@ -15,7 +15,7 @@
                 "full": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/dca6a4a7801bbf83d68f6534c7b7f1758a4bd840795ef1eb769f18ef/canvas/d7c48580-9105-46c4-bd40-51e1f09d5cfc",
                 "selector": {
                     "@type": "oa:FragmentSelector",
-                    "value": "xywh=100,100,100,100"
+                    "value": "xywh=100,100,500,500"
                 },
                 "within": {
                     "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/2413f491797dcfab9ba273b3914661b3c6d9769fee66531ba3d13ada/manifest",
