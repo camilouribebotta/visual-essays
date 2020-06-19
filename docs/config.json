@@ -14,6 +14,14 @@
             "icon": "fa-chart-network",
             "label": "Networks",
             "dependencies": ["https://d3js.org/d3.v4.min.js"]
+        },
+        {
+            "name": "openSeadragon", 
+            "src": "/components/OpenSeadragonImageViewer.vue",
+            "selectors": ["tag:open-seadragon"],
+            "icon": "fa-dragon",
+            "label": "OpenSeadragon Image Viewer",
+            "dependencies": ["https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"]
         }
     ]
 }

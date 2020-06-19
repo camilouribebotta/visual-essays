@@ -31,7 +31,7 @@ module.exports = {
     currentId: undefined
   }),
   computed: {
-    // () { return this.items.map(item => {return { manifestId: item.manifestId } }) },
+    // () { return this.items.map(item => {return { manifestId: item.manifest } }) },
     images() {
       const images = this.items.map(item => { 
         const mapped = {

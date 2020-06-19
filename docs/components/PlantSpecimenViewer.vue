@@ -76,8 +76,8 @@
                 specimen.url = defaultImage.url
                 specimen.hires = hiresImage.url
                 specimen.title = specimen.description
-                if (!specimen.manifestId) {
-                  specimen.manifestId = this.getManifest(specimen)
+                if (!specimen.manifest) {
+                  specimen.manifest = this.getManifest(specimen)
                   //this.$store.dispatch('updateItem', item)
                 }
               })

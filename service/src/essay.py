@@ -200,8 +200,10 @@ class Essay(object):
                 if attrs[attr] == '':
                     attrs[attr] = 'true'
 
+
             if 'id' not in attrs:
                 attrs['id'] = f'{tag}-{sum([1 for item in ve_markup.values() if item["tag"] == tag])+1}'
+
             if 'aliases' in attrs:
                 attrs['aliases'] = [alias.strip() for alias in attrs['aliases'].split('|')]
             if 'qid' in attrs:
@@ -435,30 +437,42 @@ class Essay(object):
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
 
     def _get_manifest(self, item):
-        defaults = {
-            'canvas': { 'height': 3000, 'width': 3000 },
-            'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
-        }
-        manifest = {
-          'label': item.get('title', ''), 
-          'description': item.get('description', ''), 
-          'sequences': [{
-            'canvases': [{**defaults['canvas'], **{
-                'label': item.get('title', ''),
-                'images': [{**defaults['image'], **{
-                    'url': item.get('hires', item.get('url'))
+        logger.info(f'getManifest {item}')
+        if 'manifest' not in item:
+            defaults = {
+                'canvas': { 'height': 3000, 'width': 3000 },
+                'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
+            }
+            manifest = {
+            'label': item.get('title', ''), 
+            'description': item.get('description', ''), 
+            'sequences': [{
+                'canvases': [{**defaults['canvas'], **{
+                    'label': item.get('title', ''),
+                    'images': [{**defaults['image'], **{
+                        'url': item.get('hires', item.get('url'))
+                    }}]
                 }}]
-            }}]
-          }]
-        }
-        resp = requests.post(
-            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
-            headers={'Content-type': 'application/json'},
-            json=manifest
-        )
-        manifest = resp.json()
-        if '@id' in manifest:
-            item['manifestId'] = manifest['@id']
+            }]
+            }
+            if 'annotations' in item:
+                manifest['sequences'][0]['canvases'][0]['otherContent'] = [{
+                        '@id': 'https://jstor-labs.github.io/visual-essays/iiif-annotations/benci.json',
+                        '@type': 'sc:AnnotationList'
+                    }]
+            resp = requests.post(
+                'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+                headers={'Content-type': 'application/json'},
+                json=manifest
+            )
+            manifest = resp.json()
+            
+            #if 'otherContent' in manifest['sequences'][0]['canvases'][0]:
+            #    item['annotations'] = f'source={item["annotations"]}&manifest='
+            # logger.info(json.dumps(manifest, indent=2))
+            if '@id' in manifest:
+                item['manifest'] = manifest['@id']
+        logger.info(json.dumps(item, indent=2))
         return item
 
     _manifests_cache = {}
@@ -469,17 +483,17 @@ class Essay(object):
                 if item['tag'] == 'image':
                     image_url = item.get('hires', item.get('url'))
                     if image_url in self._manifests_cache:
-                        item['manifestId'] = self._manifests_cache[image_url]
+                        item['manifest'] = self._manifests_cache[image_url]
                         continue
 
-                    futures[executor.submit(self._get_manifest, item)] = item['id'] = image_url
+                    futures[executor.submit(self._get_manifest, item)] = item['id']
 
             for future in concurrent.futures.as_completed(futures):
                 image_url = futures[future]
                 item = future.result()
-                if 'manifestId' in item:
-                    self._manifests_cache[image_url] = item['manifestId']
-                # logger.info(f'id={item["id"]} manifest={item.get("manifestId")}')
+                if 'manifest' in item:
+                    self._manifests_cache[image_url] = item['manifest']
+                logger.info(f'id={item["id"]} manifest={item.get("manifest")}')
 
     @property
     def json(self):

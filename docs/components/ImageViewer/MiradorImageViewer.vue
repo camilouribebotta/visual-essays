@@ -15,7 +15,7 @@ module.exports = {
   data: () => ({}),
   computed: {
     containerStyle() { return { position: 'relative', width: `${this.width}px`, height: `${this.height}px`, overflowY: 'auto !important' } },
-    windows() { return this.items.map(item => {return { manifestId: item.manifestId } }) }
+    windows() { return this.items.map(item => {return { manifestId: item.manifest } }) }
   },
   mounted() {
     console.log(`MiradorImageViewer: height=${this.height} width=${this.width}`, this.items)

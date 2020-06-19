@@ -22,12 +22,13 @@ module.exports = {
       this.$modal.hide('mirador')
     },
     getItems() {
+      console.log(this.groups)
       if (this.groups.imageViewer) {
         this.items = this.groups.imageViewer.items
       } else if (this.groups['plant-specimen']) {
         const promises = this.groups['plant-specimen'].items
           .filter(item => item.specimensData && item.specimensData.specimens && item.specimensData.specimens.length > 0)
-          .map(item => item.specimensData.specimens[0].manifestId)
+          .map(item => item.specimensData.specimens[0].manifest)
         Promise.all(promises)
           .then(manifests => {
             this.items = manifests.map(manifest => {return { manifestId: manifest['@id'] }})

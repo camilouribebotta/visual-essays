@@ -41,7 +41,7 @@ module.exports = {
       console.log('load', document.getElementById('mirador'))
       this.$mirador.viewer({
         id: 'mirador',
-        windows: this.items.map(item => {return { manifestId: item.manifestId } }),
+        windows: this.items.map(item => {return { manifestId: item.manifest } }),
         workspace: {
           type: 'mosaic'
         },

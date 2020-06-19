@@ -46,6 +46,22 @@
 <param ve-entity title="Vinci, Tuscany, Italy" eid="Q82884">
 <param ve-entity title="Leonardo da Vinci" eid="Q762">
 
+## OpenSeadragon Image Viewer
+
+Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param ve-open-seadragon
+       fit="cover"
+       title="Ginevra de' Benci (cover)"
+       url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
+       thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
+       hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
+<param ve-image mirador
+       manifest="https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/79729103d0f9e4d474ab359c6c5da50307c889f5e3b3ad21e1055757/manifest"
+       annotations="iiif-annotations/benci.json">
+<param ve-image
+       manifest="https://iiif.harvardartmuseums.org/manifests/object/299843">
+<param ve-image
+       manifest="https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/968832e213390d9b1c7d13c30ed2c8f113b1beb797e0839b0efd02c7/manifest">
 
 ## Plant specimens
 
