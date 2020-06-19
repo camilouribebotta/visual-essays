@@ -2,17 +2,8 @@
     "@context": "http://iiif.io/api/presentation/2/context.json",
     "@id": "https://jstor-labs.github.io/visual-essays/iiif-manifests/harvard-299842.json",
     "@type": "sc:Manifest",
-    "attribution": "Harvard Art Museums",
     "description": "",
     "label": "Skating",
-    "logo": {
-        "@id": "https://ids.lib.harvard.edu/ids/iiif/437958013/full/!800,800/0/native.jpg",
-        "service": {
-            "@context": "http://iiif.io/api/image/2/context.json",
-            "@id": "https://ids.lib.harvard.edu/ids/iiif/437958013",
-            "profile": "http://iiif.io/api/image/2/level2.json"
-        }
-    },
     "sequences": [
         {
             "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/sequence/normal",
@@ -28,7 +19,6 @@
                             "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/annotation/anno-47208090",
                             "@type": "oa:Annotation",
                             "motivation": "sc:painting",
-                            "on": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208090",
                             "resource": {
                                 "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090/full/full/0/native.jpg",
                                 "@type": "dctypes:Image",
@@ -40,7 +30,8 @@
                                 },
                                 "height": 2550,
                                 "width": 2025
-                            }
+                            },
+                            "on": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208090"
                         }
                     ]
                 }
