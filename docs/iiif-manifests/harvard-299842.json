@@ -22,6 +22,7 @@
                     "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208090",
                     "@type": "sc:Canvas",
                     "height": 2550,
+                    "width": 2025,
                     "images": [
                         {
                             "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/annotation/anno-47208090",
@@ -32,24 +33,16 @@
                                 "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090/full/full/0/native.jpg",
                                 "@type": "dctypes:Image",
                                 "format": "image/jpeg",
-                                "height": 2550,
                                 "service": {
                                     "@context": "http://iiif.io/api/image/2/context.json",
                                     "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090",
                                     "profile": "http://iiif.io/api/image/2/level2.json"
                                 },
+                                "height": 2550,
                                 "width": 2025
                             }
                         }
-                    ],
-                    "label": "1",
-                    "otherContent": [
-                        {
-                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/list/47208090",
-                            "@type": "sc:AnnotationList"
-                        }
-                    ],
-                    "width": 2025
+                    ]
                 }
             ]
         }
