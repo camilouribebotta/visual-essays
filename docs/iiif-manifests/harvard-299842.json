@@ -24,7 +24,7 @@
                                 "@type": "dctypes:Image",
                                 "format": "image/jpeg",
                                 "service": {
-                                    "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090",
+                                    "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090"
                                 },
                                 "height": 2550,
                                 "width": 2025
