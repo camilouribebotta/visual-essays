@@ -1,0 +1,174 @@
+{
+    "@context": "http://iiif.io/api/presentation/2/context.json",
+    "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842",
+    "@type": "sc:Manifest",
+    "attribution": "Harvard Art Museums",
+    "description": "",
+    "label": "Skating",
+    "logo": {
+        "@id": "https://ids.lib.harvard.edu/ids/iiif/437958013/full/!800,800/0/native.jpg",
+        "service": {
+            "@context": "http://iiif.io/api/image/2/context.json",
+            "@id": "https://ids.lib.harvard.edu/ids/iiif/437958013",
+            "profile": "http://iiif.io/api/image/2/level2.json"
+        }
+    },
+    "metadata": [
+        {
+            "label": "Date",
+            "value": "1877"
+        },
+        {
+            "label": "Classification",
+            "value": "Paintings"
+        },
+        {
+            "label": "Credit Line",
+            "value": "Harvard Art Museums/Fogg Museum, Bequest from the Collection of Maurice Wertheim, Class of 1906"
+        },
+        {
+            "label": "Object Number",
+            "value": "1951.50"
+        },
+        {
+            "label": "People",
+            "value": [
+                "Artist: Edouard Manet, French, 1832 - 1883"
+            ]
+        },
+        {
+            "label": "Medium",
+            "value": "Oil on canvas"
+        },
+        {
+            "label": "Dimensions",
+            "value": "92 x 71.7 cm (36 1/4 x 28 1/4 in.)\r\nframed: 112.4 x 92.7 x 9.5 cm (44 1/4 x 36 1/2 x 3 3/4 in.)"
+        },
+        {
+            "label": "Provenance",
+            "value": "Edouard Manet, Paris (1877-1883), sold; [through Vente Manet, Hotel Drouot, Paris, February 4, 1884, no. 8];  to Emanuel Chabrier (1884-1896) sold; [through Hotel Drouot, March 26, 1896, no. 9] to Manet family (1896-1897), sold; [Durand-Ruel, 1897]; to Auguste Pellerin, 1897. [Bernheim-Jeune, Paris, 1909] sold; to Joseph Hessel, 1909. Mme. Hugo Furstenberg-Cassirer, Berlin. [Paul Cassirer Gallery, Berlin (by 1925)]; Mme. Hugo Furstenberg-Cassirer, Berlin (by 1941); to [Galerie Thannhauser, New York 1946]. Maurice Wertheim, New York, 1949, bequest; to Fogg Art Museum, 1951.\r\n\r\nFootnotes:\r\nThis work was in Manet's studio at his death (inventory #25). \r\nSeligman list of French paintings at present in the U.S.A. May 1941, lists Manet, Skating as property of Mme. F., Paris\r\nGalerie Thannhauser records list the painting in their Lagerkartei New York from 1941-1969.\r\n"
+        }
+    ],
+    "rendering": {
+        "@id": "https://www.harvardartmuseums.org/collections/object/299842",
+        "format": "text/html",
+        "label": "Full record view"
+    },
+    "sequences": [
+        {
+            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/sequence/normal",
+            "@type": "sc:Sequence",
+            "canvases": [
+                {
+                    "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208090",
+                    "@type": "sc:Canvas",
+                    "height": 2550,
+                    "images": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/annotation/anno-47208090",
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "on": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208090",
+                            "resource": {
+                                "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090/full/full/0/native.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "height": 2550,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                },
+                                "width": 2025
+                            }
+                        }
+                    ],
+                    "label": "1",
+                    "otherContent": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/list/47208090",
+                            "@type": "sc:AnnotationList"
+                        }
+                    ],
+                    "width": 2025
+                },
+                {
+                    "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208347",
+                    "@type": "sc:Canvas",
+                    "height": 2550,
+                    "images": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/annotation/anno-47208347",
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "on": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-47208347",
+                            "resource": {
+                                "@id": "https://ids.lib.harvard.edu/ids/iiif/47208347/full/full/0/native.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "height": 2550,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://ids.lib.harvard.edu/ids/iiif/47208347",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                },
+                                "width": 2111
+                            }
+                        }
+                    ],
+                    "label": "2",
+                    "otherContent": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/list/47208347",
+                            "@type": "sc:AnnotationList"
+                        }
+                    ],
+                    "width": 2111
+                },
+                {
+                    "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-17328898",
+                    "@type": "sc:Canvas",
+                    "height": 1024,
+                    "images": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/annotation/anno-17328898",
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "on": "https://iiif.harvardartmuseums.org/manifests/object/299842/canvas/canvas-17328898",
+                            "resource": {
+                                "@id": "https://ids.lib.harvard.edu/ids/iiif/17328898/full/full/0/native.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "height": 1024,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://ids.lib.harvard.edu/ids/iiif/17328898",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                },
+                                "width": 802
+                            }
+                        }
+                    ],
+                    "label": "3",
+                    "otherContent": [
+                        {
+                            "@id": "https://iiif.harvardartmuseums.org/manifests/object/299842/list/17328898",
+                            "@type": "sc:AnnotationList"
+                        }
+                    ],
+                    "width": 802
+                }
+            ],
+            "viewingHint": "individuals"
+        }
+    ],
+    "thumbnail": {
+        "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090/full/!170,170/0/native.jpg",
+        "service": {
+            "@context": "http://iiif.io/api/image/2/context.json",
+            "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090",
+            "profile": "http://iiif.io/api/image/2/level2.json"
+        }
+    },
+    "within": "https://www.harvardartmuseums.org/collections"
+}
