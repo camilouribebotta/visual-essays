@@ -12,13 +12,13 @@
             ],
             "on": {
                 "@type": "oa:SpecificResource",
-                "full": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/dca6a4a7801bbf83d68f6534c7b7f1758a4bd840795ef1eb769f18ef/canvas/d7c48580-9105-46c4-bd40-51e1f09d5cfc",
+                "full": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/79729103d0f9e4d474ab359c6c5da50307c889f5e3b3ad21e1055757/canvas/d6953389-7ead-4f69-bfe7-aae3fa62c441",
                 "selector": {
                     "@type": "oa:FragmentSelector",
                     "value": "xywh=100,100,500,500"
                 },
                 "within": {
-                    "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/2413f491797dcfab9ba273b3914661b3c6d9769fee66531ba3d13ada/manifest",
+                    "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/79729103d0f9e4d474ab359c6c5da50307c889f5e3b3ad21e1055757/manifest",
                     "@type": "sc:Manifest"
                 }
             },
