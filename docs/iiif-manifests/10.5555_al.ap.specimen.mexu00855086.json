@@ -1,0 +1,39 @@
+{
+    "@type": "sc:Manifest",
+    "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/08e7e9e70a3bf063851a2c4f67eed29e63a1dd4aa72df20ad28b5e04/manifest",
+    "label": "Holotype of Agave abisaii A. Vázquez & Nieves [family AGAVACEAE]",
+    "thumbnail": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/31da14dab900ad6c30acef422ce494fba22522b32e004ae05485ca85/full/150,/0/default.png",
+    "sequences": [
+      {
+        "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/08e7e9e70a3bf063851a2c4f67eed29e63a1dd4aa72df20ad28b5e04/sequence/6a949481-5e8e-4ec4-b1fb-a4d01914f3f6",
+        "@type": "sc:Sequence",
+        "canvases": [
+          {
+            "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/08e7e9e70a3bf063851a2c4f67eed29e63a1dd4aa72df20ad28b5e04/canvas/98cef435-c277-411b-a677-2349adb3b0b5",
+            "@type": "sc:Canvas",
+            "label": "Holotype of Agave abisaii A. Vázquez & Nieves [family AGAVACEAE]",
+            "height": 3000,
+            "width": 3000,
+            "images": [
+              {
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                  "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/31da14dab900ad6c30acef422ce494fba22522b32e004ae05485ca85/full/full/0/default.png",
+                  "@type": "dctypes:Image",
+                  "format": "image/png",
+                  "service": {
+                    "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/31da14dab900ad6c30acef422ce494fba22522b32e004ae05485ca85",
+                    "profile": "http://iiif.io/api/image/2/level2.json"
+                  },
+                  "height": 9319,
+                  "width": 6547
+                },
+                "on": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/08e7e9e70a3bf063851a2c4f67eed29e63a1dd4aa72df20ad28b5e04/canvas/98cef435-c277-411b-a677-2349adb3b0b5"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
