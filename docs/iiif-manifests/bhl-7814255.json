@@ -23,7 +23,6 @@
                                 "@type": "dctypes:Image",
                                 "format": "image/png",
                                 "service": {
-                                    "@context": "http://iiif.io/api/image/2/context.json",
                                     "profile": "http://iiif.io/api/image/2/level2.json",
                                     "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/84e0f2df3efa70cacee522761174d320e216bc3bc7804dd06b1a1c44"
                                 },
