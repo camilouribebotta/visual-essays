@@ -51,16 +51,7 @@
                     ],
                     "width": 2025
                 }
-            ],
-            "viewingHint": "individuals"
+            ]
         }
-    ],
-    "thumbnail": {
-        "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090/full/!170,170/0/native.jpg",
-        "service": {
-            "@context": "http://iiif.io/api/image/2/context.json",
-            "@id": "https://ids.lib.harvard.edu/ids/iiif/47208090",
-            "profile": "http://iiif.io/api/image/2/level2.json"
-        }
-    }
+    ]
 }
