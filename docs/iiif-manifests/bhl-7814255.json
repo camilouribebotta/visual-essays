@@ -35,7 +35,7 @@
                     "otherContent": [
                         {
                             "@id": "https://jstor-labs.github.io/visual-essays/iiif-annotations/bhl-7814255.json",
-                            "@type": "sc:AnnotationList"
+                            "@type": "sc:AnnotationPage"
                         }
                     ]
                 }
