@@ -1,84 +1,7 @@
 {
-    "@context": "http://iiif.io/api/presentation/2/context.json",
     "@type": "sc:Manifest",
     "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/968832e213390d9b1c7d13c30ed2c8f113b1beb797e0839b0efd02c7/manifest",
-    "label": {
-        "en": [
-            "Caroli Clusii Atrebat Rariorum alioquot stirpium per Hispanias observatarum historia, page 447"
-        ]
-    },
-    "summary": {
-        "en": [
-            "Summary text"
-        ]
-    },
-    "metadata": [
-        {
-            "label": {
-                "en": [
-                    "metadataLabel"
-                ]
-            },
-            "value": {
-                "en": [
-                    "Updated metadata value"
-                ]
-            }
-        }
-    ],
-    "rights": "http://rightsstatements.org/vocab/NKC/1.0/",
-    "requiredStatement": {
-        "label": {
-            "en": [
-                "Attribution"
-            ]
-        },
-        "value": {
-            "en": [
-                "Biodiversity Heritage Library"
-            ]
-        }
-    },
-    "provider": [
-        {
-            "id": "https://example.org/about",
-            "type": "Agent",
-            "label": {
-                "en": [
-                    "Example Organization"
-                ]
-            },
-            "homepage": [
-                {
-                    "id": "https://example.org/",
-                    "type": "Text",
-                    "label": {
-                        "en": [
-                            "Example Organization Homepage"
-                        ]
-                    },
-                    "format": "text/html"
-                }
-            ],
-            "logo": [
-                {
-                    "id": "https://example.org/images/logo.png",
-                    "type": "Image",
-                    "format": "image/png",
-                    "height": 100,
-                    "width": 120
-                }
-            ],
-            "seeAlso": [
-                {
-                    "id": "https://data.example.org/about/us.jsonld",
-                    "type": "Dataset",
-                    "format": "application/ld+json",
-                    "profile": "https://schema.org/"
-                }
-            ]
-        }
-    ],
+    "label": "Caroli Clusii Atrebat Rariorum alioquot stirpium per Hispanias observatarum historia, page 447",
     "thumbnail": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/84e0f2df3efa70cacee522761174d320e216bc3bc7804dd06b1a1c44/full/150,/0/default.png",
     "sequences": [
         {
@@ -100,7 +23,6 @@
                                 "@type": "dctypes:Image",
                                 "format": "image/png",
                                 "service": {
-                                    "profile": "http://iiif.io/api/image/2/level2.json",
                                     "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/84e0f2df3efa70cacee522761174d320e216bc3bc7804dd06b1a1c44"
                                 },
                                 "height": 2557,
