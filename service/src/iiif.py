@@ -37,6 +37,8 @@ def create_manifest(**kwargs):
         manifest['sequences'][0]['canvases'][0]['label'] = kwargs['label']
     if 'description' in kwargs:
         manifest['description'] = kwargs['description']
+    if 'attribution' in kwargs:
+        manifest['attribution'] = kwargs['attribution']
     if 'annotations' in kwargs:
         manifest['sequences'][0]['canvases'][0]['otherContent'] = [{
                 '@id': kwargs['annotations'],
@@ -52,19 +54,20 @@ def create_manifest(**kwargs):
 
 
 def usage():
-    print(f'{sys.argv[0]} [hl:t:d:a:] url')
+    print(f'{sys.argv[0]} [hl:t:d:a:r:] url')
     print(f'   -h --help          Print help message')
     print(f'   -l --loglevel      Logging level (default=warning)')
     print(f'   -t --label         Image label')
     print(f'   -d --description   Image description')
     print(f'   -a --annotations   URL to image annotations')
+    print(f'   -r --attribution   Attribution')
 
 if __name__ == '__main__':
     logger.setLevel(logging.WARNING)
     kwargs = {}
     try:
         opts, args = getopt.getopt(
-            sys.argv[1:], 'hl:t:d:a:', ['help', 'loglevel', 'label', 'description', 'annotations'])
+            sys.argv[1:], 'hl:t:d:a:r:', ['help', 'loglevel', 'label', 'description', 'annotations', 'attribution'])
     except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err))  # will print something like "option -a not recognized"
@@ -84,6 +87,8 @@ if __name__ == '__main__':
             kwargs['description'] = a
         elif o in ('-a', '--annotations'):
             kwargs['annotations'] = a
+        elif o in ('-r', '--attribution'):
+            kwargs['attribution'] = a
         elif o in ('-h', '--help'):
             usage()
             sys.exit()
