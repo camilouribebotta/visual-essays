@@ -1,0 +1,28 @@
+[ {
+    "@context" : "http://www.w3.org/ns/anno.jsonld",
+    "id" : "https://recogito.pelagios.org/annotation/d1863c38-9563-4f39-ad17-bb3543b65896",
+    "type" : "Annotation",
+    "generator" : {
+      "id" : "https://recogito.pelagios.org/",
+      "type" : "Software",
+      "name" : "Recogito",
+      "homepage" : "https://recogito.pelagios.org/"
+    },
+    "generated" : "2020-06-20T12:13:30+00:00",
+    "body" : [ {
+      "type" : "TextualBody",
+      "value" : "A region on the image",
+      "creator" : "https://recogito.pelagios.org/rsnyder",
+      "modified" : "2020-06-20T12:12:47+00:00",
+      "purpose" : "commenting"
+    } ],
+    "target" : {
+      "source" : "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/84e0f2df3efa70cacee522761174d320e216bc3bc7804dd06b1a1c44",
+      "type" : "Image",
+      "selector" : [ {
+        "type" : "FragmentSelector",
+        "conformsTo" : "http://www.w3.org/TR/media-frags/",
+        "value" : "xywh=pixel:434,398,181,175"
+      } ]
+    }
+  } ]
