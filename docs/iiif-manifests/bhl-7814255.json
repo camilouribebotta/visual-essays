@@ -2,32 +2,60 @@
     "@type": "sc:Manifest",
     "@id": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/968832e213390d9b1c7d13c30ed2c8f113b1beb797e0839b0efd02c7/manifest",
     "label": {
-        "en": ["Caroli Clusii Atrebat Rariorum alioquot stirpium per Hispanias observatarum historia, page 447"]
+        "en": [
+            "Caroli Clusii Atrebat Rariorum alioquot stirpium per Hispanias observatarum historia, page 447"
+        ]
     },
     "summary": {
-        "en": ["Summary text"]
+        "en": [
+            "Summary text"
+        ]
     },
     "metadata": [
         {
-            "label": { "en": [ "metadataLabel" ] },
-            "value": { "en": [ "Metadata value" ] }
+            "label": {
+                "en": [
+                    "metadataLabel"
+                ]
+            },
+            "value": {
+                "en": [
+                    "Metadata value"
+                ]
+            }
         }
     ],
     "rights": "http://rightsstatements.org/vocab/NKC/1.0/",
     "requiredStatement": {
-        "label": { "en": [ "Attribution" ] },
-        "value": { "en": [ "Biodiversity Heritage Library" ] }
+        "label": {
+            "en": [
+                "Attribution"
+            ]
+        },
+        "value": {
+            "en": [
+                "Biodiversity Heritage Library"
+            ]
+        }
     },
     "provider": [
         {
             "id": "https://example.org/about",
             "type": "Agent",
-            "label": { "en": [ "Example Organization" ] },
+            "label": {
+                "en": [
+                    "Example Organization"
+                ]
+            },
             "homepage": [
                 {
                     "id": "https://example.org/",
                     "type": "Text",
-                    "label": { "en": [ "Example Organization Homepage" ] },
+                    "label": {
+                        "en": [
+                            "Example Organization Homepage"
+                        ]
+                    },
                     "format": "text/html"
                 }
             ],
@@ -48,8 +76,8 @@
                     "profile": "https://schema.org/"
                 }
             ]
-         }
-     ],
+        }
+    ],
     "thumbnail": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/84e0f2df3efa70cacee522761174d320e216bc3bc7804dd06b1a1c44/full/150,/0/default.png",
     "sequences": [
         {
@@ -83,24 +111,23 @@
                 }
             ]
         }
-        ],
-        "resources": [
-            {
-              "@context": "http://iiif.io/api/presentation/2/context.json",
-              "@id": "https://jstor-labs.github.io/visual-essays/bhl-7814255/annotations",
-              "@type": "sc:AnnotationPage",
-              "resources": [
+    ],
+    "resources": [
+        {
+            "@context": "http://iiif.io/api/presentation/2/context.json",
+            "@id": "https://jstor-labs.github.io/visual-essays/bhl-7814255/annotations",
+            "@type": "sc:AnnotationPage",
+            "resources": [
                 {
-                  "@type": "oa:Annotation",
-                  "motivation": "sc:commenting",
-                  "resource":{
-                    "@type": "cnt:ContentAsText",
-                    "chars": "My text annotation for canvas 1"
-                  },
-                  "on": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/968832e213390d9b1c7d13c30ed2c8f113b1beb797e0839b0efd02c7/canvas/282e9ff3-31a7-44a0-8a8b-bcdf11900d76"
+                    "@type": "oa:Annotation",
+                    "motivation": "sc:commenting",
+                    "resource": {
+                        "@type": "cnt:ContentAsText",
+                        "chars": "My text annotation for canvas 1"
+                    },
+                    "on": "https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/968832e213390d9b1c7d13c30ed2c8f113b1beb797e0839b0efd02c7/canvas/282e9ff3-31a7-44a0-8a8b-bcdf11900d76"
                 }
-              ]
-            }
-        ]
-    
+            ]
+        }
+    ]
 }
