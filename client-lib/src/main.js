@@ -60,7 +60,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.10'
+const VERSION = '0.7.11'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -109,6 +109,7 @@ function resizeend() {
 }
 
 const customScripts = new Set()
+const customStyles = new Set()
 
 // Site components
 const getSiteConfig = async () => {
@@ -117,7 +118,13 @@ const getSiteConfig = async () => {
   if (siteConfig.components) {
     siteConfig.components.forEach(cfg => {
       if (cfg.dependencies) {
-        cfg.dependencies.forEach(scriptURL => customScripts.add(scriptURL))
+        cfg.dependencies.forEach(url =>  {
+          if (url.slice(url.length - 3) === '.js') {
+            customScripts.add(url)
+          } else if (url.slice(url.length - 4) === '.css') {
+            customStyles.add(url)
+          }
+        })
       }
       components[cfg.name] = cfg
     })
@@ -147,7 +154,13 @@ function initApp() {
     components[customComponent.name] = customComponent
     if (customComponent.dependencies) {
       customComponent.dependencies = customComponent.dependencies.split('|')
-      customComponent.dependencies.forEach(scriptURL => customScripts.add(scriptURL))
+      customComponent.dependencies.forEach(url => {
+        if (url.slice(url.length - 3) === '.js') {
+          customScripts.add(url)
+        } else if (url.slice(url.length - 4) === '.css') {
+          customStyles.add(url)
+        }      
+      })
     }
     if (customComponent.selectors) {
       customComponent.selectors = customComponent.selectors.split('|')
@@ -228,9 +241,16 @@ function initApp() {
     window.vm = vm
   }
 
-  customScripts.forEach(src => {
+  customStyles.forEach(url => {
+    const linkElem = document.createElement('LINK')
+    linkElem.setAttribute('rel', 'stylesheet')
+    linkElem.setAttribute('href', url)      
+    document.head.appendChild(linkElem)  
+  })
+
+  customScripts.forEach(url => {
     const scriptElem = document.createElement('SCRIPT')
-    scriptElem.setAttribute('src', src)      
+    scriptElem.setAttribute('src', url)      
     document.body.appendChild(scriptElem)  
   })
 
