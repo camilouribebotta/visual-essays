@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     setHeaderHeight(headerHeight) {
-        this.$store.dispatch('setHeaderHeight', headerHeight)
+      this.$store.dispatch('setHeaderHeight', headerHeight)
     },
     setFooterHeight(footerHeight) {
       this.$store.dispatch('setFooterHeight', footerHeight)

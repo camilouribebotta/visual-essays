@@ -1,6 +1,6 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
-       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${viewport.height}px; margin:0;`"></div>
+       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${height}px; margin:0;`"></div>
   </div>
 </template>
 
