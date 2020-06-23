@@ -84,7 +84,7 @@ module.exports = {
     bottom: 20px;
     left: 20px;
     z-index: 100;
-    background: url("/images/show.svg") no-repeat center center;
+    background: url("../images/show.svg") no-repeat center center;
     background-color: rgba(255, 255, 255, 0.85);
     transition: opacity 0.4s 0s;
     opacity: 0;
@@ -96,7 +96,7 @@ module.exports = {
     transition-delay: 0.4s; }
 
   .caption-box__header .button--toggle {
-    background: url("/images/hide.svg") no-repeat center center;
+    background: url("../images/hide.svg") no-repeat center center;
     width: 26px; }
 
   .caption-box__controls .button {
