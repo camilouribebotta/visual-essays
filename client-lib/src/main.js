@@ -119,10 +119,10 @@ const getSiteConfig = async () => {
     siteConfig.components.forEach(cfg => {
       if (cfg.dependencies) {
         cfg.dependencies.forEach(url =>  {
-          if (url.slice(url.length - 3) === '.js') {
-            customScripts.add(url)
-          } else if (url.slice(url.length - 4) === '.css') {
+          if (url.slice(url.length - 4) === '.css') {
             customStyles.add(url)
+          } else {
+            customScripts.add(url)
           }
         })
       }
@@ -150,16 +150,17 @@ function initApp() {
 
   // Essay components
   window.data.filter(item => item.tag === 'component').forEach(customComponent => {
+    console.log(customComponent)
     customComponent.name = customComponent.name || customComponent.label
     components[customComponent.name] = customComponent
     if (customComponent.dependencies) {
       customComponent.dependencies = customComponent.dependencies.split('|')
       customComponent.dependencies.forEach(url => {
-        if (url.slice(url.length - 3) === '.js') {
-          customScripts.add(url)
-        } else if (url.slice(url.length - 4) === '.css') {
+        if (url.slice(url.length - 4) === '.css') {
           customStyles.add(url)
-        }      
+        } else {
+          customScripts.add(url)
+        }
       })
     }
     if (customComponent.selectors) {
@@ -248,6 +249,7 @@ function initApp() {
     document.head.appendChild(linkElem)  
   })
 
+  console.log('customScripts', customScripts)
   customScripts.forEach(url => {
     const scriptElem = document.createElement('SCRIPT')
     scriptElem.setAttribute('src', url)      

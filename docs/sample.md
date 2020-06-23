@@ -38,6 +38,14 @@
        label="Plant Hierarchy"
        dependencies="//unpkg.com/force-graph">
 
+<param ve-component 
+       name="storiiies"
+       src="components/StoriiiesViewer.vue"
+       selectors="tag:storiiies"
+       icon="fa-book"
+       label="Storiiies Viewer"
+       dependencies="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js|https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js">
+
 <param ve-entity title="Ginevra de' Benci" eid="Q1267893">
 <param ve-entity title="Milan, Italy" eid="Q490">
 <param ve-entity title="Bologna, Italy" eid="Q1891">

@@ -10,6 +10,14 @@
 	data-num-primary-sources="3"
 	data-author="Ashley Buchanan, PhD"></var>
 
+<param ve-component 
+       name="storiiies"
+       src="components/StoriiiesViewer.vue"
+       selectors="tag:storiiies"
+       icon="fa-book"
+       label="Storiiies Viewer"
+       dependencies="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js|https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js">
+
 <var title="Hortus Botanicus Leiden" id="Q2468128" data-aliases="city’s new botanical garden"></var>
 <var title="Jalisco" id="Q13160"></var>
 <var title="Agave" id="Q155874"></var>
