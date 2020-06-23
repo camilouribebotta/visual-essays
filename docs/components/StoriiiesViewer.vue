@@ -102,7 +102,7 @@ module.exports = {
   .caption-box__controls .button {
     width: 34px;
     height: 31px;
-    background: url("/images/arrow.svg") no-repeat center center; }
+    background: url("images/arrow.svg") no-repeat center center; }
 
   .button:focus {
     outline: none;
