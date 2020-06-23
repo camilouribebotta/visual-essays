@@ -16,12 +16,30 @@
             "dependencies": ["https://d3js.org/d3.v4.min.js"]
         },
         {
+            "name": "plantSpecimen", 
+            "src": "/components/PlantSpecimenViewer.vue",
+            "selectors": ["tag:plant-specimen"],
+            "icon": "fa-seedling",
+            "label": "Plant Specimens"
+        },
+        {
             "name": "openSeadragon", 
             "src": "/components/OpenSeadragonImageViewer.vue",
             "selectors": ["tag:open-seadragon"],
             "icon": "fa-dragon",
             "label": "OpenSeadragon Image Viewer",
             "dependencies": ["https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js"]
+        },
+        {
+            "name": "storiiies", 
+            "src": "/components/StoriiiesViewer.vue",
+            "selectors": ["tag:storiiies"],
+            "icon": "fa-book",
+            "label": "Storiiies Viewer",
+            "dependencies": [
+                "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js",
+                "https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js"
+            ]
         }
     ]
 }

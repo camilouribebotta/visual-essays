@@ -380,13 +380,14 @@ def markdown_viewer(acct=None, repo=None, file=None):
 def config(acct=None, repo=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
+    logger.info(f'config: acct={acct} repo={repo} kwargs={kwargs}')
 
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
         site = urlparse(request.base_url).hostname
-        acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
-        repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
+        acct = acct if acct else DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
+        repo = repo if repo else DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
         use_local = kwargs.pop('mode', ENV) == 'dev'
         logger.info(f'config: site={site} acct={acct} repo={repo} use_local={use_local}')
         _config = None
@@ -498,5 +499,5 @@ if __name__ == '__main__':
         else:
             assert False, 'unhandled option'
 
-    logger.info(f'ENV={ENV} VE_JS_LIB={VE_JS_LIB} DOCS_ROOT={DOCS_ROOT}')
+    logger.info(f'ENV={ENV} VE_JS_LIB={VE_JS_LIB} DOCS_ROOT={DOCS_ROOT} DEFAULT_ACCT={DEFAULT_ACCT} DEFAULT_REPO={DEFAULT_REPO}')
     app.run(debug=True, host='0.0.0.0')

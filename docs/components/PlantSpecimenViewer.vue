@@ -62,29 +62,32 @@
         if (item.specimensData) {
           this.specimensByTaxon = [...this.specimensByTaxon, item.specimensData]
         } else {
+          console.log(item)
           const args = Object.keys(item).filter(arg => ['max', 'reverse'].includes(arg)).map(arg => `${arg}=${item[arg]}`)
-          const url = `https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : '')
-          console.log('getSpecimenMetadata', item)
-          item.specimensData = fetch(url)
-            .then(resp => { console.log(resp); return resp.json()})
-            .then(specimensData => {
-              item.specimensData = specimensData;
-              item.specimensData.caption = item.label
-              item.specimensData.specimens.forEach(specimen => {
-                const defaultImage = specimen.images.find(img => img.type === 'default')
-                const hiresImage = specimen.images.find(img => img.type === 'best')
-                specimen.url = defaultImage.url
-                specimen.hires = hiresImage.url
-                specimen.title = specimen.description
-                if (!specimen.manifest) {
-                  specimen.manifest = this.getManifest(specimen)
-                  //this.$store.dispatch('updateItem', item)
-                }
+          if (item.label) {
+            const url = `https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : '')
+            console.log('getSpecimenMetadata', item)
+            item.specimensData = fetch(url)
+              .then(resp => { console.log(resp); return resp.json()})
+              .then(specimensData => {
+                item.specimensData = specimensData;
+                item.specimensData.caption = item.label
+                item.specimensData.specimens.forEach(specimen => {
+                  const defaultImage = specimen.images.find(img => img.type === 'default')
+                  const hiresImage = specimen.images.find(img => img.type === 'best')
+                  specimen.url = defaultImage.url
+                  specimen.hires = hiresImage.url
+                  specimen.title = specimen.description
+                  if (!specimen.manifest) {
+                    specimen.manifest = this.getManifest(specimen)
+                    //this.$store.dispatch('updateItem', item)
+                  }
+                })
+                this.specimensByTaxon = [...this.specimensByTaxon, item.specimensData]
+                this.$store.dispatch('updateItem', item)
+                console.log('md', item.specimensData)
               })
-              this.specimensByTaxon = [...this.specimensByTaxon, item.specimensData]
-              this.$store.dispatch('updateItem', item)
-              console.log('md', item.specimensData)
-            })
+          }
         }
         return item.specimensData
       },
