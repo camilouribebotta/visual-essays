@@ -26,6 +26,8 @@ import '../assets/js/fontawesome-pro.min.js'
 
 import 'leaflet.control.opacity'
 
+import VueAnalytics from 'vue-analytics'
+
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
@@ -60,7 +62,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.13'
+const VERSION = '0.7.2'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -183,6 +185,10 @@ function initApp() {
   Vue.use(VueYoutube)
   Vue.prototype.$L = L
   Vue.prototype.$marked = marked
+
+  Vue.use(VueAnalytics, {
+    id: 'UA-125778965-6'
+  })
 
   for (let [name, component] of Object.entries(components)) {
     if (!component.component) {

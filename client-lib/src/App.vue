@@ -61,6 +61,7 @@ export default {
   mounted() {
     this.layout = this.$store.getters.layout | this.layout
     console.log('App.mounted', this.showBanner, this.essayConfig)
+    this.$ga.page(window.location.pathname)
   },
   methods: {
     setHeaderHeight(headerHeight) {
