@@ -60,8 +60,10 @@ export default {
   },
   mounted() {
     this.layout = this.$store.getters.layout | this.layout
-    console.log('App.mounted', this.showBanner, this.essayConfig)
-    this.$ga.page(window.location.pathname)
+    console.log('App.mounted', window.location.hostname, this.showBanner, this.essayConfig)
+    if (window.location.hostname !== 'localhost') {
+      this.$ga.page(`${window.location.hostname}${window.location.pathname}`)
+    }
   },
   methods: {
     setHeaderHeight(headerHeight) {

@@ -51,7 +51,7 @@
     'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
     'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
-    'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'},
+    'kent-maps.online': {acct: 'kent-map', repo: 'kent', title: 'Kent Maps'},
     'dickens.kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
   }
 
@@ -64,31 +64,30 @@
       : defaults[hostname]
         ? `https://${hostname}`
         : `https://visual-essays.app`
-  let acct, repo, file
-  const path = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
-  if (path.length < 2) {
-    if (hostname.indexOf('.github.io') >= 0) {
-      acct = hostname.replace(/\.github\.io/, '')
-      repo = window.location.pathname.split('/')[1]
-    } else {
-      acct = defaults[hostname].acct
-      repo = defaults[hostname].repo
-    }
-    file = path.length === 1 && path[0] !== '' ? path[0] : undefined
+  let acct, repo, path
+  const pathElems = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
+  console.log('pathElems:', pathElems)
+
+  if (hostname === 'visual-essays.app') {
+    acct = pathElems[0]
+    repo = pathElems[1]
+    path = pathElems.length === 2
+      ? '/'
+      : `/${pathElems.slice(2).join('/')}`
   } else {
-    acct = path[0]
-    repo = path[1]
-    file = path[2]
+    acct = defaults[hostname].acct
+    repo = defaults[hostname].repo
+    path = `/${pathElems.join('/')}`
   }
 
   const md = new MobileDetect(window.navigator.userAgent)
   let isPhone = md.phone() !== null
   let isTouchDevice = md.phone() !== null || md.tablet()
 
-  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
+  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} path=${path} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
 
-  const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
-  fetch(configUrl)
+  // const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
+  fetch(`${service}/config`)
     .then(resp => {return resp.ok ? resp.json() : {}})
     .then(siteConfig => {
       console.log('siteConfig', siteConfig)
@@ -110,10 +109,10 @@
         data: () => ({
           nav: [
             { title: 'Home', icon: 'mdi-home', enabled: true },
-            { file: 'about', title: 'About', icon: 'mdi-information', enabled: false },
-            { file: 'contact', title: 'Contact', icon: 'mdi-contact-mail', enabled: false },
-            { file: 'help', title: 'Help', icon: 'mdi-help-circle', enabled: false },
-            { file: 'resources', title: 'Resources', icon: 'mdi-library', enabled: false }
+            { path: '/about', title: 'About', icon: 'mdi-information', enabled: false },
+            { path: '/contact', title: 'Contact', icon: 'mdi-contact-mail', enabled: false },
+            { path: '/help', title: 'Help', icon: 'mdi-help-circle', enabled: false },
+            { path: '/resources', title: 'Resources', icon: 'mdi-library', enabled: false }
           ],
           bannerHeight: 400,
           height: 0,
@@ -146,12 +145,12 @@
             }).observe(document.getElementById('content'))
           }
           window.onpopstate = (e) => { this.loadEssay(e.state.file, true) }
-          this.loadEssay(file)
+          this.loadEssay(path)
           // Find and preload navigation pages
           this.nav.filter(navItem => !navItem.enabled)
           .forEach(navItem => {
-            this.cachingFetch(navItem.file)
-            .then(html => { if (html) {this.nav.map(item => item.enabled = item.enabled || item.file == navItem.file)} })
+            this.cachingFetch(navItem.path)
+            .then(html => { if (html) {this.nav.map(item => item.enabled = item.enabled || item.path == navItem.path)} })
           })
         },
         updated() {
@@ -176,37 +175,51 @@
             this.footerHeight = height
             this.sync()
           },
-          menuItemClicked(file) {
-            this.loadEssay(file)
+          menuItemClicked(path) {
+            console.log('menuItemClicked', path)
+            this.loadEssay(path)
           },
-          cachingFetch(file, raw) {
-            url = file === 'help' && hostname !== 'localhost'
-              ? `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
-              : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '') + `${raw ? '?raw' : ''}`
-            console.log(`loadEssay: service=${service} acct=${acct} repo=${repo} file=${file} cached=${this.essayCache[url] !== undefined}`)
+          cachingFetch(path, raw) {
+            let url
+            if (path === '/help') {
+              url = `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
+            } else {
+              if (hostname === 'visual-essays.app') {
+                url = `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (path ? `${path}` : '') + `${raw ? '?raw' : ''}`
+              } else {
+                url = `${service}/essay` + (path ? `${path}` : '') + `${raw ? '?raw' : ''}`
+              }
+            }
+            // url = path === 'help' && hostname !== 'localhost'
+            //   ? `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
+            //   : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (path ? `/${path}` : '') + `${raw ? '?raw' : ''}`
+            console.log(`loadEssay: service=${service} acct=${acct} repo=${repo} path=${path} url=${url} cached=${this.essayCache[url] !== undefined}`)
             if (!this.essayCache[url]) {
               this.essayCache[url] = fetch(url).then((resp) => resp.ok ? resp.text() : null)
             }
             return this.essayCache[url]
           },
-          loadEssay(file, replace) {
-            this.cachingFetch(file)
+          loadEssay(path, replace) {
+            console.log('loadEssay', path, replace)
+            this.cachingFetch(path)
             .then(html => {
-              let browserPath = `${hostname === 'jstor-labs.github.io' ? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${file ? '/'+file : ''}` || '/'
+              let browserPath = `${hostname === 'jstor-labs.github.io' ? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
               if (replace) {
-                history.replaceState({file: file}, '', browserPath)
+                console.log(`replaceState: path=${path} browserPath=${browserPath}`)
+                history.replaceState({file: path}, '', browserPath)
               } else {
-                history.pushState({file: file}, '', browserPath)
+                console.log(`pushState: path=${path} browserPath=${browserPath}`)
+                history.pushState({file: path}, '', browserPath)
               }
               this.html = html
-              this.current = file
+              this.current = path
               this.$nextTick(() => {
                 window._essay = document.getElementById('essay').dataset.name
               })
             })
           },
           showMarkdown() {
-            const url = file === 'help' && hostname !== 'localhost'
+            const url = path === 'help' && hostname !== 'localhost'
               ? `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
               : `${service}/markdown-viewer` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (this.current ? `/${this.current}` : '')
             if (this.markdownViewer) { this.markdownViewer.close() }
@@ -214,7 +227,8 @@
           }
         },
         watch: {
-          isLoaded() {                
+          isLoaded() {    
+            console.log('isLoaded', this.isLoaded)            
             if (this.isLoaded) {
               this.isLoaded = false
               this.$nextTick(() => {
@@ -226,13 +240,17 @@
                 const essayElem = document.getElementById('essay')
                 if (essayElem) {
                   essayElem.querySelectorAll('a').forEach(link => {
+                    console.log(link.href)
                     if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('https://visual-essays.app/essay/help#') === 0 ) {
                       let target = link.dataset.target
                       if (!target) { 
                         const parsedUrl = parseUrl(link.href)
-                        target = parsedUrl.hash === '' 
-                          ? parsedUrl.pathname.slice(parsedUrl.pathname.lastIndexOf('/')+1)
-                          : parsedUrl.hash
+                        if (parsedUrl.hash === '' ) {
+                          const pathElems = parsedUrl.pathname.split('/')
+                          target = `/${pathElems.slice(4).join('/')}`
+                        } else {
+                          target = parsedUrl.hash
+                        }
                       }
                       link.addEventListener('click', (e) => {
                         if (target[0] === '#') {
