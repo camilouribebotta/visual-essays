@@ -16,7 +16,7 @@
   <div id="app">
     <v-app>
 
-      <component v-bind:is="isPhone && siteComponents.siteMobileHeader ? 'siteMobileHeader' : 'siteHeader'"
+      <component v-bind:is="isPhone ? 'siteMobileHeader' : 'siteHeader'"
         :site-config="siteConfig" :essay-config="essayConfig" :nav="nav" :progress="progress" 
         :app-version="appVersion" :lib-version="libVersion"
         @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @header-height="setHeaderHeight">
@@ -219,9 +219,11 @@
             })
           },
           showMarkdown() {
-            const url = path === 'help' && hostname !== 'localhost'
+            const url = path === '/help' && hostname !== 'localhost'
               ? `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
-              : `${service}/markdown-viewer` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (this.current ? `/${this.current}` : '')
+              // : `${service}/markdown-viewer` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (this.current ? `/${this.current}` : '')
+              : `${service}/markdown-viewer` + (this.current ? `${this.current}` : '')
+            console.log('showMarkdown', url)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1000,height=1200,scrollbars=yes,status=yes`)
           }
@@ -241,7 +243,7 @@
                 if (essayElem) {
                   essayElem.querySelectorAll('a').forEach(link => {
                     console.log(link.href)
-                    if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('https://visual-essays.app/essay/help#') === 0 ) {
+                    if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('/help#') > 0 ) {
                       let target = link.dataset.target
                       if (!target) { 
                         const parsedUrl = parseUrl(link.href)

@@ -2,13 +2,13 @@
 
 <param ve-config
        title="Sample Essay"
-       banner="images/da_vinci_banner.jpg"
+       banner="/images/da_vinci_banner.jpg"
        layout="vtl"
        author="Ron">
 
 <param ve-component 
        name="network"
-       src="components/Network.vue"
+       src="/components/Network.vue"
        selectors="tag:network"
        icon="fa-chart-network"
        label="Networks"
@@ -32,7 +32,7 @@
 
 <param ve-component 
        name="plant-hierarchy"
-       src="components/PlantHierarchy.vue"
+       src="/components/PlantHierarchy.vue"
        selectors="tag:plant-hierarchy"
        icon="fa-sitemap"
        label="Plant Hierarchy"
@@ -40,7 +40,7 @@
 
 <param ve-component 
        name="storiiies"
-       src="components/StoriiiesViewer.vue"
+       src="/components/StoriiiesViewer.vue"
        selectors="tag:storiiies"
        icon="fa-book"
        label="Storiiies Viewer"

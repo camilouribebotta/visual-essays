@@ -73,41 +73,54 @@
       'localhost': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'visual-essays.app': {acct: 'jstor-labs', repo: 'visual-essays', title: 'Visual Essays'},
       'plant-humanities.app': {acct: 'jstor-labs', repo: 'plant-humanities', title: 'Plant Humanities'},
-      'kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'},
+      'kent-maps.online': {acct: 'kent-map', repo: 'kent', title: 'Kent Maps'},
       'dickens.kent-maps.online': {acct: 'kent-map', repo: 'dickens', title: 'Kent Maps'}
     }
     console.log(window.location)
     const hostname = window.location.hostname.toLowerCase()
-    const service = hostname === 'localhost' ? 'http://localhost:5000' : defaults[hostname] ? `https://${hostname}` : `https://visual-essays.app`
-    let acct, repo, file
-    const path = (window.location.pathname.slice(1)).split('/').slice(1).filter(elem => elem !== '')
-    if (path.length < 2) {
+    const service = hostname === 'localhost' 
+      ? 'http://localhost:5000'
+      : hostname === 'jstor-labs.github.io'
+        ?  `https://visual-essays.app`
+        : defaults[hostname]
+          ? `https://${hostname}`
+          : `https://visual-essays.app`
+    let acct, repo, path
+    const pathElems = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
+    console.log('pathElems:', pathElems)
+
+    if (hostname === 'visual-essays.app') {
+      acct = pathElems[0]
+      repo = pathElems[1]
+      path = pathElems.length === 2
+        ? '/'
+        : `/${pathElems.slice(2).join('/')}`
+    } else {
       acct = defaults[hostname].acct
       repo = defaults[hostname].repo
-      file = path.length === 1 && path[0] !== '' ? path[0] : undefined
-    } else {
-      acct = path[0]
-      repo = path[1]
-      file = path[2]
+      path = `/${pathElems.slice(1).join('/')}`
     }
-    console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} file=${file}`)
 
-    window.app = new Vue({
-      el: '#app',
-      vuetify: new Vuetify(),
-      data: () => ({
-        markdown: undefined
-      }),
-      computed: {
-        title() { return `/${acct}/${repo}/${file ? file : ''}` }
-      },
-      mounted() {
-        url = file === 'help' && hostname !== 'localhost'
-          ? 'https://visual-essays.app/essay/help?raw'
-          : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '') + '?raw'
-        fetch(url).then(resp => resp.text()).then(markdown => this.markdown = markdown)
-      }
-    })
+  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} path=${path}`)
+
+  window.app = new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data: () => ({
+      markdown: undefined
+    }),
+    computed: {
+      title() { return `/${acct}/${repo}${path ? path : ''}` }
+    },
+    mounted() {
+      url = path === '/help' && hostname !== 'localhost'
+        ? 'https://visual-essays.app/essay/help?raw'
+        // : `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (file ? `/${file}` : '') + '?raw'
+        : `${service}/essay` + (path ? `${path}` : '') + '?raw'
+
+      fetch(url).then(resp => resp.text()).then(markdown => this.markdown = markdown)
+    }
+  })
 
   </script>
 </body>

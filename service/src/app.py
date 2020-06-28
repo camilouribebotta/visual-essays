@@ -78,7 +78,7 @@ def get_gh_markdown(acct, repo, path=None):
         resp = requests.get(url)
         logger.info(f'{url} {resp.status_code}')
         if resp.status_code == 200:
-            return {'source': 'gh', 'fname': file.replace('.md', ''), 'text': resp.content.decode('utf-8')}
+            return {'source': 'gh', 'fname': file.replace('.md', ''), 'match': file.split('/')[-1], 'text': resp.content.decode('utf-8')}
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
@@ -100,9 +100,10 @@ def get_local_markdown(path=None):
         logger.info(f'fpath{fpath} exists={os.path.exists(fpath)}')
         if os.path.exists(fpath):
             with open(fpath, 'r') as fp:
-                return {'source': 'local', 'fname': fname.replace('.md', ''), 'text': fp.read()}
+                return {'source': 'local', 'fname': fname.replace('.md', ''), 'match': file, 'text': fp.read()}
 
-def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fname=None, source=None):
+def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fname=None, match=None, source=None):
+    path_elems = [pe for pe in path.split('/') if pe] if path else []
     if site == 'localhost':
         baseurl = 'http://localhost:5000/essay'
         if acct:
@@ -116,23 +117,28 @@ def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fna
         if baseurl is None:
             baseurl = f'https://visual-essays.app/essay/{acct}/{repo}'
 
-    logger.info(f'convert_relative_links: site={site} acct={acct} repo={repo} path={path} fname={fname} baseurl={baseurl}')
+    logger.info(f'convert_relative_links: site={site} acct={acct} repo={repo} path={path} fname={fname} match={match} baseurl={baseurl}')
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
-                if attr in elem.attrs and not elem.attrs[attr].startswith('http'):
-                    if elem.attrs[attr].startswith('#'):
-                        elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
-                    logger.info(elem.attrs[attr])
-                    if elem.attrs[attr][0] == '/':
-                        elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
-                    else:
-                        logger.info(path)
-                        elem.attrs[attr] = f'{baseurl}{"/" + path if len(path) > 1 else ""}/{elem.attrs[attr]}'
+                if attr in elem.attrs:
+                    if not elem.attrs[attr].startswith('http'):
+                        logger.info(elem.attrs[attr])
+                        if elem.attrs[attr].startswith('#'):
+                            elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
+                        if elem.attrs[attr][0] == '/':
+                            elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
+                        else:
+                            if match == 'index.md':
+                                rel_path = f'/{"/".join(path_elems)}' if len(path_elems) > 0 else ''
+                            else:
+                                rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
+                            logger.info(f'path={path_elems} match={match} rel_path={rel_path}')
+                            elem.attrs[attr] = f'{baseurl}{rel_path}/{elem.attrs[attr]}'
                     logger.info(elem.attrs[attr])
     
     if site == 'localhost' and ENV == 'dev':
-        baseurl = f'http://localhost:5000/images'
+        baseurl = f'http://localhost:5000/assets'
     else:
         baseurl = content_baseurl(acct, repo)
     logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
@@ -143,7 +149,11 @@ def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fna
                     if elem.attrs[attr][0] == '/':
                         elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
                     else:
-                        elem.attrs[attr] = f'{baseurl}{"/" + path if len(path) > 1 else ""}/{elem.attrs[attr]}'
+                        if match == 'index.md':
+                            rel_path = f'/{"/".join(path_elems)}' if len(path_elems) > 0 else ''
+                        else:
+                            rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
+                        elem.attrs[attr] = f'{baseurl}{rel_path}/{elem.attrs[attr]}'
                     if repo == 'plant-humanities':
                         elem.attrs[attr] = elem.attrs[attr].replace('/content/geojson', '/geojson')
                     logger.info(elem.attrs[attr])
@@ -169,7 +179,7 @@ def markdown_to_html5(markdown, site=None, acct=None, repo=None, path=None):
             }
         })
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, site, acct, repo, path, markdown['fname'], markdown['source'])
+    convert_relative_links(soup, site, acct, repo, path, markdown['fname'], markdown['match'], markdown['source'])
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
@@ -454,11 +464,11 @@ def essay(acct=None, repo=None, file=None):
             return 'Not found', 404
 '''
 
-@app.route('/markdown-viewer/<acct>/<repo>/<file>', methods=['GET'])  
-@app.route('/markdown-viewer/<acct>/<repo>', methods=['GET'])
-@app.route('/markdown-viewer/<file>', methods=['GET'])  
+@app.route('/markdown-viewer/<path:path>', methods=['GET'])
+@app.route('/markdown-viewer/', methods=['GET'])  
 @app.route('/markdown-viewer', methods=['GET'])  
-def markdown_viewer(acct=None, repo=None, file=None):
+def markdown_viewer(path=None):
+    logger.info(f'markdown-viewer: path={path}')
     return (open(os.path.join(BASEDIR, 'src', 'markdown-viewer.html'), 'r').read(), 200, cors_headers)
 
 @app.route('/config/<path:path>', methods=['GET'])
@@ -487,13 +497,15 @@ def config(path=None):
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            baseurl = f'http://localhost:5000/images' if site == 'localhost' and ENV == 'dev' else f'https://{acct}.github.io/{repo}'
+            baseurl = f'http://localhost:5000' if site == 'localhost' and ENV == 'dev' else f'https://{acct}.github.io/{repo}'
             for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
+                    logger.info(_config[attr])
                     if _config[attr][0] == '/':
-                        _config[attr] = f'{baseurl}{_config[attr]}'
+                        _config[attr] = f'{baseurl}/assets{_config[attr]}'
                     else:
-                        _config[attr] = f'{baseurl}/{_config[attr]}'
+                        _config[attr] = f'{baseurl}/assets/{_config[attr]}'
+                    logger.info(_config[attr])
             baseurl = f'http://localhost:5000' if site == 'localhost' and ENV == 'dev'  else f'https://{acct}.github.io/{repo}'
             for comp in _config.get('components', []):
                 if not comp['src'].startswith('http'):
@@ -512,8 +524,8 @@ def site(path=None):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     _set_logging_level(kwargs)
     site = urlparse(request.base_url).hostname
-    # if site == 'kent-maps.online':
-    #     return redirect(f'https://dickens.kent-maps.online{request.path}', code=302)
+    if site == 'dickens.kent-maps.online':
+        return redirect(f'https://kent-maps.online/dickens{request.path}', code=302)
 
     logger.info(f'site: site={site} path={path} kwargs={kwargs}')
 
@@ -551,14 +563,15 @@ def site(acct=None, repo=None, file=None):
             return html, 200
 '''
 
-@app.route('/images/<path:path>', methods=['GET'])  
-def images(path):
+@app.route('/assets/<path:path>', methods=['GET'])
+def assets(path):
+    logger.info(f'assets: {path}')
     path_elems = path.split('/')
+    logger.info(path_elems)
     idir = f'{DOCS_ROOT}/docs/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else f'{DOCS_ROOT}/docs'
     fname = path_elems[-1]
-    logger.info(f'images: dir={idir} fname={fname}')
+    logger.info(f'assets: dir={idir} fname={fname}')
     return send_from_directory(idir, fname, as_attachment=False)
-
 
 @app.route('/geojson/<fname>', methods=['GET'])  
 def geojson(fname):
@@ -575,8 +588,9 @@ def components(path):
         for root in [DOCS_ROOT, os.path.dirname(BASEDIR)]:
             logger.info(root)
             _dir = f'{root}/docs/components/{"/".join(path_elems[:-1])}'
-            logger.info(f'components: dir={_dir} fname={fname} dir_exists={os.path.exists(_dir)}')
-            if os.path.exists(_dir):
+            exists = os.path.exists(f'{_dir}/{fname}')
+            logger.info(f'components: dir={_dir} fname={fname} exists={exists}')
+            if exists:
                 return (send_from_directory(_dir, fname, as_attachment=False), 200, cors_headers)
 
 def usage():
