@@ -44,6 +44,7 @@ module.exports = {
   watch: {
     items: {
       handler: function () {
+        console.log('items', this.items)
         const itemWithModeDefined = this.items.find(item => item.mirador || item.default)
         this.mode = itemWithModeDefined
           ? itemWithModeDefined.mirador ? 'mirador' : 'default'

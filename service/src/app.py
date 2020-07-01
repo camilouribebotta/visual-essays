@@ -45,7 +45,7 @@ DEFAULT_ACCT = None
 DEFAULT_REPO = None
 
 KNOWN_SITES = {
-    'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
+    # 'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
     'visual-essays.app': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
     'plant-humanities.app': {'acct': 'jstor-labs', 'repo': 'plant-humanities'},
     'dickens.kent-maps.online': {'acct': 'kent-map', 'repo': 'dickens'},
@@ -67,18 +67,24 @@ def get_markdown(url):
         return {'source': 'url', 'fname': url.split('/')[-1].replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
 def get_gh_markdown(acct, repo, path=None):
-    baseurl = content_baseurl(acct, repo)
-    logger.info(f'get_gh_markdown: acct={acct} repo={repo} path={path} baseurl={baseurl}')
-    files = [f'{path if path is not None else ""}/{file}' for file in ('index.md', 'home.md', 'README.md')]
-    if path:
-        files = [path if path.endswith('.md') else f'{path}.md'] + files
-    # files = ['index.md', 'home.md', 'README.md'] if path == '/' else [path[1:] if path.endswith('.md') else f'{path[1:]}.md']
-    for file in files:
-        url = f'{baseurl}/{file}'
-        resp = requests.get(url)
-        logger.info(f'{url} {resp.status_code}')
-        if resp.status_code == 200:
-            return {'source': 'gh', 'fname': file.replace('.md', ''), 'match': file.split('/')[-1], 'text': resp.content.decode('utf-8')}
+    # baseurl = content_baseurl(acct, repo)
+    for baseurl in (f'https://raw.githubusercontent.com/{acct}/{repo}/master{"/docs/content" if repo == "plant-humanities" else ""}', f'https://{acct}.github.io/{repo}'):
+        logger.info(f'get_gh_markdown: acct={acct} repo={repo} path={path} baseurl={baseurl}')
+        path_root = f'/{path}' if path else ''
+        files = [f'/{path_root}' if path_root.endswith('.md') else f'{path_root}.md']
+        files += [f'{path_root}/{file}' for file in ('index.md', 'home.md', 'README.md')]
+        for file in files:
+            url = f'{baseurl}{file}'
+            resp = requests.get(url)
+            logger.info(f'{url} {resp.status_code}')
+            if resp.status_code == 200:
+                return {
+                    'baseurl': baseurl,
+                    'source': 'gh',
+                    'fname': file.replace('.md', ''),
+                    'match': file.split('/')[-1],
+                    'text': resp.content.decode('utf-8')
+            }
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
@@ -100,10 +106,17 @@ def get_local_markdown(path=None):
         logger.info(f'fpath{fpath} exists={os.path.exists(fpath)}')
         if os.path.exists(fpath):
             with open(fpath, 'r') as fp:
-                return {'source': 'local', 'fname': fname.replace('.md', ''), 'match': file, 'text': fp.read()}
+                return {
+                    'baseurl': 'http://localhost:5000',
+                    'source': 'local', 
+                    'fname': fname.replace('.md', ''),
+                    'match': file,
+                    'text': fp.read()
+                }
 
-def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fname=None, match=None, source=None):
+def convert_relative_links(soup, site, acct, repo, path, markdown):
     path_elems = [pe for pe in path.split('/') if pe] if path else []
+    baseurl = f'{markdown["baseurl"]}/essay'
     if site == 'localhost':
         baseurl = 'http://localhost:5000/essay'
         if acct:
@@ -117,7 +130,7 @@ def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fna
         if baseurl is None:
             baseurl = f'https://visual-essays.app/essay/{acct}/{repo}'
 
-    logger.info(f'convert_relative_links: site={site} acct={acct} repo={repo} path={path} fname={fname} match={match} baseurl={baseurl}')
+    logger.info(f'convert_relative_links: site={site} acct={acct} repo={repo} path={path} fname={markdown["fname"]} match={markdown["match"]} baseurl={baseurl}')
     for tag in ('a',):
         for elem in soup.find_all(tag):
             for attr in ('href',):
@@ -125,23 +138,26 @@ def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fna
                     if not elem.attrs[attr].startswith('http'):
                         logger.info(elem.attrs[attr])
                         if elem.attrs[attr].startswith('#'):
-                            elem.attrs[attr] = f'{fname}{elem.attrs[attr]}'
+                            elem.attrs[attr] = f'{markdown["fname"]}{elem.attrs[attr]}'
                         if elem.attrs[attr][0] == '/':
                             elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
                         else:
-                            if match == 'index.md':
+                            if markdown['match'] == 'index.md':
                                 rel_path = f'/{"/".join(path_elems)}' if len(path_elems) > 0 else ''
                             else:
                                 rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
-                            logger.info(f'path={path_elems} match={match} rel_path={rel_path}')
+                            logger.info(f'path={path_elems} match={markdown["match"]} rel_path={rel_path}')
                             elem.attrs[attr] = f'{baseurl}{rel_path}/{elem.attrs[attr]}'
                     logger.info(elem.attrs[attr])
     
     if site == 'localhost' and ENV == 'dev':
-        baseurl = f'http://localhost:5000/assets'
+        # baseurl = f'http://localhost:5000/assets'
+        baseurl = f'{markdown["baseurl"]}/assets'
     else:
-        baseurl = content_baseurl(acct, repo)
-    logger.info(f'convert_relative_image_links: source={source} baseurl={baseurl}')
+        # baseurl = content_baseurl(acct, repo)
+        baseurl = f'{markdown["baseurl"]}'
+    
+    logger.info(f'convert_relative_image_links: source={markdown["source"]} baseurl={baseurl}')
     for tag in ('img', 'var', 'span', 'param'):
         for elem in soup.find_all(tag):
             for attr in ('banner', 'data-banner', 'src', 'url'):
@@ -149,7 +165,7 @@ def convert_relative_links(soup, site=None, acct=None, repo=None, path=None, fna
                     if elem.attrs[attr][0] == '/':
                         elem.attrs[attr] = f'{baseurl}{elem.attrs[attr]}'
                     else:
-                        if match == 'index.md':
+                        if markdown["match"] == 'index.md':
                             rel_path = f'/{"/".join(path_elems)}' if len(path_elems) > 0 else ''
                         else:
                             rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
@@ -179,7 +195,7 @@ def markdown_to_html5(markdown, site=None, acct=None, repo=None, path=None):
             }
         })
     soup = BeautifulSoup(f'<div id="md-content">{html}</div>', 'html5lib')
-    convert_relative_links(soup, site, acct, repo, path, markdown['fname'], markdown['match'], markdown['source'])
+    convert_relative_links(soup, site, acct, repo, path, markdown)
 
     base_html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><title></title></head><body></body></html>'
     html5 = BeautifulSoup(base_html, 'html5lib')
@@ -382,26 +398,23 @@ def essay(path=None):
             path_elems = path.split('/') if path else []
             logger.info(f'essay: site={site} path={path} raw={raw} kwargs={kwargs}')
             if site == 'localhost' and ENV == 'dev':
-                abs_path = f'{DOCS_ROOT}/docs/{"/".join(path_elems)}'
+                abs_path = f'{DOCS_ROOT}/docs{"/content/" if repo == "plant-humanities" else "/"}{"/".join(path_elems)}'
                 is_dir = os.path.isdir(abs_path)
                 logger.info(f'path={path} abs_path={abs_path} is_dir={is_dir}')
                 markdown = get_local_markdown(abs_path)
                 baseurl = 'http://localhost:5000'
             else:
-
-                # path = f'/{path}' if path is not None else '/'
-                '''
-                if len(path_elems) > 2:
-                    acct = path_elems[0]
-                    repo = path_elems[1]
-                    path = '/'.join(path_elems[2:])
-                elif len(path_elems) == 2:
-                    acct = path_elems[0]
-                    repo = path_elems[1]
-                    path = '/'
-                elif len(path_elems) == 1:
-                    path = f'/{path_elems[0]}'
-                '''
+                if site in ('localhost', 'visual-essays.app'):
+                    if len(path_elems) > 2:
+                        acct = path_elems[0]
+                        repo = path_elems[1]
+                        path = '/'.join(path_elems[2:])
+                    elif len(path_elems) == 2:
+                        acct = path_elems[0]
+                        repo = path_elems[1]
+                        path = None
+                    elif len(path_elems) == 1:
+                        path = path_elems[0]
                 markdown = get_gh_markdown(acct, repo, path)
                 baseurl = content_baseurl(acct, repo)
         logger.info(f'essay: site={site} acct={acct} repo={repo} path={path} raw={raw} kwargs={kwargs}')
@@ -413,56 +426,6 @@ def essay(path=None):
                 return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
         else:
             return 'Not found', 404
-
-'''
-@app.route('/essay/<acct>/<repo>/<file>', methods=['GET'])  
-@app.route('/essay/<acct>/<repo>', methods=['GET'])
-@app.route('/essay/<file>', methods=['GET'])  
-@app.route('/essay', methods=['GET'])  
-def essay(acct=None, repo=None, file=None):
-    kwargs = dict([(k, request.args.get(k)) for k in request.args])
-    _set_logging_level(kwargs)
-    if request.method == 'OPTIONS':
-        return ('', 204, cors_headers)
-    else:
-        raw = kwargs.pop('raw', 'false') in ('', 'true')
-        site = urlparse(request.base_url).hostname
-        # acct = acct if acct else DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct')
-        # repo = repo if repo else DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
-        src = None
-        gdid = None
-        for arg in ('src', 'gd', 'gdid', 'gdrive'):
-            if arg in kwargs:
-                val = kwargs.pop(arg)
-                if val.startswith('https://drive.google.com'):
-                    gdid = val.split('/')[5]
-                elif arg == 'src':
-                    src = val
-                else:
-                    gdid = val
-        baseurl = None
-        if src:
-            markdown = get_markdown(src)
-        elif gdid:
-            markdown = get_gd_markdown(gdid)
-        else:
-            use_local = kwargs.pop('mode', ENV) == 'dev'
-            if use_local:
-                markdown = get_local_markdown(file)
-                baseurl = 'http://localhost:5000'
-            else:
-                markdown = get_gh_markdown(acct, repo, file)
-                baseurl = content_baseurl(acct, repo)
-        logger.info(f'essay: site={site} acct={acct} repo={repo} file={file} raw={raw} kwargs={kwargs} use_local={use_local}')
-        if markdown:
-            if raw:
-                return (markdown['text'], 200, cors_headers)
-            else:
-                essay = Essay(html=markdown_to_html5(markdown, acct, repo, site), cache=cache, baseurl=baseurl, **kwargs)
-                return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
-        else:
-            return 'Not found', 404
-'''
 
 @app.route('/markdown-viewer/<path:path>', methods=['GET'])
 @app.route('/markdown-viewer/', methods=['GET'])  
@@ -497,14 +460,14 @@ def config(path=None):
             resp = requests.get(f'{baseurl}/config.json')
             _config = resp.json() if resp.status_code == 200 else None
         if _config:
-            baseurl = f'http://localhost:5000' if site == 'localhost' and ENV == 'dev' else f'https://{acct}.github.io/{repo}'
+            baseurl = f'http://localhost:5000/assets' if site == 'localhost' and ENV == 'dev' else f'https://{acct}.github.io/{repo}'
             for attr in ('banner', 'logo'):
                 if attr in _config and not _config[attr].startswith('http'):
                     logger.info(_config[attr])
                     if _config[attr][0] == '/':
-                        _config[attr] = f'{baseurl}/assets{_config[attr]}'
+                        _config[attr] = f'{baseurl}{_config[attr]}'
                     else:
-                        _config[attr] = f'{baseurl}/assets/{_config[attr]}'
+                        _config[attr] = f'{baseurl}/{_config[attr]}'
                     logger.info(_config[attr])
             baseurl = f'http://localhost:5000' if site == 'localhost' and ENV == 'dev'  else f'https://{acct}.github.io/{repo}'
             for comp in _config.get('components', []):

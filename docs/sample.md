@@ -14,6 +14,13 @@
        label="Networks"
        dependencies="https://d3js.org/d3.v4.min.js">
 
+<param ve-component 
+       name="starter"
+       src="/components/StarterComponent.vue"
+       selectors="tag:starter"
+       icon="fa-brackets-curly"
+       label="Starter component"
+       dependencies="">
 <!--
 <param ve-component 
        name="people"
@@ -39,6 +46,14 @@
        dependencies="//unpkg.com/force-graph">
 
 <param ve-component 
+       name="heliconia-network"
+       src="/components/HeliconiaNetwork.vue"
+       selectors="tag:heliconia-network"
+       icon="fa-sitemap"
+       label="Heliconia network"
+       dependencies="//unpkg.com/force-graph">
+
+<param ve-component 
        name="storiiies"
        src="/components/StoriiiesViewer.vue"
        selectors="tag:storiiies"
@@ -57,6 +72,7 @@
 ## OpenSeadragon Image Viewer
 
 Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param ve-starter attr1="value1">
 <param ve-storiiies id="a71cm">
 <param ve-open-seadragon
        fit="cover"
@@ -74,9 +90,11 @@ Another test image.
 ### Multiple specimens, using ve-specimen tag
 
 Prunus occidentalis is a plant in the family Rosaceae of the order Rosales. The plant can be found in the Caribbean, Central America and northern South America. It is native to Puerto Rico. Its Spanish common names include almendrón. Its English common name is the western cherry laurel. The plant is common in the Toro Negro State Forest. Family of Liechtenstein. 
+<param ve-starter attr1="value1">
 <param ve-plant-specimen primary eid="Q12844029" max="1" reverse="true">
 <param ve-plant-specimen eid="Q165321" max="1">
 <param ve-plant-specimen eid="Q5486220" max="1">
+<param ve-heliconia-network>
 
 ### Specimen, using image viewer
 

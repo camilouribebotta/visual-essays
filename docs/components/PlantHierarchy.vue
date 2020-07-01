@@ -79,13 +79,13 @@ module.exports = {
     },
     doQuery(eid) {
       const sparql = `
-      SELECT ?item ?itemLabel ?pic ?linkTo
-      WHERE {
-        ${eid} wdt:P171* ?item
-        OPTIONAL { ?item wdt:P171 ?linkTo }
-        OPTIONAL { ?item wdt:P18 ?pic }
-        SERVICE wikibase:label {bd:serviceParam wikibase:language "en" }
-      }`
+        SELECT ?item ?itemLabel ?pic ?linkTo
+        WHERE {
+          ${eid} wdt:P171* ?item
+          OPTIONAL { ?item wdt:P171 ?linkTo }
+          OPTIONAL { ?item wdt:P18 ?pic }
+          SERVICE wikibase:label {bd:serviceParam wikibase:language "en" }
+        }`
       return fetch(`https://query.wikidata.org/sparql?query=${encodeURIComponent(sparql)}`, {
         headers: {
           'Accept': 'application/sparql-results+json, application/json',

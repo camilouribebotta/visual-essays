@@ -18,6 +18,8 @@ logging.getLogger('requests').setLevel(logging.INFO)
 from rdflib import ConjunctiveGraph as Graph
 from pyld import jsonld
 
+import concurrent.futures
+
 context = {
     "@context": {
         "jwd": "http://kg.jstor.org/entity/",
@@ -161,6 +163,55 @@ sparql_template = '''
     }
 '''
 
+def _get_manifest(specimen, image_url):
+    logger.debug(f'getManifest {specimen}')
+    if 'manifest' not in specimen:
+        defaults = {
+            'canvas': { 'height': 3000, 'width': 3000 },
+            'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
+        }
+        manifest = {
+        'label': specimen.get('description', ''),  
+        'sequences': [{
+            'canvases': [{**defaults['canvas'], **{
+                'label': specimen.get('label', ''),
+                'images': [{**defaults['image'], **{
+                    'url': image_url
+                }}]
+            }}]
+        }]
+        }
+        resp = requests.post(
+            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+            headers={'Content-type': 'application/json'},
+            json=manifest
+        )
+        manifest = resp.json()
+        if '@id' in manifest:
+            specimen['manifest'] = manifest['@id']
+    # logger.info(json.dumps(specimen, indent=2))
+    return specimen
+
+_manifests_cache = {}
+def _get_manifests(specimens):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = {}
+        for specimen in specimens:
+            images = dict([(img['type'], img['url']) for img in specimen.get('images', [])])
+            image_url = images.get('best', images.get('default'))
+            if image_url in _manifests_cache:
+                specimen['manifest'] = _manifests_cache[image_url]
+                continue
+            logger.info(specimen)
+            futures[executor.submit(_get_manifest, specimen, image_url)] = specimen['id']
+
+        for future in concurrent.futures.as_completed(futures):
+            image_url = futures[future]
+            specimen = future.result()
+            if 'manifest' in specimen:
+                _manifests_cache[image_url] = specimen['manifest']
+            logger.info(f'id={specimen["id"]} manifest={specimen.get("manifest")}')
+
 def sort_specimens(specimens, **kwargs):
     def sort_by_date(_specimens):
         _specimens.sort(key=lambda x: str(x.get('collectionDate', '')), reverse=kwargs.get('reverse') == 'true')
@@ -215,9 +266,10 @@ def get_specimens(taxon_name, **kwargs):
             else:
                 _framed.pop('@context')
                 data['specimens'] = [_framed]
+            data['specimens'] = [specimen for specimen in data['specimens'] if 'id' in specimen]
             for specimen in data['specimens']:
                 for attr in ('taxonName', '@type'):
-                    specimen.pop(attr)
+                    specimen.pop(attr, None)
                 if 'specimenOf' in specimen:
                     data['id'] = specimen.pop('specimenOf')
                 if 'collectionDate' in specimen:
@@ -226,11 +278,12 @@ def get_specimens(taxon_name, **kwargs):
                     wof = specimen['locationCollected'].pop('wofId')
                     wof_parts = [wof[i:i+3] for i in range(0, len(wof), 3)]
                     specimen['locationCollected']['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
-                specimen['images'] = [{'url': img['id'], 'type': img['imgSize']} for img in specimen['images']]
+                specimen['images'] = [{'url': img['id'], 'type': img['imgSize']} for img in specimen.get('images', [])]
             data['specimens'] = sort_specimens(data['specimens'], **kwargs)
             if 'max' in kwargs:
                 data['specimens'] = data['specimens'][:int(kwargs['max'])]
             break
+    _get_manifests(data['specimens'])
     return data
 
 def usage():
