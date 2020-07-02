@@ -17,6 +17,7 @@ sys.path.append(SCRIPT_DIR)
 import json
 import traceback
 import getopt
+import base64
 from urllib.parse import urlparse
 
 import markdown as markdown_parser
@@ -43,6 +44,7 @@ VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays.min.js
 ENV = 'prod'
 DEFAULT_ACCT = None
 DEFAULT_REPO = None
+GH_CREDS = 'Token 47189dabf0b91a356d9f02155fc234f51f07905c'
 
 KNOWN_SITES = {
     # 'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
@@ -66,6 +68,7 @@ def get_markdown(url):
     if resp.status_code == 200:
         return {'source': 'url', 'fname': url.split('/')[-1].replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
+'''
 def get_gh_markdown(acct, repo, path=None):
     # baseurl = content_baseurl(acct, repo)
     for baseurl in (f'https://raw.githubusercontent.com/{acct}/{repo}/master{"/docs/content" if repo == "plant-humanities" else ""}', f'https://{acct}.github.io/{repo}'):
@@ -85,6 +88,74 @@ def get_gh_markdown(acct, repo, path=None):
                     'match': file.split('/')[-1],
                     'text': resp.content.decode('utf-8')
             }
+'''
+
+def get_gh_baseurls(acct, repo):
+    baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
+    api_baseurl = f'https://api.github.com/repos/{acct}/{repo}/contents'
+    resp = requests.get(f'https://api.github.com/repos/{acct}/{repo}/pages', headers={
+        'Authorization': GH_CREDS,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-agent': 'JSTOR Labs visual essays client'
+    })
+    if resp.status_code == 200:
+        if resp.json()['source']['path'] == '/docs':
+            baseurl += '/docs'
+            api_baseurl += '/docs'
+        if repo == 'plant-humanities':
+            baseurl += '/content'
+            api_baseurl += '/content'
+
+    return baseurl, api_baseurl
+
+def get_gh_markdown(acct, repo, path=None):
+    baseurl, api_baseurl = get_gh_baseurls(acct, repo)
+    logger.info(f'get_gh_markdown: acct={acct} repo={repo} path={path} baseurl={baseurl} api_baseurl={api_baseurl}')
+    path_root = f'/{path}' if path else ''
+    files = [f'/{path_root}' if path_root.endswith('.md') else f'{path_root}.md']
+    files += [f'{path_root}/{file}' for file in ('index.md', 'home.md', 'README.md')]
+
+    for file in files:
+        url = f'{api_baseurl}{file}'
+        if url in cache:
+            resp = requests.get(url, headers={
+                'Authorization': GH_CREDS,
+                'Accept': 'application/vnd.github.v3+json',
+                'User-agent': 'JSTOR Labs visual essays client'
+            })
+            logger.info(f'{url} {resp.status_code}')
+            if resp.status_code == 200:
+                resp = resp.json()
+                return {
+                    'baseurl': baseurl,
+                    'source': 'gh',
+                    'fname': file.replace('.md', ''),
+                    'match': file.split('/')[-1],
+                    'text': base64.b64decode(resp['content']).decode('utf-8'),
+                    'url': url,
+                    'sha': resp['sha']
+                }
+            else:
+                logger.info(resp.json())
+    for file in files:
+        url = f'{api_baseurl}{file}'
+        resp = requests.get(url, headers={
+            'Authorization': GH_CREDS,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-agent': 'JSTOR Labs visual essays client'
+        })
+        logger.info(f'{url} {resp.status_code}')
+        if resp.status_code == 200:
+            resp = resp.json()
+            return {
+                'baseurl': baseurl,
+                'source': 'gh',
+                'fname': file.replace('.md', ''),
+                'match': file.split('/')[-1],
+                'text': base64.b64decode(resp['content']).decode('utf-8'),
+                'url': url,
+                'sha': resp['sha']
+        }
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
@@ -374,6 +445,7 @@ def essay(path=None):
     else:
         raw = kwargs.pop('raw', 'false') in ('', 'true')
         site = urlparse(request.base_url).hostname
+        refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
         src = None
         gdid = None
         for arg in ('src', 'gd', 'gdid', 'gdrive'):
@@ -422,8 +494,17 @@ def essay(path=None):
             if raw:
                 return (markdown['text'], 200, cors_headers)
             else:
-                essay = Essay(html=markdown_to_html5(markdown, site, acct, repo, path or '/'), cache=cache, baseurl=baseurl, **kwargs)
-                return (add_vue_app(essay.soup, VE_JS_LIB), 200, cors_headers)
+                cache_key = f'{site}|{acct}|{repo}|{path}'
+                cached = cache.get(cache_key) if not refresh else False
+                logger.info(f'essay: site={site} acct={acct} repo={repo} path={path} cached={cached and cached["sha"] == markdown["sha"]}')
+                if cached and cached['sha'] == markdown['sha']:
+                    html = cached['html']
+                else:
+                    essay = Essay(html=markdown_to_html5(markdown, site, acct, repo, path or '/'), cache=cache, baseurl=baseurl, **kwargs)
+                    html = add_vue_app(essay.soup, VE_JS_LIB)
+                    if 'url' in markdown and 'sha' in markdown:
+                        cache[cache_key] = {'html': html, 'sha': markdown['sha']}
+                return (html, 200, cors_headers)
         else:
             return 'Not found', 404
 

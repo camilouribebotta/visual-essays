@@ -23,8 +23,8 @@ module.exports = {
     },
     getItems() {
       console.log(this.groups)
-      if (this.groups.imageViewer) {
-        this.items = this.groups.imageViewer.items
+      if (this.groups.image) {
+        this.items = this.groups.image.items
       } else if (this.groups.plantSpecimen) {
         console.log('plantSpecimens', this.groups.plantSpecimen)
         this.items = this.groups.plantSpecimen.items
