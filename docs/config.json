@@ -16,13 +16,6 @@
             "dependencies": ["https://d3js.org/d3.v4.min.js"]
         },
         {
-            "name": "plantSpecimen", 
-            "src": "/components/PlantSpecimenViewer.vue",
-            "selectors": ["tag:plant-specimen"],
-            "icon": "fa-seedling",
-            "label": "Plant Specimens"
-        },
-        {
             "name": "openSeadragon", 
             "src": "/components/OpenSeadragonImageViewer.vue",
             "selectors": ["tag:open-seadragon"],

@@ -17,7 +17,7 @@
     -->
     <component 
       v-bind:is="mode === 'default' ? 'defaultImageViewer' : 'miradorImageViewer'"
-      :width="width" :height="height" :items="items" :default-fit="defaultFit"
+      :width="width" :height="height" :seq="seq" :items="items" :default-fit="defaultFit"
     ></component>
   </div>
 </template>
@@ -27,6 +27,7 @@
 module.exports = {
   name: 'ImageViewer',
   props: {
+    seq: {type: Number, default: 1},
     items: Array,
     width: Number,
     height: Number,
@@ -36,6 +37,9 @@ module.exports = {
   data: () => ({
     mode: 'default',
   }),
+  mounted() {
+    console.log(`ImageViewer: seq=${this.seq} initialMode=${this.initialMode}`, this.items)
+  },
   methods: {
     click() {
       this.mode = this.mode === 'mirador' ? 'default' : 'mirador'
@@ -48,7 +52,7 @@ module.exports = {
         const itemWithModeDefined = this.items.find(item => item.mirador || item.default)
         this.mode = itemWithModeDefined
           ? itemWithModeDefined.mirador ? 'mirador' : 'default'
-          : 'default'
+          : this.initialMode
       },
       immediate: true
     }

@@ -1,0 +1,80 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Rons"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -83.75390768051147,
+            42.27993627682453
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "JSTOR office"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -83.74580740928648,
+            42.27976164258923
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+            "label": "The commute"
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -83.75377893447876,
+              42.28003153165795
+            ],
+            [
+              -83.75367164611816,
+              42.280071221129376
+            ],
+            [
+              -83.75372529029846,
+              42.280658622383584
+            ],
+            [
+              -83.74604344367981,
+              42.28044430093883
+            ],
+            [
+              -83.74607563018799,
+              42.279896587268084
+            ],
+            [
+              -83.74581813812256,
+              42.27987277352224
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label":"Sweetwaters"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -83.74960541725159,
+            42.28052367933671
+          ]
+        }
+      }
+    ]
+  }
+  

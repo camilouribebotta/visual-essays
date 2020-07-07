@@ -1,5 +1,5 @@
 <template>
-  <div id="mirador" :style="containerStyle"></div>
+  <div :id="`mirador-${seq}`" :style="containerStyle"></div>
 </template>
 
 <script>
@@ -7,22 +7,27 @@
 
 module.exports = {
   name: 'MiradorImageViewer',
-  props: { 
+  props: {
+    seq: { type: Number, default: 1 },
     items: { type: Array, default: function(){ return []} },
     width: { type: Number, default: 1000 }, 
     height: { type: Number, default: 1000 }
   },
-  data: () => ({}),
+  data: () => ({
+    windows: undefined,
+    viewer: undefined
+  }),
   computed: {
     containerStyle() { return { position: 'relative', width: `${this.width}px`, height: `${this.height}px`, overflowY: 'auto !important' } },
-    windows() { return this.items.map(item => {return { manifestId: item.manifest } }) }
+
   },
   mounted() {
-    console.log(`MiradorImageViewer: height=${this.height} width=${this.width}`, this.items)
-    this.$mirador.viewer({
-      id: 'mirador',
+    console.log(`MiradorImageViewer.mounted: seq=${this.seq} height=${this.height} width=${this.width}`, this.items)
+    this.windows = this.items.map(item => {return { manifestId: item.manifest } }) 
+    this.viewer = this.$mirador.viewer({
+      id: `mirador-${this.seq}`,
       selectedTheme: 'light',
-      windows: this.windows,
+      // windows: this.windows,
       workspace: {
         type: 'mosaic'
       },
@@ -30,9 +35,9 @@ module.exports = {
         enabled: false
       },
       window: {
-        allowClose: true, // Configure if windows can be closed or not
+        allowClose: false, // Configure if windows can be closed or not
         allowFullscreen: true, // Configure to show a "fullscreen" button in the WindowTopBar
-        allowMaximize: true, // Configure if windows can be maximized or not
+        allowMaximize: false, // Configure if windows can be maximized or not
         allowTopMenuButton: false, // Configure if window view and thumbnail display menu are visible or not
         allowWindowSideBar: true, // Configure if side bar menu is visible or not
         authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
@@ -58,6 +63,46 @@ module.exports = {
         ]
       }
     })
+    console.log('viewer', this.viewer)
+    this.viewer.store.dispatch(this.viewer.actions.addWindow(this.windows[0]))
+    // console.log(this.viewer.store.getState())
+    document.querySelectorAll(`#mirador-${this.seq}`).forEach(osd => {
+      osd.addEventListener('mouseenter', (e) => {
+        document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'flex')
+        // Temporary fix/workaround for Mirador styling bug
+        /*
+        document.querySelectorAll('.mirador181')
+          .forEach(elem => {
+            elem.style.width = '260px';
+            elem.style.margin = '0'
+            elem.style.padding = '16px 8px 8px 16px';
+            elem.children.forEach(child => child.style.width = '260px')
+          })
+        */
+      })
+      osd.addEventListener('mouseleave', (e) => {
+        document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'none')
+      })
+    })
+  },
+  beforeDestroy() {
+    console.log('BeforeDestroy')
+  },
+  watch: {
+    items: {
+      handler: function () {
+        console.log('MiradorImageViewer.watch', this.items)
+        Object.keys(this.viewer.store.getState().windows).forEach(windowKey => this.viewer.store.dispatch(this.viewer.actions.removeWindow(windowKey)))
+        let windows = this.items.map(item => {return { manifestId: item.manifest } })
+        console.log('MiradorImageViewer.addWindow', windows[0])
+        this.viewer.store.dispatch(this.viewer.actions.addWindow(windows[0]))
+      },
+      immediate: false
+    }
   }
 }
 </script>
+
+<style scoped>
+  .mirador-window-top-bar { display: none; }
+</style>

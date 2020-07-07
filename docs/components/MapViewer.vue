@@ -152,7 +152,8 @@ module.exports = {
               if (label) {
                 numFeatureLabels += 1
                 feature.properties.label = label
-                const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'LineString'
+                console.log(layer)
+                const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'MultiPolygon' || layer.feature.geometry.type === 'LineString'
                   ? layer.getBounds().getCenter()
                   : layer.getLatLng()
                 self.addPopup(feature.properties.id, label, latLng, feature.geometry.type === 'Point' ? -45 : 0)
@@ -191,6 +192,8 @@ module.exports = {
           },
           // Style
           style: function(feature) {
+            console.log('style', feature.properties)
+
             for (let [prop, value] of Object.entries(feature.properties)) {
               if (value === 'null') {
                 feature.properties[prop] = null
@@ -203,6 +206,7 @@ module.exports = {
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
                 fillOpacity: parseFloat(def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5),
             }
+            console.log(style)
             return style
           },
           pointToLayer: function(feature, latlng) {

@@ -163,7 +163,7 @@ sparql_template = '''
     }
 '''
 
-def _get_manifest(specimen, image_url):
+def _get_manifest(specimen, image_url, preload=False):
     logger.debug(f'getManifest {specimen}')
     if 'manifest' not in specimen:
         defaults = {
@@ -189,11 +189,18 @@ def _get_manifest(specimen, image_url):
         manifest = resp.json()
         if '@id' in manifest:
             specimen['manifest'] = manifest['@id']
+            if preload:
+                resp = requests.post(
+                    'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/preload',
+                    headers={'Content-type': 'application/json'},
+                    json={'url': image_url}
+                )
+                logger.info(f'preload {image_url} {resp.status_code}')
     # logger.info(json.dumps(specimen, indent=2))
     return specimen
 
 _manifests_cache = {}
-def _get_manifests(specimens):
+def _get_manifests(specimens, preload=False):
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         futures = {}
         for specimen in specimens:
@@ -202,8 +209,7 @@ def _get_manifests(specimens):
             if image_url in _manifests_cache:
                 specimen['manifest'] = _manifests_cache[image_url]
                 continue
-            logger.info(specimen)
-            futures[executor.submit(_get_manifest, specimen, image_url)] = specimen['id']
+            futures[executor.submit(_get_manifest, specimen, image_url, preload)] = image_url
 
         for future in concurrent.futures.as_completed(futures):
             image_url = futures[future]
@@ -232,8 +238,8 @@ def sort_specimens(specimens, **kwargs):
             sorted_specimens += sort_by_date(by_type[specimen_type])
     return sorted_specimens
 
-def get_specimens(taxon_name, **kwargs):
-    logger.info(f'get_specimens: taxon_name={taxon_name} max={kwargs.get("max")}')
+def get_specimens(taxon_name, preload=False, **kwargs):
+    logger.info(f'get_specimens: taxon_name={taxon_name} max={kwargs.get("max")} preload={preload} args={kwargs}')
     sparql = sparql_template.replace('<TAXON NAME>', taxon_name)
     data = {'taxonName': taxon_name, 'specimens': []}
     for _ in range(2):
@@ -283,7 +289,7 @@ def get_specimens(taxon_name, **kwargs):
             if 'max' in kwargs:
                 data['specimens'] = data['specimens'][:int(kwargs['max'])]
             break
-    _get_manifests(data['specimens'])
+    _get_manifests(data['specimens'], preload)
     return data
 
 def usage():

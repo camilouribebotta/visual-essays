@@ -44,7 +44,10 @@ VE_JS_LIB = 'https://jstor-labs.github.io/visual-essays/lib/visual-essays.min.js
 ENV = 'prod'
 DEFAULT_ACCT = None
 DEFAULT_REPO = None
-GH_CREDS = 'Token 47189dabf0b91a356d9f02155fc234f51f07905c'
+
+with open(f'{BASEDIR}/gh-token', 'r') as fp:
+    GH_CREDS = f'Token {fp.read()}'
+logger.info(GH_CREDS)
 
 KNOWN_SITES = {
     # 'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
@@ -387,6 +390,7 @@ def specimens(taxon_name):
         return ('', 204, cors_headers)
     else:
         taxon_name = taxon_name.replace('_', ' ')
+        kwargs['preload'] = kwargs.pop('preload', 'false').lower() in ('true', '')
         # refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
         refresh = True
         specimens = cache.get(taxon_name) if not refresh else None

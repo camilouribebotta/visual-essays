@@ -72,18 +72,26 @@
 ## OpenSeadragon Image Viewer
 
 Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
+<param ve-plant-specimen primary eid="Q165321" max="1">
+<!--
+<param ve-plant-specimen eid="Q12844029" max="1" reverse="true">
+<param ve-plant-specimen eid="Q5486220" max="1">
+<param ve-image mirador manifest="https://storiiies.cogapp.com/manifestJSON?manifest=https://jqz7t23pp9.execute-api.us-east-1.amazonaws.com/dev/manifest/1d1dh/manifest.json">
+-->
 <param ve-starter attr1="value1">
 <param ve-storiiies id="a71cm">
+<!-- <param ve-image mirador primary manifest="https://free.iiifhosting.com/iiif/8d631316c0828c59b2ff0a0fd414e81e99b91732cd251810210fed6891b332b0"> -->
 <param ve-open-seadragon
        fit="cover"
        title="British Isles"
        url="http://free.iiifhosting.com/iiif/4be425f64bc8f22f5ba88d8d536f28c5de4e4d919e6b2861daeef807b52ecce0">
 
 Another test image.  
-<param ve-open-seadragon
+<!-- <param ve-open-seadragon
        fit="cover"
        title="Self-Portrait Dedicated to Paul Gauguin"
-       url="https://ids.lib.harvard.edu/ids/iiif/47174896">
+       url="https://ids.lib.harvard.edu/ids/iiif/47174896">-->
+<param ve-image mirador primary manifest="https://jstor-labs.github.io/visual-essays/iiif-manifests/harvard-299843.json">
 
 ## Plant specimens
 
@@ -91,9 +99,6 @@ Another test image.
 
 Prunus occidentalis is a plant in the family Rosaceae of the order Rosales. The plant can be found in the Caribbean, Central America and northern South America. It is native to Puerto Rico. Its Spanish common names include almendrón. Its English common name is the western cherry laurel. The plant is common in the Toro Negro State Forest. Family of Liechtenstein. 
 <param ve-starter attr1="value1">
-<param ve-plant-specimen primary eid="Q12844029" max="1" reverse="true">
-<param ve-plant-specimen eid="Q165321" max="1">
-<param ve-plant-specimen eid="Q5486220" max="1">
 <param ve-heliconia-network>
 
 ### Specimen, using image viewer
@@ -118,12 +123,14 @@ Heliconia, derived from the Greek word Ἑλικώνιος (helikṓnios), is a 
 
 Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
 <param ve-image
+       mirador
        fit="cover"
        title="Ginevra de' Benci (cover)"
        url="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg/985px-Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg"
        thumbnail="https://commons.wikimedia.org/w/thumb.php?f=Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg&w=140"
        hires="https://upload.wikimedia.org/wikipedia/commons/1/18/Leonardo_da_Vinci_-_Ginevra_de%27_Benci_-_Google_Art_ProjectFXD.jpg">
 <param ve-image
+       mirador
        title="Holotype of Prunus serrulata Lindley f. shibayama E. H. Wilson [family ROSACEAE]"
        fit="cover"
        url="https://plants.jstor.org/fsi/img/size3/alukaplant/a/phase_01/a0000/a00032200.jpg"
