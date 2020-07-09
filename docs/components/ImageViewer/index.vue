@@ -16,7 +16,7 @@
     </div>
     -->
     <component 
-      v-bind:is="mode === 'default' ? 'defaultImageViewer' : 'miradorImageViewer'"
+      v-bind:is="mode === 'iiif' ? 'miradorImageViewer' : 'staticImageViewer'"
       :width="width" :height="height" :seq="seq" :items="items" :default-fit="defaultFit"
     ></component>
   </div>
@@ -31,27 +31,27 @@ module.exports = {
     items: Array,
     width: Number,
     height: Number,
-    initialMode: { type: String, default: 'default' },
+    initialMode: { type: String, default: 'static' },
     defaultFit: {type: String, default: 'cover'}
   },
   data: () => ({
-    mode: 'default',
+    mode: 'static',
   }),
   mounted() {
     console.log(`ImageViewer: seq=${this.seq} initialMode=${this.initialMode}`, this.items)
   },
   methods: {
     click() {
-      this.mode = this.mode === 'mirador' ? 'default' : 'mirador'
+      this.mode = this.mode === 'iif' ? 'static' : 'iiif'
     }
   },
   watch: {
     items: {
       handler: function () {
         console.log('items', this.items)
-        const itemWithModeDefined = this.items.find(item => item.mirador || item.default)
+        const itemWithModeDefined = this.items.find(item => item.iiif || item.static)
         this.mode = itemWithModeDefined
-          ? itemWithModeDefined.mirador ? 'mirador' : 'default'
+          ? itemWithModeDefined.iiif ? 'iiif' : 'static'
           : this.initialMode
       },
       immediate: true

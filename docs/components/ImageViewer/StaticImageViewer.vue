@@ -20,7 +20,7 @@
 <script>
 
 module.exports = {
-  name: 'DefaultImageViewer',
+  name: 'StaticImageViewer',
   props: {
     items: Array,
     width: Number,

@@ -19,7 +19,7 @@
       <component v-bind:is="isPhone ? 'siteMobileHeader' : 'siteHeader'"
         :site-config="siteConfig" :essay-config="essayConfig" :nav="nav" :progress="progress" 
         :app-version="appVersion" :lib-version="libVersion"
-        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @header-height="setHeaderHeight">
+        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @edit-markdown="editMarkdown" @header-height="setHeaderHeight">
       </component>
 
       <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height - (footerHeight || 0)}px;`">
@@ -226,6 +226,12 @@
             console.log('showMarkdown', url)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1000,height=1200,scrollbars=yes,status=yes`)
+          },
+          editMarkdown() {
+            const url = `https://editor-web-atjcn6za6q-uc.a.run.app/${acct}/${repo}/${path === '/' ? window._essay : path}.md`
+            console.log('editMarkdown', url)
+            if (this.markdownViewer) { this.markdownViewer.close() }
+            this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1200,height=1800,scrollbars=yes,status=yes`)
           }
         },
         watch: {

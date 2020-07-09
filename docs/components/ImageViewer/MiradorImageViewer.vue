@@ -9,6 +9,7 @@ module.exports = {
   name: 'MiradorImageViewer',
   props: {
     seq: { type: Number, default: 1 },
+    autohideToolbar: { type: Boolean, default: false },
     items: { type: Array, default: function(){ return []} },
     width: { type: Number, default: 1000 }, 
     height: { type: Number, default: 1000 }
@@ -47,7 +48,7 @@ module.exports = {
         defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
         hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
         showLocalePicker: false, // Configure locale picker for multi-lingual metadata
-        sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
+        sideBarOpenByDefault: true, // Configure if the sidebar (and its content panel) is open by default
         panels: { // Configure which panels are visible in WindowSideBarButtons
           info: true,
           attribution: true,
@@ -65,25 +66,19 @@ module.exports = {
     })
     console.log('viewer', this.viewer)
     this.viewer.store.dispatch(this.viewer.actions.addWindow(this.windows[0]))
+
     // console.log(this.viewer.store.getState())
-    document.querySelectorAll(`#mirador-${this.seq}`).forEach(osd => {
-      osd.addEventListener('mouseenter', (e) => {
-        document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'flex')
-        // Temporary fix/workaround for Mirador styling bug
-        /*
-        document.querySelectorAll('.mirador181')
-          .forEach(elem => {
-            elem.style.width = '260px';
-            elem.style.margin = '0'
-            elem.style.padding = '16px 8px 8px 16px';
-            elem.children.forEach(child => child.style.width = '260px')
-          })
-        */
+    if (this.autohideToolbar) {
+      document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'none')
+      document.querySelectorAll(`#mirador-${this.seq}`).forEach(osd => {
+        osd.addEventListener('mouseenter', (e) => {
+          document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'flex')
+        })
+        osd.addEventListener('mouseleave', (e) => {
+          document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'none')
+        })
       })
-      osd.addEventListener('mouseleave', (e) => {
-        document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'none')
-      })
-    })
+    }
   },
   beforeDestroy() {
     console.log('BeforeDestroy')
@@ -102,7 +97,3 @@ module.exports = {
   }
 }
 </script>
-
-<style scoped>
-  .mirador-window-top-bar { display: none; }
-</style>

@@ -15,7 +15,7 @@ module.exports = {
   }),
   computed: {
     height() { return Math.max(document.documentElement.clientHeight, window.innerHeight * 0.8) - 40 },
-    width() { return Math.max(document.documentElement.clientWidth, window.innerWidth * 0.8) },
+    width() { return Math.max(document.documentElement.clientWidth, window.innerWidth * 0.8) }
   },
   methods: {
     close() {
@@ -23,8 +23,8 @@ module.exports = {
     },
     getItems() {
       console.log(this.groups)
-      if (this.groups.image) {
-        this.items = this.groups.image.items
+      if (this.groups.imageViewer) {
+        this.items = this.groups.imageViewer.items
       } else if (this.groups.plantSpecimen) {
         console.log('plantSpecimens', this.groups.plantSpecimen)
         this.items = this.groups.plantSpecimen.items

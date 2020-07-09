@@ -71,28 +71,6 @@ def get_markdown(url):
     if resp.status_code == 200:
         return {'source': 'url', 'fname': url.split('/')[-1].replace('.md', ''), 'text': resp.content.decode('utf-8')}
 
-'''
-def get_gh_markdown(acct, repo, path=None):
-    # baseurl = content_baseurl(acct, repo)
-    for baseurl in (f'https://raw.githubusercontent.com/{acct}/{repo}/master{"/docs/content" if repo == "plant-humanities" else ""}', f'https://{acct}.github.io/{repo}'):
-        logger.info(f'get_gh_markdown: acct={acct} repo={repo} path={path} baseurl={baseurl}')
-        path_root = f'/{path}' if path else ''
-        files = [f'/{path_root}' if path_root.endswith('.md') else f'{path_root}.md']
-        files += [f'{path_root}/{file}' for file in ('index.md', 'home.md', 'README.md')]
-        for file in files:
-            url = f'{baseurl}{file}'
-            resp = requests.get(url)
-            logger.info(f'{url} {resp.status_code}')
-            if resp.status_code == 200:
-                return {
-                    'baseurl': baseurl,
-                    'source': 'gh',
-                    'fname': file.replace('.md', ''),
-                    'match': file.split('/')[-1],
-                    'text': resp.content.decode('utf-8')
-            }
-'''
-
 def get_gh_baseurls(acct, repo):
     baseurl = f'https://raw.githubusercontent.com/{acct}/{repo}/master'
     api_baseurl = f'https://api.github.com/repos/{acct}/{repo}/contents'
@@ -500,8 +478,8 @@ def essay(path=None):
             else:
                 cache_key = f'{site}|{acct}|{repo}|{path}'
                 cached = cache.get(cache_key) if not refresh else False
-                logger.info(f'essay: site={site} acct={acct} repo={repo} path={path} cached={cached and cached["sha"] == markdown["sha"]}')
-                if cached and cached['sha'] == markdown['sha']:
+                logger.info(f'essay: site={site} acct={acct} repo={repo} path={path} cached={cached and cached["sha"] == markdown.get("sha")}')
+                if cached and cached['sha'] == markdown.get('sha'):
                     html = cached['html']
                 else:
                     essay = Essay(html=markdown_to_html5(markdown, site, acct, repo, path or '/'), cache=cache, baseurl=baseurl, **kwargs)

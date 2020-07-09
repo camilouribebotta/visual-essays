@@ -42,7 +42,7 @@ const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https
 const defaultComponents = [
   { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
-  { name: 'defaultImageViewer', src: `${componentsBaseURL}/components/ImageViewer/DefaultImageViewer.vue` },
+  { name: 'staticImageViewer', src: `${componentsBaseURL}/components/ImageViewer/StaticImageViewer.vue` },
   { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/ImageViewer/MiradorImageViewer.vue` },
   { name: 'imageViewerModal', src: `${componentsBaseURL}/components/ImageViewer/ImageViewerModal.vue` },
   { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
@@ -62,7 +62,7 @@ const defaultComponents = [
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
 
-const VERSION = '0.7.5'
+const VERSION = '0.7.6'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
@@ -115,6 +115,7 @@ const customStyles = new Set()
 
 // Site components
 const getSiteConfig = async () => {
+  console.log(`getSiteConfig`)
   const response = await fetch('/config')
   const siteConfig = await response.json()
   if (siteConfig.components) {
@@ -278,6 +279,7 @@ const waitForContent = () => {
   const essayElem = document.getElementById('essay')
   if (!window._essay && essayElem && essayElem.innerText.length > 0) {
     window._essay = essayElem.dataset.name
+    console.log(`essay=${window._essay}`)
   }
   if (current != window._essay) {
     current = window._essay

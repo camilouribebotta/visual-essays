@@ -42,7 +42,7 @@
 
 <script>
   import { elemIdPath, itemsInElements, throttle } from '../utils'
-  const tabOrder = ['mapViewer', 'imageViewer', 'videoViewer']
+  const tabOrder = ['imageViewer', 'mapViewer', 'videoViewer']
 
   export default {
     name: 'Viewer',

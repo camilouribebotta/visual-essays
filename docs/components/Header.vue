@@ -12,6 +12,10 @@
           <v-list-item-action><v-icon>mdi-code-tags</v-icon></v-list-item-action>
           <v-list-item-content><v-list-item-title>View page markdown</v-list-item-title></v-list-item-content>
         </v-list-item>
+        <v-list-item @click="drawer = false; editMarkdown()">
+          <v-list-item-action><v-icon>mdi-file-edit-outline</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>Edit page markdown</v-list-item-title></v-list-item-content>
+        </v-list-item>
         <v-divider></v-divider>
         <v-list-item><v-list-item-content style="font-size:0.8em;margin-top:36px;">App version: {{appVersion}}</v-list-item-content></v-list-item>        
         <v-list-item><v-list-item-content style="font-size:0.8em;">Lib version: {{libVersion}}</v-list-item-content></v-list-item>
@@ -79,7 +83,7 @@
     },    
     data: () => ({
       drawer: false,
-      lastHeight: undefined 
+      lastHeight: undefined
     }),
     computed: {
       banner() { return this.essayConfig.banner || this.siteConfig.banner },
@@ -113,6 +117,9 @@
       },
       showMarkdown() {
         this.$emit('show-markdown')
+      },
+      editMarkdown() {
+        this.$emit('edit-markdown')
       },
       throttle(callback, interval) {
         let enableCall = true

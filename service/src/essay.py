@@ -15,7 +15,7 @@ import json
 import getopt
 import sys
 import hashlib
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 from time import time as now
 
 from bs4 import BeautifulSoup
@@ -436,6 +436,7 @@ class Essay(object):
                 return _jsonld
             logger.info(f'_get_entity_data: resp_code={resp.status_code} msg=${resp.text}')
 
+    '''
     def _get_manifest(self, item):
         logger.info(f'getManifest {item}')
         if 'manifest' not in item:
@@ -469,10 +470,133 @@ class Essay(object):
             
             #if 'otherContent' in manifest['sequences'][0]['canvases'][0]:
             #    item['annotations'] = f'source={item["annotations"]}&manifest='
-            # logger.info(json.dumps(manifest, indent=2))
+            logger.info(json.dumps(manifest, indent=2))
             if '@id' in manifest:
                 item['manifest'] = manifest['@id']
         logger.info(json.dumps(item, indent=2))
+        return item
+    '''
+
+    def _create_manifest(self, item):
+        logger.info(f'_create_manifest {item}')
+        manifest_defaults = {
+            'canvas': { 'height': 3000, 'width': 3000 },
+            'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
+        }
+        manifest = {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            'sequences': [{
+                'canvases': [{**manifest_defaults['canvas'], **{
+                    'images': [{**manifest_defaults['image'], **{
+                        'url': item['url']
+                    }}]
+                }}]
+            }]
+        }
+        # add optional properties
+        label = item.get('label')
+        if not label:
+            label = item.get('title')
+        if not label:
+            label = item.get('description')
+        if label:
+            manifest['label'] = label
+            manifest['sequences'][0]['canvases'][0]['label'] = label
+        metadata = dict([(k,v) for k,v in item.items() if v and k in ('attribution', 'date', 'description', 'license', 'logo', 'rights')])
+        metadata['source'] = item['url']
+
+        for fld in ('attribution', 'description', 'license', 'logo'):
+            if fld in metadata:
+                manifest[fld] = metadata.get(fld)
+        if metadata:
+            manifest['metadata'] = [{'label': k, 'value': v} for k,v in metadata.items()]
+        if 'annotations' in item:
+            manifest['sequences'][0]['canvases'][0]['otherContent'] = [{
+                '@id': item['annotations'],
+                '@type': 'sc:AnnotationList'
+            }]
+        resp = requests.post(
+            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+            headers={'Content-type': 'application/json'},
+            json=manifest
+        )
+        if resp.status_code == 200:
+            manifest = resp.json()
+            if '@id' in manifest:
+                item['manifest'] = manifest['@id']
+                if '@type' not in manifest:
+                    manifest = requests.get(item['manifest'], headers={'Content-type': 'application/json'}).json()
+        else:
+            manifest = None
+        return resp.status_code, manifest
+
+    def _urls_from_image_info(self, url):
+        if url[-1] == '/':
+            url = url[:-1]
+        if not url.endswith('info.json'):
+            url += '/info.json'
+        resp = requests.get(url, headers={'Content-type': 'application/json'})
+        static_url = None
+        iiif_url = None
+        if resp.status_code == 200:
+            info_json = resp.json()
+            logger.info(json.dumps(info_json, indent=2))
+            iiif_url = info_json["@id"]
+            fmt = 'jpg'
+            for profile in info_json.get('profile', []):
+                if isinstance(profile, dict) and 'formats' in profile:
+                    if 'jpg' in profile['formats'] or 'jpeg' in profile['formats'] or 'image/jpeg' in profile['formats']:
+                        fmt = 'jpg'
+                    else:
+                        fmt = profile['formats'][0].split('/')[-1]
+                break
+            static_url = f'{info_json["@id"]}/full/full/0/default.{fmt}'
+        return iiif_url, static_url
+
+    def _make_manifest(self, item):
+        logger.info(f'_make_manifest {item}')
+        manifest = None
+        url = None
+        for fld in ('url', 'src', 'alt-source', 'source'):
+            if fld in item:
+                url = item[fld]
+                break
+        if url:
+            parsed = urlparse(item[fld])
+            if '/blob/master' in parsed.path:
+                path_elems = parsed.path[1:].replace('/blob/master', '').split('/')
+                gh_acct = path_elems[0]
+                gh_repo = path_elems[1]
+                path = '/'.join(path_elems[2:])
+                url = f'https://raw.githubusercontent.com/{gh_acct}/{gh_repo}/master/{path}'
+            item['url'] = url
+        
+            status_code, manifest = self._create_manifest(item)
+            if status_code == 404:
+                # TODO: Create manifest from image info.json directly rather than getting a static image link
+                iiif_url, static_url = self._urls_from_image_info(item['url'])
+                logger.info(f'_urls_from_image_info: iiif_url={iiif_url} static_url={static_url}')
+                if static_url:
+                    item['url'] = static_url
+                    status_code, manifest = self._create_manifest(item)
+                else:
+                    del item['url']
+        return manifest
+
+    def _get_manifest(self, item):
+        logger.debug(f'getManifest {item}')
+        if 'manifest' in item:
+            if 'url' not in item or 'iiif-url' not in item:
+                manifest = requests.get(item['manifest'], headers={'Content-type': 'application/json'}).json()
+                item['url'] = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['@id']
+                item['iiif-url'] = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']
+        else:
+            manifest = self._make_manifest(item)
+            if manifest and '@id' in manifest:
+                item['manifest'] = manifest['@id']
+                item['url'] = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['@id']
+                item['iiif-url'] = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']
+        logger.debug(json.dumps(item, indent=2))
         return item
 
     _manifests_cache = {}
