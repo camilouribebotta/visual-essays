@@ -145,14 +145,13 @@ module.exports = {
             if (!feature.properties.id) {
               feature.properties.id = layerNum === 0 ? def.id : `${def.id}-${layerNum}`
             }
-            console.log(`feature: id=${feature.properties.id} layerid=${feature.properties.layerid}`)
+            // console.log(`feature: id=${feature.properties.id} layerid=${feature.properties.layerid}`)
             self.addEventHandlers(layer, layer.feature.properties.id)
             if (!def.title) {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || feature.properties['ne:NAME'] || undefined : undefined
               if (label) {
                 numFeatureLabels += 1
                 feature.properties.label = label
-                console.log(layer)
                 const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'MultiPolygon' || layer.feature.geometry.type === 'LineString'
                   ? layer.getBounds().getCenter()
                   : layer.getLatLng()
@@ -192,8 +191,6 @@ module.exports = {
           },
           // Style
           style: function(feature) {
-            console.log('style', feature.properties)
-
             for (let [prop, value] of Object.entries(feature.properties)) {
               if (value === 'null') {
                 feature.properties[prop] = null
@@ -206,7 +203,6 @@ module.exports = {
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
                 fillOpacity: parseFloat(def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5),
             }
-            console.log(style)
             return style
           },
           pointToLayer: function(feature, latlng) {
@@ -225,11 +221,9 @@ module.exports = {
         if (addToMap || def.active) {
           const currentLayers = new Set()
           this.map.eachLayer(layer => {if (layer.options.id) currentLayers.add(layer.options.id)})
-          console.log('currentLayers', currentLayers)
-          console.log('geojson', geojson.options.id)
           this.map.eachLayer(layer => console.log('layer', layer.options.id))
           //if (!currentLayers.has(geojson.options.id)) {
-            console.log('adding geojson.layer', geojson.options.id)
+            // console.log('adding geojson.layer', geojson.options.id)
             geojson.addTo(this.map)
           //}
         }
@@ -279,7 +273,6 @@ module.exports = {
     },
 
     syncLayers() {
-      console.log('syncLayers')
       const currentLayerIds = new Set(this.mapDef.layers.map(def => def.id))
       const _layers = {}
       const _active = new Set()
@@ -291,7 +284,6 @@ module.exports = {
               _layers[layer.options.label] = layer
               _active.add(layer.options.id)
             } else {
-              console.log('remove', layer.options.id)
               this.map.removeLayer(layer)
             }
           }
@@ -302,7 +294,6 @@ module.exports = {
         let layer
         const layerLabel = layerDef.title || layerDef.id
         if (!_layers[layerLabel]) {
-          console.log('add', layerDef.id, layerLabel)
           if (layerDef.type === 'geojson') {
             _active.add(layerDef.id)
             this.loadGeojson(layerDef)
@@ -385,7 +376,6 @@ module.exports = {
     selectedItemID: {
       handler: function (itemID, prior) {
         const layer = Object.values(this.layers).find(layer => layer.options.id === (itemID || prior))
-        console.log(`MapViewer.selectedItemID: value=${itemID} prior=${prior}`)
       },
       immediate: true
     },
@@ -433,7 +423,6 @@ module.exports = {
         const lmap = document.getElementById('lmap')
         if (lmap) {
           lmap.style.height = `${this.height}px`
-          console.log(`height=${this.height} viewport.height=${this.viewport.height} lmap=${lmap.style.height}`)
         }
       },
       immediate: true
@@ -446,7 +435,6 @@ module.exports = {
     },
     mapDef: {
       handler: function (mapDef, prior) {
-        console.log('mapDef', this.mapDef)
         const lmap = document.getElementById('lmap')
         if (lmap) {
           if (mapDef) {

@@ -38,9 +38,7 @@
 </template>
 
 <script>
-  import { addActivator } from './Activator'
   import { elemIdPath, itemsInElements } from '../utils'
-  // const tabOrder = ['map', 'image', 'video', 'location', 'place', 'person', 'plant', 'building', 'written_work', 'fictional_character', 'entity']
   const tabOrder = ['map', 'image', 'video']
 
   export default {
@@ -75,23 +73,11 @@
       this.$store.dispatch('setTriggerOffset', 100)
       if (this.$store.getters.layout === 'ho') {
           this.visualizerIsOpen = true
-          document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
       }
       this.viewerWidth = this.$refs.viewer.$el.parentElement.offsetWidth
-      // this.waitForEssay()
       this.$nextTick(() => this.init())
     },
     methods: {
-      /*
-      waitForEssay() {
-        console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
-        if (document.getElementById('essay')) {
-          this.init()
-        } else {
-          setTimeout(() => { this.waitForEssay() }, 1000)
-        }
-      },
-      */
       init() {
         Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
           para.title = elemIdPath(para.id).join(',')
@@ -100,31 +86,6 @@
             top: para.offsetTop,
             items: itemsInPara
           }
-          // Display/enable activator when cursor hovers over paragraph element
-          /*
-          para.addEventListener('mouseenter', (e) => {
-            const elemId = e.toElement.id
-            if (this.hoverElemId && this.hoverElemId !== elemId) {
-              const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
-              if (prior) { prior.style.display = 'none' }
-            }
-            this.hoverElemId = undefined
-            if (!this.visualizerIsOpen) {
-              this.hoverElemId = elemId
-              document.querySelector(`[data-id="${this.hoverElemId}"]`).style.display = 'inline-block'
-            }
-          })
-          */
-          /*
-          para.addEventListener('mouseleave', (e) => {
-            const elemId = e.toElement.id
-            if (this.hoverElemId) {
-              const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
-              if (prior) { prior.style.display = 'none' }
-            }
-            this.hoverElemId = undefined
-          })
-          */
           if (itemsInPara.length > 0) {
             para.classList.add('has-items')
             para.addEventListener('click', (e) => {
@@ -147,7 +108,6 @@
           }
         })
         this.addSpacer()
-        // cthis.addActivators()
       },
       addSpacer() {
         // Adds a spacer element that expands and contracts to match the size of the visualizer so
@@ -157,19 +117,9 @@
         this.spacer.style.height = 0
         document.getElementById('essay').appendChild(this.spacer)
       },
-      addActivators() {
-        const essay = document.getElementById('essay')
-        Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
-          const paraData = this.paragraphs[para.id]
-          if (paraData.items.length > 0) {
-            addActivator(essay, para.id, paraData.top, paraData.items.map(item => item.id).join(','), this.activatorClickHandler)
-          }
-        })
-      },
       openViewer(elemId) {
         if (this.paragraphs[elemId]) {
           this.visualizerIsOpen = true
-          document.querySelectorAll('.activator').forEach(activator => activator.style.display = 'none')
           let offset = 100
           let scrollable = document.getElementById('scrollableContent')
           if (scrollable) {
@@ -186,25 +136,6 @@
       closeViewer() {
         this.visualizerIsOpen = false
       },
-      activatorClickHandler(e) {
-        const selectedParaId = e.target.parentElement.attributes['data-id'].value
-        this.openViewer(selectedParaId)
-      },
-      /*
-      addItemClickHandlers(elemId) {
-        document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-          entity.addEventListener('click', this.itemClickHandler)
-        })
-      },
-      removeItemClickHandlers(elemId) {
-        const elem = document.getElementById(elemId)
-        if (elem) {
-          document.getElementById(elemId).querySelectorAll('.inferred, .tagged').forEach((entity) => {
-            entity.removeEventListener('click', this.itemClickHandler)
-          })
-        }
-      },
-      */
       addItemClickHandlers(elemId) {
         document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
           entity.addEventListener('click', this.itemClickHandler)
@@ -222,32 +153,9 @@
         e.stopPropagation()
         const elemId = e.target.attributes['data-eid'].value
         this.$store.dispatch('setSelectedItemID', elemId)
-        /*
-        const selectedItemId = e.toElement.attributes['data-eid'].value 
-        let found = false
-        for (let groupId in this.groups) {
-          const item = this.groups[groupId].items.find(item => item.id === selectedItemId)
-          if (item) {
-            this.activeTab = item.category === 'location' && this.groups.map
-              ? 'map'
-              : groupId
-            break
-          }
-        }
-        this.selected = selectedItemId
-        console.log(`itemClickHandler: selected=${this.selected} tab=${this.activeTab}`)
-        */
       }
     },
     watch: {
-      /*
-      footerHeight: {
-        handler: function () {
-          console.log(`viewportHeight=${this.viewportHeight} viewerHeight=${this.viewerHeight} footerHeight=${this.footerHeight} top=${this.viewportHeight/2}`)
-        },
-        immediate: true
-      },
-      */
       groups() {
         console.log(this.activeElement, this.groups)
         const availableGroups = []

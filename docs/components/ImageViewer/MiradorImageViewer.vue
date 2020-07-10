@@ -19,8 +19,7 @@ module.exports = {
     viewer: undefined
   }),
   computed: {
-    containerStyle() { return { position: 'relative', width: `${this.width}px`, height: `${this.height}px`, overflowY: 'auto !important' } },
-
+    containerStyle() { return { position: 'relative', width: `${this.width}px`, height: `${this.height}px`, overflowY: 'auto !important' } }
   },
   mounted() {
     console.log(`MiradorImageViewer.mounted: seq=${this.seq} height=${this.height} width=${this.width}`, this.items)
@@ -64,10 +63,8 @@ module.exports = {
         ]
       }
     })
-    console.log('viewer', this.viewer)
     this.viewer.store.dispatch(this.viewer.actions.addWindow(this.windows[0]))
 
-    // console.log(this.viewer.store.getState())
     if (this.autohideToolbar) {
       document.querySelectorAll('.mirador-window-top-bar').forEach(topBar => topBar.style.display = 'none')
       document.querySelectorAll(`#mirador-${this.seq}`).forEach(osd => {
@@ -80,16 +77,11 @@ module.exports = {
       })
     }
   },
-  beforeDestroy() {
-    console.log('BeforeDestroy')
-  },
   watch: {
     items: {
       handler: function () {
-        console.log('MiradorImageViewer.watch', this.items)
         Object.keys(this.viewer.store.getState().windows).forEach(windowKey => this.viewer.store.dispatch(this.viewer.actions.removeWindow(windowKey)))
         let windows = this.items.map(item => {return { manifestId: item.manifest } })
-        console.log('MiradorImageViewer.addWindow', windows[0])
         this.viewer.store.dispatch(this.viewer.actions.addWindow(windows[0]))
       },
       immediate: false

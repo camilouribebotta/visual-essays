@@ -31,14 +31,6 @@
 -->
 
 <param ve-component 
-       name="bfsNetwork"
-       src="/components/BFSNetwork.vue"
-       selectors="tag:bfs-network"
-       icon="fa-chart-network"
-       label="BFS Network"
-       dependencies="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.15.1/cytoscape.min.js">
-
-<param ve-component 
        name="plant-specimen"
        src="components/PlantSpecimenViewer.vue"
        selectors="tag:plant-specimen"
@@ -80,7 +72,12 @@
 ## OpenSeadragon Image Viewer
 
 Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-century Florentine aristocrat Ginevra de' Benci (born c.  1458). The oil-on-wood portrait was acquired by the National Gallery of Art in Washington, D.C. in 1967. The sum of US$5 million—an absolute record price at the time—came from the Ailsa Mellon Bruce Fund and was paid to the Princely Family of Liechtenstein. It is the only painting by Leonardo on public view in the Americas.
-<param ve-bfs-network>
+<param ve-image
+       primary
+       fit="cover"
+       title="Ann Arbor Art Fair"
+       url="https://upload.wikimedia.org/wikipedia/commons/0/02/Ann_Arbor_Art_Fair%2C_2019.jpg"
+       attribution="Wikimedia Commons">
 <param ve-plant-specimen primary eid="Q165321" max="1">
 <!--
 <param ve-plant-specimen eid="Q12844029" max="1" reverse="true">
@@ -90,12 +87,7 @@ Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-centur
 <param ve-starter attr1="value1">
 <param ve-storiiies id="a71cm">
 <!-- <param ve-image mirador primary manifest="https://free.iiifhosting.com/iiif/8d631316c0828c59b2ff0a0fd414e81e99b91732cd251810210fed6891b332b0"> -->
-<param ve-image
-       open-seadragon
-       fit="cover"
-       title="British Isles"
-       url="http://free.iiifhosting.com/iiif/4be425f64bc8f22f5ba88d8d536f28c5de4e4d919e6b2861daeef807b52ecce0"
-       attribution="Custom attribution statement">
+
 
 Another test image.  
 <!-- <param ve-open-seadragon
@@ -118,9 +110,7 @@ Prunus occidentalis is a plant in the family Rosaceae of the order Rosales. The 
 <param ve-image
        title="Holotype of Prunus serrulata Lindley f. shibayama E. H. Wilson [family ROSACEAE]"
        fit="cover"
-       url="https://plants.jstor.org/fsi/img/size3/alukaplant/a/phase_01/a0000/a00032200.jpg"
-       thumbnail="https://plants.jstor.org/fsi/img/size1/alukaplant/a/phase_01/a0000/a00032200.jpg"
-       hires="https://plants.jstor.org/seqapp/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&rft_id=/jp2/fpx/16/gpi-a-typspe-01-42/a0000/a00032200.jp2">
+       url="https://plants.jstor.org/seqapp/adore-djatoka/resolver?url_ver=Z39.88-2004&svc_id=info:lanl-repo/svc/getRegion&svc_val_fmt=info:ofi/fmt:kev:mtx:jpeg2000&svc.format=image/jpeg&rft_id=/jp2/fpx/16/gpi-a-typspe-01-42/a0000/a00032200.jp2">
 
 ### Plant Hierarchy Viewer
 

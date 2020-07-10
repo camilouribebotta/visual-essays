@@ -481,7 +481,7 @@ class Essay(object):
         logger.info(f'_create_manifest {item}')
         manifest_defaults = {
             'canvas': { 'height': 3000, 'width': 3000 },
-            'image': { 'region': 'full', 'size': 'full', 'rotation': '0' }
+            'image': { 'region': 'full', 'size': '1000,', 'rotation': '0' }
         }
         manifest = {
             '@context': 'http://iiif.io/api/presentation/2/context.json',

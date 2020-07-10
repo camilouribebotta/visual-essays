@@ -27,6 +27,7 @@ export default new Vuex.Store({
     itemsInActiveElements: [],
     hoverItemID: null,
     selectedItemID: null,
+    selectedImageID: null,
     height: 0,
     width: 0,
     topMargin: 0,
@@ -83,6 +84,7 @@ export default new Vuex.Store({
     },
     setHoverItemID (state, id) { state.hoverItemID = id },
     setSelectedItemID (state, id) { state.selectedItemID = id },
+    setSelectedImageID (state, id) { state.selectedImageID = id },
     updateItem (state, item) {
       state.items = [ 
         ...state.items.filter(c => c.id !== item.id),
@@ -123,6 +125,7 @@ export default new Vuex.Store({
     setActiveElements: ({ commit }, elems) => commit('setActiveElements', elems),
     setHoverItemID: ({ commit }, id) => commit('setHoverItemID', id),
     setSelectedItemID: ({ commit }, id) => commit('setSelectedItemID', id),
+    setSelectedImageID: ({ commit }, id) => commit('setSelectedImageID', id),
     updateItem: ({ commit }, entity) => commit('updateItem', entity),
     setViewport: ({ commit }, viewport) => commit('setViewport', viewport),
     setTopMargin: ({ commit }, height) => commit('setTopMargin', height),
@@ -152,6 +155,7 @@ export default new Vuex.Store({
     itemsInActiveElements: state => state.itemsInActiveElements,
     hoverItemID: state => state.hoverItemID,
     selectedItemID: state => state.selectedItemID,
+    selectedImageID: state => state.selectedImageID,
     height: state => state.height,
     width: state => state.width,
     topMargin: state => state.topMargin,

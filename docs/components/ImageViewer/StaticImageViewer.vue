@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!-- <div class="text-center">
-       <v-btn color="red lighten-2" @click="hiresViewerIsOpen = true">Open dialog</v-btn>
-    </div> -->
     <!-- https://github.com/ChristophAnastasiades/Lingallery -->
     <lingallery
       :iid.sync="currentId"
@@ -31,7 +28,6 @@ module.exports = {
     currentId: undefined
   }),
   computed: {
-    // () { return this.items.map(item => {return { manifestId: item.manifest } }) },
     images() {
       const images = this.items.map(item => { 
         const mapped = {
@@ -56,8 +52,9 @@ module.exports = {
       .forEach(fig => {
         fig.addEventListener('click', (e) => {
           if (e.target.tagName === 'IMG') {
-            this.$modal.show('mirador')
-            const selected = this.items.find(item => item.url === e.target.src)
+            const selected = this.items.find(item => item.url === e.target.src).id
+            this.$store.dispatch('setSelectedImageID', selected)
+            this.$modal.show('image-viewer-modal')
           }
         })
       })

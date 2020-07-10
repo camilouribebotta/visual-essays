@@ -13,8 +13,6 @@ import VModal from 'vue-js-modal'
 import 'leaflet'
 import 'leaflet-polylinedecorator'
 
-// import mirador from '../assets/js/mirador.min.js'
-
 // import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
@@ -36,6 +34,8 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
+const VERSION = '0.7.7'
+
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
 
@@ -44,6 +44,7 @@ const defaultComponents = [
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
   { name: 'staticImageViewer', src: `${componentsBaseURL}/components/ImageViewer/StaticImageViewer.vue` },
   { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/ImageViewer/MiradorImageViewer.vue` },
+  { name: 'openSeadragonImageViewer', src: `${componentsBaseURL}/components/ImageViewer/OpenSeadragonImageViewer.vue` },
   { name: 'imageViewerModal', src: `${componentsBaseURL}/components/ImageViewer/ImageViewerModal.vue` },
   { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
   // { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
@@ -54,15 +55,11 @@ const defaultComponents = [
   { name: 'horizontalViewer', component: HorizontalViewer },
   { name: 'verticalViewer', component: VerticalViewer },
   { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
-  //{ name: 'cardsImageViewer', src: `${componentsBaseURL}/components/ImageViewer/CardsImageViewer.vue` },
-  //{ name: 'hiresImageViewer', src: `${componentsBaseURL}/components/ImageViewer/HiresImageViewer.vue` },
   { name: 'entityInfobox', src: `${componentsBaseURL}/components/EntityInfobox.vue` }
 ]
 
 const components = {}
 defaultComponents.forEach(component => components[component.name] = component)
-
-const VERSION = '0.7.6'
 
 console.log(`visual-essays js lib ${VERSION}`)
 
