@@ -122,8 +122,8 @@
       viewMarkdown() {
         this.$emit('view-markdown')
       },
-      editMarkdown() {
-        this.$emit('edit-markdown', 'default')
+      editMarkdown(editor) {
+        this.$emit('edit-markdown', editor)
       },
       throttle(callback, interval) {
         let enableCall = true
