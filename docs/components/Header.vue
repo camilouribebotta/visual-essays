@@ -8,7 +8,7 @@
           <v-list-item-content><v-list-item-title>{{menuItem.title}}</v-list-item-title></v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item @click="drawer = false; showMarkdown()">
+        <v-list-item @click="drawer = false; viewMarkdown()">
           <v-list-item-action><v-icon>mdi-code-tags</v-icon></v-list-item-action>
           <v-list-item-content><v-list-item-title>View page markdown</v-list-item-title></v-list-item-content>
         </v-list-item>
@@ -115,11 +115,11 @@
         this.drawer = false
         this.$emit('menu-item-clicked', file)
       },
-      showMarkdown() {
-        this.$emit('show-markdown')
+      viewMarkdown() {
+        this.$emit('view-markdown')
       },
       editMarkdown() {
-        this.$emit('edit-markdown')
+        this.$emit('edit-markdown', 'default')
       },
       throttle(callback, interval) {
         let enableCall = true
