@@ -12,9 +12,13 @@
           <v-list-item-action><v-icon>mdi-code-tags</v-icon></v-list-item-action>
           <v-list-item-content><v-list-item-title>View page markdown</v-list-item-title></v-list-item-content>
         </v-list-item>
-        <v-list-item @click="drawer = false; editMarkdown()">
+        <v-list-item @click="drawer = false; editMarkdown('default')">
           <v-list-item-action><v-icon>mdi-file-edit-outline</v-icon></v-list-item-action>
-          <v-list-item-content><v-list-item-title>Edit page markdown</v-list-item-title></v-list-item-content>
+          <v-list-item-content><v-list-item-title>Edit page in default editor</v-list-item-title></v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="drawer = false; editMarkdown('stackedit')">
+          <v-list-item-action><v-icon>mdi-file-edit-outline</v-icon></v-list-item-action>
+          <v-list-item-content><v-list-item-title>Edit page in Stackedit</v-list-item-title></v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item><v-list-item-content style="font-size:0.8em;margin-top:36px;">App version: {{appVersion}}</v-list-item-content></v-list-item>        
