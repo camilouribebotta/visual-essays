@@ -34,7 +34,7 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.8'
+const VERSION = '0.7.9'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
@@ -115,13 +115,15 @@ const customStyles = new Set()
 const getSiteConfig = async () => {
   let configUrl = '/config'
   const hostname = window.location.hostname
-  if (hostname === 'localhost' || hostname === 'visual-essay.app') {
+  console.log(`main.js.hostname=${hostname}`)
+  if (hostname === 'localhost' || hostname === 'visual-essays.app') {
     const pathElems = window.location.pathname.replace(/\/essay/, '').split('/')
+    console.log('main.js.pathElems', pathElems)
     if (pathElems.length >= 3) {
       configUrl += `/${pathElems[1]}/${pathElems[2]}`
     }
   }
-  console.log(`getSiteConfig`, configUrl)
+  console.log(`main.js.getSiteConfig=${configUrl}`)
   const response = await fetch(configUrl)
   const siteConfig = await response.json()
   if (siteConfig.components) {

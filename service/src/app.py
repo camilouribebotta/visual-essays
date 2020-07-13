@@ -445,7 +445,7 @@ def essay(path=None):
         else:
             path_elems = path.split('/') if path else []
             logger.info(path_elems)
-            if site in ('localhost', 'visual-essay.app'):
+            if site in ('localhost', 'visual-essays.app'):
                 acct = path_elems[0] if len(path_elems) == 2 else DEFAULT_ACCT
                 repo = path_elems[1] if len(path_elems) == 2 else DEFAULT_REPO
                 path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
@@ -508,7 +508,7 @@ def config(path=None):
             acct = path_elems[0] if len(path_elems) == 2 else DEFAULT_ACCT
             repo = path_elems[1] if len(path_elems) == 2 else DEFAULT_REPO
             if ENV == 'dev':
-                browser_root = '/' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
+                browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
                 baseurl = 'http://localhost:5000'
                 assets_baseurl = 'http://localhost:5000/assets'
                 config_path = f'{DOCS_ROOT}/config.json'
@@ -517,7 +517,7 @@ def config(path=None):
                     _config = json.load(open(config_path, 'r'))
             else:
                 path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
-                browser_root = '/' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
+                browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
                 baseurl, _ = get_gh_baseurls(acct, repo)
                 assets_baseurl = baseurl
                 config_path = f'{baseurl}/config.json'
@@ -527,7 +527,7 @@ def config(path=None):
         else:
             acct = KNOWN_SITES.get(site, {}).get('acct', )
             repo = KNOWN_SITES.get(site, {}).get('repo')
-            browser_root = '/'
+            browser_root = ''
             baseurl, _ = get_gh_baseurls(acct, repo)
             assets_baseurl = baseurl
             config_path = f'{baseurl}/config.json'

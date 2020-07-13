@@ -87,9 +87,11 @@
   const md = new MobileDetect(window.navigator.userAgent)
   let isPhone = md.phone() !== null
   let isTouchDevice = md.phone() !== null || md.tablet()
+  console.log(`index.html.configUrl=${configUrl}`)
   const configUrl = hostname === 'visual-essays.app'
     ? `${service}/config/${acct}/${repo}`
     : `${service}/config${location.pathname === '/' ? '' : location.pathname}`
+  console.log(`index.html.configUrl=${configUrl}`)
   fetch(configUrl)
     .then(resp => {return resp.ok ? resp.json() : {}})
     .then(siteConfig => {
@@ -213,7 +215,7 @@
               // let browserPath = `${hostname === 'jstor-labs.github.io'? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
               // let browserPath = `${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
               let browserPath = path || '/'
-              if (hostname === 'localhost' && acct === 'jstor-labs' && repo === 'visual-essays' || hostname === 'visual-essay.app') {
+              if (hostname === 'localhost' && acct === 'jstor-labs' && repo === 'visual-essays' || hostname === 'visual-essays.app') {
                 browserPath = `${acct}/${repo}${path === '/' ? '' : path || ''}`
               }
               browserPath = `${browserRoot}${(!path || path === '/') ? '' : path}`
