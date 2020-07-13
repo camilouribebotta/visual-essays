@@ -19,7 +19,7 @@
       <component v-bind:is="isPhone ? 'siteMobileHeader' : 'siteHeader'"
         :site-config="siteConfig" :essay-config="essayConfig" :nav="nav" :progress="progress" 
         :app-version="appVersion" :lib-version="libVersion"
-        @menu-item-clicked="menuItemClicked" @show-markdown="showMarkdown" @edit-markdown="editMarkdown" @header-height="setHeaderHeight">
+        @menu-item-clicked="menuItemClicked" @view-markdown="viewMarkdown" @edit-markdown="editMarkdown" @header-height="setHeaderHeight">
       </component>
 
       <v-sheet id="scrollableContent" class="overflow-y-auto" :style="`height:${height - (footerHeight || 0)}px;`">
@@ -64,7 +64,10 @@
       : defaults[hostname]
         ? `https://${hostname}`
         : `https://visual-essays.app`
-  let acct, repo, path
+
+  let acct, repo, path, browserRoot
+  
+  /*
   const pathElems = (window.location.hash ? window.location.hash.slice(1) : window.location.pathname.slice(1)).split('/').slice(hostname.indexOf('github.io') > 0 ? 1 : 0).filter(elem => elem !== '')
   console.log('pathElems:', pathElems)
 
@@ -79,18 +82,24 @@
     repo = defaults[hostname].repo
     path = `/${pathElems.join('/')}`
   }
+  */
 
   const md = new MobileDetect(window.navigator.userAgent)
   let isPhone = md.phone() !== null
   let isTouchDevice = md.phone() !== null || md.tablet()
-
-  console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} path=${path} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
-
-  // const configUrl = `${service}/config` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '')
-  fetch(`${service}/config`)
+  const configUrl = hostname === 'visual-essays.app'
+    ? `${service}/config/${acct}/${repo}`
+    : `${service}/config${location.pathname === '/' ? '' : location.pathname}`
+  fetch(configUrl)
     .then(resp => {return resp.ok ? resp.json() : {}})
     .then(siteConfig => {
       console.log('siteConfig', siteConfig)
+      acct = siteConfig.acct
+      repo = siteConfig.repo
+      path = `/${siteConfig.path || ''}`
+      browserRoot = siteConfig.browserRoot
+      console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} path=${path} browserRoot=${browserRoot} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
+
       const siteComponents = {}
       if (siteConfig.components) {
         siteConfig.components.forEach(component => siteComponents[component.name] = component)
@@ -126,7 +135,7 @@
           essayConfig: {},
           essayCache: {},
           progress: 0,
-          appVersion: '0.5.2',
+          appVersion: '0.6.0',
           libVersion: undefined,
           current: undefined,
           markdownViewer: undefined,
@@ -176,7 +185,6 @@
             this.sync()
           },
           menuItemClicked(path) {
-            console.log('menuItemClicked', path)
             this.loadEssay(path)
           },
           cachingFetch(path, raw) {
@@ -184,8 +192,8 @@
             if (path === '/help') {
               url = `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
             } else {
-              if (hostname === 'visual-essays.app') {
-                url = `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (path ? `${path}` : '') + `${raw ? '?raw' : ''}`
+              if (hostname === 'visual-essays.app' || hostname === 'localhost') {
+                url = `${service}/essay` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (path === '/' ? '' : path || '') + `${raw ? '?raw' : ''}`
               } else {
                 url = `${service}/essay` + (path ? `${path}` : '') + `${raw ? '?raw' : ''}`
               }
@@ -200,43 +208,48 @@
             return this.essayCache[url]
           },
           loadEssay(path, replace) {
-            console.log('loadEssay', path, replace)
             this.cachingFetch(path)
             .then(html => {
-              let browserPath = `${hostname === 'jstor-labs.github.io' ? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
+              // let browserPath = `${hostname === 'jstor-labs.github.io'? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
+              // let browserPath = `${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
+              let browserPath = path || '/'
+              if (hostname === 'localhost' && acct === 'jstor-labs' && repo === 'visual-essays' || hostname === 'visual-essay.app') {
+                browserPath = `${acct}/${repo}${path === '/' ? '' : path || ''}`
+              }
+              browserPath = `${browserRoot}${(!path || path === '/') ? '' : path}`
+              console.log(`loadEssay: acct=${acct} repo=${repo} path=${path} browserPath=${browserPath} replace=${replace}`)
               if (replace) {
-                console.log(`replaceState: path=${path} browserPath=${browserPath}`)
-                history.replaceState({file: path}, '', browserPath)
+                history.replaceState({file: path || ''}, '', browserPath)
               } else {
-                console.log(`pushState: path=${path} browserPath=${browserPath}`)
-                history.pushState({file: path}, '', browserPath)
+                history.pushState({file: path || ''}, '', browserPath)
               }
               this.html = html
               this.current = path
               this.$nextTick(() => {
                 window._essay = document.getElementById('essay').dataset.name
+                console.log(`window._essay=${window._essay}`)
               })
             })
           },
-          showMarkdown() {
+          viewMarkdown() {
             const url = path === '/help' && hostname !== 'localhost'
               ? `https://visual-essays.app/essay/help${raw ? '?raw' : ''}`
               // : `${service}/markdown-viewer` + (acct ? `/${acct}` : '') + (repo ? `/${repo}` : '') + (this.current ? `/${this.current}` : '')
               : `${service}/markdown-viewer` + (this.current ? `${this.current}` : '')
-            console.log('showMarkdown', url)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1000,height=1200,scrollbars=yes,status=yes`)
           },
-          editMarkdown() {
-            const url = `https://editor-web-atjcn6za6q-uc.a.run.app/${acct}/${repo}/${path === '/' ? window._essay : path}.md`
-            console.log('editMarkdown', url)
+          editMarkdown(editor) {
+            const url = editor == 'stackedit'
+              ? `https://stackedit.io/app#providerId=githubWorkspace&owner=${acct}&repo=${repo}&branch=master`
+              : `https://editor-web-atjcn6za6q-uc.a.run.app${this.siteConfig.gh_root}${path === '/' ? window._essay : this.current}.md`
+            console.log(`editMarkdown: editor=${editor} url=${url}`)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1200,height=1800,scrollbars=yes,status=yes`)
           }
         },
         watch: {
           isLoaded() {    
-            console.log('isLoaded', this.isLoaded)            
             if (this.isLoaded) {
               this.isLoaded = false
               this.$nextTick(() => {
@@ -248,7 +261,6 @@
                 const essayElem = document.getElementById('essay')
                 if (essayElem) {
                   essayElem.querySelectorAll('a').forEach(link => {
-                    console.log(link.href)
                     if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('/help#') > 0 ) {
                       let target = link.dataset.target
                       if (!target) { 

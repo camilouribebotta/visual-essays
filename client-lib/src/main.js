@@ -34,12 +34,13 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.7'
+const VERSION = '0.7.8'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
 
 const defaultComponents = [
+  { name: 'siteHeader', src: `${componentsBaseURL}/components/Header.vue` },
   { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
   { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
   { name: 'staticImageViewer', src: `${componentsBaseURL}/components/ImageViewer/StaticImageViewer.vue` },
@@ -112,8 +113,16 @@ const customStyles = new Set()
 
 // Site components
 const getSiteConfig = async () => {
-  console.log(`getSiteConfig`)
-  const response = await fetch('/config')
+  let configUrl = '/config'
+  const hostname = window.location.hostname
+  if (hostname === 'localhost' || hostname === 'visual-essay.app') {
+    const pathElems = window.location.pathname.replace(/\/essay/, '').split('/')
+    if (pathElems.length >= 3) {
+      configUrl += `/${pathElems[1]}/${pathElems[2]}`
+    }
+  }
+  console.log(`getSiteConfig`, configUrl)
+  const response = await fetch(configUrl)
   const siteConfig = await response.json()
   if (siteConfig.components) {
     siteConfig.components.forEach(cfg => {
@@ -223,6 +232,7 @@ function initApp() {
 
   const qargs = parseQueryString()
   const essayConfig = vm.$store.getters.items.find(item => item.tag === 'config') || {}
+  console.log(essayConfig)
   vm.$store.dispatch('setLayout', isMobile ? 'hc' : (qargs.layout || essayConfig.layout || 'hc' ))
   vm.$store.dispatch('setShowBanner', window.app === undefined && !(qargs.nobanner === 'true' || qargs.nobanner === ''))
   vm.$store.dispatch('setContext', qargs.context || essayConfig.context)

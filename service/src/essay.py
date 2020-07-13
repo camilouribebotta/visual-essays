@@ -15,6 +15,7 @@ import json
 import getopt
 import sys
 import hashlib
+import traceback
 from urllib.parse import quote, urlparse
 from time import time as now
 
@@ -539,18 +540,22 @@ class Essay(object):
         static_url = None
         iiif_url = None
         if resp.status_code == 200:
-            info_json = resp.json()
-            logger.info(json.dumps(info_json, indent=2))
-            iiif_url = info_json["@id"]
-            fmt = 'jpg'
-            for profile in info_json.get('profile', []):
-                if isinstance(profile, dict) and 'formats' in profile:
-                    if 'jpg' in profile['formats'] or 'jpeg' in profile['formats'] or 'image/jpeg' in profile['formats']:
-                        fmt = 'jpg'
-                    else:
-                        fmt = profile['formats'][0].split('/')[-1]
-                break
-            static_url = f'{info_json["@id"]}/full/full/0/default.{fmt}'
+            try:
+                info_json = resp.json()
+                logger.info(json.dumps(info_json, indent=2))
+                iiif_url = info_json["@id"]
+                fmt = 'jpg'
+                for profile in info_json.get('profile', []):
+                    if isinstance(profile, dict) and 'formats' in profile:
+                        if 'jpg' in profile['formats'] or 'jpeg' in profile['formats'] or 'image/jpeg' in profile['formats']:
+                            fmt = 'jpg'
+                        else:
+                            fmt = profile['formats'][0].split('/')[-1]
+                    break
+                static_url = f'{info_json["@id"]}/full/full/0/default.{fmt}'
+            except:
+                logger.warning(traceback.format_exc())
+                logger.warning(url)
         return iiif_url, static_url
 
     def _make_manifest(self, item):
@@ -573,7 +578,9 @@ class Essay(object):
         
             status_code, manifest = self._create_manifest(item)
             if status_code == 404:
+                logger.info(f'image not found: {item["url"]}')
                 # TODO: Create manifest from image info.json directly rather than getting a static image link
+                '''
                 iiif_url, static_url = self._urls_from_image_info(item['url'])
                 logger.info(f'_urls_from_image_info: iiif_url={iiif_url} static_url={static_url}')
                 if static_url:
@@ -581,10 +588,11 @@ class Essay(object):
                     status_code, manifest = self._create_manifest(item)
                 else:
                     del item['url']
+                '''
         return manifest
 
     def _get_manifest(self, item):
-        logger.debug(f'getManifest {item}')
+        logger.info(f'_get_manifest {item}')
         if 'manifest' in item:
             if 'url' not in item or 'iiif-url' not in item:
                 manifest = requests.get(item['manifest'], headers={'Content-type': 'application/json'}).json()
@@ -601,11 +609,13 @@ class Essay(object):
 
     _manifests_cache = {}
     def _get_manifests(self):
+        logger.info('_get_manifests')
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = {}
             for item in self.markup.values():
                 if item['tag'] == 'image':
                     image_url = item.get('hires', item.get('url'))
+                    logger.info(f'{item["id"]} {item["tag"]} {image_url} {image_url in self._manifests_cache}')
                     if image_url in self._manifests_cache:
                         item['manifest'] = self._manifests_cache[image_url]
                         continue

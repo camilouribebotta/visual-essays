@@ -118,6 +118,7 @@ export function groupItems(items, componentSelectors) {
         }
       }
     })
+  console.log('groups', groups)
   return groups
 }
 

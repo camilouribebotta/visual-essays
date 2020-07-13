@@ -85,7 +85,7 @@ Ginevra de' Benci is a portrait painting by Leonardo da Vinci of the 15th-centur
 <param ve-image mirador manifest="https://storiiies.cogapp.com/manifestJSON?manifest=https://jqz7t23pp9.execute-api.us-east-1.amazonaws.com/dev/manifest/1d1dh/manifest.json">
 -->
 <param ve-starter attr1="value1">
-<param ve-storiiies id="a71cm">
+<param ve-storiiies id="fc1dn">
 <!-- <param ve-image mirador primary manifest="https://free.iiifhosting.com/iiif/8d631316c0828c59b2ff0a0fd414e81e99b91732cd251810210fed6891b332b0"> -->
 
 
