@@ -504,7 +504,7 @@ def config(path=None):
         # repo = path_elems[1] if len(path_elems) >= 2 else DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
         logger.info(f'config: site={path_elems} ENV={ENV}')
         _config = {}
-        if site in ('localhost', 'visual-essay.app'):
+        if site in ('localhost', 'visual-essays.app'):
             acct = path_elems[0] if len(path_elems) == 2 else DEFAULT_ACCT
             repo = path_elems[1] if len(path_elems) == 2 else DEFAULT_REPO
             if ENV == 'dev':

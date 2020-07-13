@@ -87,10 +87,15 @@
   const md = new MobileDetect(window.navigator.userAgent)
   let isPhone = md.phone() !== null
   let isTouchDevice = md.phone() !== null || md.tablet()
-  console.log(`index.html.configUrl=${configUrl}`)
-  const configUrl = hostname === 'visual-essays.app'
-    ? `${service}/config/${acct}/${repo}`
-    : `${service}/config${location.pathname === '/' ? '' : location.pathname}`
+
+  let configUrl = '/config'
+  if (hostname === 'localhost' || hostname === 'visual-essays.app') {
+    const pathElems = window.location.pathname.split('/').filter(pathElem => pathElem !== '')
+    console.log('index.html.pathElems', pathElems)
+    if (pathElems.length >= 2) {
+      configUrl += `/${pathElems[0]}/${pathElems[1]}`
+    }
+  }
   console.log(`index.html.configUrl=${configUrl}`)
   fetch(configUrl)
     .then(resp => {return resp.ok ? resp.json() : {}})
