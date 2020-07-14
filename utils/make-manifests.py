@@ -21,7 +21,7 @@ import getopt
 from urllib.parse import quote, urlparse
 
 default_workbook = 'Kent images'
-default_worksheet = 'iiif3'
+default_worksheet = 'metadata'
 
 import gspread
 from gspread.models import Cell

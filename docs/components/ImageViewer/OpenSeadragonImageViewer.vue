@@ -41,7 +41,8 @@ module.exports = {
         showNavigationControl: false,
         minZoomImageRatio: 0.2,
         maxZoomPixelRatio: 5,
-        homeFillsViewer: this.fit === 'cover'
+        homeFillsViewer: this.fit === 'cover',
+        degrees: parseInt(item.rotate || '0')
       })
       this.viewer.world.addHandler('add-item', (e) => {
         const size = this.viewer.world.getItemAt(0).getContentSize()
