@@ -124,7 +124,7 @@
         },
         data: () => ({
           nav: [
-            { title: 'Home', icon: 'mdi-home', enabled: true },
+            { path: '/', title: 'Home', icon: 'mdi-home', enabled: true },
             { path: '/about', title: 'About', icon: 'mdi-information', enabled: false },
             { path: '/contact', title: 'Contact', icon: 'mdi-contact-mail', enabled: false },
             { path: '/help', title: 'Help', icon: 'mdi-help-circle', enabled: false },
@@ -223,7 +223,7 @@
               if (hostname === 'localhost' && acct === 'jstor-labs' && repo === 'visual-essays' || hostname === 'visual-essays.app') {
                 browserPath = `${acct}/${repo}${path === '/' ? '' : path || ''}`
               }
-              browserPath = `${browserRoot}${(!path || path === '/') ? '' : path}`
+              browserPath = `${browserRoot}${(!path || path === '/') ? '/' : path}`
               console.log(`loadEssay: acct=${acct} repo=${repo} path=${path} browserPath=${browserPath} replace=${replace}`)
               if (replace) {
                 history.replaceState({file: path || ''}, '', browserPath)

@@ -479,7 +479,7 @@ class Essay(object):
     '''
 
     def _create_manifest(self, item):
-        logger.info(f'_create_manifest {item}')
+        logger.debug(f'_create_manifest {item}')
         manifest_defaults = {
             'canvas': { 'height': 3000, 'width': 3000 },
             'image': { 'region': 'full', 'size': '1000,', 'rotation': '0' }
@@ -542,7 +542,7 @@ class Essay(object):
         if resp.status_code == 200:
             try:
                 info_json = resp.json()
-                logger.info(json.dumps(info_json, indent=2))
+                logger.debug(json.dumps(info_json, indent=2))
                 iiif_url = info_json["@id"]
                 fmt = 'jpg'
                 for profile in info_json.get('profile', []):
@@ -559,7 +559,7 @@ class Essay(object):
         return iiif_url, static_url
 
     def _make_manifest(self, item):
-        logger.info(f'_make_manifest {item}')
+        logger.debug(f'_make_manifest {item}')
         manifest = None
         url = None
         for fld in ('url', 'src', 'alt-source', 'source'):
@@ -578,7 +578,7 @@ class Essay(object):
         
             status_code, manifest = self._create_manifest(item)
             if status_code == 404:
-                logger.info(f'image not found: {item["url"]}')
+                logger.debug(f'image not found: {item["url"]}')
                 # TODO: Create manifest from image info.json directly rather than getting a static image link
                 '''
                 iiif_url, static_url = self._urls_from_image_info(item['url'])
@@ -592,7 +592,7 @@ class Essay(object):
         return manifest
 
     def _get_manifest(self, item):
-        logger.info(f'_get_manifest {item}')
+        logger.debug(f'_get_manifest {item}')
         if 'manifest' in item:
             if 'url' not in item or 'iiif-url' not in item:
                 manifest = requests.get(item['manifest'], headers={'Content-type': 'application/json'}).json()
@@ -609,13 +609,13 @@ class Essay(object):
 
     _manifests_cache = {}
     def _get_manifests(self):
-        logger.info('_get_manifests')
+        logger.debug('_get_manifests')
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             futures = {}
             for item in self.markup.values():
                 if item['tag'] == 'image':
                     image_url = item.get('hires', item.get('url'))
-                    logger.info(f'{item["id"]} {item["tag"]} {image_url} {image_url in self._manifests_cache}')
+                    logger.debug(f'{item["id"]} {item["tag"]} {image_url} {image_url in self._manifests_cache}')
                     if image_url in self._manifests_cache:
                         item['manifest'] = self._manifests_cache[image_url]
                         continue
@@ -627,7 +627,7 @@ class Essay(object):
                 item = future.result()
                 if 'manifest' in item:
                     self._manifests_cache[image_url] = item['manifest']
-                logger.info(f'id={item["id"]} manifest={item.get("manifest")}')
+                logger.debug(f'id={item["id"]} manifest={item.get("manifest")}')
 
     @property
     def json(self):

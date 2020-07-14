@@ -96,7 +96,7 @@ export function groupItems(items, componentSelectors) {
   const exclude = ['essay']
   const groups = {}
   if (componentSelectors && componentSelectors.tag && componentSelectors.tag.map) {
-    const maps = items.filter(item => item.tag === 'map')  
+    const maps = items.filter(item => item.tag === 'map')
     let selectedMap = maps.length > 0 ? { ...maps[0], ...{ layers: [] } } : undefined
     if (selectedMap) {
       groups.mapViewer = { ...componentSelectors.tag.map[0], ...{ items: [selectedMap] } }

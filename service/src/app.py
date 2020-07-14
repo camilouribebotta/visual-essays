@@ -47,7 +47,6 @@ DEFAULT_REPO = None
 
 with open(f'{BASEDIR}/gh-token', 'r') as fp:
     GH_CREDS = f'Token {fp.read()}'
-logger.info(GH_CREDS)
 
 KNOWN_SITES = {
     # 'localhost': {'acct': 'jstor-labs', 'repo': 'visual-essays'},
@@ -101,7 +100,7 @@ def get_gh_markdown(acct, repo, path=None):
                 'Accept': 'application/vnd.github.v3+json',
                 'User-agent': 'JSTOR Labs visual essays client'
             })
-            logger.info(f'{url} {resp.status_code}')
+            logger.debug(f'{url} {resp.status_code}')
             if resp.status_code == 200:
                 resp = resp.json()
                 return {
@@ -114,7 +113,7 @@ def get_gh_markdown(acct, repo, path=None):
                     'sha': resp['sha']
                 }
             else:
-                logger.info(resp.json())
+                logger.debug(resp.json())
     for file in files:
         url = f'{api_baseurl}{file}'
         resp = requests.get(url, headers={
@@ -122,7 +121,7 @@ def get_gh_markdown(acct, repo, path=None):
             'Accept': 'application/vnd.github.v3+json',
             'User-agent': 'JSTOR Labs visual essays client'
         })
-        logger.info(f'{url} {resp.status_code}')
+        logger.debug(f'{url} {resp.status_code}')
         if resp.status_code == 200:
             resp = resp.json()
             return {
@@ -152,7 +151,7 @@ def get_local_markdown(path=None):
     files = ['index.md', 'home.md', 'README.md'] if is_dir else [fname if fname.endswith('.md') else f'{fname}.md']
     for file in files:
         fpath = f'{fdir}/{file}'
-        logger.info(f'fpath{fpath} exists={os.path.exists(fpath)}')
+        logger.debug(f'fpath{fpath} exists={os.path.exists(fpath)}')
         if os.path.exists(fpath):
             with open(fpath, 'r') as fp:
                 return {
@@ -185,7 +184,7 @@ def convert_relative_links(soup, site, acct, repo, path, markdown):
             for attr in ('href',):
                 if attr in elem.attrs:
                     if not elem.attrs[attr].startswith('http'):
-                        logger.info(elem.attrs[attr])
+                        logger.debug(elem.attrs[attr])
                         if elem.attrs[attr].startswith('#'):
                             elem.attrs[attr] = f'{markdown["fname"]}{elem.attrs[attr]}'
                         if elem.attrs[attr][0] == '/':
@@ -195,9 +194,9 @@ def convert_relative_links(soup, site, acct, repo, path, markdown):
                                 rel_path = f'/{"/".join(path_elems)}' if len(path_elems) > 0 else ''
                             else:
                                 rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
-                            logger.info(f'path={path_elems} match={markdown["match"]} rel_path={rel_path}')
+                            logger.debug(f'path={path_elems} match={markdown["match"]} rel_path={rel_path}')
                             elem.attrs[attr] = f'{baseurl}{rel_path}/{elem.attrs[attr]}'
-                    logger.info(elem.attrs[attr])
+                    logger.debug(elem.attrs[attr])
     
     if site == 'localhost' and ENV == 'dev':
         # baseurl = f'http://localhost:5000/assets'
@@ -219,7 +218,7 @@ def convert_relative_links(soup, site, acct, repo, path, markdown):
                         else:
                             rel_path = f'/{"/".join(path_elems[:-1])}' if len(path_elems) > 1 else ''
                         elem.attrs[attr] = f'{baseurl}{rel_path}/{elem.attrs[attr]}'
-                    logger.info(elem.attrs[attr])
+                    logger.debug(elem.attrs[attr])
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -446,8 +445,8 @@ def essay(path=None):
             path_elems = path.split('/') if path else []
             logger.info(path_elems)
             if site in ('localhost', 'visual-essays.app'):
-                acct = path_elems[0] if len(path_elems) == 2 else DEFAULT_ACCT
-                repo = path_elems[1] if len(path_elems) == 2 else DEFAULT_REPO
+                acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT
+                repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO
                 path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
                 if ENV == 'dev':
                     baseurl = 'http://localhost:5000'
@@ -470,14 +469,14 @@ def essay(path=None):
                 return (markdown['text'], 200, cors_headers)
             else:
                 cache_key = f'{site}|{acct}|{repo}|{path}'
-                cached = cache.get(cache_key) if not refresh else False
+                cached = cache.get(cache_key) if not refresh and not site == 'localhost' else None
                 logger.info(f'essay: site={site} acct={acct} repo={repo} path={path} cached={cached and cached["sha"] == markdown.get("sha")}')
                 if cached and cached['sha'] == markdown.get('sha'):
                     html = cached['html']
                 else:
                     essay = Essay(html=markdown_to_html5(markdown, site, acct, repo, path or '/'), cache=cache, baseurl=baseurl, **kwargs)
                     html = add_vue_app(essay.soup, 'http://localhost:8080/lib/visual-essays.js' if site == 'localhost' else VE_JS_LIB)
-                    if 'url' in markdown and 'sha' in markdown:
+                    if not site == 'localhost' and 'url' in markdown and 'sha' in markdown:
                         cache[cache_key] = {'html': html, 'sha': markdown['sha']}
                 return (html, 200, cors_headers)
         else:
@@ -505,8 +504,14 @@ def config(path=None):
         logger.info(f'config: site={path_elems} ENV={ENV}')
         _config = {}
         if site in ('localhost', 'visual-essays.app'):
-            acct = path_elems[0] if len(path_elems) == 2 else DEFAULT_ACCT
-            repo = path_elems[1] if len(path_elems) == 2 else DEFAULT_REPO
+            if DEFAULT_ACCT:
+                acct = DEFAULT_ACCT
+                repo = DEFAULT_REPO
+                path = '/'.join(path_elems)
+            else:
+                acct = path_elems[0] if len(path_elems) >= 2 else None
+                repo = path_elems[1] if len(path_elems) >= 2 else None
+                path = '/'.join(path_elems[2:])
             if ENV == 'dev':
                 browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
                 baseurl = 'http://localhost:5000'
@@ -516,7 +521,7 @@ def config(path=None):
                 if os.path.exists(config_path):
                     _config = json.load(open(config_path, 'r'))
             else:
-                path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
+                # path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
                 browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
                 baseurl, _ = get_gh_baseurls(acct, repo)
                 assets_baseurl = baseurl
@@ -624,9 +629,9 @@ def components(path):
         logger.info(path)
         path_elems = path.split('/')
         fname = path_elems[-1]
-        for root in [DOCS_ROOT, os.path.dirname(BASEDIR)]:
+        for root in [DOCS_ROOT, f'{os.path.dirname(BASEDIR)}/docs']:
             logger.info(root)
-            _dir = f'{root}/docs/components/{"/".join(path_elems[:-1])}'
+            _dir = f'{root}/components/{"/".join(path_elems[:-1])}'
             exists = os.path.exists(f'{_dir}/{fname}')
             logger.info(f'components: dir={_dir} fname={fname} exists={exists}')
             if exists:

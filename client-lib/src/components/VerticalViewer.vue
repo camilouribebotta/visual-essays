@@ -65,7 +65,13 @@
       footerHeight() { return this.$store.getters.footerHeight },
       viewerHeight() { return this.$store.getters.height - this.headerHeight - this.footerHeight},
       primary() {return this.$store.getters.itemsInActiveElements.find(item => item.primary === 'true' || item.tag === 'primary') },
-      primaryTab() { return this.primary ? `${this.primary.tag}` : undefined },
+      primaryTab() {
+        let primary = this.primary ? `${this.primary.tag}` : undefined
+        if (primary === 'map' || primary === 'image') {
+          primary = `${primary}Viewer`
+        }
+        return primary
+      },
       mode() { return this.primary ? this.primary.mode : undefined },
       hoverItemID() { return this.$store.getters.hoverItemID },
       selectedItemID() { return this.$store.getters.selectedItemID },
@@ -237,7 +243,8 @@
           }
         })
         this.tabs = availableGroups
-        this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
+        // this.activeTab = (this.tabs.indexOf(this.activeTab) >= 0 ? this.activeTab : undefined) || this.primaryTab || availableGroups[0] 
+        this.activeTab = this.primaryTab || availableGroups[0] 
         console.log(`availableGroups=${availableGroups} activeTab=${this.activeTab}`)
       },
       primary: {

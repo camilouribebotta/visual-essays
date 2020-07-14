@@ -45,7 +45,7 @@ module.exports = {
       })
       this.viewer.world.addHandler('add-item', (e) => {
         const size = this.viewer.world.getItemAt(0).getContentSize()
-        this.imageOrientation = size.x > size.y ? 'landscape' : 'portrain'
+        this.imageOrientation = size.x > size.y ? 'landscape' : 'portrait'
         console.log(`width=${size.x} height=${size.y} imageOrientation=${this.imageOrientation}`)
       })
       this.viewer.addHandler('canvas-drag-end', (e) => {
