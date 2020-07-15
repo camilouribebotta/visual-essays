@@ -248,7 +248,7 @@
           editMarkdown(editor) {
             const url = editor == 'stackedit'
               ? `https://stackedit.io/app#providerId=githubWorkspace&owner=${acct}&repo=${repo}&branch=master`
-              : `https://editor-web-atjcn6za6q-uc.a.run.app${this.siteConfig.gh_root}${path === '/' ? window._essay : this.current}.md`
+              : `https://editor.visual-essays.app${this.siteConfig.gh_root}${path === '/' ? window._essay : this.current}.md`
             console.log(`editMarkdown: editor=${editor} url=${url}`)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1200,height=1800,scrollbars=yes,status=yes`)
