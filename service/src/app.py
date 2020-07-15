@@ -10,7 +10,7 @@ import sys
 import re
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.path.dirname(SCRIPT_DIR)
-DOCS_ROOT = os.path.dirname(BASEDIR)
+DOCS_ROOT = f'{os.path.dirname(BASEDIR)}/docs'
 logger.warning(DOCS_ROOT)
 sys.path.append(SCRIPT_DIR)
 
@@ -445,15 +445,16 @@ def essay(path=None):
             path_elems = path.split('/') if path else []
             logger.info(path_elems)
             if site in ('localhost', 'visual-essays.app'):
-                acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT
-                repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO
-                path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
+                acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
+                repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
                 if ENV == 'dev':
+                    path = '/'.join(path_elems[2:]) if DEFAULT_ACCT else '/'.join(path_elems)
                     baseurl = 'http://localhost:5000'
                     abs_path = f'{DOCS_ROOT}/{path}'
-                    logger.info(f'path={path} abs_path={abs_path} is_dir={os.path.isdir(abs_path)}')
+                    logger.info(f'acct={acct} repo={repo} path={path} abs_path={abs_path} is_dir={os.path.isdir(abs_path)}')
                     markdown = get_local_markdown(abs_path)
                 else:
+                    path = '/'.join(path_elems) if len(path_elems) == 1 or (DEFAULT_ACCT and acct != DEFAULT_ACCT) else '/'.join(path_elems[2:])
                     baseurl = content_baseurl(acct, repo)
                     markdown = get_gh_markdown(acct, repo, path)
             else:
@@ -501,7 +502,7 @@ def config(path=None):
         site = urlparse(request.base_url).hostname
         # acct = path_elems[0] if len(path_elems) >= 2 else DEFAULT_ACCT if DEFAULT_ACCT else KNOWN_SITES.get(site, {}).get('acct', )
         # repo = path_elems[1] if len(path_elems) >= 2 else DEFAULT_REPO if DEFAULT_REPO else KNOWN_SITES.get(site, {}).get('repo')
-        logger.info(f'config: site={path_elems} ENV={ENV}')
+        logger.info(f'config: site={site} path={path_elems} ENV={ENV}')
         _config = {}
         if site in ('localhost', 'visual-essays.app'):
             if DEFAULT_ACCT:
@@ -509,10 +510,11 @@ def config(path=None):
                 repo = DEFAULT_REPO
                 path = '/'.join(path_elems)
             else:
-                acct = path_elems[0] if len(path_elems) >= 2 else None
-                repo = path_elems[1] if len(path_elems) >= 2 else None
-                path = '/'.join(path_elems[2:])
+                acct = path_elems[0] if len(path_elems) > 1 else 'jstor-labs'
+                repo = path_elems[1] if len(path_elems) > 1 else 'visual-essays'
+                path = '/'.join(path_elems[2:]) if len(path_elems) > 1 else '/'.join(path_elems)
             if ENV == 'dev':
+                path = '/'.join(path_elems)
                 browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
                 baseurl = 'http://localhost:5000'
                 assets_baseurl = 'http://localhost:5000/assets'
@@ -522,7 +524,7 @@ def config(path=None):
                     _config = json.load(open(config_path, 'r'))
             else:
                 # path = '/'.join(path_elems) if DEFAULT_ACCT and acct != DEFAULT_ACCT else '/'.join(path_elems[2:])
-                browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
+                browser_root = '' if acct in (DEFAULT_ACCT, 'jstor-labs') and repo in (DEFAULT_REPO, 'visual-essays') else f'/{acct}/{repo}'
                 baseurl, _ = get_gh_baseurls(acct, repo)
                 assets_baseurl = baseurl
                 config_path = f'{baseurl}/config.json'
@@ -532,6 +534,7 @@ def config(path=None):
         else:
             acct = KNOWN_SITES.get(site, {}).get('acct', )
             repo = KNOWN_SITES.get(site, {}).get('repo')
+            path = '/'.join(path_elems)
             browser_root = ''
             baseurl, _ = get_gh_baseurls(acct, repo)
             assets_baseurl = baseurl
@@ -539,7 +542,7 @@ def config(path=None):
             resp = requests.get(config_path)
             logger.info(f'gh_config_path={config_path} exists={resp.status_code == 200}')
             _config = resp.json() if resp.status_code == 200 else {}
-        logger.info(f'config: site={site} acct={acct} repo={repo}')
+        logger.info(f'config: site={site} acct={acct} repo={repo} path={path}')
         for attr in ('banner', 'logo'):
             if attr in _config and not _config[attr].startswith('http'):
                 logger.info(_config[attr])
@@ -559,7 +562,7 @@ def config(path=None):
         _config['acct'] = acct
         _config['repo'] = repo
         _config['browserRoot'] = browser_root
-        _config['gh_root'] = f'/{acct}/{repo}{"/docs" if baseurl.endswith("/docs") else ""}'
+        _config['gh_root'] = f'/{acct}/{repo}{"/docs" if baseurl.endswith("/docs") else ""}' if acct else None
         return (_config, 200, cors_headers)
 
 @app.route('/<path:path>', methods=['GET'])

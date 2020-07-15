@@ -1,6 +1,6 @@
 <param ve-config
        title="Cherry Blossom"
-       banner="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/USA-Cherry_Blossom0.jpg/800px-USA-Cherry_Blossom0.jpg"
+       banner="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Cherry20190331105300.jpg/1024px-Cherry20190331105300.jpg"
        layout="vtl"
        num-maps="5"
        num-specimens="15"
@@ -18,6 +18,7 @@
 <param title="Prunus serotina" eid="Q158987">
 <param title="Stockholm" eid="Q1754">
 <param title="The Tale of Genji" eid="Q8269">
+<param title="Traverse City, Michigan" eid="Q984544">
 
 <param title="Washington, D. C." 
        eid="Q61"
@@ -40,19 +41,17 @@
        title="Polyline Decorator Test"
        url="https://jstor-labs.github.io/plant-humanities/geojson/polyline_decorator.json"
        active>
+<param ve-map-layer mapwarper mapwarper-id="48772" title="USDA Plant Hardiness Zones (2012)">
 
 ### Introduction
 
 Cherry blossoms have formed an integral part of the identity of Washington, D. C., ever since Japan gifted over three thousand cherry trees to the United States in 1912 as a symbol of friendship and political alliance. Until the final decades of the 19th century, Japanese cherry trees had often been misunderstood among Westerners, and garnered only modest attention in Europe. Subsequent European involvement in East Asia forced Japan, which had pursued a strict isolationist policy for centuries, to open its borders. As a result, Europeans enjoyed greater contact with Japanese culture, and a growing interest in cherry blossoms. With the planting of Japan’s gift of cherry trees in the <span id="Q956781">Tidal Basin</span>, cherry blossoms became accessible to the American public, entering Western consciousness on an unprecedented scale.
 <param title="West Yorkshire" eid="Q23083">
 <param ve-image
-       title="Holotype of Prunus serrulata Lindley f. shibayama E. H. Wilson [family ROSACEAE]"
-       fit="cover"
-       url="https://plants.jstor.org/fsi/img/size3/alukaplant/a/phase_01/a0000/a00032200.jpg">
-<param ve-image
-       title="Tidal Basin cherry trees"
-       fit="cover"
-       url="https://upload.wikimedia.org/wikipedia/commons/5/56/Washington_C_D.C._Tidal_Basin_cherry_trees.jpg"">
+       title="Tidal basin cherry blossom"
+       url="https://upload.wikimedia.org/wikipedia/commons/2/2a/Tidal_basin_cherry_blossom_closeup.JPG"
+       fit="cover">
+<param ve-storiiies id="3f1du">
 
 Although cherry blossoms became beloved fixtures of the city of Washington, attitudes toward cherry trees have at times varied: Washington’s cherry trees have been both objects of preservation and destruction, reverence and aggression. By the 1930s, cherry blossoms were so ingrained in the public’s imagination of Washington, D.C., that the removal of cherry trees on the Tidal Basin to make room for the Jefferson Memorial caused a public outcry. Only a few years later, during World War II, cherry blossoms’ association with Japan meant that they occupied an ambiguous place in the city, at once threateningly foreign and close to home. As gifts from Japan symbolizing the relationship between the two countries, the cherry trees on the Tidal Basin embody and give witness to the exchange between two cultures at the heart of Washington, D.C.
 <param ve-image
@@ -91,7 +90,6 @@ Flower-viewing or hanami is a centuries-old practice in Japan. Flower viewing st
 
 Before the craze for Japanese cherries in the West at the start of the twentieth century, Europeans knew little of Japanese cherry blossoms, and Westerners who visited Japan often complained of how flowering Japanese cherry trees bore no fruit. As shipping techniques improved in the early 19th century, Japanese cherries began to trickle into European gardens in 1832, but remained unfashionable until the 1870s. When Japan opened its borders, greater contact with Japanese culture fueled interest in cherry blossoms among Westerners. By the 1890’s, Japan was marketing and exporting cherry trees to the West. However, cherries did not reach wide audiences in the West until Japan gave thousands of cherry trees to the United States in the early 20th century.
 <param ve-map center="48.8,-38.2" zoom="3">
-<param title="Traverse City" eid="Q984544">
 
 #### Cherries in D.C.
 
@@ -120,3 +118,31 @@ Located in the Northeastern corner of Dumbarton Oaks, Cherry Hill is planted wit
 The Tale of Genji, written in the early years of the 11th century by the noblewoman Murasaki Shikibu, depicts an imperial court brimming with elegance and intrigue, where cherry-viewing parties set the stage for love and courtship. Although The Tale of Genji marked a turning-point in the development of the aesthetics of pathos and the keen awareness of ephemerality (monono aware), cherry blossoms are largely symbols of youth and love in the novel. This screen depicts a scene from chapter thirty four, New Herbs I, in which the courtier Kashiwagi falls in love while playing kickball under blossoming cherry trees as he catches sight of Genji’s new wife behind a bamboo blind that a cat has pushed open.
 
 “The women had been too delighted with the game, young gentlemen heedless of how they scattered the blossoms, to worry about blinds and concealment.”
+
+## The Great Lakes Fruit Belt
+
+<param ve-map center="41.651031, -83.541939" zoom="6">
+<param ve-map-layer geojson url="geojson/great-lakes-fruit-belt.json" title="Great Lakes Fruit Belt" active>
+
+Fruit Belt[^glfb] is a term in the United States for an area where the microclimate provides good conditions for fruit growing.  Fruit Belts are prominent around the North American Great Lakes region, notably West Michigan (Fruit Ridge) and western Northern Lower Michigan in tandem, and the southern shore of Lake Erie. The conditions that produce a micro-climate favorable to fruit cultivation are the same that produce lake-effect snow; therefore, Fruit Belts and snowbelts are often concurrent. The map at right shows Great Lakes snowbelts which cover a somewhat larger area than the fruit belt. Notably, there are no fruit belts in Michigan's Upper Peninsula.[citation needed] A Fruit Belt also exists in Central Washington State.  Berries are grown on the West Coast.
+
+
+### Cherry Production in Michigan
+
+Cherry production in Michigan[^cpm] is a major part of the agriculture industry in the state. Harvesting over 90,000 tons of cherries each year, Michigan is the nation's leading producer of tart cherries. The Montmorency cherry is the variety of tart, or sour, cherry most commonly grown in the state. A Hungarian sour cherry cultivar, Balaton, has been commercially produced in Michigan since 1998.
+
+Michigan's cherry industry is highly vulnerable to a late spring frost, which can wipe out a season's harvest. This occurred most recently in 2012, when over 90% of the crop was lost.
+
+The Fruit Belt (also called the Fruit Ridge) of western Michigan, and, in particular, the Grand Traverse Bay region, produce most of the state's cherries. In addition, Traverse City hosts the National Cherry Festival each July.
+
+### National Cherry Festival
+
+The National Cherry Festival[^ncf] is a festival in Traverse City, Michigan. It began in 1925 as the Blessing of the Blossoms Festival, which was held in early May to attract tourists to Northern Michigan to view the blooming cherry blossoms. In 1931 the Michigan Legislature renamed the festival the National Cherry Festival, and moved the event to the summer. Since 2004, a May event coinciding with blooming of the cherry blossoms is also held again, as the Blossom Days Festival, in addition to what is now the better-known National Cherry Festival.
+
+Every year more than 500,000 attendees enjoy the National Cherry Festival, which has completed 92 years. Families can enjoy many kinds of activities from cherry pit spitting and pie eating contests, to the Grand Royale Parade in which the newly crowned Cherry Queen greets the crowds. There is also a Junior Royale parade for children and a Festival Airshow, including periodic visits from the Blue Angels. In addition to the National Cherry Festival, there are a number of other cherry festivals celebrated around the United States.  Originally held in mid- to late July to coincide with the cherry harvest, the Festival was moved to early July to take advantage of the July 4th holiday.
+
+## References
+
+[^glfb]: [en.wikipedia.org/wiki/Fruit_Belt](https://en.wikipedia.org/wiki/Fruit_Belt)
+[^cpm]: [en.wikipedia.org/wiki/Cherry_production_in_Michigan](https://en.wikipedia.org/wiki/Cherry_production_in_Michigan)
+[^ncf]: [en.wikipedia.org/wiki/National_Cherry_Festival](https://en.wikipedia.org/wiki/National_Cherry_Festival)

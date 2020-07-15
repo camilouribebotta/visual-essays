@@ -88,12 +88,13 @@
   let isPhone = md.phone() !== null
   let isTouchDevice = md.phone() !== null || md.tablet()
 
+  const pathElems = window.location.pathname.split('/').filter(pathElem => pathElem !== '')
+  console.log('index.html.pathElems', pathElems)
+
   let configUrl = '/config'
   if (hostname === 'localhost' || hostname === 'visual-essays.app') {
-    const pathElems = window.location.pathname.split('/').filter(pathElem => pathElem !== '')
-    console.log('index.html.pathElems', pathElems)
-    if (pathElems.length >= 2) {
-      configUrl += `/${pathElems[0]}/${pathElems[1]}`
+    if (pathElems.length >= 1) {
+      configUrl += `/${pathElems.join('/')}`
     }
   }
   console.log(`index.html.configUrl=${configUrl}`)
@@ -103,7 +104,9 @@
       console.log('siteConfig', siteConfig)
       acct = siteConfig.acct
       repo = siteConfig.repo
-      path = `/${siteConfig.path || ''}`
+      path = (hostname === 'localhost' || hostname === 'visual-essays.app')
+        ? `/${siteConfig.path || ''}`
+        : `/${pathElems.join('/')}`
       browserRoot = siteConfig.browserRoot
       console.log(`hostname=${hostname} service=${service} acct=${acct} repo=${repo} path=${path} browserRoot=${browserRoot} isPhone=${isPhone} isTouchDevice=${isTouchDevice}`)
 
@@ -217,13 +220,9 @@
           loadEssay(path, replace) {
             this.cachingFetch(path)
             .then(html => {
-              // let browserPath = `${hostname === 'jstor-labs.github.io'? '/'+repo : ''}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
-              // let browserPath = `${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+acct}${acct === defaults[hostname].acct && repo === defaults[hostname].repo ? '' : '/'+repo}${path ? path : ''}` || '/'
-              let browserPath = path || '/'
-              if (hostname === 'localhost' && acct === 'jstor-labs' && repo === 'visual-essays' || hostname === 'visual-essays.app') {
-                browserPath = `${acct}/${repo}${path === '/' ? '' : path || ''}`
-              }
-              browserPath = `${browserRoot}${(!path || path === '/') ? '/' : path}`
+              browserPath = path === '/help'
+                ? '/help'
+                : `${browserRoot}${(!path || path === '/') ? '/' : path }`
               console.log(`loadEssay: acct=${acct} repo=${repo} path=${path} browserPath=${browserPath} replace=${replace}`)
               if (replace) {
                 history.replaceState({file: path || ''}, '', browserPath)
@@ -268,13 +267,16 @@
                 const essayElem = document.getElementById('essay')
                 if (essayElem) {
                   essayElem.querySelectorAll('a').forEach(link => {
+                    console.log(link.href)
                     if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('/help#') > 0 ) {
                       let target = link.dataset.target
                       if (!target) { 
                         const parsedUrl = parseUrl(link.href)
                         if (parsedUrl.hash === '' ) {
-                          const pathElems = parsedUrl.pathname.split('/')
-                          target = `/${pathElems.slice(4).join('/')}`
+                          const pathElems = parsedUrl.pathname.split('/').filter(pathElem => pathElem !== '')
+                          console.log(pathElems)
+                          target = `/${pathElems.slice(repo ? 3 : 1).join('/')}`
+                          console.log(target)
                         } else {
                           target = parsedUrl.hash
                         }

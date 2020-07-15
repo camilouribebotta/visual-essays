@@ -36,6 +36,13 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
+INDEX_STYLESHEET = '''
+    #essay p img { float: left; padding-right: 12px; width: 150px; }
+    #essay p::after { content: ""; clear: both; display: table; }
+    #essay p {font-size: 1.3rem; line-height: 1.3rem; padding: 12px;}
+    #essay p a {color: #800000 !important; font-size: 1.4rem; padding-right: 6px; }
+'''
+
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
     if child_images:
@@ -67,6 +74,13 @@ class Essay(object):
         self._add_heading_ids()
         self._get_manifests()
         self._add_data()
+        self.style = 'default'
+        for item in self.markup.values():
+            if item.get('tag') == 'config' and 'style' in item:
+                self.style = item['style']
+                break
+        if self.style == 'index':
+            self.add_stylesheet(INDEX_STYLESHEET)
         # logger.info(f'{round(now()-st,3)}: phase 3')
 
     def _remove_empty_paragraphs(self):
@@ -267,11 +281,10 @@ class Essay(object):
         # logger.info(json.dumps(ve_markup, indent=2))
         return ve_markup
 
-    def add_stylesheet(self, **kwargs):
-        if 'style' in kwargs:
-            if not self._soup.html.head.style:
-                self._soup.html.head.append(self._soup.new_tag('style'))
-            self._soup.html.head.style.string = kwargs.pop('style')
+    def add_stylesheet(self, stylesheet):
+        if not self._soup.html.head.style:
+            self._soup.html.head.append(self._soup.new_tag('style'))
+        self._soup.html.head.style.string = stylesheet
 
     def _add_data(self):
         data = self._soup.new_tag('script')
