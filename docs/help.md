@@ -213,9 +213,9 @@ Associates an image with a text element.  The directive provides the ability to 
 
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __url__:  The URL to the source version of the image.
-- __data-thumbnail__:  The URL to a thumbnail sized version of the image.  If this is not provided the default version of the imaged will be scaled when a thumbnail is needed.
-- __data-hires__:  The URL to the best version of the image.  This version will be used in the high resolution image viewers and automatically converted to IIIF format (and cached) for zooming and panning.
-- __data-fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
+- __iiif-url__:  The URL to a IIIF service endpoint for the image, if one exists.
+- __manifest__:  The URL to the IIIF presentation manifest for the image, if one exists.
+- __fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
     -  `contain`:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
     - `fill`:  The replaced content is sized to fill the element's content box. If necessary, the object will be stretched or squished to fit
@@ -312,11 +312,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc5MDUwNDY3NiwxNzM0OTYxNzc0LDE3Mz
-Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
-ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
-IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
-NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
-gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
-LTE5Nzk4NTY5OF19
+eyJoaXN0b3J5IjpbLTE4MjUxNzc0MDAsMTczNDk2MTc3NCwxNz
+M0OTYxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0
+Njg3MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5Nj
+EyLDE5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5
+OTUzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MT
+Q4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2
+LC0xOTc5ODU2OThdfQ==
 -->
