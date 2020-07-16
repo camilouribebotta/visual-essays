@@ -127,31 +127,31 @@ a custom header:
 - __num-primary-sources__:  The number of primary sources used in the essay
 - __num-plant-specimens__:  The number of plan specimens used in the essay
 
-#### Example data-essay directives
+#### Example ve-config directives
 
-Below is an example of a `data-essay` directive defining a banner image (using a relative URL) and layout for the essay:
+Below is an example of a `ve-config` directive defining a banner image (using a relative URL) and layout for the essay:
 
 ```html
-<param data-essay
-       data-title="Charles Dickens"
-       data-banner="images/Viking_Bay_Broadstairs.jpg"
-       data-layout="vtl">
+<param ve-config
+       title="Charles Dickens"
+       banner="images/Viking_Bay_Broadstairs.jpg"
+       layout="vtl">
 ```
 
 This example illustrates the incorporation of custom attributes and an absolute URL for the banner image:
 
 ```html
-<param data-essay
+<param ve-config
 	   title="Cacao: An indigenous network and global commodity"
-	   data-banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
-       data-layout="vtl"
-       data-num-plant-specimens="1"
-       data-num-maps="7"
-       data-num-images="20"
-       data-num-primary-sources="14">
+	   banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
+       layout="vtl"
+       num-plant-specimens="1"
+       num-maps="7"
+       num-images="20"
+       num-primary-sources="14">
 ```
 
-### data-entity
+### v-entity
 
 The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  The entity identifier prefix for Wikidata is `http://www.wikidata.org/entity/`.  The JSTOR knowledge graph prefix is `http://kg.jstor.org/entity/`.  For both the Wikidata and JSTOR knowledge graphs a complete identifier consists of the prefix and a knowledge graph specific identifier that starts with the letter `Q` followed by one or more number, commonly referred to as a "Q" identifier or "QID".  The `data-entity` directive requires the inclusion of a `data-qid` attribute specifying the QID of the entity.  
 
@@ -317,11 +317,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgxMDAxOTUwMSwxNzM0OTYxNzc0LDE3Mz
-Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
-ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
-IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
-NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
-gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
-LTE5Nzk4NTY5OF19
+eyJoaXN0b3J5IjpbLTEwMjQyMTc3ODIsMTczNDk2MTc3NCwxNz
+M0OTYxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0
+Njg3MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5Nj
+EyLDE5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5
+OTUzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MT
+Q4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2
+LC0xOTc5ODU2OThdfQ==
 -->
