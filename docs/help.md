@@ -241,7 +241,7 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
-Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `data-qid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param data-entity data-qid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
+Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `eid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param ve-entity eid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
 
 When an entity is declared in a text using a `var` tag the software will use information in the Wikidata entity to find references in the text.  Wikidata entities include a label and optionally one or more aliases that are used to find the text references.  Additional aliases may be entered in the `var` tag to supplement those available in the Wikidata entity.  For example, if a document included the text “capital of the United States” the information available in the label and aliases properties in the Wikidata entity would be insufficient to connect that phrase to the entity.  In this case additional aliases can be provided with a `data-aliases` attribute in the `var` tag.  Multiple aliases are separated using the pipe (`|`) character.  For instance, `<var id=“Q61” data-aliases=“capital of the United States|the district”></var>`.
 
@@ -302,11 +302,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI1MjEyOTYzNywxNzM0OTYxNzc0LDE3Mz
-Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
-ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
-IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
-NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
-gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
-LTE5Nzk4NTY5OF19
+eyJoaXN0b3J5IjpbLTExNTQ1MDE0NTYsMTI1MjEyOTYzNywxNz
+M0OTYxNzc0LDE3MzQ5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2
+MTc3NCwtMjAxMzQ2ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5Mj
+Y0NCw4MTcwNzk2MTIsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgw
+MDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNz
+Q5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkz
+LDIwNDk5MjI0MjZdfQ==
 -->
