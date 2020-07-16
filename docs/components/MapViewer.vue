@@ -198,7 +198,7 @@ module.exports = {
             }
             const style = {
                 color: def['stroke'] || feature.properties['stroke'] || '#FB683F',
-                weight: parseFloat(def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' ? 0 : 4)),
+                weight: parseFloat(def['stroke-width'] || feature.properties['stroke-width'] || (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon' ? 0 : 4)),
                 opacity: parseFloat(def['stroke-opacity'] || feature.properties['stroke-opacity'] || 1),                  
                 fillColor: def['fill'] || feature.properties['fill'] || '#32C125',
                 fillOpacity: parseFloat(def['fill-opacity'] || feature.properties['fill-opacity'] || 0.5),

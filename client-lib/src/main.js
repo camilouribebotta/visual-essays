@@ -34,7 +34,7 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.12'
+const VERSION = '0.7.13'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'

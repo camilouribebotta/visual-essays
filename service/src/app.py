@@ -448,7 +448,7 @@ def essay(path=None):
                 acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
                 repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
                 if ENV == 'dev':
-                    path = '/'.join(path_elems[2:]) if DEFAULT_ACCT else '/'.join(path_elems)
+                    path = '/'.join(path_elems[2:]) if DEFAULT_ACCT or acct == 'jstor-labs' else '/'.join(path_elems)
                     baseurl = 'http://localhost:5000'
                     abs_path = f'{DOCS_ROOT}/{path}'
                     logger.info(f'acct={acct} repo={repo} path={path} abs_path={abs_path} is_dir={os.path.isdir(abs_path)}')
@@ -515,7 +515,7 @@ def config(path=None):
                 path = '/'.join(path_elems[2:]) if len(path_elems) > 1 else '/'.join(path_elems)
             if ENV == 'dev':
                 path = '/'.join(path_elems)
-                browser_root = '' if acct == DEFAULT_ACCT else f'/{acct}/{repo}'
+                browser_root = '' if acct == DEFAULT_ACCT or len(path_elems) < 2 else f'/{acct}/{repo}'
                 baseurl = 'http://localhost:5000'
                 assets_baseurl = 'http://localhost:5000/assets'
                 config_path = f'{DOCS_ROOT}/config.json'
