@@ -207,7 +207,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ### ve-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.  All URLs may be relative to the essay (i.e., 'images/my_image.png') or absolute.
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images that 
 
 #### data-image attributes
 
@@ -313,11 +313,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDcxNDA1MjksMTczNDk2MTc3NCwxNzM0OT
-YxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0Njg3
-MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5NjEyLD
-E5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OTUz
-NDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4Mj
-YsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0x
-OTc5ODU2OThdfQ==
+eyJoaXN0b3J5IjpbMTU2NzM5NDk3NiwxNzM0OTYxNzc0LDE3Mz
+Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
+ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
+IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
+NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
+gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
+LTE5Nzk4NTY5OF19
 -->
