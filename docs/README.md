@@ -1,6 +1,6 @@
-<a href="https://visual-essays.app/essay"><img src="images/ve-button.png"></a>
+<a href="https://visual-essays.app"><img src="images/ve-button.png"></a>
 
-<param ve-config title="Visual Essays"author="Ron" layout="vtl" banner="images/header2.jpg">
+<param ve-config title="Visual Essays"author="Ron" banner="images/header2.jpg">
        
 # Visual Essays
 
