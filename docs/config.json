@@ -1,6 +1,6 @@
 {
     "title": "Visual Essays",
-    "banner": "/images/header1.jpg",
+    "banner": "/images/header2.jpg",
     "bannerHeight": 400,
     "components": [
         {"name": "siteHeader", "src": "/components/Header.vue"},
