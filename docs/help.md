@@ -35,11 +35,11 @@ Markdown is a lightweight language that is commonly used to add simple formattin
 
 ### HTML
 
-Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably a little more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
+Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
 
 ```html
-<var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
-<param data-map data-center="42.2813, -83.7483" data-zoom="6">
+<var data-map center="42.2813, -83.7483" zoom="6"></var>
+<param data-map center="42.2813, -83.7483" zoom="6">
 ```
 
 In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
@@ -318,11 +318,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczNDk2MTc3NCwxNzM0OTYxNzc0LC0yMD
-EzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2
-MTc3NCwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
-IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
-NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
-gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
-LTE5Nzk4NTY5OF19
+eyJoaXN0b3J5IjpbLTE2NzgwNDQ0ODMsMTczNDk2MTc3NCwxNz
+M0OTYxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0
+Njg3MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5Nj
+EyLDE5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5
+OTUzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MT
+Q4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2
+LC0xOTc5ODU2OThdfQ==
 -->
