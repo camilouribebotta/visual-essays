@@ -46,7 +46,7 @@ def create_manifest(**kwargs):
             }]
     logger.info(json.dumps(manifest, indent=2))
     resp = requests.post(
-        'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+        'https://iiif.visual-essays.app/presentation/create',
         headers={'Content-type': 'application/json'},
         json=manifest
     )

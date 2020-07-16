@@ -476,7 +476,7 @@ class Essay(object):
                         '@type': 'sc:AnnotationList'
                     }]
             resp = requests.post(
-                'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+                'iiif.visual-essays.app/presentation/create',
                 headers={'Content-type': 'application/json'},
                 json=manifest
             )
@@ -530,7 +530,7 @@ class Essay(object):
                 '@type': 'sc:AnnotationList'
             }]
         resp = requests.post(
-            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+            'https://iiif-visual-essays.app/presentation/create',
             headers={'Content-type': 'application/json'},
             json=manifest
         )

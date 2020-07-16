@@ -182,7 +182,7 @@ def _get_manifest(specimen, image_url, preload=False):
         }]
         }
         resp = requests.post(
-            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
+            'https://iiif.visual-essays.app/presentation/create',
             headers={'Content-type': 'application/json'},
             json=manifest
         )
@@ -191,7 +191,7 @@ def _get_manifest(specimen, image_url, preload=False):
             specimen['manifest'] = manifest['@id']
             if preload:
                 resp = requests.post(
-                    'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/images/preload',
+                    'https://iiif.visual-essays.app/images/preload',
                     headers={'Content-type': 'application/json'},
                     json={'url': image_url}
                 )
