@@ -17,7 +17,7 @@
 
 <param ve-component 
        name="storiiies"
-       src="components/StoriiiesViewer.vue"
+       src="https://jstor-labs.github.io/visual-essays/components/StoriiiesViewer.vue"
        selectors="tag:storiiies"
        icon="fa-book"
        label="Storiiies Viewer"
