@@ -530,7 +530,7 @@ class Essay(object):
                 '@type': 'sc:AnnotationList'
             }]
         resp = requests.post(
-            'https://iiif-visual-essays.app/presentation/create',
+            'https://iiif.visual-essays.app/presentation/create',
             headers={'Content-type': 'application/json'},
             json=manifest
         )

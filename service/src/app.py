@@ -584,31 +584,6 @@ def site(path=None):
             if site == 'localhost':
                 html = re.sub(r'"https://jstor-labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
             return html, 200
-'''
-@app.route('/<acct>/<repo>/<file>', methods=['GET'])  
-@app.route('/<acct>/<repo>', methods=['GET'])  
-@app.route('/<file>', methods=['GET'])  
-@app.route('/', methods=['GET'])  
-def site(acct=None, repo=None, file=None):    
-    kwargs = dict([(k, request.args.get(k)) for k in request.args])
-    _set_logging_level(kwargs)
-    site = urlparse(request.base_url).hostname
-    if site == 'kent-maps.online':
-        return redirect(f'https://dickens.kent-maps.online{request.path}', code=302)
-
-    acct = acct if acct else KNOWN_SITES.get(site, {}).get('acct')
-    repo = repo if repo else KNOWN_SITES.get(site, {}).get('repo')
-    logger.info(f'site: site={site} acct={acct} repo={repo} kwargs={kwargs}')
-
-    if request.method == 'OPTIONS':
-        return ('', 204, cors_headers)
-    else:
-        with open(os.path.join(BASEDIR, 'index.html'), 'r') as fp:
-            html = fp.read()
-            if site == 'localhost':
-                html = re.sub(r'"https://jstor-labs.github.io/visual-essays.+"', '"http://localhost:8080/lib/visual-essays.js"', html)
-            return html, 200
-'''
 
 @app.route('/assets/<path:path>', methods=['GET'])
 def assets(path):
