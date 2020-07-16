@@ -38,8 +38,8 @@ Markdown is a lightweight language that is commonly used to add simple formattin
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
 
 ```html
-<var data-map center="42.2813, -83.7483" zoom="6"></var>
-<param data-map center="42.2813, -83.7483" zoom="6">
+<var ve-map center="42.2813, -83.7483" zoom="6"></var>
+<param ve-map center="42.2813, -83.7483" zoom="6">
 ```
 
 In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
@@ -98,13 +98,12 @@ Similarly, a directive defined before Heading 1 would apply to all text in the e
 
 Visual essay directives currently include:
 
-- [data-essay](#data-essay) - Essay metadata for defining title, banner image, layout, and other custom attributes
-- [data-entity](#data-entity) - Associates an entity with an element
-- [data-map](#data-map) - Defines a map to add to the essay
-- [data-map-layer](#data-map) - Defines a map layer to add to current map
-- [data-image](#data-image) - Associates an image with an element
-- [data-video](#data-video) - Associates a video with an element
-- [data-primary](#data-primary) - Identifies the content type to initially show when multiple are available for an element
+- [ve-config](#ve-config) - Essay metadata for defining title, banner image, layout, and other custom attributes
+- [ve-entity](#ve-entity) - Associates an entity with an element
+- [data-map](#ve-map) - Defines a map to add to the essay
+- [data-map-layer](#ve-map) - Defines a map layer to add to current map
+- [data-image](#ve-image) - Associates an image with an element
+- [data-video](#ve-video) - Associates a video with an element
 
 ### data-essay directive
 
@@ -318,11 +317,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2NzgwNDQ0ODMsMTczNDk2MTc3NCwxNz
-M0OTYxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0
-Njg3MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5Nj
-EyLDE5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5
-OTUzNDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MT
-Q4MjYsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2
-LC0xOTc5ODU2OThdfQ==
+eyJoaXN0b3J5IjpbNTgwMTY5OTM1LDE3MzQ5NjE3NzQsMTczND
+k2MTc3NCwtMjAxMzQ2ODcwOSwxNzM0OTYxNzc0LC0yMDEzNDY4
+NzA5LC0yMDEzNDY4NzA5LC0xMTI3NTkyNjQ0LDgxNzA3OTYxMi
+wxOTYxMjk2MDcxLDUyNjM0Nzc4MywtODAwOTE3MjM5LDU0OTk1
+MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0OD
+I2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNiwt
+MTk3OTg1Njk4XX0=
 -->
