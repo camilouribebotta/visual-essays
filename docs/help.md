@@ -35,11 +35,11 @@ Markdown is a lightweight language that is commonly used to add simple formattin
 
 ### HTML
 
-Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably a little more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
+Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
 
 ```html
-<var data-map data-center="42.2813, -83.7483" data-zoom="6"></var>
-<param data-map data-center="42.2813, -83.7483" data-zoom="6">
+<var ve-map center="42.2813, -83.7483" zoom="6"></var>
+<param ve-map center="42.2813, -83.7483" zoom="6">
 ```
 
 In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
@@ -98,152 +98,136 @@ Similarly, a directive defined before Heading 1 would apply to all text in the e
 
 Visual essay directives currently include:
 
-- [data-essay](#data-essay) - Essay metadata for defining title, banner image, layout, and other custom attributes
-- [data-entity](#data-entity) - Associates an entity with an element
-- [data-map](#data-map) - Defines a map to add to the essay
-- [data-map-layer](#data-map) - Defines a map layer to add to current map
-- [data-image](#data-image) - Associates an image with an element
-- [data-video](#data-video) - Associates a video with an element
-- [data-primary](#data-primary) - Identifies the content type to initially show when multiple are available for an element
+- [ve-config](#ve-config) - Essay metadata for defining title, banner image, layout, and other custom attributes
+- [ve-entity](#ve-entity) - Associates an entity with an element
+- [ve-map](#ve-map) - Defines a map to add to the essay
+- [ve-map-layer](#ve-map) - Defines a map layer to add to current map
+- [ve-image](#ve-image) - Associates an image with an element
+- [ve-video](#ve-video) - Associates a video with an element
 
-### data-essay directive
+### ve-essay directive
 
-The `data-essay` directive is used to define essay metadata.
+The `ve-config` directive is used to define essay metadata.
 
-#### Standard data-essay attributes
+#### Standard ve-config attributes
 
 - __title__:  The essay title
-- __data-author__:  The essay author name(s)
-- __data-banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
+- __author__:  The essay author name(s)
+- __banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
 repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
-- __data-layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
+- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
 
-#### Custom data-essay attributes
+#### Custom ve-config attributes
 
-The `data-essay` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
+The `ve-config` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
 a custom header:
 
-- __data-num-maps__:  The number of maps used in the essay
-- __data-num-images__:  The number of images used in the essay
-- __data-num-primary-sources__:  The number of primary sources used in the essay
-- __data-num-plant-specimens__:  The number of plan specimens used in the essay
+- __num-maps__:  The number of maps used in the essay
+- __num-images__:  The number of images used in the essay
+- __num-primary-sources__:  The number of primary sources used in the essay
+- __num-plant-specimens__:  The number of plan specimens used in the essay
 
-#### Example data-essay directives
+#### Example ve-config directives
 
-Below is an example of a `data-essay` directive defining a banner image (using a relative URL) and layout for the essay:
+Below is an example of a `ve-config` directive defining a banner image (using a relative URL) and layout for the essay:
 
 ```html
-<param data-essay
-       data-title="Charles Dickens"
-       data-banner="images/Viking_Bay_Broadstairs.jpg"
-       data-layout="vtl">
+<param ve-config
+       title="Charles Dickens"
+       banner="images/Viking_Bay_Broadstairs.jpg"
+       layout="vtl">
 ```
 
 This example illustrates the incorporation of custom attributes and an absolute URL for the banner image:
 
 ```html
-<param data-essay
+<param ve-config
 	   title="Cacao: An indigenous network and global commodity"
-	   data-banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
-       data-layout="vtl"
-       data-num-plant-specimens="1"
-       data-num-maps="7"
-       data-num-images="20"
-       data-num-primary-sources="14">
+	   banner="https://upload.wikimedia.org/wikipedia/commons/3/31/Cacao_Nacional_Fino_de_Aroma.jpg"
+       layout="vtl"
+       num-plant-specimens="1"
+       num-maps="7"
+       num-images="20"
+       num-primary-sources="14">
 ```
 
-### data-entity
+### ve-entity
 
-The `data-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  The entity identifier prefix for Wikidata is `http://www.wikidata.org/entity/`.  The JSTOR knowledge graph prefix is `http://kg.jstor.org/entity/`.  For both the Wikidata and JSTOR knowledge graphs a complete identifier consists of the prefix and a knowledge graph specific identifier that starts with the letter `Q` followed by one or more number, commonly referred to as a "Q" identifier or "QID".  The `data-entity` directive requires the inclusion of a `data-qid` attribute specifying the QID of the entity.  
+The `ve-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  The entity identifier prefix for Wikidata is `http://www.wikidata.org/entity/`.  The JSTOR knowledge graph prefix is `http://kg.jstor.org/entity/`.  For both the Wikidata and JSTOR knowledge graphs a complete identifier consists of the prefix and a knowledge graph specific identifier that starts with the letter `Q` followed by one or more number, commonly referred to as a "Q" identifier or "QID".  The `ve-entity` directive requires the inclusion of an `eid` (entity id) attribute specifying the QID of the entity.  
 
-Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `data-qid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `data-qid` attribute in a `data-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `data-qid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
+Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `eid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `eid` attribute in a `ve-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `eid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
 
-Since `data-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper and simple `id` attribute can be used in place of the `data-qid`.  For instance, the following directives are equivalent:
+Since `ve-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper.  For instance, the following directives are equivalent:
 
 ```html
-<param data-entity data-qid="Q10302" title="France">
-<param id="Q10302">
+<param ve-entity eqid="Q10302" title="France">
+<param eid="Q10302">
 ```
 
 In the interest of maintainability and future proofing the longer form version is recommended.
 
-#### data-entity attributes
+#### ve-entity attributes
 
-- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
-- __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
-- __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
-- __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
-- __data-prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
+- __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
+- __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
 
-### data-map
+### ve-map
 
-The `data-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `data-map-layer` directives that define layers or overlays to be applied to the map. 
+The `ve-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `ve-map-layer` directives that define layers or overlays to be applied to the map. 
 
-#### data-map attributes
+#### ve-map attributes
 
-- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
-- __data-basemap__:  By default, [OpenStreetMap (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
+- __basemap__:  By default, [OpenStreetMap (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
     - [`OpenSteetMap`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
     - [`OpenTopoMap`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenTopoMap)  
     - [`Stamen_Watercolor`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Stamen.Watercolor)  
     - [`Esri_WorldPhysical`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri.WorldPhysical)
-- __data-center__:  This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
+- __center__:  This attribute defines the center point for the map.  The center point can be defined as a latitude and longitude coordinates or using a QID for an entity that is associated with geo-coordinates.  For instance, the following are equivalent.  They both use the city of Ann Arbor, Michigan as the map center point.  In the first version the latitude and longitude coordinates are specified and in the second the Wikidata QID for Ann Arbor is provided. 
     ```html
-    <param data-map data-center="42.2813, -83.7483">
-    <param data-map data-center="Q485172">
+    <param ve-map center="42.2813, -83.7483">
+    <param ve-map center="Q485172">
     ```
-- __data-zoom__:  This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `data-zoom="3.4"`
-- __data-hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
-
-### data-map-layer
+- __zoom__:  This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `zoom="3.4"`
+- __hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
+- __prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
+- 
+### ve-map-layer
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
 
-#### data-map-layer attributes
+#### ve-map-layer attributes
 
-- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
-- __data-type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
+- __type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
 - __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
-- __data-url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
-- __data-mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
-- __data-active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
+- __url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
+- __mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
+- __active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
 
-### data-image
+### ve-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.  All URLs may be relative to the essay (i.e., 'images/my_image.png') or absolute.
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
 
-#### data-image attributes
+#### ve-image attributes
 
-- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
-- __data-url__:  The URL to the default version of the image.
-- __data-thumbnail__:  The URL to a thumbnail sized version of the image.  If this is not provided the default version of the imaged will be scaled when a thumbnail is needed.
-- __data-hires__:  The URL to the best version of the image.  This version will be used in the high resolution image viewers and automatically converted to IIIF format (and cached) for zooming and panning.
-- __data-fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
+- __url__:  The URL to the source version of the image.
+- __iiif-url__:  The URL to a IIIF service endpoint for the image, if one exists.
+- __manifest__:  The URL to the IIIF presentation manifest for the image, if one exists.
+- __fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
     -  `contain`:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
-    - `fill`:  The replaced content is sized to fill the element's content box. If necessary, the object will be stretched or squished to fit
-    - `scale-down`:  The content is sized as if none or contain were specified (would result in a smaller concrete object size)
 
-### data-video
+### ve-video
 
 Associates a video with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
 
-#### data-video attributes
+#### ve-video attributes
 
-- __id__:  The Youtube video ID.
+- __vid__:  The Youtube video ID.
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
-- __data-start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
-
-### data-primary
-
-Defines the content type to initially display for an active element when multiple are available.  This directive uses the value for the directive type attribute to define the primary content type.  For instance:
-
-```html
-<param data-primary="image">
-```
+- __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
 ## Resources
 
@@ -257,7 +241,7 @@ Defines the content type to initially display for an active element when multipl
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
-Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `data-qid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param data-entity data-qid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
+Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `eid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param ve-entity eid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
 
 When an entity is declared in a text using a `var` tag the software will use information in the Wikidata entity to find references in the text.  Wikidata entities include a label and optionally one or more aliases that are used to find the text references.  Additional aliases may be entered in the `var` tag to supplement those available in the Wikidata entity.  For example, if a document included the text “capital of the United States” the information available in the label and aliases properties in the Wikidata entity would be insufficient to connect that phrase to the entity.  In this case additional aliases can be provided with a `data-aliases` attribute in the `var` tag.  Multiple aliases are separated using the pipe (`|`) character.  For instance, `<var id=“Q61” data-aliases=“capital of the United States|the district”></var>`.
 
@@ -318,11 +302,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTczNDk2MTc3NCwtMjAxMzQ2ODcwOSwxNz
-M0OTYxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0
-Njg3MDksLTExMjc1OTI2NDQsODE3MDc5NjEyLDE5NjEyOTYwNz
-EsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OTUzNDg1LDEyNzI5
-ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4MjYsMTI4NTEwND
-gyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0xOTc5ODU2OTgs
-LTk2Nzg5ODkxM119
+eyJoaXN0b3J5IjpbLTExNTQ1MDE0NTYsMTI1MjEyOTYzNywxNz
+M0OTYxNzc0LDE3MzQ5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2
+MTc3NCwtMjAxMzQ2ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5Mj
+Y0NCw4MTcwNzk2MTIsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgw
+MDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNz
+Q5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkz
+LDIwNDk5MjI0MjZdfQ==
 -->
