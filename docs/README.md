@@ -4,7 +4,7 @@
        
 # Visual Essays
 
-A visual essay is an interactive web page that is generated from a plain text file that contains 
+A visual essay is an interactive web page that is generated from a plain text file.  The text can be formatted with simple Markdown tags and 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzc3MTAxNTc4XX0=
+eyJoaXN0b3J5IjpbMTI1NDUzODU2NF19
 -->
