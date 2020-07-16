@@ -157,21 +157,20 @@ The `ve-entity` associates an element (again, anything from a word to the entire
 
 Wikidata is the default knowledge graph used by the visual essay tool so it is sufficient to just use the QID as the value in the `eid` attribute.  When referring to an entity in the JSTOR knowledge graph the QID requires a namespace qualifier in the form of the string `jstor:` preceding the QID.  Namespacing is necessary as QIDs are not unique between knowledge graphs and the namespace (or prefix) guarantees a unique value.  Consider the country of France.  In the JSTOR knowledge graph the identifier for France is `http://kg.jstor.org/entity/Q10302`.  Simply using "Q10302" in the `eid` attribute in a `ve-entity` directive would incorrectly to the Wikidata entity with the identifier `http://www.wikidata.org/entity/Q10302` which is associated with _Sestriere_, an Italian comune.  To correctly refer to the entity for France in the JSTOR knowledge graph the `eid` attribute value would be `jstor:Q10302`.  While not required (as it is the default), QIDs for entities in the Wikidata knowledge graph may be specified using the `wd:` namespace.
 
-Since `ve-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper and simple `eid` attribute can be used in place of the `data-qid`.  For instance, the following directives are equivalent:
+Since `ve-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper.  For instance, the following directives are equivalent:
 
 ```html
-<param data-entity data-qid="Q10302" title="France">
-<param id="Q10302">
+<param ve-entity eqid="Q10302" title="France">
+<param eid="Q10302">
 ```
 
 In the interest of maintainability and future proofing the longer form version is recommended.
 
-#### data-entity attributes
+#### ve-entity attributes
 
-- __id__:  The directive ID.  If specified this should be globally unique within the essay.  If not specified a value will automatically be generated.
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
-- __data-qid__:  The Q identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
+- __eid__:  The identifier for the entity.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __data-scope__:  one of `global`, `local`, or `element` - Defines the scope of an entity.  The `data-entity` directive is different from other directives in that it is by default global regardless of where the directive is located in the text.  The `data-scope` attribute can be used to limit this to the scope associated with the directive location.
 - __data-aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `data-aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `data-aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `data-aliases="the city|the windy city"`.
 - __data-prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
@@ -317,7 +316,7 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIyNTcwNjA1NywxNzM0OTYxNzc0LDE3Mz
+eyJoaXN0b3J5IjpbMTc0NDkyMjg0OSwxNzM0OTYxNzc0LDE3Mz
 Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
 ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
 IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
