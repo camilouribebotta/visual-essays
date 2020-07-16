@@ -202,12 +202,12 @@ The map shown for an active element can be augmented with one or more layers.  T
 - __type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
 - __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
 - __url__:  URL to a GeoJSON file.  This attribute is only used when the layer type is `geojson`.  This can be a relative URL (for example, `geojson/portugal.json`) if the geojson file is located in the same Github repository as the essay.  If not, the URL must be absolute.
-- __data-mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
-- __data-active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
+- __mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
+- __active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
 
-### data-image
+### ve-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal version (`data-url`), a thumbnail (`data-thumbnail`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.  All URLs may be relative to the essay (i.e., 'images/my_image.png') or absolute.
+Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) and a high resolution version (`data-hires`).  The `data-url` attribute is required.  All URLs may be relative to the essay (i.e., 'images/my_image.png') or absolute.
 
 #### data-image attributes
 
@@ -313,11 +313,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg5NDExMDMyLDE3MzQ5NjE3NzQsMTczND
-k2MTc3NCwtMjAxMzQ2ODcwOSwxNzM0OTYxNzc0LC0yMDEzNDY4
-NzA5LC0yMDEzNDY4NzA5LC0xMTI3NTkyNjQ0LDgxNzA3OTYxMi
-wxOTYxMjk2MDcxLDUyNjM0Nzc4MywtODAwOTE3MjM5LDU0OTk1
-MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0OD
-I2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNiwt
-MTk3OTg1Njk4XX0=
+eyJoaXN0b3J5IjpbNDcxNDA1MjksMTczNDk2MTc3NCwxNzM0OT
+YxNzc0LC0yMDEzNDY4NzA5LDE3MzQ5NjE3NzQsLTIwMTM0Njg3
+MDksLTIwMTM0Njg3MDksLTExMjc1OTI2NDQsODE3MDc5NjEyLD
+E5NjEyOTYwNzEsNTI2MzQ3NzgzLC04MDA5MTcyMzksNTQ5OTUz
+NDg1LDEyNzI5ODg3MDYsLTE0MzQ3MTc0OTIsLTE4ODY1MTQ4Mj
+YsMTI4NTEwNDgyMywtMTU4ODg1OTA5MywyMDQ5OTIyNDI2LC0x
+OTc5ODU2OThdfQ==
 -->
