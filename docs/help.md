@@ -100,32 +100,32 @@ Visual essay directives currently include:
 
 - [ve-config](#ve-config) - Essay metadata for defining title, banner image, layout, and other custom attributes
 - [ve-entity](#ve-entity) - Associates an entity with an element
-- [data-map](#ve-map) - Defines a map to add to the essay
-- [data-map-layer](#ve-map) - Defines a map layer to add to current map
-- [data-image](#ve-image) - Associates an image with an element
-- [data-video](#ve-video) - Associates a video with an element
+- [ve-map](#ve-map) - Defines a map to add to the essay
+- [ve-map-layer](#ve-map) - Defines a map layer to add to current map
+- [ve-image](#ve-image) - Associates an image with an element
+- [ve-video](#ve-video) - Associates a video with an element
 
-### data-essay directive
+### ve-essay directive
 
-The `data-essay` directive is used to define essay metadata.
+The `ve-config` directive is used to define essay metadata.
 
-#### Standard data-essay attributes
+#### Standard ve-config attributes
 
 - __title__:  The essay title
-- __data-author__:  The essay author name(s)
-- __data-banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
+- __author__:  The essay author name(s)
+- __banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
 repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
-- __data-layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
+- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
 
-#### Custom data-essay attributes
+#### Custom ve-config attributes
 
-The `data-essay` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
+The `ve-config` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
 a custom header:
 
-- __data-num-maps__:  The number of maps used in the essay
-- __data-num-images__:  The number of images used in the essay
-- __data-num-primary-sources__:  The number of primary sources used in the essay
-- __data-num-plant-specimens__:  The number of plan specimens used in the essay
+- __num-maps__:  The number of maps used in the essay
+- __num-images__:  The number of images used in the essay
+- __num-primary-sources__:  The number of primary sources used in the essay
+- __num-plant-specimens__:  The number of plan specimens used in the essay
 
 #### Example data-essay directives
 
@@ -317,11 +317,11 @@ When hosted in a Github repository multiple essays can be combined to create a r
 
 #### Wrapping text around images
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTgwMTY5OTM1LDE3MzQ5NjE3NzQsMTczND
-k2MTc3NCwtMjAxMzQ2ODcwOSwxNzM0OTYxNzc0LC0yMDEzNDY4
-NzA5LC0yMDEzNDY4NzA5LC0xMTI3NTkyNjQ0LDgxNzA3OTYxMi
-wxOTYxMjk2MDcxLDUyNjM0Nzc4MywtODAwOTE3MjM5LDU0OTk1
-MzQ4NSwxMjcyOTg4NzA2LC0xNDM0NzE3NDkyLC0xODg2NTE0OD
-I2LDEyODUxMDQ4MjMsLTE1ODg4NTkwOTMsMjA0OTkyMjQyNiwt
-MTk3OTg1Njk4XX0=
+eyJoaXN0b3J5IjpbLTgxMDAxOTUwMSwxNzM0OTYxNzc0LDE3Mz
+Q5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2MTc3NCwtMjAxMzQ2
+ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5MjY0NCw4MTcwNzk2MT
+IsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgwMDkxNzIzOSw1NDk5
+NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNzQ5MiwtMTg4NjUxND
+gyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkzLDIwNDk5MjI0MjYs
+LTE5Nzk4NTY5OF19
 -->
