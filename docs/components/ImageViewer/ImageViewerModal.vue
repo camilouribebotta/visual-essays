@@ -27,8 +27,8 @@ module.exports = {
     getItems(selected) {
       if (this.groups.imageViewer) {
         this.items = this.groups.imageViewer.items.filter(item => item.id === selected)
-      } else if (this.groups['plant-specimen']) {
-        this.items = this.groups['plant-specimen'].items
+      } else if (this.groups.plantSpecimenViewer) {
+        this.items = this.groups.plantSpecimenViewer.items
           .filter(item => item.specimensMetadata)
           .map(item => item.specimensMetadata.specimens[0])
       }
