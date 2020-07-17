@@ -8,6 +8,21 @@
        num-primary-sources="0"
        author="JSTOR Labs team">
 
+<param ve-component 
+       name="plant-specimen"
+       src="components/PlantSpecimenViewer.vue"
+       selectors="tag:plant-specimen"
+       icon="fa-seedling"
+       label="Plant Specimens">
+
+<param ve-component 
+       name="storiiies"
+       src="https://jstor-labs.github.io/visual-essays/components/StoriiiesViewer.vue"
+       selectors="tag:storiiies"
+       icon="fa-book"
+       label="Storiiies Viewer"
+       dependencies="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js|https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js">
+
 <param title="Beatrix Farrand" eid="Q437714">
 <param title="cherry blossom" eid="Q871991" category="plant">
 <param title="Dumbarton Oaks" eid="Q1264942">
@@ -96,3 +111,6 @@ The National Cherry Festival[^ncf] is a festival in Traverse City, Michigan. It 
 [^cpm]: [en.wikipedia.org/wiki/Cherry_production_in_Michigan](https://en.wikipedia.org/wiki/Cherry_production_in_Michigan)
 [^ncf]: [en.wikipedia.org/wiki/National_Cherry_Festival](https://en.wikipedia.org/wiki/National_Cherry_Festival)
 [^wa]: [Cherry production by country according to the World Atlas](https://www.worldatlas.com/articles/the-world-leaders-in-cherry-production.html)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMjAwMzY1ODk4N119
+-->
