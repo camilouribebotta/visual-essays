@@ -250,13 +250,13 @@ class Essay(object):
 
             elif  tag == 'image':
                 try:
-                    if attrs.get('region'):
-                        attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
+                    #if attrs.get('region'):
+                    #    attrs['region'] = [int(c.strip()) for c in attrs['region'].split(',')]
                     for attr in ('url', 'thumbnail', 'hires'):
                         if attr in attrs and not attrs[attr].startswith('http'):
                             attrs[attr] = f'{self.baseurl}/{attrs[attr][1:] if attrs[attr][0] == "/" else attrs[attr]}'
                 except:
-                    del attrs['region']
+                    pass # del attrs['region']
 
             attrs['tagged_in'] = []
 
