@@ -34,24 +34,31 @@ import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.14'
+const VERSION = '0.7.15'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
 
+const customScripts = [
+  'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js',
+  'https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js'  // for Storiiies
+]
+const customStyles = []
+
 const defaultComponents = [
   { name: 'siteHeader', src: `${componentsBaseURL}/components/Header.vue` },
-  { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], 'icon': 'fa-map-marker-alt', 'label': 'Map' },
-  { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], 'icon': 'fa-file-image', 'label': 'Images' },
+  { name: 'mapViewer', src: `${componentsBaseURL}/components/MapViewer.vue`, selectors: ['tag:map'], icon: 'fa-map-marker-alt', label: 'Map' },
+  { name: 'imageViewer', src: `${componentsBaseURL}/components/ImageViewer/index.vue`, selectors: ['tag:image'], icon: 'fa-file-image', label: 'Images' },
   { name: 'staticImageViewer', src: `${componentsBaseURL}/components/ImageViewer/StaticImageViewer.vue` },
   { name: 'miradorImageViewer', src: `${componentsBaseURL}/components/ImageViewer/MiradorImageViewer.vue` },
   { name: 'openSeadragonImageViewer', src: `${componentsBaseURL}/components/ImageViewer/OpenSeadragonImageViewer.vue` },
   { name: 'imageViewerModal', src: `${componentsBaseURL}/components/ImageViewer/ImageViewerModal.vue` },
-  { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], 'icon': 'fa-video', 'label': 'Videos' },
+  { name: 'videoPlayer', src: `${componentsBaseURL}/components/VideoPlayer.vue`, selectors: ['tag:video'], icon: 'fa-video', label: 'Videos' },
+  { name: 'storiiiesViewer', src: `${componentsBaseURL}/components/StoriiiesViewer.vue`, selectors: ['tag:storiiies'], icon: 'fa-book', label: 'Storiiies Viewer from main.js' },
+  { name: 'plantSpecimenViewer', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, selectors: ['tag:plant-specimen'], icon: 'fa-seedling', label: 'Plant Specimens' },
   // { name: 'person', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['category:person'], 'icon': 'fa-user', 'label': 'People' },
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
   // { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
-  // { name: 'plant-specimen', src: `${componentsBaseURL}/components/PlantSpecimenViewer.vue`, selectors: ['tag:plant-specimen'], 'icon': 'fa-seedling', 'label': 'Plant Specimens' },
   { name: 'essay', component: Essay },
   { name: 'horizontalViewer', component: HorizontalViewer },
   { name: 'verticalViewer', component: VerticalViewer },
@@ -108,8 +115,7 @@ function resizeend() {
   }
 }
 
-const customScripts = new Set()
-const customStyles = new Set()
+
 
 // Site components
 const getSiteConfig = async () => {
@@ -131,9 +137,9 @@ const getSiteConfig = async () => {
       if (cfg.dependencies) {
         cfg.dependencies.forEach(url =>  {
           if (url.slice(url.length - 4) === '.css') {
-            customStyles.add(url)
+            if (customStyles.indexOf(url) === -1) customStyles.push(url)
           } else {
-            customScripts.add(url)
+            if (customScripts.indexOf(url) === -1) customScripts.push(url)
           }
         })
       }
@@ -168,9 +174,9 @@ function initApp() {
       customComponent.dependencies = customComponent.dependencies.split('|')
       customComponent.dependencies.forEach(url => {
         if (url.slice(url.length - 4) === '.css') {
-          customStyles.add(url)
+          if (customStyles.indexOf(url) === -1) customStyles.push(url)
         } else {
-          customScripts.add(url)
+          if (customScripts.indexOf(url) === -1) customScripts.push(url)
         }
       })
     }
