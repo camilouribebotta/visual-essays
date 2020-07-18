@@ -562,7 +562,7 @@ def config(path=None):
         _config['acct'] = acct
         _config['repo'] = repo
         _config['browserRoot'] = browser_root
-        _config['gh_root'] = f'/{acct}/{repo}{"/docs" if baseurl.endswith("/docs") else ""}' if acct else None
+        _config['gh_root'] = f'/{acct}/{repo}{"/docs" if baseurl.endswith("/docs") or ENV == "dev" else ""}' if acct else None
         return (_config, 200, cors_headers)
 
 @app.route('/<path:path>', methods=['GET'])

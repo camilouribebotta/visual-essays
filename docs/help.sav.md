@@ -1,15 +1,18 @@
 # Visual Essay Help
 
 - [Introduction](#introduction)
-- [Essay markup](#essay-markup)
-- [Visual essay directives](#visual-essay-directives)
-  - [ve-config](#ve-config)
-  - [ve-entity](#ve-entity)
-  - [ve-map](#ve-map)
-  - [ve-map-layer](#ve-map-layer)
-  - [ve-image](#ve-image)
-  - [ve-video](#ve-video)
-- [Essay authoring](#essay-authoring)
+- [Essay Markup](#essay-markup)
+- [Essay Authoring](#essay-authoring)
+- [Resources](#resources)
+  - [Knowledge graphs](#knowledge-graphs)
+    - [Wikidata Knowledge Graoh](#wikidata-knowledge-graph)
+    - [JSTOR Knowledge Graph](#jstor-knowledge-graph)
+    - [Supplementing Knowledge Graph Data](#supplementing-knowledge-graph-data)
+  - [MapWarper](#mapwarper)
+  - [GeoJSON](#geojson)
+- [Creating and Hosting Custom Sites](#creating-and-hosting-custom-sites)
+  - [Custom Components](#custom-components)
+  - [Custom Site Configuration](#custom-site-configuration)
 
 # Introduction
 
@@ -20,15 +23,15 @@ Visual essays are especially well suited for story telling that uses maps, image
 
 The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
 
-# Essay markup
+## Essay markup
 
 The essays are written in plain text and are formatted using Markdown.  Markdown has become something of a de-facto standard and is used by a number of popular web sites including Github, Stack Overflow, Reddit, and many others.  Markdown is a superset of HTML and as such any valid HTML is also valid Markdown.  In most typical uses a user will rarely need to augment the Markdown tags with HTML for text formatting as Markdown provides a rich set of easier to use tags for this purpose.  The visual essay processing code takes advantage of the ability to extend the Markdown tags with arbitrary HTML.  The visual essay directives to add maps, images and other visualizations to an essay are accomplished using a simple HTML tag with some custom attributes.  These custom directives and attributes are described in detail in the following sections.
 
-## Markdown
+### Markdown
 
 Markdown is a lightweight language that is commonly used to add simple formatting to plain text documents.  Markdown can be used to easily define section headings, lists, and text styling in plain text documents.  Markdown is also platform independent and portable.  It can be written in any number of tools ranging from simple text editors to full-featured integrated development environments.  There are also a number of good web-based editors available for writing Markdown.  More information on creating and modifying essay text files can be found in the [essay authoring](#essay-authoring) section.
 
-## HTML
+### HTML
 
 Any valid HTML can be used in markdown.  HTML tags are often used in a markdown document to accomplish custom formatting that is not directly supported by markdown.  The visual essay directives are also defined using HTML tags and can be specified using any of the HTML `var`, `span` or `param` tags.  While these tags are equivalent in their use as a "wrapper" for the visual essay directives and can be used interchangeably, this document will typically use the `param` tag as it is a self-closing tag and is more concise (and arguably more readable).  The `var` and `span` tags are not self closing and require an end tag (`</var>` or `</span>`) to be valid.  For example, the following forms of the `data-map` visual essay directive are equivalent.  One uses the `var` tag and thus also requires a `</var>` end tag to close.  The other form of the directive uses the `param` tag that does not require an end tag as it can be self closing.
 
@@ -42,30 +45,37 @@ In whichever tag form is used the type of visual essay directive is defined usin
 ## Text Elements
 
 Throughout this document the association of visual essay directives to _text elements_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the scope of text element to which it applies.
-<param ve-image url="images/ve-button.png">
 
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.
 
+This defines a document with 2 top level sections, each with 2 subsections that each contain 2 paragraphs resulting in a 3 level document hierarchy with a total of 8 paragraphs.
+ 
+Given this document, a map associated with Paragraph 1b1 would only be displayed when Paragraph 1b1 was the "active" paragraph.  A directive is associated with a paragraph if the directive follows or precedes the paragraph text without an intervening blank line.
+
+To associate a directive with an entire section the directive is located within scope of the topmost applicable section and includes a blank lines before and after the directive (and thus is not "attached" to any single paragraph).  In the example document above, if a directive was to be associated with an entire section, say section 1b, the directive could be placed after subheading 1b, paragraph 1b1, or paragraph 1b2.  Since it was defined within the scope of section 1b it would be associated with all paragraphs contained in section 1b.  In that way, when we say that a directive is associated with a text element we're referring to all text within the scope of the directive location.  In this example that would include paragraphs 1b1 and 1b2.
+
+If we wanted to associate a directive with all text in section 1 the directive would be placed between Heading 1 and Subheading 1a making its scope section 1.  That directive would then be associated with the text element that included paragraphs 1a1, 1a2, 1b1, and 1b2.
+
+Similarly, a directive defined before Heading 1 would apply to all text in the essay as the scope would be global since it was not defined within a section or subsection.
+
 ## Active Paragraphs
 
- An essay includes one or more paragraphs that are often hierarchical based on the nesting level of the markdown headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is a paragraph in the top portion of the browser window and is displayed with a visual treatment that identifies it as the active paragraph.  
- 
- Any visualization components associated with the active paragraph are displayed in the visualization panel.  Multiple visualization components can be associated with a single paragraph.  In some cases the components are explicitly associated with the paragraph as the corresponding directive(s) were bound to the paragraph, and in other cases the associations are implied by the scope of the directive placement.  A directive is bound to a single paragraph when there are no blank lines between the paragraph text and the directive.
+ An essay is comprised of one or more paragraphs that are often hierarchical based on the nesting level of the headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is a paragraph in the top portion of the browser window and displayed with a visual treatment that identifies it as the active paragraph.  Any visualization components associated with the active paragraph are displayed in the visualization panel.  Multiple visualization components can be associated with a single paragraph.  In some cases the components are explicitly associated with the paragraph as the corresponding directive(s) were attached to the paragraph, and in other cases the associations are implied by the scope of the directive placement.  Using our example document above, if a directive was attached to paragraph 2a2 and another directive had been placed between subheading 2a and paragraph 2a1 both directives would apply to paragraph 2a2 and the associated visualization components would be visible and/or selectable when paragraph 2a2 was active.
 
 # Visual essay directives
 
 Visual essay directives currently include:
 
-- [ve-config](#ve-config) - Essay metadata for defining title, banner image, layout, and other custom attributes.
-- [ve-entity](#ve-entity) - Associates an entity (person, location, organization, etc) with an element.  An entity is defined using a unique identifer in either the Wikidata or JSTOR knowledge graphs.
-- [ve-map](#ve-map) - Defines a map to add to the essay.
-- [ve-map-layer](#ve-map) - Defines a map layer to add to current map.
-- [ve-image](#ve-image) - Associates an image with an element.
-- [ve-video](#ve-video) - Associates a video with an element.
+- [ve-config](#ve-config) - Essay metadata for defining title, banner image, layout, and other custom attributes
+- [ve-entity](#ve-entity) - Associates an entity with an element
+- [ve-map](#ve-map) - Defines a map to add to the essay
+- [ve-map-layer](#ve-map) - Defines a map layer to add to current map
+- [ve-image](#ve-image) - Associates an image with an element
+- [ve-video](#ve-video) - Associates a video with an element
 
-## ve-config
+## ve-essay directive
 
-The `ve-config` directive is used to define essay metadata.  This directive is optional but when used is typically placed at the top of the essay.
+The `ve-config` directive is used to define essay metadata.
 
 ### Standard ve-config attributes
 
@@ -187,4 +197,84 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
-# Essay authoring
+# Resources
+
+## Knowledge graphs
+
+### Wikidata knowledge graph
+
+### JSTOR knowledge graph
+
+### Entities
+
+The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
+
+Connecting text to a Wikidata entity is accomplished by adding an HTML `param` tag to the text with an `eid` attribute the consists of the Wikidata QID associated with the entity.  For instance, to associate Washington DC with text in the document the tag `<param ve-entity eid=“Q62”>` is added to the text.  The `param` tag is not displayed in the rendered text but provides information enabling the software to associate mentions of Washington DC in the text to the Wikidata entity with the identifier Q61.  Wikidata entities provide rich information enabling a range of visualizations and tools.  For entities that are locations (such as our Washington DC example) the Wikidata entity will often include geographic coordinates enabling the location to be visualized on a map.
+
+When an entity is declared in a text using a `var` tag the software will use information in the Wikidata entity to find references in the text.  Wikidata entities include a label and optionally one or more aliases that are used to find the text references.  Additional aliases may be entered in the `var` tag to supplement those available in the Wikidata entity.  For example, if a document included the text “capital of the United States” the information available in the label and aliases properties in the Wikidata entity would be insufficient to connect that phrase to the entity.  In this case additional aliases can be provided with a `data-aliases` attribute in the `var` tag.  Multiple aliases are separated using the pipe (`|`) character.  For instance, `<var id=“Q61” data-aliases=“capital of the United States|the district”></var>`.
+
+Other attributes available for entity declarations include:
+
+- `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
+
+### Entity customization in visual essays
+
+Using JSONLD ...
+
+## Maps
+
+Maps are added to the visualization pane using a `data-map` directive.  The visual essay tools use the [leaflet](https://leafletjs.com/) javascript library for map rendering.  Leaflet is a popular open source code library for generating interactive maps.
+
+## Map layers
+
+Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers are currently supported.
+
+### MapWarper tile layers
+
+MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
+
+### GeoJSON feature layers
+
+Add a discussion of GeoJSON here.
+
+# Essay Authoring
+
+Since both the essay and annotations are plain text the essays can be created and maintained in any number of ways.  The only requirement is that the essay file be available on the internet.  One possible approach is to host the essay files in a [Github](https://github.com) repository.  Git is an open-source version control system that was started by Linus Torvalds—the same person who created the Linux operating system.  Github is an online service providing hosting of Git code repositories.  Since its inception Github has become wildly popular and is often used for much more than just version control on software projects.  Github offers free accounts and while its user interface may initially be a little intimidating to non-technical users it is actually a pretty simple to use service and a convenient way to manage text files.  When coupled with Github enabled tools much (or all) of the actual interaction with the Github service is handled through more user-friendly and familiar interfaces.  One such tool is [StackEdit](https://stackedit.io) which provides a browser-based Markdown editor with options for publishing files directly to Github.  [This page](/stackedit-setup) provides step-by-step instructions for setting up a StackEdit environment for publishing files to Github.
+
+The `visual essays` service creates an interactive web page merging text content with external data, including:
+
+- information from knowledge graphs such as [Wikidata](https://www.wikidata.org),
+- maps with optional tile layers and geojson features
+
+The text content is written in plain text with [markdown]([https://daringfireball.net/projects/markdown/syntax](https://daringfireball.net/projects/markdown/syntax)) or [wikitext]([https://meta.wikimedia.org/wiki/Help:Wikitext_examples](https://meta.wikimedia.org/wiki/Help:Wikitext_examples)) markup for simple formatting.  External data is linked to the text through the addition of HTML `var` tags that provide instructions and hints adding contextualized interactive features in the rendered page.
+
+Initially, the rendered page only displays the formatted text content.  Interactive features are enabled when page sections are selected.  Selecting a page section (generally a paragraph) be clicking on the text will open a visualization pane in the lower section of the page.
+
+When the visualization pane is enabled supplemental information associated with the corresponding text in the top portion of the page is available for viewing and in many cases interactive.  For example, if a location is mentioned in the text a map could be displayed showing the location of the place mentioned on an interactive map.  As another example, if a person is mentioned in the text more information (including images) can be displayed providing context and background on the person mentioned.
+
+## Custom Sites
+
+A visual essay is a simply a plain text file that is rendered as an interactive web page.  The visual elements and interactive features are enabled through simple HTML tags that are added to the text.  These tags are described in the [essay markup](#essay-markup) section of this document.
+
+When hosted in a Github repository multiple essays can be combined to create a rich web site with site-wide headers, footers, and navigation.
+
+### Custom Components
+
+### Custom Site Configuration
+
+## Tips and Tricks
+
+### Images
+
+#### Customizing in-line display
+
+#### Wrapping text around images
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTExNTQ1MDE0NTYsMTI1MjEyOTYzNywxNz
+M0OTYxNzc0LDE3MzQ5NjE3NzQsLTIwMTM0Njg3MDksMTczNDk2
+MTc3NCwtMjAxMzQ2ODcwOSwtMjAxMzQ2ODcwOSwtMTEyNzU5Mj
+Y0NCw4MTcwNzk2MTIsMTk2MTI5NjA3MSw1MjYzNDc3ODMsLTgw
+MDkxNzIzOSw1NDk5NTM0ODUsMTI3Mjk4ODcwNiwtMTQzNDcxNz
+Q5MiwtMTg4NjUxNDgyNiwxMjg1MTA0ODIzLC0xNTg4ODU5MDkz
+LDIwNDk5MjI0MjZdfQ==
+-->
