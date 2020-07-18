@@ -1,4 +1,4 @@
-## Visual Essay Help
+# Visual Essay Help
 
 - [Introduction](#introduction)
 - [Essay Markup](#essay-markup)
@@ -14,7 +14,7 @@
   - [Custom Components](#custom-components)
   - [Custom Site Configuration](#custom-site-configuration)
 
-## Introduction
+# Introduction
 
 Visual essays are web pages created from annotated text files.  The text files are formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with sections of text, typically paragraphs but can also be as small as a single word or as large as the entire essay.  The visual essay tools add interactive visualizations to the rendered web page using information contained in the tags.
@@ -42,41 +42,11 @@ Any valid HTML can be used in markdown.  HTML tags are often used in a markdown 
 
 In whichever tag form is used the type of visual essay directive is defined using a null value attribute.  This attribute can be specified anywhere in the tag but is typically the first attribute defined in the HTML wrapper tag.  A null data attribute is simply an attribute with the prefix `data-` and no corresponding value.  For instance, the examples above define a directive of `map` type with directive specific `center` and `zoom` attributes.
 
-### Text Elements
+## Text Elements
 
-Throughout this document the association of visual essay directives to text _**elements**_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the type and scope of text element to which it applies.
+Throughout this document the association of visual essay directives to _text elements_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the scope of text element to which it applies.
 
-It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.  For instance, consider the following document:
-
-```md
-# Heading 1
-
-## Subheading 1a
-
-Paragraph 1a1 ...
-
-Paragraph 1a2 ...
-
-## Subheading 1b
-
-Paragraph 1b1 ...
-
-Paragraph 1b2 ...
-
-# Heading 2
-
-## Subheading 2a
-
-Paragraph 2a1 ...
-
-Paragraph 2a2 ...
-
-## Subheading 2b
-
-Paragraph 2b1 ...
-
-Paragraph 2b2 ...
-```
+It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.
 
 This defines a document with 2 top level sections, each with 2 subsections that each contain 2 paragraphs resulting in a 3 level document hierarchy with a total of 8 paragraphs.
  
@@ -88,11 +58,11 @@ If we wanted to associate a directive with all text in section 1 the directive w
 
 Similarly, a directive defined before Heading 1 would apply to all text in the essay as the scope would be global since it was not defined within a section or subsection.
 
-### Active Paragraphs
+## Active Paragraphs
 
  An essay is comprised of one or more paragraphs that are often hierarchical based on the nesting level of the headings added.  As a user scrolls through a document a single paragraph is said to be "active".  The active paragraph is a paragraph in the top portion of the browser window and displayed with a visual treatment that identifies it as the active paragraph.  Any visualization components associated with the active paragraph are displayed in the visualization panel.  Multiple visualization components can be associated with a single paragraph.  In some cases the components are explicitly associated with the paragraph as the corresponding directive(s) were attached to the paragraph, and in other cases the associations are implied by the scope of the directive placement.  Using our example document above, if a directive was attached to paragraph 2a2 and another directive had been placed between subheading 2a and paragraph 2a1 both directives would apply to paragraph 2a2 and the associated visualization components would be visible and/or selectable when paragraph 2a2 was active.
 
-## Visual essay directives
+# Visual essay directives
 
 Visual essay directives currently include:
 
@@ -103,11 +73,11 @@ Visual essay directives currently include:
 - [ve-image](#ve-image) - Associates an image with an element
 - [ve-video](#ve-video) - Associates a video with an element
 
-### ve-essay directive
+## ve-essay directive
 
 The `ve-config` directive is used to define essay metadata.
 
-#### Standard ve-config attributes
+### Standard ve-config attributes
 
 - __title__:  The essay title
 - __author__:  The essay author name(s)
@@ -115,7 +85,7 @@ The `ve-config` directive is used to define essay metadata.
 repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
 - __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
 
-#### Custom ve-config attributes
+### Custom ve-config attributes
 
 The `ve-config` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
 a custom header:
@@ -125,7 +95,7 @@ a custom header:
 - __num-primary-sources__:  The number of primary sources used in the essay
 - __num-plant-specimens__:  The number of plan specimens used in the essay
 
-#### Example ve-config directives
+### Example ve-config directives
 
 Below is an example of a `ve-config` directive defining a banner image (using a relative URL) and layout for the essay:
 
@@ -149,7 +119,7 @@ This example illustrates the incorporation of custom attributes and an absolute 
        num-primary-sources="14">
 ```
 
-### ve-entity
+## ve-entity
 
 The `ve-entity` associates an element (again, anything from a word to the entire document) to an entity (person, place, organization, etc).  Entities are identified through the use of a globally unique identifier.  The current version of the visual essay tools assumes that entity identifiers are URIs that are resolvable in a publicly accessible knowledge graph.  Both Wikidata and the JSTOR knowledge graph are currently supported.  The entity identifier prefix for Wikidata is `http://www.wikidata.org/entity/`.  The JSTOR knowledge graph prefix is `http://kg.jstor.org/entity/`.  For both the Wikidata and JSTOR knowledge graphs a complete identifier consists of the prefix and a knowledge graph specific identifier that starts with the letter `Q` followed by one or more number, commonly referred to as a "Q" identifier or "QID".  The `ve-entity` directive requires the inclusion of an `eid` (entity id) attribute specifying the QID of the entity.  
 
@@ -164,18 +134,18 @@ Since `ve-entity` directives are used so frequently they are the default directi
 
 In the interest of maintainability and future proofing the longer form version is recommended.
 
-#### ve-entity attributes
+### ve-entity attributes
 
 - __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
 - __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
 
-### ve-map
+## ve-map
 
 The `ve-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `ve-map-layer` directives that define layers or overlays to be applied to the map. 
 
-#### ve-map attributes
+### ve-map attributes
 
 - __basemap__:  By default, [OpenStreetMap (OSM)](https://www.openstreetmap.org/) is used for the base map.  Other base maps are available and can be requested with this attribute.  The available base maps are:
     - [`OpenSteetMap`](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=OpenStreetMap.Mapnik)  
@@ -191,11 +161,11 @@ The `ve-map` directive indicates that a map should be added as a visualization c
 - __hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 - __prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
 - 
-### ve-map-layer
+## ve-map-layer
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
 
-#### ve-map-layer attributes
+### ve-map-layer attributes
 
 - __type__:  `mapwarper` or `geojson`.  Defines the specific layer type.
 - __title__:  The title attribute serves a couple purposes for map layers.  First, it is used a the label on map controls that enable/disable MapWarper layers and control the layer opacity.  When the layer type is geojson the title, when provided, will override any predefined labels in the GeoJSON file when displaying location labels on a map.  Note that when multiple features (and labels) are defined in a single GeoJSON file the title value will be used once for the aggregate features.
@@ -203,11 +173,11 @@ The map shown for an active element can be augmented with one or more layers.  T
 - __mapwarper-id__:  Defines the overlay ID when the layer type is `mapwarper`
 - __active__:  One of `true` (default if attribute is not provided) or `false`.  This attribute defines whether the layer is activated on the map when initially displayed.  In either case the user can toggle individual layers on/off using controls on the map.  
 
-### ve-image
+## ve-image
 
 Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
 
-#### ve-image attributes
+### ve-image attributes
 
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __url__:  The URL to the source version of the image.
@@ -217,25 +187,25 @@ Associates an image with a text element.  The directive provides the ability to 
     -  `contain`:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
 
-### ve-video
+## ve-video
 
 Associates a video with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
 
-#### ve-video attributes
+### ve-video attributes
 
 - __vid__:  The Youtube video ID.
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
-## Resources
+# Resources
 
-### Knowledge graphs
+## Knowledge graphs
 
-#### Wikidata knowledge graph
+### Wikidata knowledge graph
 
-#### JSTOR knowledge graph
+### JSTOR knowledge graph
 
-#### Entities
+### Entities
 
 The data used by the widgets in the visualization pane is typically retrieved from Wikidata (the knowledge base behind Wikipedia).  Wikidata is a Linked Open Data (LOD) knowledge base containing nearly 90 million entities (as of mid-2020) and growing at the rate of nearly 1 million per month.  Each entity (person, location, organization, etc) in Wikidata is assigned a unique identifier commonly called a ‘Q’ ID as each of the identifiers starts with the ‘Q’ character followed by a number.  For instance, Washington DC is assigned the identifier Q61.
 
@@ -247,27 +217,27 @@ Other attributes available for entity declarations include:
 
 - `data-scope` which can used to restrict the document regions considered when associating text with an entity.  For entity associations a `var` declaration is by default of **global** scope meaning that any mention in any part of the document is associated with the entity.  This behavior can be overridden by declaring an entities scope as **local** which would restrict associations to those mentions in the local region in which the `var` tag was defined.  The locality can be a paragraph or higher-level section depending on where the tag was entered.  To restrict locality to a single paragraph the `var` tag must be entered in the associated paragraph text block with no intervening blank lines and include the `data-scope=“local”` attribute.
 
-#### Entity customization in visual essays
+### Entity customization in visual essays
 
 Using JSONLD ...
 
-### Maps
+## Maps
 
 Maps are added to the visualization pane using a `data-map` directive.  The visual essay tools use the [leaflet](https://leafletjs.com/) javascript library for map rendering.  Leaflet is a popular open source code library for generating interactive maps.
 
-### Map layers
+## Map layers
 
 Maps may include optional layers.  MapWarper tiles and GeoJSON feature layers are currently supported.
 
-#### MapWarper tile layers
+### MapWarper tile layers
 
 MapWarper is an open source tool and online service that generates map tiles from image files.  A common use case for this is to overlay an historical map on base map tiles.  MapWarper provides tools for fitting an image to base map geo-coordinates by relating map feature points.
 
-#### GeoJSON feature layers
+### GeoJSON feature layers
 
 Add a discussion of GeoJSON here.
 
-## Essay Authoring
+# Essay Authoring
 
 Since both the essay and annotations are plain text the essays can be created and maintained in any number of ways.  The only requirement is that the essay file be available on the internet.  One possible approach is to host the essay files in a [Github](https://github.com) repository.  Git is an open-source version control system that was started by Linus Torvalds—the same person who created the Linux operating system.  Github is an online service providing hosting of Git code repositories.  Since its inception Github has become wildly popular and is often used for much more than just version control on software projects.  Github offers free accounts and while its user interface may initially be a little intimidating to non-technical users it is actually a pretty simple to use service and a convenient way to manage text files.  When coupled with Github enabled tools much (or all) of the actual interaction with the Github service is handled through more user-friendly and familiar interfaces.  One such tool is [StackEdit](https://stackedit.io) which provides a browser-based Markdown editor with options for publishing files directly to Github.  [This page](/stackedit-setup) provides step-by-step instructions for setting up a StackEdit environment for publishing files to Github.
 
