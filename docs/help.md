@@ -20,6 +20,7 @@
     - [Footnotes](#footnotes)
     - [Viewing essay text](#viewing-essay-text)
     - [Editing essays](#editing-essays)
+    - [Advanced usage](#advanced-usage)
 - [GeoJSON](#geojson)
 - [IIIF](#international-image-interoperability-framework-iiif)
 - [Frequently asked questions](#frequently-asked-questions)
@@ -252,6 +253,10 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 ### StackEdit editor
 
+## Advanced usage
+
+### Adding custom styling
+
 # GeoJSON
 
 ## Sources for existing GeoJSON files
@@ -271,7 +276,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk5NzYzOTE4LDIxMzI0MjY3NSwtNTQ3Mj
+eyJoaXN0b3J5IjpbODI4NDQxMDI2LDIxMzI0MjY3NSwtNTQ3Mj
 g2ODQ0LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYz
 LDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
