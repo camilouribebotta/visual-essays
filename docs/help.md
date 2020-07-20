@@ -1,3 +1,7 @@
+<style>
+	.v-application a, .v-application p { font-size: 1.3rem; }
+</style>
+
 # Visual Essay Help
 
 - [Introduction](#introduction)
@@ -219,6 +223,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMT
-I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbODUwMjY4NTc2LDIwODY2NTc1MDgsLTczNz
+U5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIxLDE2OTQxOTIwNTRd
+fQ==
 -->
