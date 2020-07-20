@@ -172,7 +172,7 @@ Associates an image with a text element.  The directive provides the ability to 
 - __fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
     -  `contain`:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
- - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.
+ - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.  The value for a region is a comma separated sequence of 4 integers representing the origin, width and height.  The origin includes both the x and y coordinates 
 
 ## ve-video
 
@@ -186,5 +186,5 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbMTQxNDg5OTk5MiwxNjk0MTkyMDU0XX0=
 -->
