@@ -23,7 +23,7 @@
     - [Viewing essay text](#viewing-essay-text)
     - [Editing essays](#editing-essays)
 - [GeoJSON](#geojson)
-- [IIIF](#iiif)
+- [IIIF](#international-image-interoperability-framework-iiif)
 - [Frequently asked questions](#frequently-asked-questions)
 - [Tips and tricks](#tips-and-tricks)
 
@@ -270,7 +270,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEzMjQyNjc1LC01NDcyODY4NDQsMjA4Nj
-Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
-MTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbNjk2OTA1ODQ0LDIxMzI0MjY3NSwtNTQ3Mj
+g2ODQ0LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYz
+LDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
