@@ -11,6 +11,9 @@
     - [ve-video](#ve-video)
     - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
+    - [References](#ve-references)
+
+- 
 
 # Introduction
 
@@ -199,7 +202,12 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 - [medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv) - A tab separated text file defining a graph using a mix of ad-hoc nodes and nodes defined using Wikidata entities
 
 # Essay authoring
+
+## References
+
+# Frequently asked questions
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MT
-kyMDU0XX0=
+eyJoaXN0b3J5IjpbMjAxNTkwNTg1MCwxMTEyNTc3NDYzLDY0MD
+g1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
