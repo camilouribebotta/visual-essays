@@ -195,8 +195,14 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 ## ve-plant-specimen
 
-Dis
+Displays a high resolution image for a plant type specimen retrieved from the [Global Plants](https://https://plants.jstor.org) database.
 
+### ve-video attributes
+
+- __vid__:  The Youtube video ID.
+- __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
+- __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
+- 
 ## ve-graph
 
 Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
@@ -228,7 +234,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzY4OTk0MDAsLTU0NzI4Njg0NCwyMDg2Nj
-U3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwx
-Njk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbLTExNDE0NDMxNzQsLTU0NzI4Njg0NCwyMD
+g2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcy
+MSwxNjk0MTkyMDU0XX0=
 -->
