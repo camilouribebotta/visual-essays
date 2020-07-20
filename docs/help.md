@@ -14,8 +14,10 @@
     - [ve-image](#ve-image)
     - [ve-video](#ve-video)
     - [ve-graph](#ve-graph)
+    - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
-    - [Footnotes](#ve-footnotes)
+    - [Markdown](#markdown)
+    - [Footnotes](#footnotes)
 - [GeoJSON](#geojson)
 - [IIIF](#iiif)
 - [Frequently asked questions](#frequently-asked-questions)
@@ -252,7 +254,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5NjM5NTA3NiwtNTQ3Mjg2ODQ0LDIwOD
-Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
-LDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbMTEzMDcwMDgyLC01NDcyODY4NDQsMjA4Nj
+Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
+MTY5NDE5MjA1NF19
 -->
