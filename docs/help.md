@@ -149,9 +149,9 @@ When a `title` attribute is included in a `data-entity` attribute for a location
 
 This section defines optional entity attributes that may be used to control the presentation of locations displayed on a map.
 
-
-- __marker-symbol__:  
-- __fill__:  When tagging entities in the essay text the text to match is defined by the label and aliases 
+ - __title__:  The label used in map feature labels and the map controls. 
+- __marker-symbol__:  The symbol to be used on a location marker.
+- __fill__:  The color to use for a 
 
 ## ve-map
 
@@ -284,7 +284,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc2NDEzMTA5MSwyMTMyNDI2NzUsLTU0Nz
-I4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2
-Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbLTYwMDA1OTQ1LDIxMzI0MjY3NSwtNTQ3Mj
+g2ODQ0LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYz
+LDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
