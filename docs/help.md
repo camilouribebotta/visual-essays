@@ -115,15 +115,14 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 Since `ve-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper.  For instance, the following directives are equivalent:
 
 ```html
-<param ve-entity eqid="Q10302" title="France">
+<param ve-entity eid="Q10302" title="France">
 <param eid="Q10302">
 ```
-
 In the interest of maintainability and future proofing the longer form version is recommended.
 
 ### ve-entity attributes
 
-- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
+- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used b.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
 - __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
@@ -186,5 +185,5 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTYzOTcxMjcxXX0=
+eyJoaXN0b3J5IjpbNTg3ODU1NTg2XX0=
 -->
