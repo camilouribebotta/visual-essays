@@ -205,7 +205,7 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 ## Footnotes
 
-Footnotes and endnotes are not part of the core Markdown syntax.  The visual essay Markdown processor supports a common extension that 
+Footnotes and endnotes are not part of the core Markdown syntax.  The visual essay Markdown processor supports a common extension that enables footnote linking in the essay text.  The syntax is `[^1]`
 
 
 # Frequently asked questions
@@ -219,6 +219,6 @@ Footnotes and endnotes are not part of the core Markdown syntax.  The visual ess
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjkzNTY1MzIyLC03Mzc1OTIwNDIsMTExMj
-U3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbLTE5MjMxMTg4NDcsLTczNzU5MjA0MiwxMT
+EyNTc3NDYzLDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
