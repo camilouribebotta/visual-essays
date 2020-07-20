@@ -16,6 +16,8 @@
     - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
     - [Footnotes](#ve-footnotes)
+- [GeoJSON](#geojson)
+- [IIIF](#iiif)
 - [Frequently asked questions](#frequently-asked-questions)
 - [Tips and tricks](#tips-and-tricks)
 
@@ -237,7 +239,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 ## Creating and hosting a custom GeoJSON file
 
-# International Image Interoperability Fr
+# International Image Interoperability Framework (IIIF)
 
 # Frequently asked questions
 
@@ -250,7 +252,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODgzNjI2MTQ4LC01NDcyODY4NDQsMjA4Nj
-Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
-MTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbLTY5NjM5NTA3NiwtNTQ3Mjg2ODQ0LDIwOD
+Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
+LDE2OTQxOTIwNTRdfQ==
 -->
