@@ -199,7 +199,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 Associates an image with a text element.   The directive provides the ability to define an image using the source URL for an image (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
 
-By default, images are presented as IIIF images providing deep zoom and panning of high resolution images.  
+By default, images are presented as IIIF images providing deep zoom and panning of high resolution images.  This behavior can be overridden by adding a `static` attribute to the directive. 
 
 ### ve-image attributes
 
@@ -212,7 +212,7 @@ By default, images are presented as IIIF images providing deep zoom and panning 
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
  - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.  The value for a region is a comma separated sequence of 4 integers representing the origin, width and height.  The origin includes both the x and y coordinates relative to the top left of the image.  The region may be expressed as absolute pixel values or as percentages of the relative values.  More information on IIIF regions can be found at [https://iiif.io/api/image/2.0/#region](https://iiif.io/api/image/2.0/#region)
  - __attribution__:  An attribution statement to associate with the image.
- - __static__:  Overrides the default behavior
+ - __static__:  Forces the image to be displayed as a static image rather than using the IIIF version with deep zoom and panning support
 
 ## ve-video
 
@@ -298,8 +298,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIwNjg5NTQ3MSw4OTEyNjk0ODEsLTIxMD
-gwODcwNzksMjEzMjQyNjc1LC01NDcyODY4NDQsMjA4NjY1NzUw
-OCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEsMTY5ND
-E5MjA1NF19
+eyJoaXN0b3J5IjpbMTA2NzI5NDI5LDg5MTI2OTQ4MSwtMjEwOD
+A4NzA3OSwyMTMyNDI2NzUsLTU0NzI4Njg0NCwyMDg2NjU3NTA4
+LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MT
+kyMDU0XX0=
 -->
