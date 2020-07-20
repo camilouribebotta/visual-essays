@@ -149,12 +149,15 @@ When a `title` attribute is included in a `data-entity` attribute for a location
 
 This section defines optional entity attributes that may be used to control the presentation of locations displayed on a map.
 
- - __title__:  The label used in map feature labels and the map controls. 
-- __marker-symbol__:  The symbol to be used on a location marker.
-- __marker-symbol-color__:  The color to use for a location marker symbol.
-- __marker-color__:  The color to use for a location marker background.
+ - __title__:  The label used in map feature labels and the map controls
+- __marker-symbol__:  The symbol to be used on a location marker
+- __marker-symbol-color__:  The color to use for a location marker symbol
+- __marker-symbol-color__:  The color to use for a location marker symbol
+- __marker-symbol-color__:  The color to use for a location marker symbol
+- __marker-color__:  The color to use for a location marker background
 - __fill__:  The color to use for a location marker or GeoJSON polygon region
 - __stroke__:  The color to use for lines (including GeoJSON polygon region outlines)
+- __opacity__:  The opacity level for a marker or GeoJSON polygon
 
 ## ve-map
 
@@ -287,7 +290,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODczOTMzNDAyLC0yMTA4MDg3MDc5LDIxMz
-I0MjY3NSwtNTQ3Mjg2ODQ0LDIwODY2NTc1MDgsLTczNzU5MjA0
-MiwxMTEyNTc3NDYzLDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbLTg4MzcwMjE2NiwtMjEwODA4NzA3OSwyMT
+MyNDI2NzUsLTU0NzI4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIw
+NDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
