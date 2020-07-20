@@ -12,8 +12,8 @@
     - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
     - [Footnotes](#ve-footnotes)
-- [Frequently asked questions](#essay-frequently-asked-questions)
-- [Tips and tricks](#essay-tips-and-tricks)
+- [Frequently asked questions](#frequently-asked-questions)
+- [Tips and tricks](#tips-and-tricks)
 
 # Introduction
 
@@ -219,6 +219,6 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUyODA3NzgxNCwtNzM3NTkyMDQyLDExMT
-I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbNzg0NjM4Mjk0LC03Mzc1OTIwNDIsMTExMj
+U3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
