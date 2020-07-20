@@ -197,9 +197,9 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 Displays a high resolution image for a plant type specimen retrieved from the [Global Plants](https://https://plants.jstor.org) database.
 
-### ve-video attributes
+### ve-plant-specimen attributes
 
-- __vid__:  The Youtube video ID.
+- __eid__:  The Wikidata QID for a species-level taxon name.  For example, [Q624242](https:/)
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 - 
@@ -234,7 +234,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNDE0NDMxNzQsLTU0NzI4Njg0NCwyMD
-g2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcy
-MSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbLTM5MzQ2NTk3OCwtNTQ3Mjg2ODQ0LDIwOD
+Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
+LDE2OTQxOTIwNTRdfQ==
 -->
