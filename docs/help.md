@@ -122,7 +122,7 @@ In the interest of maintainability and future proofing the longer form version i
 
 ### ve-entity attributes
 
-- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used b.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
+- __title__:  The entity label.  This has special meaning for location entities but is otherwise not used.  The actual entity label used in information boxes and elsewhere comes from the label property in the referenced entity.  Although the title is not used for non-location entities including a title is still helpful as a means to identify the purpose of the `data-entity` directive in the essay source text.  Essays will often include directives for many entities and the title field provides a convenient way for an author to see what is referenced.
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
 - __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
@@ -146,7 +146,7 @@ The `ve-map` directive indicates that a map should be added as a visualization c
 - __zoom__:  This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `zoom="3.4"`
 - __hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 - __prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
-- 
+
 ## ve-map-layer
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
@@ -185,5 +185,5 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTg3ODU1NTg2XX0=
+eyJoaXN0b3J5IjpbMTgwMjk1ODk5OV19
 -->
