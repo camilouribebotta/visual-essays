@@ -257,6 +257,10 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 # Essay hosting
 
+## Github
+
+
+
 # Essay authoring
 
 ## Markdown
@@ -298,8 +302,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM5NDExODA3NCw4OTEyNjk0ODEsLTIxMD
-gwODcwNzksMjEzMjQyNjc1LC01NDcyODY4NDQsMjA4NjY1NzUw
-OCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEsMTY5ND
-E5MjA1NF19
+eyJoaXN0b3J5IjpbMTc1MzQ0ODA1OSwxMzk0MTE4MDc0LDg5MT
+I2OTQ4MSwtMjEwODA4NzA3OSwyMTMyNDI2NzUsLTU0NzI4Njg0
+NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2ND
+A4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
