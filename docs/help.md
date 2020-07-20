@@ -208,11 +208,14 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 # Frequently asked questions
 
 1.  How do I ...
-   **Answer**: well, that depends
+     **Answer**:  hmmm, good question
 2.  What is ...
-   **Answer**: well, that depends
+    **Answer**:  well, that depends
 
+# Tips and tricks
+
+1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI1Mjc2MDUyMywxMTEyNTc3NDYzLDY0MD
+eyJoaXN0b3J5IjpbLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MD
 g1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
