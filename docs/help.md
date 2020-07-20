@@ -147,10 +147,11 @@ When a `title` attribute is included in a `data-entity` attribute for a location
 
 ### ve-entity location-specific attributes
 
-This section defines optiona entity attributes that 
+This section defines optional entity attributes that may be used to control the presentation of locations displayed on a map.
 
-- __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
-- __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases 
+
+- __marker-symbol__:  
+- __fill__:  When tagging entities in the essay text the text to match is defined by the label and aliases 
 
 ## ve-map
 
@@ -283,7 +284,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NjcwMzE2NTMsMjEzMjQyNjc1LC01ND
-cyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0
-NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbLTc2NDEzMTA5MSwyMTMyNDI2NzUsLTU0Nz
+I4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2
+Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
