@@ -16,6 +16,7 @@
     - [ve-plant-specimen](#ve-plant-specimen)
     - [ve-storiiies](#ve-storiiies)
     - [ve-graph](#ve-graph)
+- [Essay hosting](#essay-hosting)
 - [Essay authoring](#essay-authoring)
     - [Markdown](#markdown)
     - [Footnotes](#footnotes)
@@ -232,9 +233,9 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 - [medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv) - A tab separated text file defining a graph using a mix of ad-hoc nodes and nodes defined using Wikidata entities
 
-# Essay authoring
+# Essay hosting
 
-## Hosting essays
+# Essay authoring
 
 ## Markdown
 
@@ -269,7 +270,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1MzUxMjU1MzEsLTU0NzI4Njg0NCwyMD
-g2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcy
-MSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbMjEzMjQyNjc1LC01NDcyODY4NDQsMjA4Nj
+Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
+MTY5NDE5MjA1NF19
 -->
