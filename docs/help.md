@@ -205,7 +205,7 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 ## Footnotes
 
-
+Footnotes and endnotes are not part of the core Markdown syntax.  The visual essay Markdown processor supports a common extension that 
 
 
 # Frequently asked questions
@@ -219,6 +219,6 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA3NjE4NTM4OCwtNzM3NTkyMDQyLDExMT
-I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbNjkzNTY1MzIyLC03Mzc1OTIwNDIsMTExMj
+U3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
