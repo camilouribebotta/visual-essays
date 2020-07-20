@@ -199,7 +199,7 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 Associates an image with a text element.   The directive provides the ability to define an image using the source URL for an image (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
 
-By default, images are presented as IIIF images providing deep zoom and panning of high resolution images.  This behavior can be overridden by adding a `static` attribute to the directive. 
+By default, images are presented as IIIF images providing deep zoom and panning of high resolution images.  This behavior can be overridden by adding a `static` attribute to the directive.  If more than one image is associated with an element the static viewer will be used as the IIIF viewer used does not currently support multiple images.
 
 ### ve-image attributes
 
@@ -298,8 +298,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA2NzI5NDI5LDg5MTI2OTQ4MSwtMjEwOD
-A4NzA3OSwyMTMyNDI2NzUsLTU0NzI4Njg0NCwyMDg2NjU3NTA4
-LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MT
-kyMDU0XX0=
+eyJoaXN0b3J5IjpbNTgyNTY0MTMsODkxMjY5NDgxLC0yMTA4MD
+g3MDc5LDIxMzI0MjY3NSwtNTQ3Mjg2ODQ0LDIwODY2NTc1MDgs
+LTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIxLDE2OTQxOT
+IwNTRdfQ==
 -->
