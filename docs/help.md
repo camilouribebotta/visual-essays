@@ -145,6 +145,13 @@ When a `title` attribute is included in a `data-entity` attribute for a location
 - __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
 
+### ve-entity location-specific attributes
+
+This section defines optiona entity attributes that 
+
+- __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
+- __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases 
+
 ## ve-map
 
 The `ve-map` directive indicates that a map should be added as a visualization component for the associated text element(s).  Maps can be further customized with `ve-map-layer` directives that define layers or overlays to be applied to the map. 
@@ -193,8 +200,6 @@ Associates an image with a text element.  The directive provides the ability to 
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
  - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.  The value for a region is a comma separated sequence of 4 integers representing the origin, width and height.  The origin includes both the x and y coordinates relative to the top left of the image.  The region may be expressed as absolute pixel values or as percentages of the relative values.  More information on IIIF regions can be found at [https://iiif.io/api/image/2.0/#region](https://iiif.io/api/image/2.0/#region)
  - __attribution__:  An attribution statement to associate with the image.
-
-### ve-image location-specific attributes
 
 ## ve-video
 
@@ -278,7 +283,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMDA4NTMzMDcsMjEzMjQyNjc1LC01ND
+eyJoaXN0b3J5IjpbLTE5NjcwMzE2NTMsMjEzMjQyNjc1LC01ND
 cyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0
 NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
