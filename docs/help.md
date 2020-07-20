@@ -157,7 +157,9 @@ This section defines optional entity attributes that may be used to control the 
 - __marker-color__:  The color to use for a location marker background
 - __fill__:  The color to use for a location marker or GeoJSON polygon region
 - __stroke__:  The color to use for lines (including GeoJSON polygon region outlines)
-- __stroke-width__:  Sets the width of a line or GeoJSON polygon outline.  Th
+- __stroke-width__:  Sets the width of a line or GeoJSON polygon outline.  The default is 4 for a regular line and 0 for a GeoJSON polygon
+- __stroke-opacity__:  Sets the opacity level of a line or GeoJSON polygon outline
+- __fill-opacity__:  Sets the opacity level of a line or GeoJSON polygon outline
 - __opacity__:  The opacity level for a marker or GeoJSON polygon
 
 ## ve-map
@@ -291,7 +293,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNDI1MjczMTEsLTIxMDgwODcwNzksMj
-EzMjQyNjc1LC01NDcyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTky
-MDQyLDExMTI1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbLTMxMDAyNDY5MCwtMjEwODA4NzA3OSwyMT
+MyNDI2NzUsLTU0NzI4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIw
+NDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
