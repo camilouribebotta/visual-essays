@@ -9,6 +9,7 @@
     - [ve-map-layer](#ve-map-layer)
     - [ve-image](#ve-image)
     - [ve-video](#ve-video)
+    - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
 
 # Introduction
@@ -184,7 +185,12 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
+## ve-graph
+
+Associates a graph )or network diagram) with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
+
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbMTI5NDEwNjY5OCw2NDA4NTcyMSwxNjk0MT
+kyMDU0XX0=
 -->
