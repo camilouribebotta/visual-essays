@@ -208,6 +208,10 @@ Displays a high resolution image for a plant type specimen retrieved from the [G
 
 Displays an IIIF annotated image.
 
+### ve-storiiies attributes
+
+- __id__:  The 5-digit identifier assigned by the Storiiies editor
+
 ## ve-graph
 
 Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
@@ -239,7 +243,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMwMjE2NTk3NSwtNTQ3Mjg2ODQ0LDIwOD
-Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
-LDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbLTU2OTEwNTk1LC01NDcyODY4NDQsMjA4Nj
+Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
+MTY5NDE5MjA1NF19
 -->
