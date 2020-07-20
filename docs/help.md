@@ -233,7 +233,11 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 # GeoJSON
 
-## Sources for 
+## Sources for existing GeoJSON files
+
+## Creating and hosting a custom GeoJSON file
+
+# International Image Interoperability Fr
 
 # Frequently asked questions
 
@@ -246,7 +250,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjI4NDUxMDYsLTU0NzI4Njg0NCwyMD
-g2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcy
-MSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbODgzNjI2MTQ4LC01NDcyODY4NDQsMjA4Nj
+Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
+MTY5NDE5MjA1NF19
 -->
