@@ -151,7 +151,8 @@ This section defines optional entity attributes that may be used to control the 
 
  - __title__:  The label used in map feature labels and the map controls. 
 - __marker-symbol__:  The symbol to be used on a location marker.
-- __fill__:  The color to use for a 
+- __fill__:  The color to use for a location marker or GeoJSON polygon region
+- 
 
 ## ve-map
 
@@ -284,7 +285,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYwMDA1OTQ1LDIxMzI0MjY3NSwtNTQ3Mj
-g2ODQ0LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYz
-LDY0MDg1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbLTIxMDgwODcwNzksMjEzMjQyNjc1LC01ND
+cyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0
+NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
