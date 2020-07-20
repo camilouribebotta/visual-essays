@@ -187,10 +187,10 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 ## ve-graph
 
-Associates a graph )or network diagram) with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
+Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited text files that include the information for plotting the nodes and edges in the grao
 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI5NDEwNjY5OCw2NDA4NTcyMSwxNjk0MT
+eyJoaXN0b3J5IjpbLTc3MzY1ODY1OCw2NDA4NTcyMSwxNjk0MT
 kyMDU0XX0=
 -->
