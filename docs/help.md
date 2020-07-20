@@ -199,10 +199,10 @@ Displays a high resolution image for a plant type specimen retrieved from the [G
 
 ### ve-plant-specimen attributes
 
-- __eid__:  The Wikidata QID for a species-level taxon name.  For example, [Q624242](https:/)
-- __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
-- __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
-- 
+- __eid__:  The Wikidata QID for a species-level taxon name.  For example, [Q624242](https://www.wikidata.org/entity/Q624242)
+- __max__: The maximum number of specimens to return
+- __reverse__:  Reverses the date 
+ 
 ## ve-graph
 
 Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
@@ -234,7 +234,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM5MzQ2NTk3OCwtNTQ3Mjg2ODQ0LDIwOD
+eyJoaXN0b3J5IjpbMjA1MjgwNTU5NiwtNTQ3Mjg2ODQ0LDIwOD
 Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
 LDE2OTQxOTIwNTRdfQ==
 -->
