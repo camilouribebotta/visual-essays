@@ -269,7 +269,11 @@ Essays may be viewed as either stand-alone essays or in the context of site that
 When viewing an essay in stand-alone mode (i.e., no links to supplemental pages).  The general form of the URL is:  
 >`https://visual-essays.app/<GITHUB-ACCOUNT>/<GITHUB-REPOSITORY><FILE-PATH>`
 
-For visual essay sites with known domains (i.e., **plant-humanities.app** and **kent-maps.online**) the GITHUB-ACCOUNT and GITHUB-REPOSITORY is omitted in the URL.  Similarly, URLs to top-level essays associated with the **visual-essays.app** domain do 
+For visual essay sites with known domains (i.e., **plant-humanities.app** and **kent-maps.online**) the GITHUB-ACCOUNT and GITHUB-REPOSITORY is omitted in the URL.  Similarly, URLs to top-level essays associated with the **visual-essays.app** domain can omit the GITHUB-ACCOUNT and GITHUB-REPOSITORY from the URL.
+
+Below are some examples of stand-alone essay links:
+
+- [https://visual-essay]
 
 # Essay authoring
 
@@ -312,7 +316,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEyMTkwNzc3MiwxMzk0MTE4MDc0LDg5MT
+eyJoaXN0b3J5IjpbLTk4NjE5NDAxNCwxMzk0MTE4MDc0LDg5MT
 I2OTQ4MSwtMjEwODA4NzA3OSwyMTMyNDI2NzUsLTU0NzI4Njg0
 NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2ND
 A4NTcyMSwxNjk0MTkyMDU0XX0=
