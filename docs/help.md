@@ -189,8 +189,13 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
 
+### ve-graph attributes
+
+- __url__:  The URL to a comma delimited text file containing the graph specification.
+- __title__:  The title to use for the graph in the viewer.
+
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM1MDIwNDg0NSw2NDA4NTcyMSwxNjk0MT
-kyMDU0XX0=
+eyJoaXN0b3J5IjpbLTEyNzkzMjI2MzIsNjQwODU3MjEsMTY5ND
+E5MjA1NF19
 -->
