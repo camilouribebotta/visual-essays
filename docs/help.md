@@ -11,9 +11,9 @@
     - [ve-video](#ve-video)
     - [ve-graph](#ve-graph)
 - [Essay authoring](#essay-authoring)
-    - [References](#ve-references)
-
-- 
+    - [Footnotes](#ve-footnotes)
+- [Frequently asked questions](#essay-frequently-asked-questions)
+- [Tips and tricks](#essay-tips-and-tricks)
 
 # Introduction
 
@@ -203,7 +203,10 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 # Essay authoring
 
-## References
+## Footnotes
+
+
+
 
 # Frequently asked questions
 
@@ -216,6 +219,6 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MD
-g1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbMTA3NjE4NTM4OCwtNzM3NTkyMDQyLDExMT
+I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
