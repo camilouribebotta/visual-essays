@@ -194,6 +194,8 @@ Associates an image with a text element.  The directive provides the ability to 
  - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.  The value for a region is a comma separated sequence of 4 integers representing the origin, width and height.  The origin includes both the x and y coordinates relative to the top left of the image.  The region may be expressed as absolute pixel values or as percentages of the relative values.  More information on IIIF regions can be found at [https://iiif.io/api/image/2.0/#region](https://iiif.io/api/image/2.0/#region)
  - __attribution__:  An attribution statement to associate with the image.
 
+### ve-image location-specific attributes
+
 ## ve-video
 
 Associates a video with a text element.  Youtube videos are supported in the current version of the visual essay tool.  Other streaming services may be added in future versions.
@@ -276,7 +278,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI1NzcyMzk5NCwyMTMyNDI2NzUsLTU0Nz
-I4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2
-Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbLTIxMDA4NTMzMDcsMjEzMjQyNjc1LC01ND
+cyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0
+NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
