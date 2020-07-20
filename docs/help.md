@@ -201,7 +201,7 @@ Displays a high resolution image for a plant type specimen retrieved from the [G
 
 - __eid__:  The Wikidata QID for a species-level taxon name.  For example, [Q624242](https://www.wikidata.org/entity/Q624242)
 - __max__: The maximum number of specimens to return
-- __reverse__:  Reverses the date sorting within a type group (holotype, isotype, etc).  By default, multiple specimens within the same type group are sorted by date in ascending order (oldest is first).  Setting this attribute 
+- __reverse__:  Reverses the date sorting within a type group (holotype, isotype, etc).  By default, multiple specimens within the same type group are sorted by date in ascending order (oldest is first).  Setting this attribute to `true` will display the most recent first.
  
 ## ve-graph
 
@@ -234,7 +234,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjUxMjc2MjI2LC01NDcyODY4NDQsMjA4Nj
+eyJoaXN0b3J5IjpbLTUyNzE5MDI2LC01NDcyODY4NDQsMjA4Nj
 Y1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNjQwODU3MjEs
 MTY5NDE5MjA1NF19
 -->
