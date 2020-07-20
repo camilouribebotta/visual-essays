@@ -204,6 +204,10 @@ Displays a high resolution image for a plant type specimen retrieved from the [G
 - __max__: The maximum number of specimens to return
 - __reverse__:  Reverses the date sorting within a type group (holotype, isotype, etc).  By default, multiple specimens within the same type group are sorted by date in ascending order (oldest is first).  Setting this attribute to `true` will display the most recent first.
  
+## ve-storiiies
+
+Displays an IIIF annotated image.
+
 ## ve-graph
 
 Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
@@ -235,7 +239,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAxOTY2MjgyMCwtNTQ3Mjg2ODQ0LDIwOD
+eyJoaXN0b3J5IjpbLTMwMjE2NTk3NSwtNTQ3Mjg2ODQ0LDIwOD
 Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
 LDE2OTQxOTIwNTRdfQ==
 -->
