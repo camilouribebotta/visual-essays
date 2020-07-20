@@ -70,9 +70,9 @@ The `ve-config` directive is used to define essay metadata.  This directive is o
 
 - __title__:  The essay title
 - __author__:  The essay author name(s)
-- __banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
+- __banner__:  A URL to an image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
 repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
-- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
+- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visualization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
 
 ### Custom ve-config attributes
 
@@ -188,5 +188,5 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTcyNTcxODM0Ml19
+eyJoaXN0b3J5IjpbMTIxNzM4NjkxMl19
 -->
