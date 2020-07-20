@@ -151,7 +151,7 @@ When a `title` attribute is included in a `data-entity` attribute for a location
 This section defines optional entity attributes that may be used to control the presentation of locations displayed on a map.
 
  - __title__:  The label used in map feature labels and the map controls
-- __marker-symbol__:  The symbol to be used on a location marker
+- __marker-symbol__:  The symbol to be used on a location marker.  Any icon from the [Font Awesome icon set](https://fontawesome.com/icons?d=gallery)
 - __marker-symbol-color__:  The color to use for a location marker symbol
 - __marker-symbol-xoffset__:  Sets the horizontal offset for a marker symbol (rarely used)
 - __marker-symbol-yoffset__:  Sets the vertical offset for a marker symbol (rarely used)
@@ -316,8 +316,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDQ2Nzk0Mjg2LDEzOTQxMTgwNzQsODkxMj
-Y5NDgxLC0yMTA4MDg3MDc5LDIxMzI0MjY3NSwtNTQ3Mjg2ODQ0
-LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MD
-g1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbMjE0NDc3NDQ2Myw0NDY3OTQyODYsMTM5ND
+ExODA3NCw4OTEyNjk0ODEsLTIxMDgwODcwNzksMjEzMjQyNjc1
+LC01NDcyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMT
+I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
