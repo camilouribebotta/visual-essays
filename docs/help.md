@@ -15,6 +15,7 @@
     - [ve-storiiies](#ve-storiiies)
     - [ve-graph](#ve-graph)
 - [Essay hosting](#essay-hosting)
+- [Viewing essays](#viewing-essays)
 - [Essay authoring](#essay-authoring)
     - [Markdown](#markdown)
     - [Footnotes](#footnotes)
@@ -259,7 +260,9 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 ## Github
 
-# Viewing essa
+# Viewing essays
+
+Essays may be viewed as either stand-alone essays or in the context of 
 
 # Essay authoring
 
@@ -302,8 +305,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MzEwMDg1MzEsMTM5NDExODA3NCw4OT
-EyNjk0ODEsLTIxMDgwODcwNzksMjEzMjQyNjc1LC01NDcyODY4
-NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0NjMsNj
-QwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbNzc1MDAyOTczLDEzOTQxMTgwNzQsODkxMj
+Y5NDgxLC0yMTA4MDg3MDc5LDIxMzI0MjY3NSwtNTQ3Mjg2ODQ0
+LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MD
+g1NzIxLDE2OTQxOTIwNTRdfQ==
 -->
