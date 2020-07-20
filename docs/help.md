@@ -211,14 +211,14 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 # Frequently asked questions
 
 1.  How do I ...  
-     **Answer**:  hmmm, good question
+     **Answer**:  hmmm, good question  
 2.  What is ...  
-    **Answer**:  well, that depends
+    **Answer**:  well, that depends. 
 
 # Tips and tricks
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTY2MjAxMzAyLC03Mzc1OTIwNDIsMTExMj
-U3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
+eyJoaXN0b3J5IjpbMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMT
+I1Nzc0NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
 -->
