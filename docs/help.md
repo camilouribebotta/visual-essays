@@ -1,5 +1,5 @@
 <style>
-	.v-application a, .v-application li, v-application p { font-size: 1.3rem; }
+	.v-application a, .v-application li, .v-application p { font-size: 1.3rem; }
 </style>
 
 # Visual Essay Help
@@ -223,7 +223,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTk2MzA4NDg4OCwyMDg2NjU3NTA4LC03Mz
+eyJoaXN0b3J5IjpbLTU0NzI4Njg0NCwyMDg2NjU3NTA4LC03Mz
 c1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcyMSwxNjk0MTkyMDU0
 XX0=
 -->
