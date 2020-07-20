@@ -77,9 +77,9 @@ Visual essay directives currently include:
 - [ve-map-layer](#ve-map) - Defines a map layer to add to current map.
 - [ve-image](#ve-image) - Associates an image with an element.
 - [ve-video](#ve-video) - Associates a video with an element.
-- [ve-plant-specimen](#ve-video) - Associates a video with an element.
-- [ve-storiiies](#ve-video) - Associates a video with an element.
-- [ve-graph](#ve-video) - Associates a video with an element.
+- [ve-plant-specimen](#ve-plant-specimen) - Associates plant type specimens from [Global Plants](https://plants.jstor.org) with an element.
+- [ve-storiiies](#ve-storiiies) - Associates a video with an element.
+- [ve-graph](#ve-graph) - Associates a video with an element.
 
 ## ve-config
 
@@ -273,7 +273,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NTk5NjkzMTYsMjEzMjQyNjc1LC01ND
-cyODY4NDQsMjA4NjY1NzUwOCwtNzM3NTkyMDQyLDExMTI1Nzc0
-NjMsNjQwODU3MjEsMTY5NDE5MjA1NF19
+eyJoaXN0b3J5IjpbLTQzMDU5MTU1NSwyMTMyNDI2NzUsLTU0Nz
+I4Njg0NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2
+Myw2NDA4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
