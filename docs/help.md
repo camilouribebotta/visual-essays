@@ -196,9 +196,9 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 ### Example ve-graph directives
 
-- [https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv)
+- [medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv) - A tab separated text file defining a graph using a mix of nodes defined using Wikidata entities and 
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU0Njc3ODcxOSw2NDA4NTcyMSwxNjk0MT
-kyMDU0XX0=
+eyJoaXN0b3J5IjpbLTE0ODYyMzY5ODIsNjQwODU3MjEsMTY5ND
+E5MjA1NF19
 -->
