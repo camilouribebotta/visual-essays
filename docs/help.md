@@ -207,7 +207,10 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 # Frequently asked questions
 
+1.  Before the craze for Japanese cherries in the West at the start of the twentieth century, Europeans knew little of Japanese cherry blossoms, and Westerners who visited Japan often complained of how flowering Japanese cherry trees bore no fruit.
+   *
+3.  What is ...
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjAxNTkwNTg1MCwxMTEyNTc3NDYzLDY0MD
-g1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbMTQ3MzE5MzQ0LDExMTI1Nzc0NjMsNjQwOD
+U3MjEsMTY5NDE5MjA1NF19
 -->
