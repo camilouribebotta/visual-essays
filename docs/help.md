@@ -234,11 +234,14 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 
 # Essay authoring
 
+## Hosting essays
+
+## Markdown
+
 ## Footnotes
 
 Footnotes and endnotes are not part of the core Markdown syntax.  However, the visual essay Markdown processor supports a common extension that enables footnote linking in the essay text.  The syntax is `[^ref]`, where "ref" can be any string.  A pair of these footnote tags are used in the markdown text.  The first is located with the essay text to be associated with the footnote.  The second is included in an aggregated footnotes list, typically located at the end of the essay following a section heading of `References` or something equivalent. 
 
-## 
 ## Viewing essay text
 
 ## Editing essays
@@ -266,7 +269,7 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU2OTE2NDgxMiwtNTQ3Mjg2ODQ0LDIwOD
-Y2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MDg1NzIx
-LDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbLTE1MzUxMjU1MzEsLTU0NzI4Njg0NCwyMD
+g2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2NDA4NTcy
+MSwxNjk0MTkyMDU0XX0=
 -->
