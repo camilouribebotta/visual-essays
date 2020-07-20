@@ -194,8 +194,11 @@ Associates a graph (or network diagram) with a text element.  Graphs are defined
 - __url__:  The URL to a comma delimited text file containing the graph specification.
 - __title__:  The title to use for the graph in the viewer.
 
+### Example ve-graph directives
+
+- [https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv)
 # Essay authoring
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNzkzMjI2MzIsNjQwODU3MjEsMTY5ND
-E5MjA1NF19
+eyJoaXN0b3J5IjpbLTU0Njc3ODcxOSw2NDA4NTcyMSwxNjk0MT
+kyMDU0XX0=
 -->
