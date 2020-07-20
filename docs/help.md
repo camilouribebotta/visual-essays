@@ -266,7 +266,9 @@ Essays may be viewed as either stand-alone essays or in the context of site that
 
 ## Viewing an essay in stand-alone mode
 
-When viewing an essay in stand-alo
+When viewing an essay in stand-alone mode (i.e., no links to supplemental pages).  The URL is:  
+
+`https://
 
 # Essay authoring
 
@@ -309,8 +311,8 @@ Footnotes and endnotes are not part of the core Markdown syntax.  However, the v
 
 1. 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDcyMjMxMDgwLDEzOTQxMTgwNzQsODkxMj
-Y5NDgxLC0yMTA4MDg3MDc5LDIxMzI0MjY3NSwtNTQ3Mjg2ODQ0
-LDIwODY2NTc1MDgsLTczNzU5MjA0MiwxMTEyNTc3NDYzLDY0MD
-g1NzIxLDE2OTQxOTIwNTRdfQ==
+eyJoaXN0b3J5IjpbMTEwMDg0MzcxMSwxMzk0MTE4MDc0LDg5MT
+I2OTQ4MSwtMjEwODA4NzA3OSwyMTMyNDI2NzUsLTU0NzI4Njg0
+NCwyMDg2NjU3NTA4LC03Mzc1OTIwNDIsMTExMjU3NzQ2Myw2ND
+A4NTcyMSwxNjk0MTkyMDU0XX0=
 -->
