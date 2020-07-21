@@ -58,6 +58,7 @@ In whichever tag form is used the type of visual essay directive is defined usin
 ## Text Elements
 
 Throughout this document the association of visual essay directives to _text elements_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the scope of text element to which it applies.
+<param ve-map>
 
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.
 
