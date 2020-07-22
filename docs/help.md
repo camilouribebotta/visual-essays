@@ -1,3 +1,5 @@
+<style>.v-application a, .v-application li, .v-application p { font-size: 1.3rem; }</style>
+
 # Visual Essay Help
 
 - [Introduction](#introduction)
@@ -10,6 +12,15 @@
     - [ve-image](#ve-image)
     - [ve-video](#ve-video)
 - [Essay authoring](#essay-authoring)
+    - [Markdown](#markdown)
+    - [Footnotes](#footnotes)
+    - [Viewing essay markdown text](#viewing-essay-markdown-text)
+    - [Editing essays](#editing-essays)
+    - [Advanced usage](#advanced-usage)
+- [GeoJSON](#geojson)
+- [IIIF](#international-image-interoperability-framework-iiif)
+- [Frequently asked questions](#frequently-asked-questions)
+- [Tips and tricks](#tips-and-tricks)
 
 # Introduction
 
@@ -46,7 +57,6 @@ In whichever tag form is used the type of visual essay directive is defined usin
 ## Text Elements
 
 Throughout this document the association of visual essay directives to _text elements_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the scope of text element to which it applies.
-<param ve-map center="42.2813, -83.7483" zoom="6">
 
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.
 
@@ -66,6 +76,9 @@ Visual essay directives currently include:
 - [ve-map-layer](#ve-map) - Defines a map layer to add to current map.
 - [ve-image](#ve-image) - Associates an image with an element.
 - [ve-video](#ve-video) - Associates a video with an element.
+- [ve-plant-specimen](#ve-plant-specimen) - Displays plant type specimens from [Global Plants](https://plants.jstor.org).
+- [ve-storiiies](#ve-storiiies) - Displays an annotated IIIF image in an interactive viewer.
+- [ve-graph](#ve-graph) - Displays a graph (network diagram).
 
 ## ve-config
 
@@ -75,14 +88,12 @@ The `ve-config` directive is used to define essay metadata.  This directive is o
 
 - __title__:  The essay title
 - __author__:  The essay author name(s)
-- __banner__:  A URL to a image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the sane content 
-repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
-- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visulaization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
+- __banner__:  A URL to an image to use in the essay header.  This can be an absolute URL to an externally hosted image or a relative URL to an image in the same content repository in which the essay text is hosted, for instance `data-banner="images/some-banner-image.png"`
+- __layout__:  One of `hc` (horizontal closed), `ho` (horizontal open), `vtl`, (vertical text left), `vtr` (vertical text right).  By default, essays will be displayed in a horizontal orientation with the visualization pane hidden (__hc__).  The value __ho__ can be used to render the essay horizontally with the viewer pane initially opened.  The vertical orientation options allow the text location to be set to the right or left view pane.
 
 ### Custom ve-config attributes
 
-The `ve-config` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in
-a custom header:
+The `ve-config` directive can also be used for site-specific custom attributes.  For instance, the _**Plant humanities**_ project uses the following attributes to define values used in a custom header:
 
 - __num-maps__:  The number of maps used in the essay
 - __num-images__:  The number of images used in the essay
@@ -122,10 +133,9 @@ Wikidata is the default knowledge graph used by the visual essay tool so it is s
 Since `ve-entity` directives are used so frequently they are the default directive type and can be used in an un-typed wrapper.  For instance, the following directives are equivalent:
 
 ```html
-<param ve-entity eqid="Q10302" title="France">
+<param ve-entity eid="Q10302" title="France">
 <param eid="Q10302">
 ```
-
 In the interest of maintainability and future proofing the longer form version is recommended.
 
 ### ve-entity attributes
@@ -134,6 +144,23 @@ In the interest of maintainability and future proofing the longer form version i
 When a `title` attribute is included in a `data-entity` attribute for a location the value of this attribute will override any previously defined label from the knowledge graph or external map data, such as that included in existing GeoJSON feature files.
 - __eid__:  The identifier for the entity, typically a 'Q' identifier.  If not namespaced this refers to an entity in the Wikidata knowledge graph.
 - __aliases__:  When tagging entities in the essay text the text to match is defined by the label and aliases contained in the knowledge graph.  It is not uncommon for an entity to be reference in some other way in the essay text and the `aliases` attribute can enable the visual essay tagger to make the connection.  As an example, say the text is describing a location like Chicago but the text simply includes "the city".  To associate "the city" with Chicago include `aliases="the city"` in the directive.  Multiple aliases may be provided using a pipe (`|`) delimiter to separate multiple terms, for instance `aliases="the city|the windy city"`.
+
+### ve-entity location-specific attributes
+
+This section defines optional entity attributes that may be used to control the presentation of locations displayed on a map.
+
+ - __title__:  The label used in map feature labels and the map controls
+- __marker-symbol__:  The symbol to be used on a location marker.  Any icon from the [Font Awesome icon set](https://fontawesome.com/icons?d=gallery) may be used.
+- __marker-symbol-color__:  The color to use for a location marker symbol
+- __marker-symbol-xoffset__:  Sets the horizontal offset for a marker symbol (rarely used)
+- __marker-symbol-yoffset__:  Sets the vertical offset for a marker symbol (rarely used)
+- __marker-color__:  The color to use for a location marker background
+- __fill__:  The color to use for a location marker or GeoJSON polygon region
+- __stroke__:  The color to use for lines (including GeoJSON polygon region outlines)
+- __stroke-width__:  Sets the width of a line or GeoJSON polygon outline.  The default is 4 for a regular line and 0 for a GeoJSON polygon
+- __stroke-opacity__:  Sets the opacity level of a line or GeoJSON polygon outline
+- __fill-opacity__:  Sets the opacity level of a GeoJSON polygon region
+- __opacity__:  The opacity level for a marker or GeoJSON polygon
 
 ## ve-map
 
@@ -154,7 +181,8 @@ The `ve-map` directive indicates that a map should be added as a visualization c
 - __zoom__:  This attribute defines the starting map zoom level.  This number can be expressed in 0.1 increments, such as `zoom="3.4"`
 - __hide-labels__:  By default, the labels for any locations plotted on a map (both markers and GeoJSON features) will be displayed.  This attribute can be used to inhibit this default behavior.  Note that a user can still open the label by hovering over and/or clicking on the label or GeoJSON defined region.
 - __prefer-geojson__:  Location entities are automatically added to a map components that is visible for an active text element.  By default the location is represented as a marker pinned at a discrete geo-coordinate.  However, many location entities in the Wikidata knowledge graph can also be associated with GeoJSON shape files that represent the location as region using a polygon shape.  If the visualization of a location on a map using the GeoJSON defined region is preferred over a simple marker/pin this attribute is used to express that preference.
-- 
+- __active__: Defines whether the layer is initially displayed on the map.  The default value is `false`.  If this attribute is not set to `true` the user will need to activate the layer from the map control located on the map.  Since `active` is a boolean property (supporting just `true` and `false` values) a shorthand version of the attribute (the attribute name without a value) can be used.
+
 ## ve-map-layer
 
 The map shown for an active element can be augmented with one or more layers.  Two types of layers are currently supported.
@@ -169,7 +197,9 @@ The map shown for an active element can be augmented with one or more layers.  T
 
 ## ve-image
 
-Associates an image with a text element.  The directive provides the ability to define 3 versions of the image URL, the normal URL (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
+Associates an image with a text element.   The directive provides the ability to define an image using the source URL for an image (`url`), an IIIF URL (`iiif-url`) or an IIIF manifest URL (`manifest`).  The `iiif-url` and/or `manifest` attributes should be used for images with existing IIIF service links or manifests.  If not, use the `url` attribute and IIIF manifests will be automatically created by the visual essay service.
+
+By default, images are presented as IIIF images providing deep zoom and panning of high resolution images.  This behavior can be overridden by adding a `static` attribute to the directive.  If more than one image is associated with an element the static viewer will be used as the IIIF viewer used does not currently support multiple images.  That will be added in a future version.
 
 ### ve-image attributes
 
@@ -180,6 +210,9 @@ Associates an image with a text element.  The directive provides the ability to 
 - __fit__:  This attribute defines how an image will be scaled or cropped in the image viewer window.  Possible values for this attribute are
     -  `contain`:  The replaced content is scaled to maintain its aspect ratio while fitting within the element's content box
     -  `cover`:  (default) The replaced content is sized to maintain its aspect ratio while filling the element's entire content box. The object will be clipped to fit
+ - __region__: The region attribute is used to show a cropped region of the image in the image viewer.  The entire image is loaded and can be seen by zooming and panning but the initial display will only include the specified region.  The value for a region is a comma separated sequence of 4 integers representing the origin, width and height.  The origin includes both the x and y coordinates relative to the top left of the image.  The region may be expressed as absolute pixel values or as percentages of the relative values.  More information on IIIF regions can be found at [https://iiif.io/api/image/2.0/#region](https://iiif.io/api/image/2.0/#region)
+ - __attribution__:  An attribution statement to associate with the image.
+ - __static__:  Forces the image to be displayed as a static image rather than using the IIIF viewer with deep zoom and panning support
 
 ## ve-video
 
@@ -191,6 +224,93 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 - __title__:  The title attribute is used for the image caption.  Markdown text formatting is supported in the title allowing for italicized and bold text.
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
+## ve-plant-specimen
+
+Displays a high resolution image for a plant type specimen retrieved from the [Global Plants](https://https://plants.jstor.org) database.
+
+### ve-plant-specimen attributes
+
+- __eid__:  The Wikidata QID for a species-level taxon name.  For example, [Q12844029](https://www.wikidata.org/entity/Q624242)
+- __max__: The maximum number of specimens to return
+- __reverse__:  Reverses the date sorting within a type group (holotype, isotype, etc).  By default, multiple specimens within the same type group are sorted by date in ascending order (oldest is first).  Setting this attribute to `true` will display the most recent first.
+ 
+## ve-storiiies
+
+Displays an IIIF annotated image.
+
+### ve-storiiies attributes
+
+- __id__:  The 5-digit identifier assigned by the Storiiies editor
+
+## ve-graph
+
+Associates a graph (or network diagram) with a text element.  Graphs are defined using delimited (comma or tab) text files that include the information for plotting the nodes and edges in the graph.  The graph specification is loaded from a URL provided in the `ve-graph` tag.
+
+### ve-graph attributes
+
+- __url__:  The URL to a comma delimited text file containing the graph specification.
+- __title__:  The title to use for the graph in the viewer.
+
+### Example ve-graph directives
+
+- [medici.tsv](https://github.com/JSTOR-Labs/plant-humanities/blob/master/graphs/medici.tsv) - A tab separated text file defining a graph using a mix of ad-hoc nodes and nodes defined using Wikidata entities
+
+# Essay hosting
+
+## Github
+
+# Viewing essays
+
+Essays may be viewed as either stand-alone essays or in the context of site that aggregates multiple essays and can provide supplemental pages ("help", "contact", "about", etc)
+
+## Viewing an essay in stand-alone mode
+
+When viewing an essay in stand-alone mode (i.e., no links to supplemental pages).  The general form of the URL is:  
+>`https://visual-essays.app/<GITHUB-ACCOUNT>/<GITHUB-REPOSITORY><FILE-PATH>`
+
+For visual essay sites with known domains (i.e., **plant-humanities.app** and **kent-maps.online**) the GITHUB-ACCOUNT and GITHUB-REPOSITORY is omitted in the URL.  Similarly, URLs to top-level essays associated with the **visual-essays.app** domain can omit the GITHUB-ACCOUNT and GITHUB-REPOSITORY from the URL.
+
+Below are some examples of stand-alone essay links:
+
+- [https://visual-essays.app]
+
 # Essay authoring
 
-Coming...
+## Markdown
+
+## Footnotes
+
+Footnotes and endnotes are not part of the core Markdown syntax.  However, the visual essay Markdown processor supports a common extension that enables footnote linking in the essay text.  The syntax is `[^ref]`, where "ref" can be any string.  A pair of these footnote tags are used in the markdown text.  The first is located with the essay text to be associated with the footnote.  The second is included in an aggregated footnotes list, typically located at the end of the essay following a section heading of `References` or something equivalent. 
+
+## Viewing essay markdown text
+
+## Editing essays
+
+### Default editor
+
+### StackEdit editor
+
+## Advanced usage
+
+### Adding custom styling
+
+# GeoJSON
+
+## Sources for existing GeoJSON files
+
+## Creating and hosting a custom GeoJSON file
+
+### GeoJSON decorators
+
+# International Image Interoperability Framework (IIIF)
+
+# Frequently asked questions
+
+1.  How do I ...  
+     **Answer**:  hmmm, good question  
+2.  What is ...  
+    **Answer**:  well, that depends. 
+
+# Tips and tricks
+
+1. 
