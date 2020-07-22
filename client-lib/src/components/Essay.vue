@@ -9,7 +9,7 @@ export default {
   name: 'essay',
   data: () => ({
     paragraphs: {},
-    scenes: []
+    scenes: [],
   }),
   computed: {
     html() { return this.$store.getters.essayHTML },
@@ -21,6 +21,7 @@ export default {
     layout() { return this.$store.getters.layout },
     isMobile() { return this.$store.getters.isMobile },
     hoverItemID() { return this.$store.getters.hoverItemID },
+    viewerIsOpen() { return this.$store.getters.viewerIsOpen },
     triggerHook() { return (this.contentStartPos + this.$store.getters.triggerOffset) / this.$store.getters.height },
     style() {
       return {
@@ -38,7 +39,6 @@ export default {
   },
   methods: {
     init() {
-      this.findContent()
       this.linkTaggedItems()
       // this.addFootnotesHover()
 
@@ -50,11 +50,28 @@ export default {
           first = para.id
         }
         para.title = elemIdPath(para.id).join(',')
+        const itemsInPara = itemsInElements(elemIdPath(para.id), this.allItems)
+        let scrollTop = para.offsetTop
+        let elem = para
+        while (elem.parentElement && elem.id !== 'essay') {
+          elem = elem.parentElement
+          scrollTop += elem.offsetTop
+        }
+
         this.paragraphs[para.id] = {
           prior, 
-          top: para.offsetTop,
-          items: itemsInElements(elemIdPath(para.id), this.allItems)
+          top: scrollTop,
+          offset: para.offsetTop,
+          items: itemsInPara
         }
+
+        // console.log(`${para.id} ${itemsInPara.length}`)
+        if (itemsInPara.length > 0) {
+          para.classList.add('has-items')
+          para.addEventListener('click', this.paragraphClickHandler)
+        }
+
+        // console.log(`${para.id} ${this.paragraphs[para.id].top} ${itemsInPara.length}`)
         prior = para.id
         const scene = this.$scrollmagic.scene({
           triggerElement: `#${para.id}`,
@@ -69,11 +86,12 @@ export default {
           this.setActiveElements(this.paragraphs[para.id].prior)
         })
         if (this.debug) {
-          scene.addIndicators({indent: this.viewportWidth/2})
+          scene.addIndicators({indent: this.layout === 'vtl' ? this.viewportWidth/2 : 0})
         }
         this.$scrollmagic.addScene(scene)
         this.scenes.push(scene)
       })
+      this.findContent()
       this.setActiveElements(first)
     },
     setActiveElements(elemId) {
@@ -115,7 +133,8 @@ export default {
             paragraphs.push({
               type: 'paragraph',
               id: para.id,
-              top: para.offsetTop,
+              offset: this.paragraphs[para.id].offset,
+              top: this.paragraphs[para.id].top,
               bottom: para.offsetTop + para.offsetHeight,
               items: this.itemsPartOf(para.id),
             })
@@ -177,12 +196,80 @@ export default {
           this.$store.dispatch('setSelectedItemID', elemId)
         })
       })
+    },
+    paragraphClickHandler(e) {
+      const paraId = e.target.tagName === 'P'
+        ? e.target.id
+        : e.target.parentElement.id
+      console.log(`paragraphClickHandler para=${paraId}`, e)
+      this.$store.dispatch('setSelectedParagraphID', paraId)
+      if (this.paragraphs[paraId]) {
+        let offset = -280
+        let scrollable = document.getElementById('scrollableContent')
+        if (scrollable) {
+          offset = 120
+        } else {
+          scrollable = window
+        }
+        const scrollTo = this.paragraphs[paraId].top + offset
+        console.log(`top=${this.paragraphs[paraId].top} offset=${offset} scrollto=${scrollTo}`)
+        scrollable.scrollTo(0, scrollTo)
+      }
+
+    },
+    setHoverItemID(e) {
+      this.$store.dispatch('setHoverItemID', e.type === 'mouseover' ? e.target.dataset.eid : null)
+    },
+    itemClickHandler(e) {
+      e.stopPropagation()
+      const elemId = e.target.attributes['data-eid'].value
+      this.$store.dispatch('setSelectedItemID', elemId)
+    },
+    addItemClickHandlers(elemId) {
+      // console.log(`addItemClickHandlers: elemId=${elemId}`, document.getElementById(elemId))
+      document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
+        entity.addEventListener('click', this.itemClickHandler)
+        entity.addEventListener('mouseover', this.setHoverItemID)
+        entity.addEventListener('mouseout', this.setHoverItemID)
+      })
+    },
+    removeItemClickHandlers(elemId) {
+      // console.log(`removeItemClickHandlers: elemId=${elemId}`)
+      const elem = document.getElementById(elemId)
+      if (elem) {
+        document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
+          entity.removeEventListener('click', this.itemClickHandler)
+          entity.removeEventListener('mouseover', this.setHoverItemID)
+          entity.removeEventListener('mouseout', this.setHoverItemID)
+        })
+      }
     }
   },
   watch: {
+    activeElement: {
+      handler (active, prior) {
+        console.log('Essay.activeElement', active)
+        if (prior) {
+          this.removeItemClickHandlers(prior)
+          document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
+        }
+        if (active) {
+          if (this.viewerIsOpen) {
+            document.getElementById(active).classList.add('active-elem')
+          }
+          this.addItemClickHandlers(active)
+          const tabsBarElem = document.querySelector('.v-tabs-bar')
+          if (tabsBarElem) {
+            // console.log(`tabsBarElem: offset=${this.paragraphs[active].offset} top=${this.paragraphs[active].top}`)
+            tabsBarElem.style.top = `${this.paragraphs[active].offset}px`
+          }
+        }
+      },
+      immediate: true
+    },
     hoverItemID: {
       handler: function (itemID, prior) {
-        console.log(`Essay.hoverItemID: value=${itemID} prior=${prior}`)
+        // console.log(`Essay.hoverItemID: value=${itemID} prior=${prior}`)
         if (itemID) {
           document.querySelectorAll(`.active-elem [data-eid="${itemID}"]`).forEach(elem => elem.classList.add('entity-highlight'))
         }

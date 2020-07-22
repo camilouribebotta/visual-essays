@@ -3,12 +3,12 @@
 - [Introduction](#introduction)
 - [Essay markup](#essay-markup)
 - [Visual essay directives](#visual-essay-directives)
-  - [ve-config](#ve-config)
-  - [ve-entity](#ve-entity)
-  - [ve-map](#ve-map)
-  - [ve-map-layer](#ve-map-layer)
-  - [ve-image](#ve-image)
-  - [ve-video](#ve-video)
+    - [ve-config](#ve-config)
+    - [ve-entity](#ve-entity)
+    - [ve-map](#ve-map)
+    - [ve-map-layer](#ve-map-layer)
+    - [ve-image](#ve-image)
+    - [ve-video](#ve-video)
 - [Essay authoring](#essay-authoring)
 
 # Introduction
@@ -16,9 +16,13 @@
 Visual essays are web pages created from annotated text files.  The text files are formatted using [Markdown](https://www.markdownguide.org/getting-started/),
 a lightweight markup language.  The essay text can be annotated with simple tags that associate entities (people, locations, etc), images, maps, and videos with sections of text, typically paragraphs but can also be as small as a single word or as large as the entire essay.  The visual essay tools add interactive visualizations to the rendered web page using information contained in the tags.
 
-Visual essays are especially well suited for story telling that uses maps, images, and videos.  Adding a few simple tags to a text can result in an engaging web page that provides context and depth to the written text
+<figure style="border: 1px solid black; float:right; padding: 6px 12px 6px 0;">
+  <img src="images/ve-button.png" alt="Trulli">
+  <figcaption>Fig.1 - Trulli, Puglia, Italy.</figcaption>
+</figure>
 
-The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions.
+Visual essays are especially well suited for story telling that uses maps, images, and videos.  Adding a few simple tags to a text can result in an engaging web page that provides context and depth to the written text
+The ability to easily associate text with maps and multimedia is useful but the real power in the visual essay approach used here is the ability to leverage open knowledge graphs such as [Wikidata](https://www.wikidata.org) to obtain data that can be used for automatically generating information dialogs, location coordinates, image URLs, and other information about entities associated with a section of text.  At present the visual essays can use entities from both the Wikidata and JSTOR knowledge graphs.  Support for using other linked open data (LOD) sources may be provided in future versions
 
 # Essay markup
 
@@ -42,7 +46,7 @@ In whichever tag form is used the type of visual essay directive is defined usin
 ## Text Elements
 
 Throughout this document the association of visual essay directives to _text elements_ are described.  A text element can be be a single word or phrase, a single paragraph, all paragraphs in a section, or even all text in the entire essay.  The placement of the visual essay directive in the document defines the scope of text element to which it applies.
-<param ve-image url="images/ve-button.png">
+<param ve-map center="42.2813, -83.7483" zoom="6">
 
 It is common to add Markdown headings to documents to define sections of related content, and for longer documents nested heading levels are often used resulting in a document that is hierarchical.
 
@@ -188,3 +192,5 @@ Associates a video with a text element.  Youtube videos are supported in the cur
 - __start__:  The starting timestamp (in seconds).  If not provided the video will start playing from the beginning.
 
 # Essay authoring
+
+Coming...

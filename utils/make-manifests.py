@@ -78,9 +78,9 @@ def create_manifest(**kwargs):
             if fld in metadata:
                 manifest[fld] = metadata.get(fld)
         if metadata:
-            manifest['metadata'] = [{'label': k, 'value': v} for k,v in metadata.items()]
+            manifest['metadata'] = [{'label': 'version', 'value': '1'}] + [{'label': k, 'value': v} for k,v in metadata.items()]
 
-        logger.info(json.dumps(manifest, indent=2))
+        logger.debug(json.dumps(manifest, indent=2))
         resp = requests.post(
             'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
             headers={'Content-type': 'application/json'},
@@ -89,6 +89,7 @@ def create_manifest(**kwargs):
         logger.info(resp.status_code)
         manifest = resp.json()
         if '@id' in manifest:
+            logger.info(f'{url} {manifest["@id"]}')
             if '@type' in manifest:
                 return manifest
             else:
@@ -159,7 +160,7 @@ if __name__ == '__main__':
             continue
         manifest = create_manifest(**rec)
         if manifest:
-            logger.info(json.dumps(manifest, indent=2))
+            logger.debug(json.dumps(manifest, indent=2))
             img = manifest['sequences'][0]['canvases'][0]['images'][0]['resource']
             row_updates = {
                 'manifest': manifest['@id'],

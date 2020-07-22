@@ -108,7 +108,7 @@ module.exports = {
       this.$emit('selected-id', itemID)
     },
     cachedGeojson(def) {
-      console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
+      // console.log('loadGeojson', def.url || def.geojson, `cached=${this.$store.getters.geoJsonCache[def.id] !== undefined}`)
       if (!this.$store.getters.geoJsonCache[def.id]) {
         const cacheObj = {}
         cacheObj[def.id] = fetch(def.url || def.geojson).then(resp => resp.json())
@@ -221,7 +221,7 @@ module.exports = {
         if (addToMap || def.active) {
           const currentLayers = new Set()
           this.map.eachLayer(layer => {if (layer.options.id) currentLayers.add(layer.options.id)})
-          this.map.eachLayer(layer => console.log('layer', layer.options.id))
+          // this.map.eachLayer(layer => console.log('layer', layer.options.id))
           //if (!currentLayers.has(geojson.options.id)) {
             // console.log('adding geojson.layer', geojson.options.id)
             geojson.addTo(this.map)

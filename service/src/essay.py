@@ -36,12 +36,27 @@ SPARQL_DIR = os.path.join(BASE_DIR, 'sparql')
 
 DEFAULT_SITE = 'https://kg.jstor.org'
 
-INDEX_STYLESHEET = '''
-    #essay p img { float: left; padding-right: 12px; width: 150px; }
-    #essay p::after { content: ""; clear: both; display: table; }
-    #essay p {font-size: 1.3rem; line-height: 1.3rem; padding: 12px;}
-    #essay p a {color: #800000 !important; font-size: 1.4rem; padding-right: 6px; }
-'''
+STYLESHEETS = {
+    'index':
+        '''
+        #essay p img { float: left; padding-right: 12px; width: 150px; }
+        #essay p::after { content: ""; clear: both; display: table; }
+        #essay p {font-size: 1.3rem; line-height: 1.3rem; padding: 12px;}
+        #essay p a {color: #800000 !important; font-size: 1.4rem; padding-right: 6px; }
+        ''',
+    'article': 
+        '''
+        p { font-size: 1.3rem; }
+        figure { max-width: 40%; font-weight: bold; font-size: 1.0rem; text-align: center; margin: 0 12px 12px 0; }
+        figcaption { padding: 6px; line-height: 1.1rem; }
+        .left { float: left; margin: 0 18px 12px 0; }
+        .right { float: right; margin: 0 0 12px 18px; }
+        .dropshadow { box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+        .border { border:1px solid #aaa; }
+        h1, h2, h3, h4, figure { content: ""; display: table; clear: both; }
+        br { clear: both; }
+        '''
+}
 
 def _is_empty(elem):
     child_images = [c for c in elem.children if c.name == 'img']
@@ -79,8 +94,8 @@ class Essay(object):
             if item.get('tag') == 'config' and 'style' in item:
                 self.style = item['style']
                 break
-        if self.style == 'index':
-            self.add_stylesheet(INDEX_STYLESHEET)
+        if self.style in STYLESHEETS:
+            self.add_stylesheet(STYLESHEETS[self.style])
         # logger.info(f'{round(now()-st,3)}: phase 3')
 
     def _remove_empty_paragraphs(self):

@@ -17,15 +17,18 @@ google-resumable-media==0.5.0
 googleapis-common-protos==1.51.0
 html5lib==1.0.1
 idna==2.8
+importlib-metadata==1.6.0
 isodate==0.6.0
 itsdangerous==1.1.0
 Jinja2==2.10.3
-#markdown2==2.3.8
 Markdown==3.2.2
+markdown-captions==2
+markdown2==2.3.8
 MarkupSafe==1.1.1
 protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+Pygments==2.6.1
 PyLD==1.0.5
 pymdown-extensions==7.1
 pyparsing==2.4.5
@@ -43,3 +46,4 @@ typing==3.7.4.1
 urllib3==1.25.7
 webencodings==0.5.1
 Werkzeug==0.16.0
+zipp==3.1.0

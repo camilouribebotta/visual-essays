@@ -234,7 +234,7 @@ def markdown_to_html5(markdown, site=None, acct=None, repo=None, path=None):
     html = markdown_parser.markdown(
         markdown['text'],
         output_format='html5', 
-        extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details', 'attr_list'],
+        extensions=['footnotes', 'pymdownx.superfences', 'pymdownx.details', 'markdown_captions', 'attr_list'],
         extension_configs = {
             'footnotes': {
                 'SEPARATOR': '-'
@@ -445,15 +445,17 @@ def essay(path=None):
             path_elems = path.split('/') if path else []
             logger.info(path_elems)
             if site in ('localhost', 'visual-essays.app'):
-                acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
-                repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
                 if ENV == 'dev':
-                    path = '/'.join(path_elems[2:]) if DEFAULT_ACCT or acct == 'jstor-labs' else '/'.join(path_elems)
+                    acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
+                    repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
+                    path = '/'.join(path_elems[2:]) if (DEFAULT_ACCT or acct == 'jstor-labs') and len(path_elems) > 1 else '/'.join(path_elems)
                     baseurl = 'http://localhost:5000'
                     abs_path = f'{DOCS_ROOT}/{path}'
                     logger.info(f'acct={acct} repo={repo} path={path} abs_path={abs_path} is_dir={os.path.isdir(abs_path)}')
                     markdown = get_local_markdown(abs_path)
                 else:
+                    acct = path_elems[0] if len(path_elems) > 1 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
+                    repo = path_elems[1] if len(path_elems) > 1 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
                     path = '/'.join(path_elems) if len(path_elems) == 1 or (DEFAULT_ACCT and acct != DEFAULT_ACCT) else '/'.join(path_elems[2:])
                     baseurl = content_baseurl(acct, repo)
                     markdown = get_gh_markdown(acct, repo, path)

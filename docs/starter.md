@@ -8,21 +8,6 @@
        num-primary-sources="0"
        author="JSTOR Labs team">
 
-<param ve-component 
-       name="plant-specimen"
-       src="components/PlantSpecimenViewer.vue"
-       selectors="tag:plant-specimen"
-       icon="fa-seedling"
-       label="Plant Specimens">
-
-<param ve-component 
-       name="storiiies"
-       src="https://jstor-labs.github.io/visual-essays/components/StoriiiesViewer.vue"
-       selectors="tag:storiiies"
-       icon="fa-book"
-       label="Storiiies Viewer"
-       dependencies="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js|https://storiiies.cogapp.com/assets/demos/viewer/js/shortcode.js">
-
 <param title="Beatrix Farrand" eid="Q437714">
 <param title="cherry blossom" eid="Q871991" category="plant">
 <param title="Dumbarton Oaks" eid="Q1264942">

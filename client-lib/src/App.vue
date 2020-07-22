@@ -6,13 +6,13 @@
       <v-sheet id="scrollableContent" class="overflow-y-auto">
         <v-container :style="`margin-top:${essayTopMargin}px; height:${height}px;`">
           <v-row v-if="layout === 'vtl'" no-gutters>
-            <v-col class="essay-pane vtl"><essay></essay></v-col>
-            <v-col class="map-pane vtl"><vertical-viewer></vertical-viewer></v-col>
+            <v-col class="essay-pane vtl"><essay/></v-col>
+            <v-col class="viewer-pane vtl"><viewer/></v-col>
           </v-row>
           <v-row v-else no-gutters>
             <v-col>
               <essay/>
-              <horizontal-viewer/>
+              <viewer/>
             </v-col>
           </v-row>
         </v-container>
@@ -22,12 +22,12 @@
     <v-container v-else :style="`margin-top:${essayTopMargin}px; height:${height}px`">
       <v-row v-if="layout === 'vtl'" no-gutters>
         <v-col class="essay-pane vtl"><essay/></v-col>
-        <v-col class="map-pane vtl"><vertical-viewer/></v-col>
+        <v-col class="viewer-pane vtl"><viewer/></v-col>
       </v-row>
       <v-row v-else no-gutters>
         <v-col>
           <essay/>
-          <horizontal-viewer/>
+          <viewer/>
         </v-col>
       </v-row>
     </v-container>
@@ -46,7 +46,7 @@ export default {
     path: { type: String }
   },
   data: () => ({
-    layout: 'vtl',
+    layout: undefined,
     bannerHeight: undefined
   }),
   computed: {
@@ -125,7 +125,7 @@ export default {
     margin-bottom: 12px;
   }
 
-  .map-pane {
+  .viewer-pane {
     z-index: 10;
   }
 

@@ -85,8 +85,8 @@
     },
     mounted() {
       console.log('VerticalViewer.mounted')
-      this.contentContainer = document.getElementById('scrollableContent')
-      this.header = document.getElementById('header')
+      // this.contentContainer = document.getElementById('scrollableContent')
+      // this.header = document.getElementById('header')
       // this.contentContainer.addEventListener('scroll', throttle(this.mouseMove, 10))
       /*if (this.header && this.contentContainer) {
         this.contentContainer.addEventListener('scroll', throttle(this.mouseMove, 10))
@@ -106,7 +106,8 @@
       setSelectedItemID(itemID) {
         this.$store.dispatch('setSelectedItemID', itemID)
       },
-      mouseMove(e) {
+      /*
+      (e) {
         if (!this.header) {
           this.header = document.getElementById('header')
         }
@@ -128,15 +129,9 @@
         }
         // console.log(`position=${this.position} ${this.header.offsetHeight}`)
       },
-      waitForEssay() {
-        // console.log(`waitForEssay: found=${document.getElementById('essay') !== undefined}`)
-        if (document.getElementById('essay')) {
-          this.init()
-        } else {
-          setTimeout(() => { this.waitForEssay() }, 1000)
-        }
-      },
+      */
       init() {
+        /*
         Array.from(document.body.querySelectorAll('p')).filter(elem => elem.id).forEach((para) => {
           para.title = elemIdPath(para.id).join(',')
           const itemsInPara = itemsInElements(elemIdPath(para.id), this.allItems)
@@ -157,6 +152,7 @@
           }
           para.addEventListener('mouseenter', (e) => {
             const elemId = e.toElement.id
+            console.log('mouseenter', elemId)
             if (this.hoverElemId && this.hoverElemId !== elemId) {
               const prior = document.querySelector(`[data-id="${this.hoverElemId}"]`)
               if (prior) { prior.style.display = 'none' }
@@ -168,6 +164,8 @@
             }
           })
         })
+        */
+        /*
         if (this.activeElement && this.paragraphs[this.activeElement]) {
           document.getElementById(this.activeElement).classList.add('active-elem')
           this.addItemClickHandlers(this.activeElement)
@@ -177,6 +175,7 @@
           }
         }
         this.addSpacer()
+        */
       },
       addSpacer() {
         // Adds a spacer element that expands and contracts to match the size of the visualizer so
@@ -185,26 +184,6 @@
         this.spacer.id = 'essay-spacer'
         this.spacer.style.height = `${this.viewportHeight*.8}px`
         document.getElementById('essay').appendChild(this.spacer)
-      },
-      addItemClickHandlers(elemId) {
-        document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
-          entity.addEventListener('click', this.itemClickHandler)
-          entity.addEventListener('mouseover', (e) => { this.setHoverItemID(e.target.attributes['data-eid'].value) })
-          entity.addEventListener('mouseout', (e) => { this.setHoverItemID() })
-        })
-      },
-      removeItemClickHandlers(elemId) {
-        const elem = document.getElementById(elemId)
-        if (elem) {
-          document.getElementById(elemId).querySelectorAll('.active-elem .inferred, .active-elem .tagged').forEach((entity) => {
-            entity.removeEventListener('click', this.itemClickHandler)
-          })
-        }
-      },
-      itemClickHandler(e) {
-        e.stopPropagation()
-        const elemId = e.target.attributes['data-eid'].value
-        this.$store.dispatch('setSelectedItemID', elemId)
       }
     },
     watch: {
@@ -276,21 +255,23 @@
         },
         immediate: false
       },
+      /*
       activeElement(active, prior) {
         if (prior) {
-          this.removeItemClickHandlers(prior)
+          // this.removeItemClickHandlers(prior)
           document.querySelectorAll('.active-elem').forEach(elem => elem.classList.remove('active-elem'))
         }
         // this.activeTab = undefined
         if (active && this.paragraphs[active]) {
           document.getElementById(active).classList.add('active-elem')
-          this.addItemClickHandlers(active)
+          // this.addItemClickHandlers(active)
           const tabsBarElem = document.querySelector('.v-tabs-bar')
           if (tabsBarElem) {
             tabsBarElem.style.top = `${this.paragraphs[active].top}px`
           }
         }
       }
+    */
     }
   }
 </script>

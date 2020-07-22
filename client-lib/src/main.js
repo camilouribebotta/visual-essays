@@ -29,12 +29,13 @@ import VueAnalytics from 'vue-analytics'
 // Default viewer components
 import HorizontalViewer from './components/HorizontalViewer'
 import VerticalViewer from './components/VerticalViewer'
+import Viewer from './components/Viewer'
 import Essay from './components/Essay'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.16'
+const VERSION = '0.7.17'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
@@ -60,6 +61,7 @@ const defaultComponents = [
   // { name: 'entity', src: `${componentsBaseURL}/components/EntityViewer.vue`, selectors: ['tag:entity'], 'icon': 'fa-brackets-curly', 'label': 'Entities' },
   // { name: 'network', src: `${componentsBaseURL}/components/Network.vue`, selectors: ['tag:network'], 'icon': 'fa-chart-network', 'label': 'Networks' },
   { name: 'essay', component: Essay },
+  { name: 'viewer', component: Viewer },
   { name: 'horizontalViewer', component: HorizontalViewer },
   { name: 'verticalViewer', component: VerticalViewer },
   { name: 'entityInfoboxDialog', component: EntityInfoboxDialog },
@@ -115,8 +117,6 @@ function resizeend() {
   }
 }
 
-
-
 // Site components
 const getSiteConfig = async () => {
   let configUrl = '/config'
@@ -164,6 +164,7 @@ function initApp() {
   document.querySelectorAll('script[type="application/ld+json"]').forEach((scr) => {
     eval(scr.text)
   })
+  console.log(`window.data=${window.data.length}`)
 
   // Essay components
   window.data.filter(item => item.tag === 'component').forEach(customComponent => {

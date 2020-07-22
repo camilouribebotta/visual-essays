@@ -232,7 +232,6 @@
             const url = editor == 'stackedit'
               ? `https://stackedit.io/app#providerId=githubWorkspace&owner=${acct}&repo=${repo}&branch=master`
               : `https://editor.visual-essays.app${this.siteConfig.gh_root}${path === '/' ? window._essay : this.current}.md`
-            console.log(`editMarkdown: editor=${editor} url=${url}`)
             if (this.markdownViewer) { this.markdownViewer.close() }
             this.markdownViewer = window.open(url, '_blank', `toolbar=yes,location=yes,left=0,top=0,width=1400,height=1200,scrollbars=yes,status=yes`)
           }
@@ -250,16 +249,13 @@
                 const essayElem = document.getElementById('essay')
                 if (essayElem) {
                   essayElem.querySelectorAll('a').forEach(link => {
-                    console.log(link.href)
                     if (!link.href || link.href.indexOf(service) === 0 || link.href.indexOf('/help#') > 0 ) {
                       let target = link.dataset.target
                       if (!target) { 
                         const parsedUrl = parseUrl(link.href)
                         if (parsedUrl.hash === '' ) {
                           const pathElems = parsedUrl.pathname.split('/').filter(pathElem => pathElem !== '')
-                          console.log(pathElems)
                           target = `/${pathElems.slice(repo ? 3 : 1).join('/')}`
-                          console.log(target)
                         } else {
                           target = parsedUrl.hash
                         }
