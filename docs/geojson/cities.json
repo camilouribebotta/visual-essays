@@ -1,0 +1,159 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Detroit",
+          "date": "1701"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -83.12255859375,
+            42.45588764197166
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "St. Louis",
+          "date": "1764"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -90.19775390625,
+            38.788345355085625
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "New Orleans",
+          "date": "1718"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -90.087890625,
+            30.107117887092357
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Cincinnati",
+          "date": "1788"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -84.55078125,
+            39.18117526158749
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Miami",
+          "date": "1825"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -80.2001953125,
+            25.819671943904044
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Charleston",
+          "date": "1670"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -79.91455078125,
+            32.879587173066305
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Fort Collins",
+          "date": "1864"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -105.0677490234375,
+            40.59727063442024
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Chicago",
+          "date": "1833"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -87.63519287109375,
+            41.896144026994854
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Ann Arbor",
+          "date": "1824"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -83.726806640625,
+            42.313877566161864
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "New York",
+          "date": "1624"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.8885498046875,
+            40.73893324113601
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "label": "Boston",
+          "date": "1630"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -71.05957031249999,
+            42.39912215986002
+          ]
+        }
+      }
+    ]
+  }
