@@ -10,6 +10,8 @@ import Lingallery from '../assets/js/lingallery.umd.min.js'
 import marked from 'marked'
 import VModal from 'vue-js-modal'
  
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/antd.css'
 import 'leaflet'
 import 'leaflet-polylinedecorator'
 
@@ -33,9 +35,11 @@ import Viewer from './components/Viewer'
 import Essay from './components/Essay'
 import EntityInfoboxDialog from './components/EntityInfoboxDialog'
 
+import _ from 'lodash'
+
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.17'
+const VERSION = '0.7.18'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
@@ -73,6 +77,7 @@ defaultComponents.forEach(component => components[component.name] = component)
 
 console.log(`visual-essays js lib ${VERSION}`)
 
+Vue.component('VueSlider', VueSlider)
 Vue.component('lingallery', Lingallery)
 
 Vue.mixin({

@@ -1,6 +1,18 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
-       <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${height}px; margin:0;`"></div>
+    <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${mapHeight}px; margin:0;`"></div>
+    <div ref="timeSelector" v-if="timeRange.length > 0" style="height: 45px; padding: 0 24px;">
+      <!-- https://nightcatsama.github.io/vue-slider-component -->
+      <vue-slider
+        v-if="max"
+        v-model="timeRange"
+        :min="min" 
+        :max="max"
+        :marks="mark"
+        :tooltip-formatter="label"
+        @change="throttledMethod"
+      />
+    </div>
   </div>
 </template>
 
@@ -47,26 +59,120 @@ module.exports = {
     opacityControl: undefined,
     popups: {},
     active: new Set(),
-
     featuresById: {},
-    markersByLatLng: {}
+    markersByLatLng: {},
+    mapHeight: 0,
+
+    geojsonIsLoading: false,
+    featureDates: new Set(),
+    timeRange: [],
+    min: undefined,
+    max: undefined
   }),
   computed: {
     mapDef() { return this.items[0] },
+    timeSelector() { return this.mapDef['time-selector'] },
     activeElements() { return this.$store.getters.activeElements },
     itemsInActiveElements() { return this.$store.getters.itemsInActiveElements },
     entities() { return this.itemsInActiveElements.filter(item => item.tag === 'entity') },
     locations() { return this.itemsInActiveElements.filter(entity => entity.coords || entity.geojson) },
     viewport() { return {height: this.$store.getters.height, width: this.$store.getters.width} },
     isHorizontal() { return this.$store.getters.layout[0] === 'h' },
-    isSelected() { return this.selected === 'map' }
+    isSelected() { return this.selected === 'map' },
     // width() { return Math.min(this.viewport.width, this.viewerWidth)},
+  },
+  created() {
+    if (this.timeSelector) {
+      if (this.timeSelector !== 'true') {
+        const initialRangeDates = this.timeSelector.split(':').map(dateStr => this.parseDate(dateStr).getUTCFullYear())
+        this.timeRange = initialRangeDates.length === 2 ? initialRangeDates : [initialRangeDates[0], initialRangeDates[0]]
+      }
+      this.useTimeSelector = true
+      console.log(`timeSelector: start=${this.timeRange[0]} end=${this.timeRange[1]}`)
+    }
   },
   mounted() {
     console.log(`MapViewer.mounted: height=${this.height} width=${this.width}`)
+    const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
+    console.log(`height=${this.height} timeSelectorHeight=${timeSelectorHeight} mapHeight=${this.mapHeight}`)
+    this.mapHeight = this.height - timeSelectorHeight
     this.$nextTick(() => { this.createBaseMap() })
   },
   methods: {
+    throttledMethod: _.debounce(function (e) {
+      console.log('rangeChange', e, this.map)
+      console.log('layers', this.layers)
+      this.map.removeLayer(this.layers.Labels)
+      this.map.eachLayer(layer => {
+        console.log(layer.options.id, layer.options.type)
+        console.log(layer.options)
+        if (layer.options.type === 'geojson' && layer.options.id && layer.options.id.indexOf('map-layer-1') === 0) {
+          console.log('removing', layer.options.id)
+          this.map.removeLayer(layer)
+        }
+      })
+      this.syncLayers()
+    }, 500),
+    timeRangeFilter(feature) {
+      console.log('filter', feature)
+      if (this.timeRange.length === 2) {
+        const featureDate = feature.properties.date ? this.parseDate(feature.properties.date).getUTCFullYear() : null
+        if (featureDate) {
+          this.featureDates.add(featureDate)
+          return featureDate >= this.timeRange[0] && featureDate <= this.timeRange[1]
+        }
+      }
+      return true
+    },
+    setTimeSelector() {
+      const min = Math.min(...this.featureDates)
+      this.min = Math.floor(min/100)*100
+      const max = Math.max(...this.featureDates)
+      this.max = Math.ceil(max/100)*100
+      console.log(`min=${this.min} max=${this.max} start=${this.timeRange[0]} end=${this.timeRange[1]}`)
+    },
+    label(val) {
+      return `${Math.abs(val)}${val < 0 ? ' BCE' : ''}`
+    },
+    mark(val) {
+      if (val % 100 === 0) {
+        return {label: this.label(val)}
+      }
+      return false
+    },
+    parseDate(ds) {
+      let date
+      if (Number.isInteger(ds)) {
+        date = new Date(`${ds}-01-01T00:00:00Z`)
+      } else {
+        const split = ds.split('-')
+        if (split.length === 1) {
+          const yr = split[0].toUpperCase().replace(/[\. ]/,'')
+          let yrAsInt
+          if (yr.indexOf('BC') > 0) { // covers both 'BC' and 'BCE' eras
+            yrAsInt = -Math.abs(parseInt(yr.slice(0,yr.indexOf('BCE'))))
+          } else if (yr.indexOf('CE') > 0 || yr.indexOf('AD') > 0) {
+            yrAsInt = parseInt(yr.slice(0,yr.indexOf('CE')))
+          } else {
+            yrAsInt = parseInt(ds)
+          }
+          if (yrAsInt > 0) {
+            date = new Date(`${yrAsInt}-01-01T00:00:00Z`)
+          } else {
+            date = new Date(yrAsInt, 0, 0)
+            date.setUTCFullYear(yrAsInt)
+          }
+        } else if (split.length === 2) {
+          date = new Date(`${split[0]}-${split[1]}-01T00:00:00Z`)
+        } else if (split.length === 3) {
+          date = new Date(`${ds}T00:00:00Z`)
+        }
+      }
+      return date
+    },
+    rangeChange(e) {
+      console.log('rangeChange', e)
+    },
     createBaseMap() {
       const t = performance.now()
       if (this.map) {
@@ -123,7 +229,7 @@ module.exports = {
     },
     addPopup(id, label, latLng, offset) {
       if (!this.popups[id]) {
-        // console.log(`addPopup: id=${id} label=${label} lagLng=${latLng} offset=${offset}`)
+        console.log(`addPopup: id=${id} label=${label} lagLng=${latLng} offset=${offset}`)
         const popup = L.popup({ ...defaults.popupOptions, ...{ offset: L.point(0, offset || 0)}})
         popup.setLatLng(latLng)
         popup.setContent(`<h1 data-eid="${id}">${label}</h1>`)
@@ -132,13 +238,14 @@ module.exports = {
       }
     },
     loadGeojson(def, addToMap) {
+      this.geojsonIsLoading = true
       this.cachedGeojson(def)
       .then(data => {
         const self = this
         let layerNum = 0
         let numFeatureLabels = 0
         let geojson = L.geoJson(data, {
-          // Pop Up
+          filter: this.timeRangeFilter,
           onEachFeature: function(feature, layer) {
             layer.options.id = def.id
             feature.properties.layerid = def.id
@@ -237,6 +344,7 @@ module.exports = {
         geojson.options.label = geojsonLabel
         geojson.options.type = 'geojson'
 
+        console.log(this.active)
         const _layers = { 
           ...this.layers, 
           ...{ Labels: this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id))) } 
@@ -248,6 +356,8 @@ module.exports = {
         this.layers = _layers
 
         this.map.flyTo(this.mapDef.center || defaults.center, this.mapDef.zoom || defaults.zoom)
+        
+        this.geojsonIsLoading = false
 
         return geojson
       })
@@ -341,6 +451,15 @@ module.exports = {
     }
   },
   watch: {
+    geojsonIsLoading: {
+      handler: function (isLoading, prior) {
+        console.log(`watch.geojsonIsLoading=${isLoading} prior=${prior}`)
+        if (!isLoading) {
+          this.setTimeSelector()
+        }
+      },
+      immediate: false
+    },
     hoverItemID: {
       handler: function (itemID, prior) {
         // console.log(`hoverItemID: value=${itemID} prior=${prior}`)
@@ -420,12 +539,16 @@ module.exports = {
     },
     height: {
       handler: function () {
+        const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
+        console.log(`height=${this.height} timeSelectorHeight=${timeSelectorHeight} mapHeight=${this.mapHeight}`)
+        this.mapHeight = this.height - timeSelectorHeight
         const lmap = document.getElementById('lmap')
         if (lmap) {
-          lmap.style.height = `${this.height}px`
+          lmap.style.height = `${this.mapHeight}px`
+          console.log(`lmap.style.height=${lmap.style.height}`)
         }
       },
-      immediate: true
+      immediate: false
     },
     activeElements: {
       handler: function () {

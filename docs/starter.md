@@ -26,6 +26,8 @@ Cherry blossoms have formed an integral part of the identity of Washington, D. C
        url="https://upload.wikimedia.org/wikipedia/commons/2/2a/Tidal_basin_cherry_blossom_closeup.JPG"
        fit="cover"
        attribution="Wikimedia Commons">
+<param ve-map primary time-selector="1720:1850" center="Q41819" zoom="5">
+<param ve-map-layer geojson active url="geojson/cities.json">
 
 ## Cherry Trees in Japan
 
