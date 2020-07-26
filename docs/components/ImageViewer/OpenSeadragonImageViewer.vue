@@ -33,18 +33,19 @@ module.exports = {
     parseRegionString(region) {
       const s1 = region.split(':')
       let ints = s1[s1.length-1].split(',').map(v => parseInt(v))
-      if (s1.length === 1 || (s1.length === 2 && (s1[0] === 'px' || s1[0] === 'pixel'))) {
-        console.log('ints', ints)
-        return this.viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(...ints))
-      } else if (s1.length === 2 && (s1[0] === 'pct' || s1[0] === 'percent')) {
-        const size = this.viewer.world.getItemAt(0).getContentSize()
-        if (size.x > 0 && size.y > 0) {
-          return this.viewer.viewport.imageToViewportRectangle(
-            Math.round(size.x * ints[0]/100),
-            Math.round(size.y * ints[1]/100),
-            Math.round(size.x * ints[2]/100), 
-            Math.round(size.y * ints[3]/100)
-          )
+      if (ints.len === 4) {
+        if (s1.length === 1 || (s1.length === 2 && (s1[0] === 'px' || s1[0] === 'pixel'))) {
+          return this.viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(...ints))
+        } else if (s1.length === 2 && (s1[0] === 'pct' || s1[0] === 'percent')) {
+          const size = this.viewer.world.getItemAt(0).getContentSize()
+          if (size.x > 0 && size.y > 0) {
+            return this.viewer.viewport.imageToViewportRectangle(
+              Math.round(size.x * ints[0]/100),
+              Math.round(size.y * ints[1]/100),
+              Math.round(size.x * ints[2]/100), 
+              Math.round(size.y * ints[3]/100)
+            )
+          }
         }
       }
     },
