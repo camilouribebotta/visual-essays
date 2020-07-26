@@ -34,6 +34,7 @@ module.exports = {
       const s1 = region.split(':')
       let ints = s1[s1.length-1].split(',').map(v => parseInt(v))
       if (s1.length === 1 || (s1.length === 2 && (s1[0] === 'px' || s1[0] === 'pixel'))) {
+        console.log('ints', ints)
         return this.viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(...ints))
       } else if (s1.length === 2 && (s1[0] === 'pct' || s1[0] === 'percent')) {
         const size = this.viewer.world.getItemAt(0).getContentSize()
