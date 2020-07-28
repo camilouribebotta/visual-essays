@@ -19,7 +19,7 @@ import 'leaflet-polylinedecorator'
 import 'leaflet.control.opacity/dist/L.Control.Opacity.css'
 import 'leaflet.control.opacity'
 import '../assets/styles/main.css'
-import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems, parseDate } from './utils'
+import { parseQueryString, prepItems, elemIdPath, itemsInElements, groupItems, parseDate, eqSet } from './utils'
 
 import '../assets/js/leaflet-fa-markers.js'
 import '../assets/js/fontawesome-pro.min.js'
@@ -39,7 +39,7 @@ import _ from 'lodash'
 
 import MobileDetect from 'mobile-detect'
 
-const VERSION = '0.7.19'
+const VERSION = '0.7.20'
 
 console.log(window.location.hostname)
 const componentsBaseURL = window.location.hostname === 'localhost' ? '' : 'https://jstor-labs.github.io/visual-essays'
@@ -92,7 +92,7 @@ Vue.mixin({
     // selectedItemID () { return store.getters.selectedItemID }
     // visualizerIsOpen() { return store.getters.visualizerIsOpen }
   },
-  methods: { parseDate }
+  methods: { parseDate, eqSet }
 })
 
 const md = new MobileDetect(window.navigator.userAgent)

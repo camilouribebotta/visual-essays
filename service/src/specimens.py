@@ -97,6 +97,7 @@ sparql_template = '''
     PREFIX jp: <http://kg.jstor.org/prop/>
     PREFIX jps: <http://kg.jstor.org/prop/statement/>
     PREFIX jpq: <http://kg.jstor.org/prop/qualifier/>
+    PREFIX wd: <http://www.wikidata.org/entity/>
     PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
     CONSTRUCT {
@@ -238,9 +239,15 @@ def sort_specimens(specimens, **kwargs):
             sorted_specimens += sort_by_date(by_type[specimen_type])
     return sorted_specimens
 
-def get_specimens(taxon_name=None, gpid=None, preload=False, **kwargs):
+def get_specimens(taxon_name=None, gpid=None, wdid=None, preload=False, **kwargs):
     logger.info(f'get_specimens: taxon_name={taxon_name} max={kwargs.get("max")} preload={preload} args={kwargs}')
-    sparql = sparql_template.replace('<SELECTOR>', f'jwdt:P501 "{taxon_name}" ;') if taxon_name else sparql_template.replace('<SELECTOR>', f'jwdt:P1106 "{gpid}" ;')
+    if taxon_name:
+        sparql = sparql_template.replace('<SELECTOR>', f'jwdt:P501 "{taxon_name}" ;')
+    elif gpid:
+        sparql = sparql_template.replace('<SELECTOR>', f'jwdt:P1106 "{gpid}" ;')
+    elif wdid:
+        sparql = sparql_template.replace('<SELECTOR>', f'jwdt:P1660 {wdid} ;')
+
     data = {'taxonName': taxon_name, 'specimens': []}
     for _ in range(2):
         resp = requests.post(
@@ -286,8 +293,7 @@ def get_specimens(taxon_name=None, gpid=None, preload=False, **kwargs):
                     specimen['locationCollected']['geojson'] = f'https://data.whosonfirst.org/{"/".join(wof_parts)}/{wof}.geojson'
                 specimen['images'] = [{'url': img['id'], 'type': img['imgSize']} for img in specimen.get('images', [])]
             data['specimens'] = sort_specimens(data['specimens'], **kwargs)
-            if 'max' in kwargs:
-                data['specimens'] = data['specimens'][:int(kwargs['max'])]
+            data['specimens'] = data['specimens'][:int(kwargs.get('max', 5))]
             break
     _get_manifests(data['specimens'], preload)
     return data

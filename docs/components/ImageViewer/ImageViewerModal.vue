@@ -30,7 +30,7 @@ module.exports = {
       } else if (this.groups.plantSpecimenViewer) {
         this.items = this.groups.plantSpecimenViewer.items
           .filter(item => item.specimensMetadata)
-          .map(item => item.specimensMetadata.specimens[0])
+          .map(item => item.specimensMetadata.specimens.find(specimen => specimen.id === selected))
       }
     }
   },

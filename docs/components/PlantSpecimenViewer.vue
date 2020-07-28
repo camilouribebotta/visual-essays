@@ -49,15 +49,16 @@
       outerContainerStyle() { return { width: `${this.width}px`, height: `${this.height}px`, padding: 0 } },
       innerContainerStyle() { return { height: `${this.height - 48}px`, padding: 0, overflowY: 'auto !important' } },
     },
-    mounted() {
-      console.log('PlantSpecimenViewer')
-      this.items.forEach(item => this.getSpecimenMetadata(item))
-    },
+
     methods: {
       getSpecimenMetadata(item) {
-        if (item.label) {
+        const id = item.jpid || item.eid
+        if (item.specimensMetadata) {
+          this.specimensByTaxon = [...this.specimensByTaxon, item.specimensMetadata]
+        } else {
           const args = Object.keys(item).filter(arg => ['max', 'reverse'].includes(arg)).map(arg => `${arg}=${item[arg]}`)
-          fetch(`https://plant-humanities.app/specimens/${item.label.replace(/ /, '_')}` + (args ?  `?${args.join('&')}` : ''))
+          const url = `https://plant-humanities.app/specimens/${id}` + (args ?  `?${args.join('&')}` : '')
+          fetch(url)
             .then(resp => resp.json())
             .then(specimensMetadata => {
               if (specimensMetadata.specimens.length > 0) {
@@ -72,6 +73,19 @@
               }
             })
         }
+      }
+    },
+    watch: {
+      items: {
+        handler: function (current, prior) {
+          const currentItemIds = new Set(current.map(item => item.id))
+          const priorItemIds = new Set((prior || []).map(item => item.id))
+          if (!this.eqSet(currentItemIds, priorItemIds)) {
+            this.specimensByTaxon = []
+            this.items.forEach(item => this.getSpecimenMetadata(item))
+          }
+        },
+        immediate: true
       }
     }
   }

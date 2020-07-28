@@ -367,6 +367,7 @@ def entity(eid=None):
         return (entity, 200, cors_headers)
 
 @app.route('/specimens/<path:path>', methods=['GET'])
+@app.route('/specimen/<path:path>', methods=['GET'])
 def specimens(path):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     accept = request.headers.get('Accept', 'application/json').split(',')
@@ -376,10 +377,13 @@ def specimens(path):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        taxon_name = gpid = None
+        taxon_name = gpid = wdid = None
         path_elems = path.split('/')
         if len(path_elems) == 1:
-            taxon_name = path_elems[0].replace('_', ' ')
+            if path_elems[0].startswith('wd:'):
+                wdid = path_elems[0]
+            else:
+                taxon_name = path_elems[0].replace('_', ' ')
         else:
             gpid = '/'.join(path_elems)
         kwargs['preload'] = kwargs.pop('preload', 'false').lower() in ('true', '')
@@ -387,7 +391,7 @@ def specimens(path):
         refresh = True
         specimens = cache.get(path) if not refresh else None
         if specimens is None:
-            specimens = get_specimens(taxon_name=taxon_name, gpid=gpid, **kwargs)
+            specimens = get_specimens(taxon_name=taxon_name, gpid=gpid, wdid=wdid, **kwargs)
             if specimens['specimens']:
                 cache[path] = specimens
         else:
