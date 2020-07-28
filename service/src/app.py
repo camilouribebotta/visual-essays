@@ -28,7 +28,7 @@ from bs4.element import Tag
 import requests
 logging.getLogger('requests').setLevel(logging.INFO)
 
-from flask import Flask, request, send_from_directory, redirect
+from flask import Flask, request, send_from_directory, redirect, Response
 
 app = Flask(__name__)
 
@@ -133,6 +133,19 @@ def get_gh_markdown(acct, repo, path=None):
                 'url': url,
                 'sha': resp['sha']
         }
+
+def get_gh_component(acct, repo, path):
+    _, api_baseurl = get_gh_baseurls(acct, repo)
+    url = f'{api_baseurl}/{path}'
+    logger.info(f'get_gh_component: acct={acct} repo={repo} path={path} api_baseurl={api_baseurl} url={url}')
+    resp = requests.get(url, headers={
+        'Authorization': GH_CREDS,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-agent': 'JSTOR Labs visual essays client'
+    })
+    if resp.status_code == 200:
+        resp = resp.json()
+        return base64.b64decode(resp['content']).decode('utf-8')
 
 def get_gd_markdown(gdid):
     url = f'https://drive.google.com/uc?export=download&id={gdid}'
@@ -316,6 +329,7 @@ def add_vue_app(html, js_lib):
     for url in [
             'https://unpkg.com/mirador@beta/dist/mirador.min.js',
             'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/2.4.2/openseadragon.min.js',
+            'https://d3plus.org/js/d3plus-network.v0.6.full.min.js',
             js_lib
         ]:
         lib = soup.new_tag('script')
@@ -352,25 +366,30 @@ def entity(eid=None):
         entity = KnowledgeGraph(cache=cache, **kwargs).entity(**kwargs)
         return (entity, 200, cors_headers)
 
-@app.route('/specimens/<taxon_name>', methods=['GET'])  
-def specimens(taxon_name):
+@app.route('/specimens/<path:path>', methods=['GET'])
+def specimens(path):
     kwargs = dict([(k, request.args.get(k)) for k in request.args])
     accept = request.headers.get('Accept', 'application/json').split(',')
     content_type = ([ct for ct in accept if ct in ('text/html', 'application/json', 'text/csv', 'text/tsv')] + ['application/json'])[0]
     _set_logging_level(kwargs)
-    logger.info(f'specimens: taxon_name={taxon_name} kwargs={kwargs}')
+    logger.info(f'specimens: path={path} kwargs={kwargs}')
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        taxon_name = taxon_name.replace('_', ' ')
+        taxon_name = gpid = None
+        path_elems = path.split('/')
+        if len(path_elems) == 1:
+            taxon_name = path_elems[0].replace('_', ' ')
+        else:
+            gpid = '/'.join(path_elems)
         kwargs['preload'] = kwargs.pop('preload', 'false').lower() in ('true', '')
         # refresh = kwargs.pop('refresh', 'false').lower() in ('true', '')
         refresh = True
-        specimens = cache.get(taxon_name) if not refresh else None
+        specimens = cache.get(path) if not refresh else None
         if specimens is None:
-            specimens = get_specimens(taxon_name, **kwargs)
+            specimens = get_specimens(taxon_name=taxon_name, gpid=gpid, **kwargs)
             if specimens['specimens']:
-                cache[taxon_name] = specimens
+                cache[path] = specimens
         else:
             specimens['from_cache'] = True
         if content_type == 'text/html':
@@ -602,20 +621,30 @@ def geojson(fname):
     return send_from_directory(os.path.join(DOCS_ROOT, 'geojson'), fname, as_attachment=False)
 
 @app.route('/components/<path:path>', methods=['GET'])
+@app.route('/component/<path:path>', methods=['GET'])
 def components(path):
     if request.method == 'OPTIONS':
         return ('', 204, cors_headers)
     else:
-        logger.info(path)
+        site = urlparse(request.base_url).hostname
+        logger.info(f'component path={path} site={site}')
         path_elems = path.split('/')
-        fname = path_elems[-1]
-        for root in [DOCS_ROOT, f'{os.path.dirname(BASEDIR)}/docs']:
-            logger.info(root)
-            _dir = f'{root}/components/{"/".join(path_elems[:-1])}'
-            exists = os.path.exists(f'{_dir}/{fname}')
-            logger.info(f'components: dir={_dir} fname={fname} exists={exists}')
-            if exists:
-                return (send_from_directory(_dir, fname, as_attachment=False), 200, cors_headers)
+        if site == 'localhost':
+            fname = path_elems[-1]
+            for root in [DOCS_ROOT, f'{os.path.dirname(BASEDIR)}/docs']:
+                logger.info(root)
+                _dir = f'{root}/components/{"/".join(path_elems[:-1])}'
+                exists = os.path.exists(f'{_dir}/{fname}')
+                logger.info(f'components: dir={_dir} fname={fname} exists={exists}')
+                if exists:
+                    return (send_from_directory(_dir, fname, as_attachment=False), 200, cors_headers)
+        elif site == 'visual-essays.app':
+            acct = path_elems[0] if len(path_elems) > 2 else DEFAULT_ACCT if DEFAULT_ACCT else 'jstor-labs'
+            repo = path_elems[1] if len(path_elems) > 2 else DEFAULT_REPO if DEFAULT_REPO else 'visual-essays'
+            path = '/'.join(path_elems) if len(path_elems) <= 2 or (DEFAULT_ACCT and acct != DEFAULT_ACCT) else '/'.join(path_elems[2:])
+            baseurl = content_baseurl(acct, repo)
+            component_source = get_gh_component(acct, repo, path)
+            return Response(response=component_source, status=200, mimetype='text/plain', headers=cors_headers)
 
 def usage():
     print('%s [hl:dr:a:p:]' % sys.argv[0])

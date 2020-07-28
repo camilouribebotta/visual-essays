@@ -126,7 +126,7 @@ sparql_template = '''
     } WHERE {
 
         ?specimen jwdt:P17 jwd:Q14316 ;
-                jwdt:P501 '<TAXON NAME>' ;
+                <SELECTOR>
                 schema:description ?description ;
                 jwdt:P1106 ?jstorPlantsId ;
                 jwdt:P1661 ?specimenType ;
@@ -238,9 +238,9 @@ def sort_specimens(specimens, **kwargs):
             sorted_specimens += sort_by_date(by_type[specimen_type])
     return sorted_specimens
 
-def get_specimens(taxon_name, preload=False, **kwargs):
+def get_specimens(taxon_name=None, gpid=None, preload=False, **kwargs):
     logger.info(f'get_specimens: taxon_name={taxon_name} max={kwargs.get("max")} preload={preload} args={kwargs}')
-    sparql = sparql_template.replace('<TAXON NAME>', taxon_name)
+    sparql = sparql_template.replace('<SELECTOR>', f'jwdt:P501 "{taxon_name}" ;') if taxon_name else sparql_template.replace('<SELECTOR>', f'jwdt:P1106 "{gpid}" ;')
     data = {'taxonName': taxon_name, 'specimens': []}
     for _ in range(2):
         resp = requests.post(

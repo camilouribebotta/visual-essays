@@ -42,11 +42,12 @@ manifest_defaults = {
 }
 
 def create_manifest(**kwargs):
-    logger.debug(f'create_manifest {kwargs}')
+    logger.info(f'create_manifest {kwargs}')
     url = None
     for fld in ('alt-source', 'source'):
         url = kwargs.get(fld)
         if url:
+            logger.info(f'url={url}')
             parsed = urlparse(kwargs[fld])
             if '/blob/master' in parsed.path:
                 path_elems = parsed.path[1:].replace('/blob/master', '').split('/')
@@ -54,46 +55,46 @@ def create_manifest(**kwargs):
                 gh_repo = path_elems[1]
                 path = '/'.join(path_elems[2:])
                 url = f'https://raw.githubusercontent.com/{gh_acct}/{gh_repo}/master/{path}'
-        manifest = {
-            '@context': 'http://iiif.io/api/presentation/2/context.json',
-            'sequences': [{
-                'canvases': [{**manifest_defaults['canvas'], **{
-                    'images': [{**manifest_defaults['image'], **{
-                        'url': url
+            manifest = {
+                '@context': 'http://iiif.io/api/presentation/2/context.json',
+                'sequences': [{
+                    'canvases': [{**manifest_defaults['canvas'], **{
+                        'images': [{**manifest_defaults['image'], **{
+                            'url': url
+                        }}]
                     }}]
-                }}]
-            }]
-        }
-        # add optional properties
-        label = kwargs.get('label')
-        if not label:
-            label = kwargs.get('description')
-        if label:
-            manifest['label'] = label
-            manifest['sequences'][0]['canvases'][0]['label'] = label
-        metadata = dict([(k,v) for k,v in kwargs.items() if v and k in ('attribution', 'date', 'description', 'license', 'logo', 'rights')])
-        metadata['source'] = url
+                }]
+            }
+            # add optional properties
+            label = kwargs.get('label')
+            if not label:
+                label = kwargs.get('description')
+            if label:
+                manifest['label'] = label
+                manifest['sequences'][0]['canvases'][0]['label'] = label
+            metadata = dict([(k,v) for k,v in kwargs.items() if v and k in ('attribution', 'date', 'description', 'license', 'logo', 'rights')])
+            metadata['source'] = url
 
-        for fld in ('attribution', 'description', 'license', 'logo'):
-            if fld in metadata:
-                manifest[fld] = metadata.get(fld)
-        if metadata:
-            manifest['metadata'] = [{'label': 'version', 'value': '1'}] + [{'label': k, 'value': v} for k,v in metadata.items()]
+            for fld in ('attribution', 'description', 'license', 'logo'):
+                if fld in metadata:
+                    manifest[fld] = metadata.get(fld)
+            if metadata:
+                manifest['metadata'] = [{'label': 'version', 'value': '2'}] + [{'label': k, 'value': v} for k,v in metadata.items()]
 
-        logger.debug(json.dumps(manifest, indent=2))
-        resp = requests.post(
-            'https://tripleeyeeff-atjcn6za6q-uc.a.run.app/presentation/create',
-            headers={'Content-type': 'application/json'},
-            json=manifest
-        )
-        logger.info(resp.status_code)
-        manifest = resp.json()
-        if '@id' in manifest:
-            logger.info(f'{url} {manifest["@id"]}')
-            if '@type' in manifest:
-                return manifest
-            else:
-                return requests.get(manifest['@id'], headers={'Content-type': 'application/json'}).json() 
+            logger.info(json.dumps(manifest, indent=2))
+            resp = requests.post(
+                'https://iiif.visual-essays.app/presentation/create',
+                headers={'Content-type': 'application/json'},
+                json=manifest
+            )
+            logger.info(resp.status_code)
+            manifest = resp.json()
+            if '@id' in manifest:
+                logger.info(f'{url} {manifest["@id"]}')
+                if '@type' in manifest:
+                    return manifest
+                else:
+                    return requests.get(manifest['@id'], headers={'Content-type': 'application/json'}).json() 
 
 def as_hyperlink(qid, label=None):
     return '=HYPERLINK("{}", "{}")'.format('https://kg.jstor.org/entity/{}'.format(qid), label if label else qid)

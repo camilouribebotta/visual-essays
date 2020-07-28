@@ -1,17 +1,8 @@
 <template>
   <div id="mapWrapper" ref="mapWrapper" class="row wrapper">
     <div ref="map" id="lmap" class="lmap" :style="`width:${width}px; height:${mapHeight}px; margin:0;`"></div>
-    <div ref="timeSelector" v-if="timeRange.length > 0" style="height: 45px; padding: 0 24px;">
-      <!-- https://nightcatsama.github.io/vue-slider-component -->
-      <vue-slider
-        v-if="max"
-        v-model="timeRange"
-        :min="min" 
-        :max="max"
-        :marks="mark"
-        :tooltip-formatter="label"
-        @change="throttledMethod"
-      />
+    <div ref="timeSelector" v-if="timeSelector" style="height: 45px; padding: 0 24px;">
+      <time-selector :initial-time-range="timeRange" @range-change="rangeChange" :data="timeData" />
     </div>
   </div>
 </template>
@@ -64,7 +55,9 @@ module.exports = {
     mapHeight: 0,
 
     geojsonIsLoading: false,
-    featureDates: new Set(),
+    dateField: 'date',
+    data: [],
+    timeData: [],
     timeRange: [],
     min: undefined,
     max: undefined
@@ -81,97 +74,35 @@ module.exports = {
     isSelected() { return this.selected === 'map' },
     // width() { return Math.min(this.viewport.width, this.viewerWidth)},
   },
-  created() {
-    if (this.timeSelector) {
-      if (this.timeSelector !== 'true') {
-        const initialRangeDates = this.timeSelector.split(':').map(dateStr => this.parseDate(dateStr).getUTCFullYear())
-        this.timeRange = initialRangeDates.length === 2 ? initialRangeDates : [initialRangeDates[0], initialRangeDates[0]]
-      }
-      this.useTimeSelector = true
-      console.log(`timeSelector: start=${this.timeRange[0]} end=${this.timeRange[1]}`)
-    }
-  },
   mounted() {
     console.log(`MapViewer.mounted: height=${this.height} width=${this.width}`)
-    const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
-    console.log(`height=${this.height} timeSelectorHeight=${timeSelectorHeight} mapHeight=${this.mapHeight}`)
-    this.mapHeight = this.height - timeSelectorHeight
-    this.$nextTick(() => { this.createBaseMap() })
+    this.mapHeight = this.height
+    this.$nextTick(() => this.createBaseMap())
   },
   methods: {
-    throttledMethod: _.debounce(function (e) {
-      console.log('rangeChange', e, this.map)
-      console.log('layers', this.layers)
+    rangeChange(range) {
+      this.timeRange = range
       this.map.removeLayer(this.layers.Labels)
       this.map.eachLayer(layer => {
-        console.log(layer.options.id, layer.options.type)
-        console.log(layer.options)
         if (layer.options.type === 'geojson' && layer.options.id && layer.options.id.indexOf('map-layer-1') === 0) {
-          console.log('removing', layer.options.id)
           this.map.removeLayer(layer)
         }
       })
       this.syncLayers()
-    }, 500),
+    },
     timeRangeFilter(feature) {
-      console.log('filter', feature)
-      if (this.timeRange.length === 2) {
-        const featureDate = feature.properties.date ? this.parseDate(feature.properties.date).getUTCFullYear() : null
-        if (featureDate) {
-          this.featureDates.add(featureDate)
-          return featureDate >= this.timeRange[0] && featureDate <= this.timeRange[1]
-        }
+      console.log(this.timeRange)
+      if (feature.properties[this.dateField]) {
+        const dateStrs = feature.properties[this.dateField].split(':')
+        feature.properties.startDate = this.parseDate(dateStrs[0]).getUTCFullYear()
+        feature.properties.endDate = dateStrs.length === 1 ? feature.properties.startDate : this.parseDate(dateStrs[1]).getUTCFullYear()
+        feature.properties.value = feature.properties.startDate
+        this.data.push(feature.properties)
+      }
+      if (feature.properties.startDate && this.timeRange.length === 2) {
+        return feature.properties.startDate >= this.timeRange[0] && feature.properties.endDate <= this.timeRange[1]
       }
       return true
-    },
-    setTimeSelector() {
-      const min = Math.min(...this.featureDates)
-      this.min = Math.floor(min/100)*100
-      const max = Math.max(...this.featureDates)
-      this.max = Math.ceil(max/100)*100
-      console.log(`min=${this.min} max=${this.max} start=${this.timeRange[0]} end=${this.timeRange[1]}`)
-    },
-    label(val) {
-      return `${Math.abs(val)}${val < 0 ? ' BCE' : ''}`
-    },
-    mark(val) {
-      if (val % 100 === 0) {
-        return {label: this.label(val)}
-      }
-      return false
-    },
-    parseDate(ds) {
-      let date
-      if (Number.isInteger(ds)) {
-        date = new Date(`${ds}-01-01T00:00:00Z`)
-      } else {
-        const split = ds.split('-')
-        if (split.length === 1) {
-          const yr = split[0].toUpperCase().replace(/[\. ]/,'')
-          let yrAsInt
-          if (yr.indexOf('BC') > 0) { // covers both 'BC' and 'BCE' eras
-            yrAsInt = -Math.abs(parseInt(yr.slice(0,yr.indexOf('BCE'))))
-          } else if (yr.indexOf('CE') > 0 || yr.indexOf('AD') > 0) {
-            yrAsInt = parseInt(yr.slice(0,yr.indexOf('CE')))
-          } else {
-            yrAsInt = parseInt(ds)
-          }
-          if (yrAsInt > 0) {
-            date = new Date(`${yrAsInt}-01-01T00:00:00Z`)
-          } else {
-            date = new Date(yrAsInt, 0, 0)
-            date.setUTCFullYear(yrAsInt)
-          }
-        } else if (split.length === 2) {
-          date = new Date(`${split[0]}-${split[1]}-01T00:00:00Z`)
-        } else if (split.length === 3) {
-          date = new Date(`${ds}T00:00:00Z`)
-        }
-      }
-      return date
-    },
-    rangeChange(e) {
-      console.log('rangeChange', e)
     },
     createBaseMap() {
       const t = performance.now()
@@ -181,14 +112,25 @@ module.exports = {
         this.map = undefined
       }
       if (!this.map) {
-        this.baseLayer = this.$L.tileLayer(...baseLayers[this.mapDef.basemap || defaults.basemap])
-        this.map = this.$L.map('lmap', {
-          preferCanvas: true,
-          center: this.mapDef.center || defaults.center, 
-          zoom: this.mapDef.zoom || defaults.zoom, zoomSnap: 0.1,
-          layers: [this.baseLayer]})
-        console.log(`createBaseMap: basemap=${this.mapDef.basemap} title=${this.mapDef.title} center=${this.mapDef.center} zoom=${this.mapDef.zoom} elapsed=${Math.round(performance.now() - t)}`)
-        this.updateLayers()
+        if (this.timeSelector) {
+          if (this.timeSelector !== 'true') {
+            const initialRangeDates = this.timeSelector.split(':').map(dateStr => this.parseDate(dateStr).getUTCFullYear())
+            this.timeRange = initialRangeDates.length === 2 ? initialRangeDates : [initialRangeDates[0], initialRangeDates[0]]
+          }
+        }
+        this.$nextTick(() => {
+          const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
+          const basemap = this.mapDef.basemap || defaults.basemap
+          const center = this.mapDef.center || defaults.center
+          const zoom = this.mapDef.zoom || defaults.zoom
+          this.baseLayer = this.$L.tileLayer(...baseLayers[basemap])
+          this.map = this.$L.map('lmap', {
+            preferCanvas: true,
+            center, zoom, zoomSnap: 0.1,
+            layers: [this.baseLayer]})
+          console.log(`createBaseMap: height=${this.height} width=${this.width} timeSelector=${this.timeSelector !== undefined} basemap=${basemap} title=${this.mapDef.title} center=${center} zoom=${zoom} elapsed=${Math.round(performance.now() - t)}`)
+          this.updateLayers()
+        })
       }
     },
     makeMarker(latlng, props) {
@@ -229,7 +171,7 @@ module.exports = {
     },
     addPopup(id, label, latLng, offset) {
       if (!this.popups[id]) {
-        console.log(`addPopup: id=${id} label=${label} lagLng=${latLng} offset=${offset}`)
+        // console.log(`addPopup: id=${id} label=${label} lagLng=${latLng} offset=${offset}`)
         const popup = L.popup({ ...defaults.popupOptions, ...{ offset: L.point(0, offset || 0)}})
         popup.setLatLng(latLng)
         popup.setContent(`<h1 data-eid="${id}">${label}</h1>`)
@@ -239,30 +181,29 @@ module.exports = {
     },
     loadGeojson(def, addToMap) {
       this.geojsonIsLoading = true
+      this.dateField = def['date-field'] || this.dateField
       this.cachedGeojson(def)
       .then(data => {
         const self = this
-        let layerNum = 0
         let numFeatureLabels = 0
+        console.log('loadGeojson')
         let geojson = L.geoJson(data, {
           filter: this.timeRangeFilter,
           onEachFeature: function(feature, layer) {
             layer.options.id = def.id
             feature.properties.layerid = def.id
-            if (!feature.properties.id) {
-              feature.properties.id = layerNum === 0 ? def.id : `${def.id}-${layerNum}`
-            }
+            const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'MultiPolygon' || layer.feature.geometry.type === 'LineString'
+              ? layer.getBounds().getCenter()
+              : layer.getLatLng()
+            feature.properties.id = feature.properties.id || `${latLng}`
             // console.log(`feature: id=${feature.properties.id} layerid=${feature.properties.layerid}`)
             self.addEventHandlers(layer, layer.feature.properties.id)
-            if (!def.title) {
+            //if (!def.title) {
               const label = feature.properties ? feature.properties.label || feature.properties.name || feature.properties.title || feature.properties['ne:NAME'] || undefined : undefined
               if (label) {
                 numFeatureLabels += 1
                 feature.properties.label = label
-                const latLng = layer.feature.geometry.type === 'Polygon' || layer.feature.geometry.type === 'MultiPolygon' || layer.feature.geometry.type === 'LineString'
-                  ? layer.getBounds().getCenter()
-                  : layer.getLatLng()
-                self.addPopup(feature.properties.id, label, latLng, feature.geometry.type === 'Point' ? -45 : 0)
+                self.addPopup(feature.properties.id, label, latLng, feature.geometry.type === 'Point' ? -20 : 0)
                 self.addEventHandlers(layer, layer.feature.properties.id)
                 self.active.add(feature.properties.id)
                 /*
@@ -273,7 +214,7 @@ module.exports = {
                 this.layers = _layers
                 */
               }
-            }
+            //}
             if (feature.properties.decorators) {
               const polyline = self.$L.polyline(self.$L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates), {})
               const patterns = []
@@ -294,7 +235,6 @@ module.exports = {
                 const decorator = self.$L.polylineDecorator(polyline, {patterns}).addTo(self.map)
               })
             }
-            layerNum += 1
           },
           // Style
           style: function(feature) {
@@ -312,9 +252,9 @@ module.exports = {
             }
             return style
           },
-          pointToLayer: function(feature, latlng) {
-            return self.makeMarker(latlng, feature.properties)
-          }
+          //pointToLayer: function(feature, latlng) {
+          //  return self.makeMarker(latlng, feature.properties)
+          //}
         })
 
         const geojsonLabel = def.title
@@ -336,7 +276,8 @@ module.exports = {
         }
 
         if (numFeatureLabels === 0) {
-          this.addPopup(def.id, geojsonLabel, geojson.getBounds().getCenter())
+          const latLng = geojson.getBounds().getCenter()
+          this.addPopup(`${latLng}`, geojsonLabel, latLng)
           this.addEventHandlers(geojson, def.id)
         }
 
@@ -344,7 +285,6 @@ module.exports = {
         geojson.options.label = geojsonLabel
         geojson.options.type = 'geojson'
 
-        console.log(this.active)
         const _layers = { 
           ...this.layers, 
           ...{ Labels: this.$L.layerGroup(Object.values(this.popups).filter(popup => this.active.has(popup.options.id))) } 
@@ -372,7 +312,8 @@ module.exports = {
       this.locations.filter(location => location.coords && !this.useGeojson(location)).forEach((location) => {
         const marker = this.makeMarker(location.coords[0], location)
         const markerLabel = location.title || location.label
-        this.addPopup(location.eid, markerLabel, marker.getLatLng(), -45)
+        const latLng = marker.getLatLng()
+        this.addPopup(`${latLng}`, markerLabel, latLng, -45)
         this.addEventHandlers(marker, location.eid)
         markers.push(marker)
         const mll = marker.getLatLng()
@@ -448,14 +389,19 @@ module.exports = {
       if (this.map) {
         this.syncLayers()
       }
+    },
+    mapChanged(current, prior) {
+      return false
+      // return !prior || current.basemap !== prior.basemap || current['time-selector'] !== prior['time-selector']
     }
   },
   watch: {
     geojsonIsLoading: {
       handler: function (isLoading, prior) {
-        console.log(`watch.geojsonIsLoading=${isLoading} prior=${prior}`)
-        if (!isLoading) {
-          this.setTimeSelector()
+        if (isLoading) {
+          this.data = []
+        } else {
+          this.timeData = this.data
         }
       },
       immediate: false
@@ -540,12 +486,13 @@ module.exports = {
     height: {
       handler: function () {
         const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
-        console.log(`height=${this.height} timeSelectorHeight=${timeSelectorHeight} mapHeight=${this.mapHeight}`)
         this.mapHeight = this.height - timeSelectorHeight
+        // console.log(`height=${this.height} timeSelectorHeight=${timeSelectorHeight} mapHeight=${this.mapHeight}`)
         const lmap = document.getElementById('lmap')
         if (lmap) {
           lmap.style.height = `${this.mapHeight}px`
-          console.log(`lmap.style.height=${lmap.style.height}`)
+          // console.log(`lmap.style.height=${lmap.style.height}`)
+          this.map.invalidateSize()
         }
       },
       immediate: false
@@ -561,12 +508,26 @@ module.exports = {
         const lmap = document.getElementById('lmap')
         if (lmap) {
           if (mapDef) {
-            if (this.map && mapDef && !prior || mapDef.basemap === prior.basemap) {
-              this.map.flyTo(mapDef.center || defaults.center, mapDef.zoom || defaults.zoom)
+            if (this.timeSelector && this.timeSelector !== 'true') {
+              const initialRangeDates = this.timeSelector.split(':').map(dateStr => this.parseDate(dateStr).getUTCFullYear())
+              this.timeRange = initialRangeDates.length === 2 ? initialRangeDates : [initialRangeDates[0], initialRangeDates[0]]
             } else {
-              this.createBaseMap()
+              this.timeRange = []
             }
-            this.$refs.mapWrapper.style.display = 'block'
+            this.$nextTick(() => {
+              const timeSelectorHeight = this.$refs.timeSelector ? this.$refs.timeSelector.clientHeight : 0
+              console.log(`mapDef: timeSelector=${this.timeSelector !== undefined} timeSelectorHeight=${timeSelectorHeight} timeRange=${this.timeRange}`)
+              this.mapHeight = this.height - timeSelectorHeight
+              const lmap = document.getElementById('lmap')
+              lmap.style.height = `${this.mapHeight}px`
+              this.map.invalidateSize()
+              if (!this.map || this.mapChanged(mapDef, prior)) {
+                this.createBaseMap()
+              } else {
+                this.map.flyTo(mapDef.center || defaults.center, mapDef.zoom || defaults.zoom)
+              }
+              this.$refs.mapWrapper.style.display = 'block'
+            })
           } else {
             this.$refs.mapWrapper.style.display = 'none'
           }

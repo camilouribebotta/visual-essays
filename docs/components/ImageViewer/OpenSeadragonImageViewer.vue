@@ -33,7 +33,7 @@ module.exports = {
     parseRegionString(region) {
       const s1 = region.split(':')
       let ints = s1[s1.length-1].split(',').map(v => parseInt(v))
-      if (ints.len === 4) {
+      if (ints.length === 4) {
         if (s1.length === 1 || (s1.length === 2 && (s1[0] === 'px' || s1[0] === 'pixel'))) {
           return this.viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(...ints))
         } else if (s1.length === 2 && (s1[0] === 'pct' || s1[0] === 'percent')) {

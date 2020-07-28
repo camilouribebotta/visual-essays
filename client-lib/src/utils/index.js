@@ -137,3 +137,34 @@ export function throttle(callback, interval) {
     setTimeout(() => enableCall = true, interval)
   }
 }
+
+export function parseDate(ds) {
+  let date
+  if (Number.isInteger(ds)) {
+    date = new Date(`${ds}-01-01T00:00:00Z`)
+  } else {
+    const split = ds.split('-')
+    if (split.length === 1) {
+      const yr = split[0].toUpperCase().replace(/[\. ]/,'')
+      let yrAsInt
+      if (yr.indexOf('BC') > 0) { // covers both 'BC' and 'BCE' eras
+        yrAsInt = -Math.abs(parseInt(yr.slice(0,yr.indexOf('BCE'))))
+      } else if (yr.indexOf('CE') > 0 || yr.indexOf('AD') > 0) {
+        yrAsInt = parseInt(yr.slice(0,yr.indexOf('CE')))
+      } else {
+        yrAsInt = parseInt(ds)
+      }
+      if (yrAsInt >= 1000) {
+        date = new Date(`${yrAsInt}-01-01T00:00:00Z`)
+      } else {
+        date = new Date(yrAsInt, 0, 0)
+        date.setUTCFullYear(yrAsInt)
+      }
+    } else if (split.length === 2) {
+      date = new Date(`${split[0]}-${split[1]}-01T00:00:00Z`)
+    } else if (split.length === 3) {
+      date = new Date(`${ds}T00:00:00Z`)
+    }
+  }
+  return date
+}

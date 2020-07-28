@@ -533,6 +533,7 @@ class Essay(object):
             manifest['sequences'][0]['canvases'][0]['label'] = label
         metadata = dict([(k,v) for k,v in item.items() if v and k in ('attribution', 'date', 'description', 'license', 'logo', 'rights')])
         metadata['source'] = item['url']
+        metadata['version'] = '1'
 
         for fld in ('attribution', 'description', 'license', 'logo'):
             if fld in metadata:
@@ -549,6 +550,7 @@ class Essay(object):
             headers={'Content-type': 'application/json'},
             json=manifest
         )
+        logger.info(f'{item["id"]} {resp.status_code}')
         if resp.status_code == 200:
             manifest = resp.json()
             if '@id' in manifest:
@@ -556,6 +558,7 @@ class Essay(object):
                 if '@type' not in manifest:
                     manifest = requests.get(item['manifest'], headers={'Content-type': 'application/json'}).json()
         else:
+            logger.info(f'{item["id"]} {resp.status_code} {item["url"]}')
             manifest = None
         return resp.status_code, manifest
 
